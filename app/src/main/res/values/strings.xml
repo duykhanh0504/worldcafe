@@ -11,4 +11,5 @@
     <string name="facebook_app_id">PASTE_YOUR_FACEBOOK_APP_ID</string>
     <string name="fb_login_protocol_scheme">fbPASTE_YOUR_FACEBOOK_APP_ID</string>
 
+    <string name="google_maps_api_key">AIzaSyB3epWh0CrlPdSNdecLs2b2MN7AanDa7xI</string>
 </resources>
