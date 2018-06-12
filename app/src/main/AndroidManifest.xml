@@ -2,8 +2,18 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.aseanfan.worldcafe.worldcafe">
 
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <permission
+        android:name="android.permission.ACCESS_FINE_LOCATION"
+        android:protectionLevel="dangerous" />
+    <permission
+        android:name="android.permission.ACCESS_COARSE_LOCATION"
+        android:protectionLevel="dangerous" />
+
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="com.example.mapdemo.permission.MAPS_RECEIVE" />
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
     <application
         android:allowBackup="true"
@@ -12,7 +22,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name="com.aseanfan.worldcafe.MainActivity" />
+        <activity android:name="com.aseanfan.worldcafe.UI.MainActivity" />
         <activity android:name="com.aseanfan.worldcafe.UI.IntroActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -21,18 +31,20 @@
             </intent-filter>
         </activity>
         <activity android:name="com.aseanfan.worldcafe.UI.LoginActivity" />
-        <activity android:name="com.aseanfan.worldcafe.UI.TimeLineActivity"></activity>
+        <activity android:name="com.aseanfan.worldcafe.UI.TimeLineActivity" />
 
-        <uses-library android:required="true" android:name="com.google.android.maps" />
+        <uses-library
+            android:name="com.google.android.maps"
+            android:required="true" />
 
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
             android:value="@string/google_maps_api_key" />
-
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
 
+        <activity android:name="com.aseanfan.worldcafe.UI.ChatActivity"></activity>
     </application>
 
 </manifest>

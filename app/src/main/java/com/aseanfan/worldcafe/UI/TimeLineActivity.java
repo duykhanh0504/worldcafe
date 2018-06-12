@@ -13,7 +13,6 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.aseanfan.worldcafe.worldcafe.R;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -33,9 +32,13 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 
 import permissions.dispatcher.NeedsPermission;
+import permissions.dispatcher.RuntimePermissions;
 
 import static com.google.android.gms.location.LocationServices.getFusedLocationProviderClient;
 
+import com.aseanfan.worldcafe.worldcafe.R;
+
+@RuntimePermissions
 public class TimeLineActivity extends AppCompatActivity {
 
     private SupportMapFragment mapFragment;
@@ -47,12 +50,7 @@ public class TimeLineActivity extends AppCompatActivity {
 
     private final static String KEY_LOCATION = "location";
 
-    /*
-     * Define a request code to send to Google Play services This code is
-     * returned in Activity.onActivityResult
-     */
     private final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,24 +79,24 @@ public class TimeLineActivity extends AppCompatActivity {
             Toast.makeText(this, "Error - Map Fragment was null!!", Toast.LENGTH_SHORT).show();
         }
 
-    }
 
-    protected void loadMap(GoogleMap googleMap) {
-        map = googleMap;
-        if (map != null) {
-            // Map is ready
-            Toast.makeText(this, "Map Fragment was loaded properly!", Toast.LENGTH_SHORT).show();
-            MapDemoActivityPermissionsDispatcher.getMyLocationWithPermissionCheck(this);
-            MapDemoActivityPermissionsDispatcher.startLocationUpdatesWithPermissionCheck(this);
-        } else {
-            Toast.makeText(this, "Error - Map was null!!", Toast.LENGTH_SHORT).show();
-        }
     }
+    protected void loadMap(GoogleMap googleMap) {
+    map = googleMap;
+        if (map != null) {
+        // Map is ready
+        Toast.makeText(this, "Map Fragment was loaded properly!", Toast.LENGTH_SHORT).show();
+        TimeLineActivityPermissionsDispatcher.getMyLocationWithPermissionCheck(this);
+        TimeLineActivityPermissionsDispatcher.startLocationUpdatesWithPermissionCheck(this);
+    } else {
+        Toast.makeText(this, "Error - Map was null!!", Toast.LENGTH_SHORT).show();
+    }
+}
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        MapDemoActivityPermissionsDispatcher.onRequestPermissionsResult(this, requestCode, grantResults);
+        TimeLineActivityPermissionsDispatcher.onRequestPermissionsResult(this, requestCode, grantResults);
     }
 
     @SuppressWarnings({"MissingPermission"})
@@ -125,9 +123,6 @@ public class TimeLineActivity extends AppCompatActivity {
                 });
     }
 
-    /*
-     * Called when the Activity becomes visible.
-     */
     @Override
     protected void onStart() {
         super.onStart();
@@ -180,7 +175,7 @@ public class TimeLineActivity extends AppCompatActivity {
         } else {
             Toast.makeText(this, "Current location was null, enable GPS on emulator!", Toast.LENGTH_SHORT).show();
         }
-        MapDemoActivityPermissionsDispatcher.startLocationUpdatesWithPermissionCheck(this);
+        TimeLineActivityPermissionsDispatcher.startLocationUpdatesWithPermissionCheck(this);
     }
 
     @NeedsPermission({Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION})
@@ -235,7 +230,6 @@ public class TimeLineActivity extends AppCompatActivity {
         savedInstanceState.putParcelable(KEY_LOCATION, mCurrentLocation);
         super.onSaveInstanceState(savedInstanceState);
     }
-
     // Define a DialogFragment that displays the error dialog
     public static class ErrorDialogFragment extends android.support.v4.app.DialogFragment {
 
@@ -259,4 +253,5 @@ public class TimeLineActivity extends AppCompatActivity {
             return mDialog;
         }
     }
+
 }
