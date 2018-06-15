@@ -11,6 +11,11 @@
         android:layout_height="wrap_content"
         android:background="#fafafa">
 
+        <android.support.v4.view.ViewPager
+            android:id="@+id/intro_view_pager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"></android.support.v4.view.ViewPager>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -44,31 +49,29 @@
                 android:layout_weight="1"
                 android:layout_marginTop="2dp"
                 android:contentDescription="TODO" />
-        </LinearLayout>
 
-        <TextView android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="336dp"
-            android:layout_gravity="center_horizontal"
-            android:textSize="16sp"
-            android:textColor="#ffffff"
-            android:gravity="center"
-            android:paddingLeft="20dp"
-            android:paddingRight="20dp"
-            android:paddingTop="10dp"
-            android:paddingBottom="10dp"
-            android:layout_marginLeft="10dp"
-            android:text="@string/Login"
-            android:layout_marginRight="10dp"
-            android:id="@+id/start_messaging_button"/>
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_gravity="bottom"
-            android:layout_height="match_parent"
-            android:id="@+id/backgroundintro"
-            android:src="@drawable/introl1"
-            android:scaleType="fitEnd"
-            android:contentDescription="@string/todo" />
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="100dp">
+
+                <Button
+                    android:id="@+id/Signup"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left"
+                    android:layout_marginLeft="20dp"
+                    android:text="@string/Signup" />
+
+                <Button
+                    android:id="@+id/Login"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right"
+                    android:layout_marginRight="20dp"
+                    android:text="@string/Login" />
+            </FrameLayout>
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -108,74 +111,7 @@
                 android:layout_marginLeft="7dp"
                 android:layout_marginStart="7dp" />
 
-            <FrameLayout
-                android:layout_width="8dp"
-                android:layout_height="8dp"
-                android:shape="ring"
-                android:background="@drawable/circle"
-                android:layout_marginLeft="7dp"
-                android:layout_marginStart="7dp" />
-
-            <FrameLayout
-                android:layout_width="8dp"
-                android:layout_height="8dp"
-                android:shape="ring"
-                android:background="@drawable/circle"
-                android:layout_marginLeft="7dp"
-                android:layout_marginStart="7dp" />
-
-            <FrameLayout
-                android:layout_width="8dp"
-                android:layout_height="8dp"
-                android:shape="ring"
-                android:background="@drawable/circle"
-                android:layout_marginLeft="7dp"
-                android:layout_marginStart="7dp" />
-
-            <FrameLayout
-                android:layout_width="8dp"
-                android:layout_height="8dp"
-                android:shape="ring"
-                android:background="@drawable/circle"
-                android:layout_marginLeft="7dp"
-                android:layout_marginStart="7dp" />
-
-            <FrameLayout
-                android:layout_width="8dp"
-                android:layout_height="8dp"
-                android:shape="ring"
-                android:background="@drawable/circle"
-                android:layout_marginLeft="7dp"
-                android:layout_marginStart="7dp" />
-
-            <FrameLayout
-                android:layout_width="8dp"
-                android:layout_height="8dp"
-                android:shape="ring"
-                android:background="@drawable/circle"
-                android:layout_marginLeft="7dp"
-                android:layout_marginStart="7dp" />
-
-            <FrameLayout
-                android:layout_width="8dp"
-                android:layout_height="8dp"
-                android:shape="ring"
-                android:background="@drawable/circle"
-                android:layout_marginLeft="7dp"
-                android:layout_marginStart="7dp" />
-
         </LinearLayout>
-
-        <android.support.v4.view.ViewPager
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/intro_view_pager">
-        </android.support.v4.view.ViewPager>
-        <Button
-            android:id="@+id/button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Button" />
 
     </FrameLayout>
 

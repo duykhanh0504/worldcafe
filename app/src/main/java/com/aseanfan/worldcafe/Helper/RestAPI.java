@@ -37,10 +37,11 @@ public class RestAPI {
 
     private static int TIME_OUT = 12000;
 
-    public static String root_url = "";
+    public static String root_url = "http://127.0.0.1:8080";
     public static String root_url_dev = "";
 
-    public static String TEST = root_url + "";// identifier
+    public static String POST_SIGNUP = root_url + "/api/signup";// identifier
+    public static String POST_LOGIN = root_url + "/api/login";
 
     private static int POST_METHOD = 0;
     private static int DELETE_METHOD = 1;
@@ -49,8 +50,8 @@ public class RestAPI {
     //public static int NUMBER_REQUEST_TOKEN =3;
 
 
-    /*public static String loginUrl(String user, String pass) {
-        return String.format(POST_LOGIN, user, pass);
+   /* public static String loginUrl(String user, String pass) {
+        return String.format(POST_SIGNUP, user, pass);
     }*/
 
 
