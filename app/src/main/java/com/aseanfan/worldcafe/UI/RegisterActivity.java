@@ -12,7 +12,9 @@ import android.widget.TextView;
 
 import com.aseanfan.worldcafe.Helper.RestAPI;
 import com.aseanfan.worldcafe.worldcafe.R;
+import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -70,7 +72,29 @@ public class RegisterActivity extends AppCompatActivity {
         String password = _passwordText.getText().toString();
         String reEnterPassword = _reEnterPasswordText.getText().toString();
 
-        JsonObject json = null;
+        Gson gson = new Gson();
+        JsonObject dataJson = gson.toJsonTree(null).getAsJsonObject();
+
+        RestAPI.PostDataMaster(getApplicationContext(), dataJson, RestAPI.POST_SIGNUP, new RestAPI.RestAPIListenner() {
+
+            @Override
+            public void OnComplete(int httpCode, String error, String s) {
+                try {
+                    if (!RestAPI.checkHttpCode(httpCode)) {
+                        //AppFuncs.alert(getApplicationContext(),s,true);
+
+                        return;
+                    }
+                    JsonObject jsonObject = (new JsonParser()).parse(s).getAsJsonObject();
+                    Gson gson = new Gson();
+
+                } catch (Exception ex) {
+
+                    ex.printStackTrace();
+                }
+
+            }
+        });
 
     }
 

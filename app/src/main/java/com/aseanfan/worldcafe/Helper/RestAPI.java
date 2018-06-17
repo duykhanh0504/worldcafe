@@ -178,7 +178,7 @@ public class RestAPI {
         return getIon(context,url,"DELETE").setJsonObjectBody((jsonObject==null)? new JsonObject() : jsonObject).asString().withResponse();
     }
 
-    public static void PostDataWrappy(final Context context, final JsonObject jsonObject, final String url, final RestAPIListenner listenner) {
+    public static void PostDataMaster(final Context context, final JsonObject jsonObject, final String url, final RestAPIListenner listenner) {
         apiPOST(context,url,jsonObject).setCallback(new FutureCallback<Response<String>>() {
             @Override
             public void onCompleted(Exception e, Response<String> result) {
@@ -194,7 +194,7 @@ public class RestAPI {
         });
     }
 
-    public static void DeleteDataWrappy(final Context context, final JsonObject jsonObject, final String url, final RestAPIListenner listenner) {
+    public static void DeleteDataMaster(final Context context, final JsonObject jsonObject, final String url, final RestAPIListenner listenner) {
         apiDELETE(context, url, jsonObject).setCallback(new FutureCallback<Response<String>>() {
             @Override
             public void onCompleted(Exception e, Response<String> result) {
@@ -210,7 +210,7 @@ public class RestAPI {
         });
     }
 
-    public static void GetDataWrappy(final Context context, final String url, final RestAPIListenner listenner) {
+    public static void GetDataMaster(final Context context, final String url, final RestAPIListenner listenner) {
         apiGET(context,url).setCallback(new FutureCallback<Response<String>>() {
             @Override
             public void onCompleted(Exception e, Response<String> result) {
