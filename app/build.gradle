@@ -1,14 +1,22 @@
 apply plugin: 'com.android.application'
 
 android {
+
     compileSdkVersion 28
+
     defaultConfig {
+
         applicationId "com.aseanfan.worldcafe.worldcafe"
         minSdkVersion 15
         targetSdkVersion 28
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        javaCompileOptions {
+            annotationProcessorOptions {
+                includeCompileClasspath false
+            }
+        }
     }
     buildTypes {
         release {
@@ -23,7 +31,6 @@ ext {
     supportLibVersion = "27.1.1"
     googlePlayVersion = "15.0.0"
 }
-
 dependencies {
 
     configurations {
@@ -59,6 +66,7 @@ dependencies {
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
     implementation 'com.koushikdutta.ion:ion:2.2.1'
 
+    implementation  'io.realm:realm-android:0.87.4'
 
     implementation 'com.android.support:design:28.0.0-alpha3'
 }

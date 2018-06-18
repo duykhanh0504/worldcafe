@@ -2,6 +2,7 @@ package com.aseanfan.worldcafe.UI;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.support.v4.content.IntentCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -72,8 +73,12 @@ public class RegisterActivity extends AppCompatActivity {
         String password = _passwordText.getText().toString();
         String reEnterPassword = _reEnterPasswordText.getText().toString();
 
-        Gson gson = new Gson();
-        JsonObject dataJson = gson.toJsonTree(null).getAsJsonObject();
+       // Gson gson = new Gson();
+      //  JsonObject dataJson = gson.toJsonTree(null).getAsJsonObject();
+        JsonObject dataJson = new JsonObject();
+        dataJson.addProperty("username",name);
+        dataJson.addProperty("password",password);
+        dataJson.addProperty("email",email);
 
         RestAPI.PostDataMaster(getApplicationContext(), dataJson, RestAPI.POST_SIGNUP, new RestAPI.RestAPIListenner() {
 
@@ -86,7 +91,14 @@ public class RegisterActivity extends AppCompatActivity {
                         return;
                     }
                     JsonObject jsonObject = (new JsonParser()).parse(s).getAsJsonObject();
-                    Gson gson = new Gson();
+                  //  if(jsonObject.get("status").getAsInt() == 200)
+                   // {
+                        progressDialog.dismiss();
+                        Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        startActivity(intent);
+                        finish();
+                   // }
 
                 } catch (Exception ex) {
 

@@ -1,18 +1,20 @@
 package com.aseanfan.worldcafe.Model;
 
 
-public class UserModel {
-    private Long id;
-    private String identifier;
-    private String email;
-    private String mobile;
-    private String gender;
+import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
 
-    public UserModel(String identifier, String email, String mobile, String gender) {
-        this.identifier = identifier;
+public class UserModel extends RealmObject {
+    @PrimaryKey
+    private Long account_id;
+
+    private String username;
+    private String email;
+    private String phonenumber;
+
+    public UserModel( String email, String mobile) {
         this.email = email;
-        this.mobile = mobile;
-        this.gender = gender;
+        this.phonenumber = mobile;
     }
 
     public UserModel() {
@@ -20,28 +22,13 @@ public class UserModel {
 
 
     public Long getId() {
-        return id;
+        return account_id;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setId(Long account_id) {
+        this.account_id = account_id;
     }
 
-    public String getGender() {
-        return gender;
-    }
-
-    public void setGender(String gender) {
-        this.gender = gender;
-    }
-
-    public String getIdentifier() {
-        return identifier;
-    }
-
-    public void setIdentifier(String identifier) {
-        this.identifier = identifier;
-    }
 
     public String getEmail() {
         return email;
@@ -49,6 +36,23 @@ public class UserModel {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getPhonenumber() {
+        return phonenumber;
+    }
+
+    public void setPhonenumber(String username) {
+        this.phonenumber = phonenumber;
     }
 
 }

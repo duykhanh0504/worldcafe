@@ -8,6 +8,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
 
+import com.aseanfan.worldcafe.Model.UserModel;
+import com.aseanfan.worldcafe.Provider.RealmManager;
 import com.aseanfan.worldcafe.UI.Fragment.CommunityFragment;
 import com.aseanfan.worldcafe.UI.Fragment.MypageFragment;
 import com.aseanfan.worldcafe.UI.Fragment.NotifyFragment;
@@ -17,6 +19,9 @@ import com.aseanfan.worldcafe.worldcafe.R;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import io.realm.RealmChangeListener;
+import io.realm.RealmResults;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -63,6 +68,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        loadUserListAsync();
 
         firstFragment = new CommunityFragment();
         secondFragment = new TimelineFragment();
@@ -76,6 +82,17 @@ public class MainActivity extends AppCompatActivity {
         showFirstFragment();
 
     }
+
+    private void loadUserListAsync() {
+        final RealmResults<UserModel> dataList = RealmManager.createUserDao().loadAllAsync();
+        dataList.addChangeListener(new RealmChangeListener() {
+            @Override
+            public void onChange() {
+                UserModel u = dataList.get(0);
+            }
+        });
+    }
+
 
     public void showFirstFragment() {
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
