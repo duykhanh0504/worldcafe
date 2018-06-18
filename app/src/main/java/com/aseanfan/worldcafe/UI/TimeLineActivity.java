@@ -13,7 +13,6 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.aseanfan.worldcafe.Provider.RealmManager;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.location.FusedLocationProviderClient;

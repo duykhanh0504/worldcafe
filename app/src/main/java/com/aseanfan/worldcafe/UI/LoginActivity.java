@@ -6,8 +6,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.app.WindowDecorActionBar;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -16,7 +14,6 @@ import android.widget.Toast;
 
 import com.aseanfan.worldcafe.Helper.RestAPI;
 import com.aseanfan.worldcafe.Model.UserModel;
-import com.aseanfan.worldcafe.Provider.RealmManager;
 import com.aseanfan.worldcafe.Provider.Store;
 import com.aseanfan.worldcafe.worldcafe.R;
 import com.facebook.AccessToken;
@@ -25,7 +22,6 @@ import com.facebook.GraphResponse;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.parse.LogInCallback;
 import com.parse.ParseException;
 import com.parse.ParseFacebookUtils;
 import com.parse.ParseUser;
@@ -33,9 +29,6 @@ import com.parse.SaveCallback;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.util.Arrays;
-import java.util.Collection;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -56,7 +49,6 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
-        RealmManager.open();
         _loginButton.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -124,10 +116,7 @@ public class LoginActivity extends AppCompatActivity {
             onLoginFailed();
             return;
         }*/
-        final UserModel user = new UserModel();
-        user.setId((long)111);
 
-        RealmManager.createUserDao().save(user);
         /*user.setEmail(jsonObject.get("email").getAsString());
         user.setPhonenumber(jsonObject.get("phonenumber").getAsString());
         user.setUsername(jsonObject.get("username").getAsString());*/
@@ -164,7 +153,7 @@ public class LoginActivity extends AppCompatActivity {
 
                     //  UserModel u = gson.fromJson(jsonObject.getAsJsonArray("result").get(0).getAsJsonObject(), UserModel.class);
                   //  UserModel u  =  RealmManager.open().createObjectFromJson(UserModel.class, JSONObject);
-                    RealmManager.createUserDao().save(user);
+
                     Store.putBooleanData(LoginActivity.this,Store.LOGGED,true);
                     progressDialog.dismiss();
                     Intent intent = new Intent(LoginActivity.this , MainActivity.class);

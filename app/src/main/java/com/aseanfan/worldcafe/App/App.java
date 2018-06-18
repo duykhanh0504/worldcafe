@@ -10,13 +10,5 @@ public class App  extends Application {
     public void onCreate() {
         super.onCreate();
 
-        RealmConfiguration realmConfiguration =
-                new RealmConfiguration.Builder(this)
-                        .name("realm-db.db")
-                        .deleteRealmIfMigrationNeeded()
-                        .schemaVersion(1)
-                        .build();
-
-        Realm.setDefaultConfiguration(realmConfiguration);
     }
 }

@@ -4,8 +4,8 @@ package com.aseanfan.worldcafe.Model;
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 
-public class UserModel extends RealmObject {
-    @PrimaryKey
+public class UserModel  {
+
     private Long account_id;
 
     private String username;
