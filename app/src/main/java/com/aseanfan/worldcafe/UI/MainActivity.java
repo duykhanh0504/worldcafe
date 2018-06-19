@@ -1,5 +1,6 @@
 package com.aseanfan.worldcafe.UI;
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -7,7 +8,9 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.widget.Toast;
 
+import com.aseanfan.worldcafe.App.AccountController;
 import com.aseanfan.worldcafe.Helper.DBHelper;
 import com.aseanfan.worldcafe.Model.UserModel;
 import com.aseanfan.worldcafe.UI.Fragment.CommunityFragment;
@@ -19,6 +22,10 @@ import com.aseanfan.worldcafe.worldcafe.R;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import io.socket.client.IO;
+import io.socket.client.Socket;
+import io.socket.emitter.Emitter;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -32,6 +39,45 @@ public class MainActivity extends AppCompatActivity {
     String TAG_THIRD="third";
     String TAG_FOUR="four";
     String TAG_FIFTH="fifth";
+
+    public static Socket mSocket;
+    {
+        try {
+            mSocket = IO.socket("8080");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private Emitter.Listener onConnectError = new Emitter.Listener() {
+        @Override
+        public void call(Object... args) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    Toast.makeText(getApplicationContext(), "connect error", Toast.LENGTH_LONG).show();
+                    MainActivity.mSocket.disconnect();
+                    Intent intent = new Intent(getApplicationContext(), IntroActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+                    getApplicationContext().startActivity(intent);
+                }
+            });
+        }
+    };
+
+    private Emitter.Listener onReceiveMessgeFromServer = new Emitter.Listener() {
+        @Override
+        public void call(Object... args) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+
+                }
+            });
+        }
+    };
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -67,18 +113,16 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         UserModel user = new UserModel();
-        String [] columns = new String[] {
-                DBHelper.PERSON_COLUMN_ID,
-                DBHelper.PERSON_COLUMN_NAME,
-                DBHelper.PERSON_COLUMN_EMAIL,
-                DBHelper.PERSON_PHONE_NUMBER
-        };
-        Cursor cus = DBHelper.getInstance(getBaseContext()).getAllPersons();
-        cus.moveToFirst();
-        cus.getColumnName(0);
-        String [] columns1 =  cus.getColumnNames();
-        cus.getColumnIndex(columns[2]);
-        cus.getColumnIndex(columns[3]);
+
+        Cursor cursor = DBHelper.getInstance(getBaseContext()).getAllPersons();
+        if(cursor!=null) {
+            cursor.moveToFirst();
+            user.setId(cursor.getLong(cursor.getColumnIndex(DBHelper.PERSON_COLUMN_ID)));
+            user.setUsername(cursor.getString(cursor.getColumnIndex(DBHelper.PERSON_COLUMN_NAME)));
+            user.setEmail(cursor.getString(cursor.getColumnIndex(DBHelper.PERSON_COLUMN_EMAIL)));
+            user.setPhonenumber(cursor.getString(cursor.getColumnIndex(DBHelper.PERSON_PHONE_NUMBER)));
+            AccountController.getInstance().SetAccount(user);
+        }
 
         firstFragment = new CommunityFragment();
         secondFragment = new TimelineFragment();
