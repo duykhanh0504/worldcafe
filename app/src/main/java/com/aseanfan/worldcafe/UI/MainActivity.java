@@ -1,13 +1,15 @@
 package com.aseanfan.worldcafe.UI;
 
+import android.database.Cursor;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
 
+import com.aseanfan.worldcafe.Helper.DBHelper;
+import com.aseanfan.worldcafe.Model.UserModel;
 import com.aseanfan.worldcafe.UI.Fragment.CommunityFragment;
 import com.aseanfan.worldcafe.UI.Fragment.MypageFragment;
 import com.aseanfan.worldcafe.UI.Fragment.NotifyFragment;
@@ -63,6 +65,20 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        UserModel user = new UserModel();
+        String [] columns = new String[] {
+                DBHelper.PERSON_COLUMN_ID,
+                DBHelper.PERSON_COLUMN_NAME,
+                DBHelper.PERSON_COLUMN_EMAIL,
+                DBHelper.PERSON_PHONE_NUMBER
+        };
+        Cursor cus = DBHelper.getInstance(getBaseContext()).getAllPersons();
+        cus.moveToFirst();
+        cus.getColumnName(0);
+        String [] columns1 =  cus.getColumnNames();
+        cus.getColumnIndex(columns[2]);
+        cus.getColumnIndex(columns[3]);
 
         firstFragment = new CommunityFragment();
         secondFragment = new TimelineFragment();

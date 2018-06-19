@@ -37,7 +37,7 @@ public class RestAPI {
 
     private static int TIME_OUT = 12000;
 
-    public static String root_url = "http://127.0.0.1:8080";
+    public static String root_url = "http://10.0.2.2:8080";
     public static String root_url_dev = "";
 
     public static String POST_SIGNUP = root_url + "/api/signup";// identifier

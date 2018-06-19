@@ -6,15 +6,16 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.app.WindowDecorActionBar;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.aseanfan.worldcafe.Helper.DBHelper;
 import com.aseanfan.worldcafe.Helper.RestAPI;
+import com.aseanfan.worldcafe.Model.UserModel;
+import com.aseanfan.worldcafe.Provider.Store;
 import com.aseanfan.worldcafe.worldcafe.R;
 import com.facebook.AccessToken;
 import com.facebook.GraphRequest;
@@ -22,7 +23,6 @@ import com.facebook.GraphResponse;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.parse.LogInCallback;
 import com.parse.ParseException;
 import com.parse.ParseFacebookUtils;
 import com.parse.ParseUser;
@@ -30,9 +30,6 @@ import com.parse.SaveCallback;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.util.Arrays;
-import java.util.Collection;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -117,11 +114,14 @@ public class LoginActivity extends AppCompatActivity {
 
     public void login() {
 
-        if (!validate()) {
+      /*  if (!validate()) {
             onLoginFailed();
             return;
-        }
+        }*/
 
+        /*user.setEmail(jsonObject.get("email").getAsString());
+        user.setPhonenumber(jsonObject.get("phonenumber").getAsString());
+        user.setUsername(jsonObject.get("username").getAsString());*/
         _loginButton.setEnabled(false);
 
         final ProgressDialog progressDialog = new ProgressDialog(LoginActivity.this);
@@ -132,10 +132,13 @@ public class LoginActivity extends AppCompatActivity {
         String email = _emailText.getText().toString();
         String password = _passwordText.getText().toString();
 
-        Gson gson = new Gson();
-        JsonObject dataJson = gson.toJsonTree(null).getAsJsonObject();
+       // Gson gson = new Gson();
+       // JsonObject dataJson = gson.toJsonTree(null).getAsJsonObject();
+        JsonObject dataJson = new JsonObject();
+        dataJson.addProperty("password",password);
+        dataJson.addProperty("email",email);
 
-        /*RestAPI.PostDataMaster(getApplicationContext(), dataJson, RestAPI.POST_LOGIN, new RestAPI.RestAPIListenner() {
+        RestAPI.PostDataMaster(getApplicationContext(), dataJson, RestAPI.POST_LOGIN, new RestAPI.RestAPIListenner() {
 
             @Override
             public void OnComplete(int httpCode, String error, String s) {
@@ -145,8 +148,24 @@ public class LoginActivity extends AppCompatActivity {
 
                         return;
                     }
-                    JsonObject jsonObject = (new JsonParser()).parse(s).getAsJsonObject();
+                    JsonObject jsonObject = (new JsonParser()).parse(s).getAsJsonObject().getAsJsonArray("result").get(0).getAsJsonObject();
                     Gson gson = new Gson();
+                    UserModel u =  gson.fromJson(jsonObject, UserModel.class);
+                    DBHelper.getInstance(getBaseContext()).insertPerson(u.getId(),u.getUsername(),u.getEmail(),u.getPhonenumber());
+                    //  UserModel u = gson.fromJson(jsonObject.getAsJsonArray("result").get(0).getAsJsonObject(), UserModel.class);
+                  //  UserModel u  =  RealmManager.open().createObjectFromJson(UserModel.class, JSONObject);
+
+                    Store.putBooleanData(LoginActivity.this,Store.LOGGED,true);
+                    progressDialog.dismiss();
+                    Intent intent = new Intent(LoginActivity.this , MainActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(intent);
+                    finish();
+                  //  if(jsonObject.get("status").getAsInt() == 200)
+                   // {
+
+                    //}
+
 
                 } catch (Exception ex) {
 
@@ -154,7 +173,7 @@ public class LoginActivity extends AppCompatActivity {
                 }
 
             }
-        });*/
+        });
         // TODO: Implement your own authentication logic here.
 
     }
