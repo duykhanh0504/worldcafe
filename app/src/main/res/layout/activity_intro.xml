@@ -8,8 +8,7 @@
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="#fafafa">
+        android:layout_height="wrap_content">
 
         <android.support.v4.view.ViewPager
             android:id="@+id/intro_view_pager"
@@ -21,25 +20,8 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:layout_gravity="top"
-            android:layout_marginTop="88dp"
+            android:layout_marginTop="338dp"
             >
-
-            <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                >
-
-
-                <ImageView
-                    android:id="@+id/icon_image1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:src="@drawable/intro1"
-                    android:contentDescription="@string/todo" />
-
-
-            </FrameLayout>
 
             <ImageView
                 android:id="@+id/icon_introtext"

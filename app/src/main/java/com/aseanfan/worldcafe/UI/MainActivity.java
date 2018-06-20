@@ -11,6 +11,7 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.aseanfan.worldcafe.App.AccountController;
+import com.aseanfan.worldcafe.App.App;
 import com.aseanfan.worldcafe.Helper.DBHelper;
 import com.aseanfan.worldcafe.Model.UserModel;
 import com.aseanfan.worldcafe.UI.Fragment.CommunityFragment;
@@ -29,26 +30,20 @@ import io.socket.emitter.Emitter;
 
 public class MainActivity extends AppCompatActivity {
 
-    CommunityFragment firstFragment;
-    TimelineFragment secondFragment;
-    MypageFragment thirdFragment;
-    NotifyFragment fourFragment;
-    SettingFragment fifthFragment;
-    String TAG_FIRST="first";
-    String TAG_SECOND="second";
-    String TAG_THIRD="third";
-    String TAG_FOUR="four";
-    String TAG_FIFTH="fifth";
+    private CommunityFragment firstFragment;
+    private TimelineFragment secondFragment;
+    private MypageFragment thirdFragment;
+    private NotifyFragment fourFragment;
+    private SettingFragment fifthFragment;
+    private String TAG_FIRST="first";
+    private String TAG_SECOND="second";
+    private String TAG_THIRD="third";
+    private String TAG_FOUR="four";
+    private String TAG_FIFTH="fifth";
 
-    public static Socket mSocket;
-    {
-        try {
-            mSocket = IO.socket("8080");
+    private Socket mSocket ;
 
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+
 
     private Emitter.Listener onConnectError = new Emitter.Listener() {
         @Override
@@ -57,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void run() {
                     Toast.makeText(getApplicationContext(), "connect error", Toast.LENGTH_LONG).show();
-                    MainActivity.mSocket.disconnect();
+                    mSocket.disconnect();
                     Intent intent = new Intent(getApplicationContext(), IntroActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
@@ -112,9 +107,19 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        App app = (App) getApplication();
+        mSocket = app.getSocket();
+
+        mSocket.on(Socket.EVENT_CONNECT_ERROR, onConnectError);
+        mSocket.on(Socket.EVENT_CONNECT_TIMEOUT, onConnectError);
+        mSocket.on(Socket.EVENT_ERROR, onConnectError);
+        mSocket.on(Socket.EVENT_DISCONNECT, onConnectError);
+        mSocket.on(Socket.EVENT_RECONNECT_ERROR, onConnectError);
+        mSocket.on(Socket.EVENT_RECONNECT_FAILED, onConnectError);
+
         UserModel user = new UserModel();
 
-        Cursor cursor = DBHelper.getInstance(getBaseContext()).getAllPersons();
+        Cursor cursor = DBHelper.getInstance(getApplicationContext()).getAllPersons();
         if(cursor!=null) {
             cursor.moveToFirst();
             user.setId(cursor.getLong(cursor.getColumnIndex(DBHelper.PERSON_COLUMN_ID)));

@@ -47,7 +47,8 @@
 
         <activity android:name="com.aseanfan.worldcafe.UI.ChatActivity" />
         <activity android:name="com.aseanfan.worldcafe.UI.RegisterActivity" />
-        <activity android:name="com.aseanfan.worldcafe.UI.LaunchActivity"></activity>
+        <activity android:name="com.aseanfan.worldcafe.UI.LaunchActivity" />
+        <activity android:name="com.aseanfan.worldcafe.UI.SplashScreen"></activity>
     </application>
 
 </manifest>

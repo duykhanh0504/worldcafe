@@ -2,16 +2,21 @@ package com.aseanfan.worldcafe.UI;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ViewFlipper;
 
+import com.aseanfan.worldcafe.App.AccountController;
+import com.aseanfan.worldcafe.App.App;
 import com.aseanfan.worldcafe.Helper.DBHelper;
 import com.aseanfan.worldcafe.Helper.RestAPI;
 import com.aseanfan.worldcafe.Model.UserModel;
@@ -31,25 +36,55 @@ import com.parse.SaveCallback;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.socket.client.Socket;
 
 public class LoginActivity extends AppCompatActivity {
 
     private static final int REQUEST_SIGNUP = 0;
 
-    @BindView(R.id.input_email)
+  /*  @BindView(R.id.input_email)
     EditText _emailText;
     @BindView(R.id.input_password) EditText _passwordText;
     @BindView(R.id.btn_login) Button _loginButton;
     @BindView(R.id.link_signup)
-    TextView _signupLink;
+    TextView _signupLink;*/
+
+    private ViewFlipper _viewfliper;
+    private Button _loginButton;
+    private EditText _passwordText;
+    private EditText _emailText;
+    private TextView _signupLink;
+
+    private EditText _mobileupdate;
+    private Button _update;
+
+    private Socket mSocket;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        ButterKnife.bind(this);
+       // ButterKnife.bind(this);
+
+        App app = (App) getApplication();
+        mSocket = app.getSocket();
+
+        _viewfliper = (ViewFlipper)this.findViewById(R.id.viewFlipper);
+
+        View viewLogin = this.findViewById(R.id.flipViewLogin);
+        View viewLoginUpdate =  this.findViewById(R.id.flipViewUpdateLogin);
+        _loginButton = (Button)viewLogin.findViewById(R.id.btn_login);
+        _passwordText = (EditText)viewLogin.findViewById(R.id.input_password);
+        _emailText = (EditText)viewLogin.findViewById(R.id.input_email);
+        _signupLink = (TextView)viewLogin.findViewById(R.id.link_signup);
+
+        _mobileupdate = (EditText)viewLoginUpdate.findViewById(R.id.input_mobile_update);
+        _update = (Button) viewLoginUpdate.findViewById(R.id.btn_update);
+
+        showLogin();
 
         _loginButton.setOnClickListener(new View.OnClickListener() {
 
@@ -67,6 +102,13 @@ public class LoginActivity extends AppCompatActivity {
                 Intent intent = new Intent(getApplicationContext(), RegisterActivity.class);
                 startActivityForResult(intent, REQUEST_SIGNUP);
                 finish();
+            }
+        });
+
+        _update.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                update();
             }
         });
 
@@ -112,6 +154,71 @@ public class LoginActivity extends AppCompatActivity {
         });*/
     }
 
+    private void showLogin()
+    {
+
+        _viewfliper.setDisplayedChild(0);
+    }
+
+    private void showLoginUpdate()
+    {
+
+        _viewfliper.setDisplayedChild(1);
+
+    }
+
+
+    public void update() {
+
+        _loginButton.setEnabled(false);
+
+        final ProgressDialog progressDialog = new ProgressDialog(LoginActivity.this);
+        progressDialog.setIndeterminate(true);
+        progressDialog.setMessage("Updating...");
+        progressDialog.show();
+
+        String mobilephone = _mobileupdate.getText().toString();
+
+        final UserModel u = AccountController.getInstance().getAccount();
+        u.setPhonenumber(mobilephone);
+
+        JsonObject dataJson = new JsonObject();
+        dataJson.addProperty("account_id",u.getId());
+        dataJson.addProperty("phonenumber",mobilephone);
+
+
+        RestAPI.PostDataMaster(getApplicationContext(), dataJson, RestAPI.POST_UPDATEUSER, new RestAPI.RestAPIListenner() {
+
+            @Override
+            public void OnComplete(int httpCode, String error, String s) {
+                try {
+                    if (!RestAPI.checkHttpCode(httpCode)) {
+                        //AppFuncs.alert(getApplicationContext(),s,true);
+
+                        return;
+                    }
+
+                    Store.putBooleanData(LoginActivity.this,Store.LOGGED,true);
+                    progressDialog.dismiss();
+
+                    Intent intent = new Intent(LoginActivity.this , MainActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(intent);
+                    finish();
+
+
+                } catch (Exception ex) {
+
+                    ex.printStackTrace();
+                }
+
+            }
+        });
+        // TODO: Implement your own authentication logic here.
+
+    }
+
+
     public void login() {
 
       /*  if (!validate()) {
@@ -150,17 +257,45 @@ public class LoginActivity extends AppCompatActivity {
                     }
                     JsonObject jsonObject = (new JsonParser()).parse(s).getAsJsonObject().getAsJsonArray("result").get(0).getAsJsonObject();
                     Gson gson = new Gson();
-                    UserModel u =  gson.fromJson(jsonObject, UserModel.class);
-                    DBHelper.getInstance(getBaseContext()).insertPerson(u.getId(),u.getUsername(),u.getEmail(),u.getPhonenumber());
+                    final UserModel u =  gson.fromJson(jsonObject, UserModel.class);
+                    DBHelper.getInstance(getApplicationContext()).insertPerson(u.getId(),u.getUsername(),u.getEmail(),u.getPhonenumber());
+                    AccountController.getInstance().SetAccount(u);
+
+                    JsonObject dataJson = new JsonObject();
+                    dataJson.addProperty("account_id",u.getId());
+
+                    RestAPI.PostDataMaster(getApplicationContext(), dataJson, RestAPI.POST_UPDATESOCKET, new RestAPI.RestAPIListenner() {
+                        @Override
+                        public void OnComplete(int httpCode, String error, String s) {
+                            if (!RestAPI.checkHttpCode(httpCode)) {
+                                //AppFuncs.alert(getApplicationContext(),s,true);
+
+                                return;
+                            }
+
+                            Store.putBooleanData(LoginActivity.this,Store.LOGGED,true);
+                            progressDialog.dismiss();
+                            if(u.getPhonenumber()==null || u.getPhonenumber().isEmpty()) {
+                                if (LoginActivity.this.getCurrentFocus() != null) {
+                                    InputMethodManager imm = (InputMethodManager) LoginActivity.this.getSystemService(Context.INPUT_METHOD_SERVICE);
+                                    imm.hideSoftInputFromWindow(LoginActivity.this.getCurrentFocus().getWindowToken(), 0);
+                                }
+                                showLoginUpdate();
+                            }
+                            else
+                            {
+                                Intent intent = new Intent(LoginActivity.this , MainActivity.class);
+                                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                startActivity(intent);
+                                finish();
+                            }
+
+                        }
+                    });
+
                     //  UserModel u = gson.fromJson(jsonObject.getAsJsonArray("result").get(0).getAsJsonObject(), UserModel.class);
                   //  UserModel u  =  RealmManager.open().createObjectFromJson(UserModel.class, JSONObject);
 
-                    Store.putBooleanData(LoginActivity.this,Store.LOGGED,true);
-                    progressDialog.dismiss();
-                    Intent intent = new Intent(LoginActivity.this , MainActivity.class);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    startActivity(intent);
-                    finish();
                   //  if(jsonObject.get("status").getAsInt() == 200)
                    // {
 

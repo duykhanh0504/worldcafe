@@ -29,8 +29,7 @@ public class IntroActivity extends AppCompatActivity {
 
     @BindView(R.id.intro_view_pager)
     ViewPager viewPager;
-    @BindView(R.id.icon_image1)
-    ImageView topImage1;
+
     @BindView(R.id.icon_introtext)
     ImageView textintro;
     @BindView(R.id.bottom_pages)
@@ -39,9 +38,8 @@ public class IntroActivity extends AppCompatActivity {
     private int lastPage = 0;
     private boolean justCreated = false;
     private boolean startPressed = false;
-    private int[] icons;
-    private int[] titles;
-    private int[] messages;
+    private int[] images;
+
 
     @BindView(R.id.Signup)
     Button signup;
@@ -68,24 +66,13 @@ public class IntroActivity extends AppCompatActivity {
         setContentView(R.layout.activity_intro);
         ButterKnife.bind(this);
 
-            icons = new int[]{
-                    R.drawable.intro1,
-                    R.drawable.intro2,
-                    R.drawable.intro3,
-                    R.drawable.intro4
+            images = new int[]{
+                    R.drawable.introl1,
+                    R.drawable.introl2,
+                    R.drawable.introl3,
+                    R.drawable.introl4
             };
-            titles = new int[]{
-                    R.string.aaa,
-                    R.string.bbb,
-                    R.string.ccc,
-                    R.string.ddd
-            };
-            messages = new int[]{
-                    R.string.aaa,
-                    R.string.bbb,
-                    R.string.ccc,
-                    R.string.ddd
-            };
+
 
        // viewPager = (ViewPager) findViewById(R.id.intro_view_pager);
        // textintro = (ImageView) findViewById(R.id.icon_introtext);
@@ -105,7 +92,7 @@ public class IntroActivity extends AppCompatActivity {
         viewPager.setAdapter(new IntroAdapter());
         viewPager.setPageMargin(0);
         viewPager.setOffscreenPageLimit(1);
-        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+       /* viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
@@ -134,18 +121,10 @@ public class IntroActivity extends AppCompatActivity {
                         }
 
                         fadeinImage.bringToFront();
-                        fadeinImage.setImageResource(icons[lastPage]);
+                        fadeinImage.setImageResource(images[lastPage]);
                         fadeinImage.clearAnimation();
                         fadeoutImage.clearAnimation();
 
-                        if(icons[lastPage] == R.drawable.intro1)
-                        {
-                            textintro.setVisibility(View.VISIBLE);
-                        }
-                        else
-                        {
-                            textintro.setVisibility(View.GONE);
-                        }
 
                         Animation outAnimation = AnimationUtils.loadAnimation(IntroActivity.this, R.anim.icon_anim_fade_out);
                         outAnimation.setAnimationListener(new Animation.AnimationListener() {
@@ -188,7 +167,7 @@ public class IntroActivity extends AppCompatActivity {
                     }
                 }
             }
-        });
+        });*/
 
         justCreated = true;
     }
@@ -231,12 +210,10 @@ public class IntroActivity extends AppCompatActivity {
         @Override
         public Object instantiateItem(ViewGroup container, int position) {
             View view = View.inflate(container.getContext(), R.layout.intro_view_layout, null);
-            TextView headerTextView = (TextView) view.findViewById(R.id.header_text);
-            TextView messageTextView = (TextView) view.findViewById(R.id.message_text);
+            ImageView headerimage = (ImageView) view.findViewById(R.id.header_image);
             container.addView(view, 0);
 
-            headerTextView.setText(getString(titles[position]));
-            messageTextView.setText(getString(messages[position]));
+            headerimage.setBackgroundResource(images[position]);
 
             return view;
         }
@@ -253,9 +230,9 @@ public class IntroActivity extends AppCompatActivity {
             for (int a = 0; a < count; a++) {
                 View child = bottomPages.getChildAt(a);
                 if (a == position) {
-                    child.setBackground(getResources().getDrawable(R.drawable.circle_select));
+                    child.setBackgroundResource(R.drawable.circle_select);
                 } else {
-                    child.setBackground(getResources().getDrawable(R.drawable.circle));
+                    child.setBackgroundResource(R.drawable.circle);
                 }
             }
         }

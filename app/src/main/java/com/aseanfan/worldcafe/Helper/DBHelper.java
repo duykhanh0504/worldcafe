@@ -46,27 +46,27 @@ public class DBHelper extends SQLiteOpenHelper {
         return numRows;
     }
 
-    public boolean updatePerson(Integer id, String name, String email, int phonenumber) {
+    public boolean updatePerson(Long id, String name, String email, String phonenumber) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(PERSON_COLUMN_NAME, name);
         contentValues.put(PERSON_COLUMN_EMAIL, email);
         contentValues.put(PERSON_PHONE_NUMBER, phonenumber);
-        db.update(PERSON_TABLE_USER, contentValues, PERSON_COLUMN_ID + " = ? ", new String[] { Integer.toString(id) } );
+        db.update(PERSON_TABLE_USER, contentValues, PERSON_COLUMN_ID + " = ? ", new String[] { Long.toString(id) } );
         return true;
     }
 
-    public Integer deletePerson(Integer id) {
+    public Integer deletePerson(Long id) {
         SQLiteDatabase db = this.getWritableDatabase();
         return db.delete(PERSON_TABLE_USER,
                 PERSON_COLUMN_ID + " = ? ",
-                new String[] { Integer.toString(id) });
+                new String[] { Long.toString(id) });
     }
 
-    public Cursor getPerson(int id) {
+    public Cursor getPerson(Long id) {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor res =  db.rawQuery("SELECT * FROM " + PERSON_TABLE_USER + " WHERE " +
-                PERSON_COLUMN_ID + "=?", new String[]{Integer.toString(id)});
+                PERSON_COLUMN_ID + "=?", new String[]{Long.toString(id)});
         return res;
     }
 
