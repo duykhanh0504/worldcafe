@@ -7,6 +7,8 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
@@ -42,6 +44,8 @@ public class MainActivity extends AppCompatActivity {
     private String TAG_FIFTH="fifth";
 
     private Socket mSocket ;
+
+    private Toolbar mToolbar;
 
 
 
@@ -101,11 +105,15 @@ public class MainActivity extends AppCompatActivity {
 
     };
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        mToolbar = (Toolbar) findViewById(R.id.app_toolbar);
+        setSupportActionBar(mToolbar);
+        getSupportActionBar().setTitle("Crosea");
+        getSupportActionBar().setDisplayShowTitleEnabled(true);
 
         App app = (App) getApplication();
         mSocket = app.getSocket();
@@ -141,6 +149,16 @@ public class MainActivity extends AppCompatActivity {
         showFirstFragment();
 
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main_tool_bar, menu);
+
+        MenuItem item = menu.findItem(R.id.action_search);
+
+        return true;
+    }
+
 
     public void showFirstFragment() {
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();

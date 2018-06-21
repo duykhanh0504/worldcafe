@@ -8,38 +8,60 @@
     <!-- TODO: Update blank fragment layout -->
 
     <android.support.design.widget.TabLayout
+        android:id="@+id/tab_community"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <android.support.design.widget.TabItem
+            android:id="@+id/tabItem1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/business"/>
-
+            android:text="Tab2" />
         <android.support.design.widget.TabItem
+            android:id="@+id/tabItem2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/local" />
-
+            android:text="Tab2" />
         <android.support.design.widget.TabItem
+            android:id="@+id/tabItem3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/language" />
-
+            android:text="Tab2" />
         <android.support.design.widget.TabItem
+            android:id="@+id/tabItem4"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/friend" />
-
+            android:text="Tab2" />
     </android.support.design.widget.TabLayout>
 
     <LinearLayout
         android:id="@+id/framelayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/colorAccent"
-        android:orientation="horizontal">
+        android:orientation="vertical">
+        <Spinner
+            android:id="@+id/spinnersort"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:drawable/btn_dropdown"
+            android:spinnerMode="dropdown"/>
 
+        <ImageButton
+            android:id="@+id/btn_narrow"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_gravity="right"/>
+
+        <ViewFlipper
+            android:id="@+id/viewFlippercommunity"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="0dp">
+            <include
+                android:id="@+id/community_tab1"
+                layout="@layout/community_view_layout" />
+
+        </ViewFlipper>
     </LinearLayout>
 
 </LinearLayout>
