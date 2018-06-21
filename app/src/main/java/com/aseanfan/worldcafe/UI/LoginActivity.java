@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -23,11 +24,13 @@ import com.aseanfan.worldcafe.Model.UserModel;
 import com.aseanfan.worldcafe.Provider.Store;
 import com.aseanfan.worldcafe.worldcafe.R;
 import com.facebook.AccessToken;
+import com.facebook.FacebookSdk;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.parse.LogInCallback;
 import com.parse.ParseException;
 import com.parse.ParseFacebookUtils;
 import com.parse.ParseUser;
@@ -36,6 +39,9 @@ import com.parse.SaveCallback;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+
+import java.util.Arrays;
+import java.util.Collection;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -54,6 +60,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private ViewFlipper _viewfliper;
     private Button _loginButton;
+    private Button _loginFacebookButton;
     private EditText _passwordText;
     private EditText _emailText;
     private TextView _signupLink;
@@ -77,6 +84,7 @@ public class LoginActivity extends AppCompatActivity {
         View viewLogin = this.findViewById(R.id.flipViewLogin);
         View viewLoginUpdate =  this.findViewById(R.id.flipViewUpdateLogin);
         _loginButton = (Button)viewLogin.findViewById(R.id.btn_login);
+        _loginFacebookButton = (Button)viewLogin.findViewById(R.id.btn_facebook_login);
         _passwordText = (EditText)viewLogin.findViewById(R.id.input_password);
         _emailText = (EditText)viewLogin.findViewById(R.id.input_email);
         _signupLink = (TextView)viewLogin.findViewById(R.id.link_signup);
@@ -113,7 +121,7 @@ public class LoginActivity extends AppCompatActivity {
         });
 
 
-      /*  fblogin.setOnClickListener(new View.OnClickListener() {
+        _loginFacebookButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 final ProgressDialog dlg = new ProgressDialog(LoginActivity.this);
@@ -151,7 +159,7 @@ public class LoginActivity extends AppCompatActivity {
                     }
                 });
             }
-        });*/
+        });
     }
 
     private void showLogin()
