@@ -23,6 +23,7 @@ import com.aseanfan.worldcafe.UI.Fragment.SettingFragment;
 import com.aseanfan.worldcafe.UI.Fragment.TimelineFragment;
 import com.aseanfan.worldcafe.worldcafe.R;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -109,7 +110,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        
         mToolbar = (Toolbar) findViewById(R.id.app_toolbar);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setTitle("Crosea");
