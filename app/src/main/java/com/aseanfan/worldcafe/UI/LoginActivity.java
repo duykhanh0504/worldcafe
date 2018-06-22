@@ -1,10 +1,16 @@
 package com.aseanfan.worldcafe.UI;
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
+import android.provider.MediaStore;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -12,6 +18,7 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ViewFlipper;
@@ -23,58 +30,57 @@ import com.aseanfan.worldcafe.Helper.RestAPI;
 import com.aseanfan.worldcafe.Model.UserModel;
 import com.aseanfan.worldcafe.Provider.Store;
 import com.aseanfan.worldcafe.worldcafe.R;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
 import com.facebook.AccessToken;
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
+import com.facebook.login.LoginManager;
+import com.facebook.login.LoginResult;
+import com.facebook.login.widget.LoginButton;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.parse.LogInCallback;
-import com.parse.ParseException;
-import com.parse.ParseFacebookUtils;
-import com.parse.ParseUser;
-import com.parse.SaveCallback;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 
 import java.util.Arrays;
-import java.util.Collection;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import io.socket.client.Socket;
 
 public class LoginActivity extends AppCompatActivity {
 
     private static final int REQUEST_SIGNUP = 0;
 
-  /*  @BindView(R.id.input_email)
-    EditText _emailText;
-    @BindView(R.id.input_password) EditText _passwordText;
-    @BindView(R.id.btn_login) Button _loginButton;
-    @BindView(R.id.link_signup)
-    TextView _signupLink;*/
-
     private ViewFlipper _viewfliper;
     private Button _loginButton;
-    private Button _loginFacebookButton;
+    private LoginButton _loginFacebookButton;
     private EditText _passwordText;
     private EditText _emailText;
     private TextView _signupLink;
+
+    private ImageView _avatarimage;
 
     private EditText _mobileupdate;
     private Button _update;
 
     private Socket mSocket;
+    CallbackManager callbackManager;
+
+    private final int PICK_IMAGE_CAMERA = 1, PICK_IMAGE_GALLERY = 2;
+    private final int FACEBOOK_LOGIN = 64206;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-       // ButterKnife.bind(this);
 
         App app = (App) getApplication();
         mSocket = app.getSocket();
@@ -84,13 +90,15 @@ public class LoginActivity extends AppCompatActivity {
         View viewLogin = this.findViewById(R.id.flipViewLogin);
         View viewLoginUpdate =  this.findViewById(R.id.flipViewUpdateLogin);
         _loginButton = (Button)viewLogin.findViewById(R.id.btn_login);
-        _loginFacebookButton = (Button)viewLogin.findViewById(R.id.btn_facebook_login);
+        _loginFacebookButton = (LoginButton)viewLogin.findViewById(R.id.btn_facebook_login);
         _passwordText = (EditText)viewLogin.findViewById(R.id.input_password);
         _emailText = (EditText)viewLogin.findViewById(R.id.input_email);
         _signupLink = (TextView)viewLogin.findViewById(R.id.link_signup);
 
         _mobileupdate = (EditText)viewLoginUpdate.findViewById(R.id.input_mobile_update);
         _update = (Button) viewLoginUpdate.findViewById(R.id.btn_update);
+
+        _avatarimage = (ImageView) viewLoginUpdate.findViewById(R.id.imageAvatar);
 
         showLogin();
 
@@ -120,46 +128,61 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
+        callbackManager = CallbackManager.Factory.create();
+        _loginFacebookButton.setReadPermissions(Arrays.asList(
+                "public_profile", "email", "user_birthday"));
 
-        _loginFacebookButton.setOnClickListener(new View.OnClickListener() {
+        _avatarimage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                final ProgressDialog dlg = new ProgressDialog(LoginActivity.this);
-                dlg.setTitle("Please, wait a moment.");
-                dlg.setMessage("Logging in...");
-                dlg.show();
-
-                Collection<String> permissions = Arrays.asList("public_profile", "email");
-
-                ParseFacebookUtils.logInWithReadPermissionsInBackground(LoginActivity.this, permissions, new LogInCallback() {
-
-                    @Override
-                    public void done(ParseUser user, ParseException err) {
-                        if (err != null) {
-                            dlg.dismiss();
-                            ParseUser.logOut();
-                            Log.e("err", "err", err);
-                        }
-                        if (user == null) {
-                            dlg.dismiss();
-                            ParseUser.logOut();
-                            Toast.makeText(LoginActivity.this, "The user cancelled the Facebook login.", Toast.LENGTH_LONG).show();
-                            Log.d("MyApp", "Uh oh. The user cancelled the Facebook login.");
-                        } else if (user.isNew()) {
-                            dlg.dismiss();
-                            Toast.makeText(LoginActivity.this, "User signed up and logged in through Facebook.", Toast.LENGTH_LONG).show();
-                            Log.d("MyApp", "User signed up and logged in through Facebook!");
-                            getUserDetailFromFB();
-                        } else {
-                            dlg.dismiss();
-                            Toast.makeText(LoginActivity.this, "User logged in through Facebook.", Toast.LENGTH_LONG).show();
-                            Log.d("MyApp", "User logged in through Facebook!");
-                            alertDisplayer("Oh, you!","Welcome back!");
-                        }
-                    }
-                });
+                selectImage();
             }
         });
+
+        LoginManager.getInstance().registerCallback(callbackManager,
+                new FacebookCallback<LoginResult>() {
+                    @Override
+                    public void onSuccess(LoginResult loginResult) {
+                        // App code
+                        String  i = "";
+                        GraphRequest request = GraphRequest.newMeRequest(
+                                loginResult.getAccessToken(),
+                                new GraphRequest.GraphJSONObjectCallback() {
+                                    @Override
+                                    public void onCompleted(JSONObject object, GraphResponse response) {
+                                        Log.v("LoginActivity", response.toString());
+
+                                        // Application code
+                                        try {
+
+                                            UserModel u =  new UserModel();
+                                            u.setEmail(object.getString("email"));
+                                            u.setAvarta( object.getJSONObject("picture").getJSONObject("data").getString("url"));
+                                            AccountController.getInstance().SetAccount(u);
+                                            showLoginUpdate();
+                                        } catch (JSONException e) {
+                                            e.printStackTrace();
+                                        }
+
+                                    }
+                                });
+                        Bundle parameters = new Bundle();
+                        parameters.putString("fields", "id,name,email,gender, picture");
+                        request.setParameters(parameters);
+                        request.executeAsync();
+                    }
+
+                    @Override
+                    public void onCancel() {
+
+                    }
+
+                    @Override
+                    public void onError(FacebookException exception) {
+
+                    }
+                });
+
     }
 
     private void showLogin()
@@ -171,10 +194,54 @@ public class LoginActivity extends AppCompatActivity {
     private void showLoginUpdate()
     {
 
+        RequestOptions requestOptions = new RequestOptions()
+                .diskCacheStrategy(DiskCacheStrategy.ALL);
+
+
+        Glide.with(this)
+                .load(AccountController.getInstance().getAccount().getAvarta()).apply(requestOptions)
+                .into(_avatarimage);
+
         _viewfliper.setDisplayedChild(1);
 
     }
 
+
+    private void selectImage() {
+        try {
+            PackageManager pm = getPackageManager();
+
+            if (ContextCompat.checkSelfPermission(this,Manifest.permission.CAMERA)
+                    != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.CAMERA}, 0 );
+            }
+
+                final CharSequence[] options = {"Take Photo", "Choose From Gallery","Cancel"};
+                android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(this);
+                builder.setTitle("Select Option");
+                builder.setItems(options, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int item) {
+                        if (options[item].equals("Take Photo")) {
+                            dialog.dismiss();
+                            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                            startActivityForResult(intent, PICK_IMAGE_CAMERA);
+                        } else if (options[item].equals("Choose From Gallery")) {
+                            dialog.dismiss();
+                            Intent pickPhoto = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                            startActivityForResult(pickPhoto, PICK_IMAGE_GALLERY);
+                        } else if (options[item].equals("Cancel")) {
+                            dialog.dismiss();
+                        }
+                    }
+                });
+                builder.show();
+
+        } catch (Exception e) {
+            Toast.makeText(this, "Camera Permission error", Toast.LENGTH_SHORT).show();
+            e.printStackTrace();
+        }
+    }
 
     public void update() {
 
@@ -266,7 +333,7 @@ public class LoginActivity extends AppCompatActivity {
                     JsonObject jsonObject = (new JsonParser()).parse(s).getAsJsonObject().getAsJsonArray("result").get(0).getAsJsonObject();
                     Gson gson = new Gson();
                     final UserModel u =  gson.fromJson(jsonObject, UserModel.class);
-                    DBHelper.getInstance(getApplicationContext()).insertPerson(u.getId(),u.getUsername(),u.getEmail(),u.getPhonenumber());
+                    DBHelper.getInstance(getApplicationContext()).insertPerson(u.getId(),u.getUsername(),u.getEmail(),u.getPhonenumber(),u.getAvarta());
                     AccountController.getInstance().SetAccount(u);
 
                     JsonObject dataJson = new JsonObject();
@@ -350,36 +417,6 @@ public class LoginActivity extends AppCompatActivity {
         _loginButton.setEnabled(true);
     }
 
-    private void getUserDetailFromFB(){
-        GraphRequest request = GraphRequest.newMeRequest(AccessToken.getCurrentAccessToken(),new GraphRequest.GraphJSONObjectCallback(){
-            @Override
-            public void onCompleted(JSONObject object, GraphResponse response) {
-                ParseUser user = ParseUser.getCurrentUser();
-                try{
-                    user.setUsername(object.getString("name"));
-                }catch(JSONException e){
-                    e.printStackTrace();
-                }
-                try{
-                    user.setEmail(object.getString("email"));
-                }catch(JSONException e){
-                    e.printStackTrace();
-                }
-                user.saveInBackground(new SaveCallback() {
-                    @Override
-                    public void done(ParseException e) {
-                        alertDisplayer("First Time Login!", "Welcome!");
-                    }
-                });
-            }
-
-        });
-
-        Bundle parameters = new Bundle();
-        parameters.putString("fields","name,email");
-        request.setParameters(parameters);
-        request.executeAsync();
-    }
 
     private void alertDisplayer(String title,String message){
         AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this)
@@ -401,6 +438,26 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        ParseFacebookUtils.onActivityResult(requestCode, resultCode, data);
+        switch(requestCode) {
+            case PICK_IMAGE_CAMERA:
+                if(resultCode == RESULT_OK){
+                    Uri selectedImage = data.getData();
+                    Glide.with(this).load( selectedImage).into( _avatarimage);
+
+                }
+
+                break;
+            case PICK_IMAGE_GALLERY:
+                if(resultCode == RESULT_OK){
+                    Uri selectedImage = data.getData();
+                    Glide.with(this).load( selectedImage).into( _avatarimage);
+                }
+                break;
+            case FACEBOOK_LOGIN:
+                if(resultCode == RESULT_OK){
+                    callbackManager.onActivityResult(requestCode, resultCode, data);
+                }
+                break;
+        }
     }
 }

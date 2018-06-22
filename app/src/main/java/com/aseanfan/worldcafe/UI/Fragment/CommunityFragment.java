@@ -134,8 +134,8 @@ public class CommunityFragment extends Fragment {
 
         mAdapter.setOnItemClickListener(new CommunityAdapter.ClickListener() {
             @Override
-            public void onItemClick(int position, View v) {
-                int a = position;
+            public void onItemClick(int position, View v,int Type) {
+                int a = Type;
             }
         });
 

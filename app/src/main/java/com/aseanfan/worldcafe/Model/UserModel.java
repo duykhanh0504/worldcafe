@@ -7,6 +7,7 @@ public class UserModel {
     private String username;
     private String email;
     private String phonenumber;
+    private String avarta;
 
     public UserModel( String email, String mobile) {
         this.email = email;
@@ -49,6 +50,14 @@ public class UserModel {
 
     public void setPhonenumber(String username) {
         this.phonenumber = phonenumber;
+    }
+
+    public String getAvarta() {
+        return avarta;
+    }
+
+    public void setAvarta(String avarta) {
+        this.avarta = avarta;
     }
 
 }

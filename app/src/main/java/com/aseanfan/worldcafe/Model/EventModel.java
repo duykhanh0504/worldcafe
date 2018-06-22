@@ -4,6 +4,7 @@ public class EventModel {
 
     private Long event_id;
     private String urlImage;
+    private String urlAvatar;
     private String title;
     private Long price;
     private String detail;
@@ -26,9 +27,18 @@ public class EventModel {
         return urlImage;
     }
 
+    public void setUrlAvatar(String urlAvatar) {
+        this.urlAvatar = urlAvatar;
+    }
+
+    public String getUrlAvatar() {
+        return urlAvatar;
+    }
+
     public void setUrlImage(String urlImage) {
         this.urlImage = urlImage;
     }
+
 
 
     public String getTitle() {

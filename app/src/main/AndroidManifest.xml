@@ -14,6 +14,8 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.CAMERA" />
 
     <application
         android:name="com.aseanfan.worldcafe.App.App"
@@ -31,7 +33,15 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.aseanfan.worldcafe.UI.LoginActivity" />
+        <activity android:name="com.aseanfan.worldcafe.UI.LoginActivity"
+            android:exported="true">
+        <intent-filter>
+            <action android:name="android.intent.action.VIEW" />
+            <category android:name="android.intent.category.DEFAULT" />
+            <category android:name="android.intent.category.BROWSABLE" />
+            <data android:scheme="@string/fb_login_protocol_scheme" />
+        </intent-filter>
+        </activity>
         <activity android:name="com.aseanfan.worldcafe.UI.TimeLineActivity" />
 
         <uses-library
@@ -44,6 +54,13 @@
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
+
+        <meta-data android:name="com.facebook.sdk.ApplicationId"
+            android:value="@string/facebook_app_id"/>
+
+        <meta-data
+            android:name="com.parse.APPLICATION_ID"
+            android:value="@string/back4app_app_id" />
 
         <activity android:name="com.aseanfan.worldcafe.UI.ChatActivity" />
         <activity android:name="com.aseanfan.worldcafe.UI.RegisterActivity" />

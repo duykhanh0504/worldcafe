@@ -17,6 +17,7 @@ public class DBHelper extends SQLiteOpenHelper {
     public static final String PERSON_COLUMN_NAME = "username";
     public static final String PERSON_COLUMN_EMAIL = "email";
     public static final String PERSON_PHONE_NUMBER = "phonenumber";
+    public static final String PERSON_AVATAR_URL = "avarta";
 
     private static SQLiteDatabase db;
     private static DBHelper instance;
@@ -26,7 +27,7 @@ public class DBHelper extends SQLiteOpenHelper {
         super(context, DATABASE_NAME , null, DATABASE_VERSION);
     }
 
-    public boolean insertPerson(Long id,String name, String email, String phonenumber) {
+    public boolean insertPerson(Long id,String name, String email, String phonenumber , String avarta) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
 
@@ -34,6 +35,7 @@ public class DBHelper extends SQLiteOpenHelper {
         contentValues.put(PERSON_COLUMN_NAME, name);
         contentValues.put(PERSON_COLUMN_EMAIL, email);
         contentValues.put(PERSON_PHONE_NUMBER, phonenumber);
+        contentValues.put(PERSON_AVATAR_URL, avarta);
 
 
         db.insert(PERSON_TABLE_USER, null, contentValues);
@@ -46,12 +48,13 @@ public class DBHelper extends SQLiteOpenHelper {
         return numRows;
     }
 
-    public boolean updatePerson(Long id, String name, String email, String phonenumber) {
+    public boolean updatePerson(Long id, String name, String email, String phonenumber,String avatar) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(PERSON_COLUMN_NAME, name);
         contentValues.put(PERSON_COLUMN_EMAIL, email);
         contentValues.put(PERSON_PHONE_NUMBER, phonenumber);
+        contentValues.put(PERSON_AVATAR_URL, avatar);
         db.update(PERSON_TABLE_USER, contentValues, PERSON_COLUMN_ID + " = ? ", new String[] { Long.toString(id) } );
         return true;
     }
@@ -83,7 +86,8 @@ public class DBHelper extends SQLiteOpenHelper {
                         "(" + PERSON_COLUMN_ID + " INTEGER, " /*INTEGER PRIMARY KEY,*/  +
                         PERSON_COLUMN_NAME + " TEXT, " +
                         PERSON_COLUMN_EMAIL + " TEXT, " +
-                        PERSON_PHONE_NUMBER + " TEXT)"
+                        PERSON_PHONE_NUMBER + " TEXT, " +
+                        PERSON_AVATAR_URL + " TEXT)"
         );
     }
 
