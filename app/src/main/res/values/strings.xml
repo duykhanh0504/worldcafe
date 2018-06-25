@@ -1,9 +1,5 @@
 <resources>
     <string name="app_name">worldcafe</string>
-    <string name="aaa">aaa</string>
-    <string name="bbb">bbb</string>
-    <string name="ccc">ccc</string>
-    <string name="ddd">ccc</string>
     <string name="button">Button</string>
     <string name="todo">TODO</string>
     <string name="Login">Login</string>
@@ -20,19 +16,16 @@
     <string name="title_setting">Setting</string>
     <string name="title_notifications">Notify</string>
 
-    <string name="business">Business</string>
-    <string name="local">Local</string>
-    <string name="language">Language</string>
-    <string name="friend">Friend</string>
-
     <string name="Signup">Sign up</string>
 
     <string name="facebook_app_id">216205465084648</string>
     <string name="fb_login_protocol_scheme">fb216205465084648</string>
-    <string name="back4app_server_url">https://parseapi.back4app.com/</string>
 
-    <string name="back4app_app_id">216205465084648</string>
-    <string name="back4app_client_key">PASTE_YOUR_CLIENT_KEY</string>
+    <string name="Friend">Friend</string>
+    <string name="Business">Business</string>
+    <string name="Local">Local</string>
+    <string name="Language">Language</string>
+
 
 
 </resources>

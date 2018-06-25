@@ -24,14 +24,29 @@ import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.ViewFlipper;
 
+import com.aseanfan.worldcafe.App.AccountController;
+import com.aseanfan.worldcafe.Helper.DBHelper;
+import com.aseanfan.worldcafe.Helper.NotificationCenter;
+import com.aseanfan.worldcafe.Helper.RestAPI;
 import com.aseanfan.worldcafe.Model.EventModel;
+import com.aseanfan.worldcafe.Model.UserModel;
 import com.aseanfan.worldcafe.UI.Adapter.CommunityAdapter;
 import com.aseanfan.worldcafe.UI.IntroActivity;
+import com.aseanfan.worldcafe.UI.MainActivity;
+import com.aseanfan.worldcafe.Utils.Constants;
 import com.aseanfan.worldcafe.worldcafe.R;
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import com.google.gson.reflect.TypeToken;
 
+import java.lang.reflect.Type;
+import java.security.acl.LastOwnerException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,7 +54,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 
-public class CommunityFragment extends Fragment {
+public class CommunityFragment extends Fragment implements NotificationCenter.NotificationCenterDelegate {
 
   //  @BindView(R.id.tab_community)
     private  TabLayout tabcommunity;
@@ -53,6 +68,17 @@ public class CommunityFragment extends Fragment {
 
     private ImageButton btn_narrow;
 
+    List<EventModel> listEventFriend;
+    List<EventModel> listEventBusiness;
+    List<EventModel> listEventLocal;
+    List<EventModel> listEventLanguage;
+
+    final int TAB_FRIEND = 0;
+    final int TAB_BUSINESS=1;
+    final int TAB_LOCAL=2;
+    final int TAB_LANGUAGE=3;
+
+
     private static final String[]paths = {"item 1", "item 2", "item 3"};
 
     public static CommunityFragment newInstance() {
@@ -60,10 +86,102 @@ public class CommunityFragment extends Fragment {
         return firstFrag;
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+    }
+
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        if (hidden) {
+            //do when hidden
+        } else {
+            //do when show
+        }
+    }
+
+    public void SearchEvent(String search_text)
+    {
+        int i =0;
+    }
+
+    public void LoadListEvent(final int Type)
+    {
+        RestAPI.GetDataMaster(getActivity().getApplicationContext(),RestAPI.GET_LISTEVENT, new RestAPI.RestAPIListenner() {
+            @Override
+            public void OnComplete(int httpCode, String error, String s) {
+                try {
+                    if (!RestAPI.checkHttpCode(httpCode)) {
+                        //AppFuncs.alert(getApplicationContext(),s,true);
+
+                        return;
+                    }
+                    JsonArray jsonArray = (new JsonParser()).parse(s).getAsJsonObject().getAsJsonArray("result");
+                    Gson gson = new Gson();
+                    Type type = new TypeToken<List<EventModel>>(){}.getType();
+                    switch(Type)
+                    {
+                        case TAB_FRIEND:
+                            listEventFriend = gson.fromJson(jsonArray, type);
+                            if (tabcommunity.getSelectedTabPosition() == TAB_FRIEND) {
+                                mAdapter.setEventList(listEventFriend);
+                            }
+                            break;
+                        case TAB_BUSINESS:
+                            listEventBusiness = gson.fromJson(jsonArray, type);
+                            if (tabcommunity.getSelectedTabPosition() == TAB_BUSINESS) {
+                                mAdapter.setEventList(listEventFriend);
+                            }
+                            break;
+                        case TAB_LOCAL:
+                            listEventLocal = gson.fromJson(jsonArray, type);
+                            if (tabcommunity.getSelectedTabPosition() == TAB_LOCAL) {
+                                mAdapter.setEventList(listEventFriend);
+                            }
+                            break;
+                        case TAB_LANGUAGE:
+                            listEventLanguage = gson.fromJson(jsonArray, type);
+                            if (tabcommunity.getSelectedTabPosition() == TAB_LANGUAGE) {
+                                mAdapter.setEventList(listEventFriend);
+                            }
+                            break;
+                    }
+
+
+                }
+                catch (Exception ex) {
+
+                    ex.printStackTrace();
+                }
+            }
+        });
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable final ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_community, container, false);
+
+        listEventFriend = new ArrayList<>();
+        listEventBusiness = new ArrayList<>();
+        listEventLocal = new ArrayList<>();
+        listEventLanguage = new ArrayList<>();
+
+        NotificationCenter.getInstance().addObserver(this, NotificationCenter.callbacksearch);
+
+
+        LoadListEvent(TAB_FRIEND);
 
         viewpager = (ViewFlipper)view.findViewById(R.id.viewFlippercommunity);
         tabcommunity = (TabLayout)view.findViewById(R.id.tab_community);
@@ -72,9 +190,7 @@ public class CommunityFragment extends Fragment {
 
         View tab1 = view.findViewById(R.id.community_tab1);
 
-        final List<EventModel> eventList = new ArrayList<>();
-
-        mAdapter = new CommunityAdapter(eventList);
+        mAdapter = new CommunityAdapter(null);
         final RecyclerView list_community = (RecyclerView) tab1.findViewById(R.id.list_community);;
         RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(container.getContext(),2);
         list_community.setLayoutManager(mLayoutManager);
@@ -135,37 +251,32 @@ public class CommunityFragment extends Fragment {
         mAdapter.setOnItemClickListener(new CommunityAdapter.ClickListener() {
             @Override
             public void onItemClick(int position, View v,int Type) {
-                int a = Type;
+                if(Type == Constants.CLICK_EVENT) {
+                    ((MainActivity)getActivity()).callDetailEvent(position);
+                }
             }
         });
 
         tabcommunity.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
                                                   @Override
                                                   public void onTabSelected(TabLayout.Tab tab) {
-                                                      EventModel e;
                                                       switch(tab.getPosition()) {
-                                                          case 0:
-                                                              e = new EventModel();
-                                                              e.setTitle("sss");
-                                                              eventList.add(e);
-                                                              mAdapter.setEventList(eventList);
-                                                              mAdapter.notifyDataSetChanged();
-                                                          case 1:
-
-                                                              e = new EventModel();
-                                                              e.setTitle("dsdd");
-                                                              eventList.add(e);
-                                                              mAdapter.setEventList(eventList);
-                                                          case 2:
-                                                              e = new EventModel();
-                                                              e.setTitle("dsd");
-                                                              eventList.add(e);
-                                                              mAdapter.setEventList(eventList);
-                                                          case 3:
-                                                               e = new EventModel();
-                                                              e.setTitle("ddftrtrd");
-                                                              eventList.add(e);
-                                                              mAdapter.setEventList(eventList);
+                                                          case TAB_FRIEND:
+                                                              mAdapter.setEventList(listEventFriend);
+                                                              LoadListEvent(TAB_FRIEND);
+                                                              break;
+                                                          case TAB_BUSINESS:
+                                                              mAdapter.setEventList(listEventBusiness);
+                                                              LoadListEvent(TAB_BUSINESS);
+                                                              break;
+                                                          case TAB_LOCAL:
+                                                              mAdapter.setEventList(listEventLocal);
+                                                              LoadListEvent(TAB_LOCAL);
+                                                              break;
+                                                          case TAB_LANGUAGE:
+                                                              mAdapter.setEventList(listEventLanguage);
+                                                              LoadListEvent(TAB_LANGUAGE);
+                                                              break;
 
                                                       }
                                                   }
@@ -197,6 +308,15 @@ public class CommunityFragment extends Fragment {
         }*/
 
         return view;
+    }
+
+    @Override
+    public void didReceivedNotification(int id, Object... args) {
+        if(id == NotificationCenter.callbacksearch)
+        {
+            String i = (String)args[0];
+        }
+
     }
 
    /* private class PageCommunityAdapter extends PagerAdapter {

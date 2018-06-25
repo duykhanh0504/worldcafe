@@ -44,6 +44,7 @@ public class RestAPI {
     public static String POST_LOGIN = root_url + "/api/login";
     public static String POST_UPDATESOCKET = root_url + "/api/user/updatesocket";
     public static String POST_UPDATEUSER = root_url + "/api/user/update";
+    public static String GET_LISTEVENT = /*root_url + */"http://www.mocky.io/v2/5b30ad6c3100009909129002";
 
     private static int POST_METHOD = 0;
     private static int DELETE_METHOD = 1;

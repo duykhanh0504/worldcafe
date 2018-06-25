@@ -9,11 +9,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.aseanfan.worldcafe.Model.EventModel;
+import com.aseanfan.worldcafe.Utils.Constants;
 import com.aseanfan.worldcafe.worldcafe.R;
 
 import java.util.List;
 
 public class CommunityAdapter extends RecyclerView.Adapter<CommunityAdapter.MyViewHolder> {
+
 
     private List<EventModel> eventList;
 
@@ -43,7 +45,7 @@ public class CommunityAdapter extends RecyclerView.Adapter<CommunityAdapter.MyVi
             imageEvent.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    clickListener.onItemClick(getAdapterPosition(), view , 1);
+                    clickListener.onItemClick(getAdapterPosition(), view , Constants.CLICK_IMAGE_EVENT);
                 }
             });
 
@@ -51,7 +53,7 @@ public class CommunityAdapter extends RecyclerView.Adapter<CommunityAdapter.MyVi
 
         @Override
         public void onClick(View view) {
-            clickListener.onItemClick(getAdapterPosition(), view , 0);
+            clickListener.onItemClick(getAdapterPosition(), view , Constants.CLICK_EVENT);
         }
     }
 
@@ -82,6 +84,10 @@ public class CommunityAdapter extends RecyclerView.Adapter<CommunityAdapter.MyVi
 
     @Override
     public int getItemCount() {
+        if (eventList == null)
+        {
+            return 0;
+        }
         return eventList.size();
     }
 }
