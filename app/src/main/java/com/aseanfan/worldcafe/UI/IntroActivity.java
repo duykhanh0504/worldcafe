@@ -47,9 +47,6 @@ public class IntroActivity extends AppCompatActivity {
     @BindView(R.id.Login)
     Button login;
 
-    ImageView topImage2;
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,112 +63,24 @@ public class IntroActivity extends AppCompatActivity {
         setContentView(R.layout.activity_intro);
         ButterKnife.bind(this);
 
-            images = new int[]{
-                    R.drawable.introl1,
-                    R.drawable.introl2,
-                    R.drawable.introl3,
-                    R.drawable.introl4
-            };
-
-
-       // viewPager = (ViewPager) findViewById(R.id.intro_view_pager);
-       // textintro = (ImageView) findViewById(R.id.icon_introtext);
-      //  login = (Button)findViewById(R.id.button);
-
-     /*   signup.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(IntroActivity.this, LoginActivity.class);
-                startActivity(intent);
-                finish();
-            }
-        });*/
-
-       // topImage1 = (ImageView) findViewById(R.id.icon_image1);
-      //  bottomPages = (ViewGroup) findViewById(R.id.bottom_pages);
-        viewPager.setAdapter(new IntroAdapter());
-        viewPager.setPageMargin(0);
-        viewPager.setOffscreenPageLimit(1);
-       /* viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-            }
-
-            @Override
-            public void onPageSelected(int i) {
-
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int i) {
-                if (i == ViewPager.SCROLL_STATE_IDLE || i == ViewPager.SCROLL_STATE_SETTLING) {
-                    if (lastPage != viewPager.getCurrentItem()) {
-                        lastPage = viewPager.getCurrentItem();
-
-                        final ImageView fadeoutImage;
-                        final ImageView fadeinImage;
-                        if (topImage1.getVisibility() == View.VISIBLE) {
-                            fadeoutImage = topImage1;
-                            fadeinImage = topImage2;
-
-                        } else {
-                            fadeoutImage = topImage2;
-                            fadeinImage = topImage1;
-                        }
-
-                        fadeinImage.bringToFront();
-                        fadeinImage.setImageResource(images[lastPage]);
-                        fadeinImage.clearAnimation();
-                        fadeoutImage.clearAnimation();
-
-
-                        Animation outAnimation = AnimationUtils.loadAnimation(IntroActivity.this, R.anim.icon_anim_fade_out);
-                        outAnimation.setAnimationListener(new Animation.AnimationListener() {
-                            @Override
-                            public void onAnimationStart(Animation animation) {
-                            }
-
-                            @Override
-                            public void onAnimationEnd(Animation animation) {
-                                fadeoutImage.setVisibility(View.GONE);
-                                fadeinImage.setVisibility(View.VISIBLE);
-                            }
-
-                            @Override
-                            public void onAnimationRepeat(Animation animation) {
-
-                            }
-                        });
-
-                        Animation inAnimation = AnimationUtils.loadAnimation(IntroActivity.this, R.anim.icon_anim_fade_in);
-                        inAnimation.setAnimationListener(new Animation.AnimationListener() {
-                            @Override
-                            public void onAnimationStart(Animation animation) {
-                                fadeinImage.setVisibility(View.VISIBLE);
-                            }
-
-                            @Override
-                            public void onAnimationEnd(Animation animation) {
-                            }
-
-                            @Override
-                            public void onAnimationRepeat(Animation animation) {
-
-                            }
-                        });
-
-
-                        fadeoutImage.startAnimation(outAnimation);
-                        fadeinImage.startAnimation(inAnimation);
-                    }
-                }
-            }
-        });*/
+        UiInit();
 
         justCreated = true;
     }
 
+    void UiInit()
+    {
+        images = new int[]{
+                R.drawable.introl1,
+                R.drawable.introl2,
+                R.drawable.introl3,
+                R.drawable.introl4
+        };
+
+        viewPager.setAdapter(new IntroAdapter());
+        viewPager.setPageMargin(0);
+        viewPager.setOffscreenPageLimit(1);
+    }
 
     @OnClick(R.id.Login)
     public void Login() {
