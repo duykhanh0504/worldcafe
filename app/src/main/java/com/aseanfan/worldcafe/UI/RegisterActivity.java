@@ -10,35 +10,38 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.ViewFlipper;
 
 import com.aseanfan.worldcafe.Helper.RestAPI;
 import com.aseanfan.worldcafe.worldcafe.R;
+import com.facebook.login.widget.LoginButton;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-
 public class RegisterActivity extends AppCompatActivity {
 
-    @BindView(R.id.input_name)
-    EditText _nameText;
-    @BindView(R.id.input_address) EditText _addressText;
-    @BindView(R.id.input_email) EditText _emailText;
-    @BindView(R.id.input_mobile) EditText _mobileText;
-    @BindView(R.id.input_password) EditText _passwordText;
-    @BindView(R.id.input_reEnterPassword) EditText _reEnterPasswordText;
-    @BindView(R.id.btn_signup)
-    Button _signupButton;
-    @BindView(R.id.link_login)
-    TextView _loginLink;
+
+    private ViewFlipper _viewfliper;
+    private Button _signupButton;
+    private LoginButton _signupFacebookButton;
+    private EditText _passwordText;
+    private EditText _emailText;
+    private TextView _signupLink;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
-        ButterKnife.bind(this);
+
+        _viewfliper = (ViewFlipper)this.findViewById(R.id.viewFlipper);
+
+        View viewSignup = this.findViewById(R.id.flipViewRegister);
+
+        _signupButton = (Button)viewSignup.findViewById(R.id.btn_Signup);
+        _passwordText = (EditText)viewSignup.findViewById(R.id.input_password);
+        _emailText = (EditText)viewSignup.findViewById(R.id.input_email);
+
         _signupButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -46,15 +49,6 @@ public class RegisterActivity extends AppCompatActivity {
             }
         });
 
-        _loginLink.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Finish the registration screen and return to the Login activity
-                Intent intent = new Intent(getApplicationContext(),LoginActivity.class);
-                startActivity(intent);
-                finish();
-            }
-        });
     }
 
     public void signup() {
@@ -66,17 +60,17 @@ public class RegisterActivity extends AppCompatActivity {
         progressDialog.setMessage("Creating Account...");
         progressDialog.show();
 
-        String name = _nameText.getText().toString();
-        String address = _addressText.getText().toString();
+   //     String name = _nameText.getText().toString();
+      //  String address = _addressText.getText().toString();
         String email = _emailText.getText().toString();
-        String mobile = _mobileText.getText().toString();
+      //  String mobile = _mobileText.getText().toString();
         String password = _passwordText.getText().toString();
-        String reEnterPassword = _reEnterPasswordText.getText().toString();
+      //  String reEnterPassword = _reEnterPasswordText.getText().toString();
 
        // Gson gson = new Gson();
       //  JsonObject dataJson = gson.toJsonTree(null).getAsJsonObject();
         JsonObject dataJson = new JsonObject();
-        dataJson.addProperty("username",name);
+       // dataJson.addProperty("username",name);
         dataJson.addProperty("password",password);
         dataJson.addProperty("email",email);
 
@@ -91,14 +85,15 @@ public class RegisterActivity extends AppCompatActivity {
                         return;
                     }
                     JsonObject jsonObject = (new JsonParser()).parse(s).getAsJsonObject();
-                  //  if(jsonObject.get("status").getAsInt() == 200)
-                   // {
-                        progressDialog.dismiss();
-                        Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | intent.FLAG_ACTIVITY_CLEAR_TASK);
-                        startActivity(intent);
-                        finish();
-                   // }
+                    if(jsonObject.get("status").getAsInt() == 200)
+                    {
+                       progressDialog.dismiss();
+                       _viewfliper.setDisplayedChild(1);
+                        //Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
+                        //intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | intent.FLAG_ACTIVITY_CLEAR_TASK);
+                      //  startActivity(intent);
+                       // finish();
+                    }
 
                 } catch (Exception ex) {
 
@@ -113,26 +108,26 @@ public class RegisterActivity extends AppCompatActivity {
     public boolean validate() {
         boolean valid = true;
 
-        String name = _nameText.getText().toString();
-        String address = _addressText.getText().toString();
+      //  String name = _nameText.getText().toString();
+       // String address = _addressText.getText().toString();
         String email = _emailText.getText().toString();
-        String mobile = _mobileText.getText().toString();
+       // String mobile = _mobileText.getText().toString();
         String password = _passwordText.getText().toString();
-        String reEnterPassword = _reEnterPasswordText.getText().toString();
+       // String reEnterPassword = _reEnterPasswordText.getText().toString();
 
-        if (name.isEmpty() || name.length() < 3) {
+   /*     if (name.isEmpty() || name.length() < 3) {
             _nameText.setError("at least 3 characters");
             valid = false;
         } else {
             _nameText.setError(null);
-        }
+        }*/
 
-        if (address.isEmpty()) {
+      /*  if (address.isEmpty()) {
             _addressText.setError("Enter Valid Address");
             valid = false;
         } else {
             _addressText.setError(null);
-        }
+        }*/
 
 
         if (email.isEmpty() || !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
@@ -142,12 +137,12 @@ public class RegisterActivity extends AppCompatActivity {
             _emailText.setError(null);
         }
 
-        if (mobile.isEmpty() || mobile.length()!=10) {
+       /* if (mobile.isEmpty() || mobile.length()!=10) {
             _mobileText.setError("Enter Valid Mobile Number");
             valid = false;
         } else {
             _mobileText.setError(null);
-        }
+        }*/
 
         if (password.isEmpty() || password.length() < 4 || password.length() > 10) {
             _passwordText.setError("between 4 and 10 alphanumeric characters");
@@ -156,12 +151,12 @@ public class RegisterActivity extends AppCompatActivity {
             _passwordText.setError(null);
         }
 
-        if (reEnterPassword.isEmpty() || reEnterPassword.length() < 4 || reEnterPassword.length() > 10 || !(reEnterPassword.equals(password))) {
+       /* if (reEnterPassword.isEmpty() || reEnterPassword.length() < 4 || reEnterPassword.length() > 10 || !(reEnterPassword.equals(password))) {
             _reEnterPasswordText.setError("Password Do not match");
             valid = false;
         } else {
             _reEnterPasswordText.setError(null);
-        }
+        }**/
 
         return valid;
     }

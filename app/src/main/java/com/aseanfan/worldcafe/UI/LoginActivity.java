@@ -64,11 +64,18 @@ public class LoginActivity extends AppCompatActivity {
     private LoginButton _loginFacebookButton;
     private EditText _passwordText;
     private EditText _emailText;
-    private TextView _signupLink;
+    private TextView _forgotLink;
+
+    private Button _signupButton;
+    private LoginButton _signupFacebookButton;
+    private EditText _passwordTextSignup;
+    private EditText _emailTextSignup;
 
     private ImageView _avatarimage;
 
     private EditText _mobileupdate;
+    private EditText _emailupdate;
+    private EditText _usernameupdate;
     private Button _update;
 
     private Socket mSocket;
@@ -76,6 +83,8 @@ public class LoginActivity extends AppCompatActivity {
 
     private final int PICK_IMAGE_CAMERA = 1, PICK_IMAGE_GALLERY = 2;
     private final int FACEBOOK_LOGIN = 64206;
+
+    private  boolean USING_FACEBOOK = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,46 +94,49 @@ public class LoginActivity extends AppCompatActivity {
         App app = (App) getApplication();
         mSocket = app.getSocket();
 
-        _viewfliper = (ViewFlipper)this.findViewById(R.id.viewFlipper);
+        LoginManager.getInstance().logOut();
 
-        View viewLogin = this.findViewById(R.id.flipViewLogin);
-        View viewLoginUpdate =  this.findViewById(R.id.flipViewUpdateLogin);
-        _loginButton = (Button)viewLogin.findViewById(R.id.btn_login);
-        _loginFacebookButton = (LoginButton)viewLogin.findViewById(R.id.btn_facebook_login);
-        _passwordText = (EditText)viewLogin.findViewById(R.id.input_password);
-        _emailText = (EditText)viewLogin.findViewById(R.id.input_email);
-        _signupLink = (TextView)viewLogin.findViewById(R.id.link_signup);
 
-        _mobileupdate = (EditText)viewLoginUpdate.findViewById(R.id.input_mobile_update);
-        _update = (Button) viewLoginUpdate.findViewById(R.id.btn_update);
+        InitView();
 
-        _avatarimage = (ImageView) viewLoginUpdate.findViewById(R.id.imageAvatar);
 
-        showLogin();
+        _forgotLink.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                /*Intent intent = new Intent(getApplicationContext(), RegisterActivity.class);
+                startActivityForResult(intent, REQUEST_SIGNUP);
+                finish();*/
+            }
+        });
+        int typePage = getIntent().getIntExtra("type",0);
+        showPage(typePage);
+
+        _signupButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String email = _emailTextSignup.getText().toString();
+                String password = _passwordTextSignup.getText().toString();
+                register(email,password);
+            }
+        });
+
 
         _loginButton.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
-                login();
-            }
-        });
-
-        _signupLink.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                // Start the Signup activity
-                Intent intent = new Intent(getApplicationContext(), RegisterActivity.class);
-                startActivityForResult(intent, REQUEST_SIGNUP);
-                finish();
+                String email = _emailText.getText().toString();
+                String password = _passwordText.getText().toString();
+                login(email,password);
             }
         });
 
         _update.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                update();
+                String mobilephone = _mobileupdate.getText().toString();
+                update(mobilephone);
             }
         });
 
@@ -139,6 +151,12 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
+        facebookManagerCallback();
+
+    }
+
+    public void facebookManagerCallback()
+    {
         LoginManager.getInstance().registerCallback(callbackManager,
                 new FacebookCallback<LoginResult>() {
                     @Override
@@ -154,12 +172,14 @@ public class LoginActivity extends AppCompatActivity {
 
                                         // Application code
                                         try {
-
+                                            USING_FACEBOOK = true;
                                             UserModel u =  new UserModel();
                                             u.setEmail(object.getString("email"));
+                                            u.setUsername(object.getString("name"));
                                             u.setAvarta( object.getJSONObject("picture").getJSONObject("data").getString("url"));
                                             AccountController.getInstance().SetAccount(u);
-                                            showLoginUpdate();
+                                            register(u.getEmail(),null);
+
                                         } catch (JSONException e) {
                                             e.printStackTrace();
                                         }
@@ -182,26 +202,62 @@ public class LoginActivity extends AppCompatActivity {
 
                     }
                 });
+    }
+
+
+    void InitView()
+    {
+        _viewfliper = (ViewFlipper)this.findViewById(R.id.viewFlipper);
+
+        View viewLogin = this.findViewById(R.id.flipViewLogin);
+        View viewLoginUpdate =  this.findViewById(R.id.flipViewUpdateLogin);
+        View viewRegister =  this.findViewById(R.id.flipViewRegister);
+
+        _loginButton = (Button)viewLogin.findViewById(R.id.btn_login);
+        _loginFacebookButton = (LoginButton)viewLogin.findViewById(R.id.btn_facebook_login);
+        _passwordText = (EditText)viewLogin.findViewById(R.id.input_password);
+        _emailText = (EditText)viewLogin.findViewById(R.id.input_email);
+        _forgotLink = (TextView)viewLogin.findViewById(R.id.link_forgotpass);
+
+        _signupButton = (Button)viewRegister.findViewById(R.id.btn_Signup);
+        _signupFacebookButton = (LoginButton)viewRegister.findViewById(R.id.btn_facebook_login);
+        _passwordTextSignup = (EditText)viewRegister.findViewById(R.id.input_password);
+        _emailTextSignup = (EditText)viewRegister.findViewById(R.id.input_email);
+
+        _mobileupdate = (EditText)viewLoginUpdate.findViewById(R.id.input_mobile_update);
+        _emailupdate = (EditText)viewLoginUpdate.findViewById(R.id.input_email_update);
+        _usernameupdate = (EditText)viewLoginUpdate.findViewById(R.id.input_username_update);
+        _update = (Button) viewLoginUpdate.findViewById(R.id.btn_update);
+
+        _avatarimage = (ImageView) viewLoginUpdate.findViewById(R.id.imageAvatar);
 
     }
 
-    private void showLogin()
+    private void showPage(int Type)
     {
 
-        _viewfliper.setDisplayedChild(0);
+        _viewfliper.setDisplayedChild(Type);
     }
+
 
     private void showLoginUpdate()
     {
+        if(USING_FACEBOOK  ==true) {
+            UserModel u = AccountController.getInstance().getAccount();
+            if (u.getAvarta() != null) {
+                RequestOptions requestOptions = new RequestOptions()
+                        .diskCacheStrategy(DiskCacheStrategy.ALL);
 
-        RequestOptions requestOptions = new RequestOptions()
-                .diskCacheStrategy(DiskCacheStrategy.ALL);
+                Glide.with(this)
+                        .load(u.getAvarta()).apply(requestOptions)
+                        .into(_avatarimage);
+            }
+            _emailupdate.setEnabled(false);
+            _usernameupdate.setEnabled(false);
+            _emailupdate.setText(u.getEmail());
+            _usernameupdate.setText(u.getUsername());
 
-
-        Glide.with(this)
-                .load(AccountController.getInstance().getAccount().getAvarta()).apply(requestOptions)
-                .into(_avatarimage);
-
+        }
         _viewfliper.setDisplayedChild(1);
 
     }
@@ -243,7 +299,56 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-    public void update() {
+    public void register(String email , String password) {
+
+        final ProgressDialog progressDialog = new ProgressDialog(LoginActivity.this);
+        progressDialog.setIndeterminate(true);
+        progressDialog.setMessage("Create account...");
+        progressDialog.show();
+        JsonObject dataJson = new JsonObject();
+        _signupButton.setEnabled(false);
+        if(USING_FACEBOOK ==true) {
+            Gson gson = new Gson();
+            JsonParser jsonParser = new JsonParser();
+             dataJson = (JsonObject) jsonParser.parse(gson.toJson(AccountController.getInstance().getAccount()));
+        }
+        else
+        {
+            dataJson.addProperty("email",email);
+        }
+        dataJson.addProperty("password", password);
+        if(USING_FACEBOOK == true)
+        {
+            dataJson.addProperty("username",AccountController.getInstance().getAccount().getUsername());
+        }
+
+        RestAPI.PostDataMaster(getApplicationContext(), dataJson, RestAPI.POST_SIGNUP, new RestAPI.RestAPIListenner() {
+
+            @Override
+            public void OnComplete(int httpCode, String error, String s) {
+                try {
+                    if (!RestAPI.checkHttpCode(httpCode)) {
+                        //AppFuncs.alert(getApplicationContext(),s,true);
+
+                        return;
+                    }
+                    JsonObject jsonObject = (new JsonParser()).parse(s).getAsJsonObject();
+                    if(jsonObject.get("status").getAsInt() == 200)
+                    {
+                        progressDialog.dismiss();
+                        showLoginUpdate();
+                    }
+
+                } catch (Exception ex) {
+
+                    ex.printStackTrace();
+                }
+
+            }
+        });
+    }
+
+    public void update(String mobilephone) {
 
         _loginButton.setEnabled(false);
 
@@ -251,8 +356,6 @@ public class LoginActivity extends AppCompatActivity {
         progressDialog.setIndeterminate(true);
         progressDialog.setMessage("Updating...");
         progressDialog.show();
-
-        String mobilephone = _mobileupdate.getText().toString();
 
         final UserModel u = AccountController.getInstance().getAccount();
         u.setPhonenumber(mobilephone);
@@ -273,14 +376,10 @@ public class LoginActivity extends AppCompatActivity {
                         return;
                     }
 
-                    Store.putBooleanData(LoginActivity.this,Store.LOGGED,true);
+                    String email = _emailText.getText().toString();
+                    String password = _passwordText.getText().toString();
+                    login(email,password);
                     progressDialog.dismiss();
-
-                    Intent intent = new Intent(LoginActivity.this , MainActivity.class);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    startActivity(intent);
-                    finish();
-
 
                 } catch (Exception ex) {
 
@@ -293,8 +392,7 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
-
-    public void login() {
+    public void login( String email ,String password) {
 
       /*  if (!validate()) {
             onLoginFailed();
@@ -310,9 +408,6 @@ public class LoginActivity extends AppCompatActivity {
         progressDialog.setIndeterminate(true);
         progressDialog.setMessage("Authenticating...");
         progressDialog.show();
-
-        String email = _emailText.getText().toString();
-        String password = _passwordText.getText().toString();
 
        // Gson gson = new Gson();
        // JsonObject dataJson = gson.toJsonTree(null).getAsJsonObject();
@@ -350,14 +445,14 @@ public class LoginActivity extends AppCompatActivity {
 
                             Store.putBooleanData(LoginActivity.this,Store.LOGGED,true);
                             progressDialog.dismiss();
-                            if(u.getPhonenumber()==null || u.getPhonenumber().isEmpty()) {
+                          /*  if(u.getPhonenumber()==null || u.getPhonenumber().isEmpty()) {
                                 if (LoginActivity.this.getCurrentFocus() != null) {
                                     InputMethodManager imm = (InputMethodManager) LoginActivity.this.getSystemService(Context.INPUT_METHOD_SERVICE);
                                     imm.hideSoftInputFromWindow(LoginActivity.this.getCurrentFocus().getWindowToken(), 0);
                                 }
                                 showLoginUpdate();
                             }
-                            else
+                            else*/
                             {
                                 Intent intent = new Intent(LoginActivity.this , MainActivity.class);
                                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | intent.FLAG_ACTIVITY_CLEAR_TASK);

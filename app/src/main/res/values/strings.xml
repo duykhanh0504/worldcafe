@@ -1,8 +1,7 @@
 <resources>
-    <string name="app_name">worldcafe</string>
+    <string name="app_name">Crosea</string>
     <string name="button">Button</string>
     <string name="todo">TODO</string>
-    <string name="Login">Login</string>
 
 
     <string name="google_maps_api_key">AIzaSyD5WulihCHENmeaCamHEPajTEUzBroqrEo</string>
@@ -16,8 +15,6 @@
     <string name="title_setting">Setting</string>
     <string name="title_notifications">Notify</string>
 
-    <string name="Signup">Sign up</string>
-
     <string name="facebook_app_id">216205465084648</string>
     <string name="fb_login_protocol_scheme">fb216205465084648</string>
 
@@ -25,6 +22,13 @@
     <string name="Business">Business</string>
     <string name="Local">Local</string>
     <string name="Language">Language</string>
+
+    <string name="Login">Login</string>
+    <string name="Signup">Sign up</string>
+    <string name="Email">Email</string>
+    <string name="Password">Password</string>
+    <string name="Facebook_Login">Facebook Login</string>
+    <string name="Forget_Password">Forgot password</string>
 
 
 

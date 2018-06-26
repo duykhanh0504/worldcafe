@@ -37,6 +37,10 @@
             android:id="@+id/flipViewUpdateLogin"
             layout="@layout/flip_login_update" />
 
+        <include
+            android:id="@+id/flipViewRegister"
+            layout="@layout/flip_register" />
+
 
     </ViewFlipper>
 

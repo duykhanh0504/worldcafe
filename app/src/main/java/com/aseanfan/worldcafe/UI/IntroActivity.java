@@ -85,12 +85,14 @@ public class IntroActivity extends AppCompatActivity {
     @OnClick(R.id.Login)
     public void Login() {
         Intent intent = new Intent(IntroActivity.this, LoginActivity.class);
+        intent.putExtra("type",0);
         startActivity(intent);
     }
 
     @OnClick(R.id.Signup)
     public void Signup() {
-        Intent intent = new Intent(IntroActivity.this, RegisterActivity.class);
+        Intent intent = new Intent(IntroActivity.this, LoginActivity.class);
+        intent.putExtra("type",2);
         startActivity(intent);
     }
 

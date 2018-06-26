@@ -20,6 +20,7 @@
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:layout_gravity="center"
+            android:background="@drawable/camera"
              />
 
         <android.support.design.widget.TextInputLayout
@@ -33,12 +34,30 @@
                 android:hint="Mobile" />
         </android.support.design.widget.TextInputLayout>
 
-        <!--  Password Label -->
+
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"></android.support.design.widget.TextInputLayout>
+            android:layout_marginBottom="8dp">
+            <EditText android:id="@+id/input_email_update"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Email" />
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp">
+            <EditText android:id="@+id/input_username_update"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Username" />
+        </android.support.design.widget.TextInputLayout>
+
+
 
         <android.support.v7.widget.AppCompatButton
             android:id="@+id/btn_update"
