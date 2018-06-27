@@ -28,6 +28,11 @@ public class AccountController {
         account = user;
     }
 
+    public void SetAccountID (Long id)
+    {
+        account.setId(id);
+    }
+
     public UserModel getAccount()
     {
         return account;

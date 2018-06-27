@@ -29,6 +29,7 @@ import com.aseanfan.worldcafe.Helper.DBHelper;
 import com.aseanfan.worldcafe.Helper.RestAPI;
 import com.aseanfan.worldcafe.Model.UserModel;
 import com.aseanfan.worldcafe.Provider.Store;
+import com.aseanfan.worldcafe.Utils.Utils;
 import com.aseanfan.worldcafe.worldcafe.R;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -46,6 +47,8 @@ import com.facebook.login.widget.LoginButton;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.theartofdev.edmodo.cropper.CropImage;
+import com.theartofdev.edmodo.cropper.CropImageView;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -80,6 +83,8 @@ public class LoginActivity extends AppCompatActivity {
 
     private Socket mSocket;
     CallbackManager callbackManager;
+
+    Uri selectedAvatar = null;
 
     private final int PICK_IMAGE_CAMERA = 1, PICK_IMAGE_GALLERY = 2;
     private final int FACEBOOK_LOGIN = 64206;
@@ -271,8 +276,11 @@ public class LoginActivity extends AppCompatActivity {
                     != PackageManager.PERMISSION_GRANTED) {
                 ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.CAMERA}, 0 );
             }
-
-                final CharSequence[] options = {"Take Photo", "Choose From Gallery","Cancel"};
+            Intent intent = CropImage.activity(null)
+                    .setGuidelines(CropImageView.Guidelines.ON)
+                    .getIntent(this);
+            startActivityForResult(intent, CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE);
+              /*  final CharSequence[] options = {"Take Photo", "Choose From Gallery","Cancel"};
                 android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(this);
                 builder.setTitle("Select Option");
                 builder.setItems(options, new DialogInterface.OnClickListener() {
@@ -291,7 +299,7 @@ public class LoginActivity extends AppCompatActivity {
                         }
                     }
                 });
-                builder.show();
+                builder.show();*/
 
         } catch (Exception e) {
             Toast.makeText(this, "Camera Permission error", Toast.LENGTH_SHORT).show();
@@ -299,7 +307,7 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-    public void register(String email , String password) {
+    public void register(final String email , final String password) {
 
         final ProgressDialog progressDialog = new ProgressDialog(LoginActivity.this);
         progressDialog.setIndeterminate(true);
@@ -336,7 +344,18 @@ public class LoginActivity extends AppCompatActivity {
                     if(jsonObject.get("status").getAsInt() == 200)
                     {
                         progressDialog.dismiss();
+                        AccountController.getInstance().SetAccountID(jsonObject.get("result").getAsLong());
                         showLoginUpdate();
+                    }
+                    else if(jsonObject.get("status").getAsInt() == 3)
+                    {
+                        if(USING_FACEBOOK == true) {
+                            login(email, password);
+                        }
+                        else
+                        {
+                            Toast.makeText(LoginActivity.this, "Camera Permission error", Toast.LENGTH_SHORT).show();
+                        }
                     }
 
                 } catch (Exception ex) {
@@ -363,6 +382,15 @@ public class LoginActivity extends AppCompatActivity {
         JsonObject dataJson = new JsonObject();
         dataJson.addProperty("account_id",u.getId());
         dataJson.addProperty("phonenumber",mobilephone);
+        if(selectedAvatar!=null)
+        {
+            String[] bb = Utils.compressFormat(selectedAvatar.getPath(), this);
+            String base64 = bb[0];
+            String imagename = System.currentTimeMillis() + "." + bb[1];
+            dataJson.addProperty("base64",base64);
+            dataJson.addProperty("image",imagename);
+            dataJson.addProperty("type","image/");
+        }
 
 
         RestAPI.PostDataMaster(getApplicationContext(), dataJson, RestAPI.POST_UPDATEUSER, new RestAPI.RestAPIListenner() {
@@ -537,20 +565,36 @@ public class LoginActivity extends AppCompatActivity {
             case PICK_IMAGE_CAMERA:
                 if(resultCode == RESULT_OK){
                     Uri selectedImage = data.getData();
-                    Glide.with(this).load( selectedImage).into( _avatarimage);
+                    Intent intent = CropImage.activity(selectedImage)
+                            .setGuidelines(CropImageView.Guidelines.ON)
+                            .getIntent(this);
 
+                    startActivityForResult(intent, CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE);
+                 //   Glide.with(this).load( selectedImage).into( _avatarimage);
                 }
 
                 break;
             case PICK_IMAGE_GALLERY:
                 if(resultCode == RESULT_OK){
                     Uri selectedImage = data.getData();
-                    Glide.with(this).load( selectedImage).into( _avatarimage);
+                    Intent intent = CropImage.activity(selectedImage)
+                            .setGuidelines(CropImageView.Guidelines.ON)
+                            .getIntent(this);
+
+                    startActivityForResult(intent, CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE);
+                   // Glide.with(this).load( selectedImage).into( _avatarimage);
                 }
                 break;
             case FACEBOOK_LOGIN:
                 if(resultCode == RESULT_OK){
                     callbackManager.onActivityResult(requestCode, resultCode, data);
+                }
+                break;
+            case CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE:
+                if(resultCode == RESULT_OK){
+                    CropImage.ActivityResult result = CropImage.getActivityResult(data);
+                    selectedAvatar = result.getUri();
+                    Glide.with(this).load( selectedAvatar).into( _avatarimage);
                 }
                 break;
         }
