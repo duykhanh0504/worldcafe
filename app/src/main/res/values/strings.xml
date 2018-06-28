@@ -30,6 +30,12 @@
     <string name="Facebook_Login">Facebook Login</string>
     <string name="Forget_Password">Forgot password</string>
 
+    <string name="Wrong_passowrd">Wrong Password</string>
+    <string name="Account_exist">Account exist</string>
+
+    <string name="My_Post">My post</string>
+    <string name="Dtail_page">Detail</string>
+
 
 
 </resources>

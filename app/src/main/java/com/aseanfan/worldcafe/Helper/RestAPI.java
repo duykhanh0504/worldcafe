@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.widget.ImageView;
 
 import com.aseanfan.worldcafe.Provider.Store;
+import com.aseanfan.worldcafe.worldcafe.R;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -38,6 +39,8 @@ public class RestAPI {
     private static int TIME_OUT = 12000;
 
     public static String root_url = "http://10.0.2.2:8080";
+   // public static String root_url = "http://192.168.10.141:8080";
+
     public static String root_url_dev = "";
 
     public static String POST_SIGNUP = root_url + "/api/signup";// identifier
@@ -46,9 +49,10 @@ public class RestAPI {
     public static String POST_UPDATEUSER = root_url + "/api/user/update";
     public static String GET_LISTEVENT = /*root_url + */"http://www.mocky.io/v2/5b30ad6c3100009909129002";
 
-    private static int POST_METHOD = 0;
-    private static int DELETE_METHOD = 1;
-    private static int GET_METHOD = 2;
+    public final static int STATUS_SUCCESS = 200;
+    public final static int STATUS_WRONGPASSWORD = 2;
+    public final static int STATUS_ACCOUNTESIXT = 3;
+
 
     //public static int NUMBER_REQUEST_TOKEN =3;
 
@@ -99,6 +103,19 @@ public class RestAPI {
 
     public static boolean checkHttpCode(int code) {
         return ((code == 200) || (code == 201)) ? true : false;
+    }
+
+    public static int  checkStatusCode(int code) {
+       switch (code)
+       {
+           case STATUS_SUCCESS:
+               return 2;
+           case STATUS_WRONGPASSWORD:
+               return R.string.Wrong_passowrd;
+           case STATUS_ACCOUNTESIXT:
+               return R.string.Account_exist;
+       }
+       return 2;
     }
 
     public static TrustManager[] trustAllCerts = new X509TrustManager[]{new X509TrustManager() {

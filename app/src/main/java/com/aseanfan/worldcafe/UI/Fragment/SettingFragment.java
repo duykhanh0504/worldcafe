@@ -17,6 +17,7 @@ import com.aseanfan.worldcafe.UI.IntroActivity;
 import com.aseanfan.worldcafe.UI.LoginActivity;
 import com.aseanfan.worldcafe.UI.MainActivity;
 import com.aseanfan.worldcafe.worldcafe.R;
+import com.facebook.login.LoginManager;
 
 public class SettingFragment extends android.support.v4.app.Fragment {
 
@@ -49,6 +50,7 @@ public class SettingFragment extends android.support.v4.app.Fragment {
         Store.putBooleanData(getContext(),Store.LOGGED,false);
         DBHelper.getInstance(getContext()).deletePerson(AccountController.getInstance().getAccount().getId());
         AccountController.getInstance().SetAccount(null);
+        LoginManager.getInstance().logOut();
         Intent intent = new Intent(getActivity() , IntroActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);

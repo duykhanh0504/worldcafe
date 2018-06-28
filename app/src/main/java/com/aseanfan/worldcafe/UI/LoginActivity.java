@@ -6,6 +6,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.provider.MediaStore;
@@ -86,15 +87,18 @@ public class LoginActivity extends AppCompatActivity {
 
     Uri selectedAvatar = null;
 
-    private final int PICK_IMAGE_CAMERA = 1, PICK_IMAGE_GALLERY = 2;
     private final int FACEBOOK_LOGIN = 64206;
 
     private  boolean USING_FACEBOOK = false;
+
+    private int LOGIN_FACEBOOK =1;
+    private int LOGIN_NORMAL =2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
 
         App app = (App) getApplication();
         mSocket = app.getSocket();
@@ -133,7 +137,7 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String email = _emailText.getText().toString();
                 String password = _passwordText.getText().toString();
-                login(email,password);
+                login(email,password,LOGIN_NORMAL);
             }
         });
 
@@ -314,7 +318,7 @@ public class LoginActivity extends AppCompatActivity {
         progressDialog.setMessage("Create account...");
         progressDialog.show();
         JsonObject dataJson = new JsonObject();
-        _signupButton.setEnabled(false);
+      //  _signupButton.setEnabled(false);
         if(USING_FACEBOOK ==true) {
             Gson gson = new Gson();
             JsonParser jsonParser = new JsonParser();
@@ -340,26 +344,21 @@ public class LoginActivity extends AppCompatActivity {
 
                         return;
                     }
-                    JsonObject jsonObject = (new JsonParser()).parse(s).getAsJsonObject();
-                    if(jsonObject.get("status").getAsInt() == 200)
-                    {
+                    JsonObject jsons = (new JsonParser()).parse(s).getAsJsonObject();
+                    int statuscode = jsons.get("status").getAsInt();
                         progressDialog.dismiss();
-                        AccountController.getInstance().SetAccountID(jsonObject.get("result").getAsLong());
-                        showLoginUpdate();
-                    }
-                    else if(jsonObject.get("status").getAsInt() == 3)
-                    {
-                        if(USING_FACEBOOK == true) {
-                            login(email, password);
+                        if (statuscode == RestAPI.STATUS_SUCCESS) {
+                            AccountController.getInstance().SetAccountID(jsons.get("result").getAsLong());
+                            showLoginUpdate();
+                        } else if (statuscode == RestAPI.STATUS_ACCOUNTESIXT) {
+                            if (USING_FACEBOOK == true) {
+                                login(email, password, LOGIN_FACEBOOK);
+                            } else {
+                                Toast.makeText(LoginActivity.this, "Account exist!!!", Toast.LENGTH_SHORT).show();
+                            }
                         }
-                        else
-                        {
-                            Toast.makeText(LoginActivity.this, "Camera Permission error", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-
                 } catch (Exception ex) {
-
+                    progressDialog.dismiss();
                     ex.printStackTrace();
                 }
 
@@ -369,7 +368,7 @@ public class LoginActivity extends AppCompatActivity {
 
     public void update(String mobilephone) {
 
-        _loginButton.setEnabled(false);
+       // _loginButton.setEnabled(false);
 
         final ProgressDialog progressDialog = new ProgressDialog(LoginActivity.this);
         progressDialog.setIndeterminate(true);
@@ -406,11 +405,17 @@ public class LoginActivity extends AppCompatActivity {
 
                     String email = _emailText.getText().toString();
                     String password = _passwordText.getText().toString();
-                    login(email,password);
+                    if(USING_FACEBOOK==true) {
+                        login(email, password,LOGIN_FACEBOOK);
+                    }
+                    else
+                    {
+                        login(email, password,LOGIN_NORMAL);
+                    }
                     progressDialog.dismiss();
 
                 } catch (Exception ex) {
-
+                    progressDialog.dismiss();
                     ex.printStackTrace();
                 }
 
@@ -420,17 +425,25 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
-    public void login( String email ,String password) {
+    public void login( String email ,String password,int type) {
 
       /*  if (!validate()) {
             onLoginFailed();
             return;
         }*/
+      if(type == LOGIN_NORMAL)
+      {
+          if (password==null || password.isEmpty())
+          {
+              Toast.makeText(LoginActivity.this, "Password can not empty", Toast.LENGTH_SHORT).show();
+              return;
+          }
+      }
 
         /*user.setEmail(jsonObject.get("email").getAsString());
         user.setPhonenumber(jsonObject.get("phonenumber").getAsString());
         user.setUsername(jsonObject.get("username").getAsString());*/
-        _loginButton.setEnabled(false);
+       // _loginButton.setEnabled(false);
 
         final ProgressDialog progressDialog = new ProgressDialog(LoginActivity.this);
         progressDialog.setIndeterminate(true);
@@ -453,57 +466,67 @@ public class LoginActivity extends AppCompatActivity {
 
                         return;
                     }
-                    JsonObject jsonObject = (new JsonParser()).parse(s).getAsJsonObject().getAsJsonArray("result").get(0).getAsJsonObject();
-                    Gson gson = new Gson();
-                    final UserModel u =  gson.fromJson(jsonObject, UserModel.class);
-                    DBHelper.getInstance(getApplicationContext()).insertPerson(u.getId(),u.getUsername(),u.getEmail(),u.getPhonenumber(),u.getAvarta());
-                    AccountController.getInstance().SetAccount(u);
+                    JsonObject jsons = (new JsonParser()).parse(s).getAsJsonObject();
+                    int statuscode = jsons.get("status").getAsInt();
+                    if (statuscode == RestAPI.STATUS_SUCCESS) {
+                        JsonObject jsonObject = jsons.getAsJsonArray("result").get(0).getAsJsonObject();
+                        Gson gson = new Gson();
+                        final UserModel u = gson.fromJson(jsonObject, UserModel.class);
+                        DBHelper.getInstance(getApplicationContext()).insertPerson(u.getId(), u.getUsername(), u.getEmail(), u.getPhonenumber(), u.getAvarta());
+                        AccountController.getInstance().SetAccount(u);
 
-                    JsonObject dataJson = new JsonObject();
-                    dataJson.addProperty("account_id",u.getId());
+                        JsonObject dataJson = new JsonObject();
+                        dataJson.addProperty("account_id", u.getId());
 
-                    RestAPI.PostDataMaster(getApplicationContext(), dataJson, RestAPI.POST_UPDATESOCKET, new RestAPI.RestAPIListenner() {
-                        @Override
-                        public void OnComplete(int httpCode, String error, String s) {
-                            if (!RestAPI.checkHttpCode(httpCode)) {
-                                //AppFuncs.alert(getApplicationContext(),s,true);
+                        RestAPI.PostDataMaster(getApplicationContext(), dataJson, RestAPI.POST_UPDATESOCKET, new RestAPI.RestAPIListenner() {
+                            @Override
+                            public void OnComplete(int httpCode, String error, String s) {
+                                if (!RestAPI.checkHttpCode(httpCode)) {
+                                    //AppFuncs.alert(getApplicationContext(),s,true);
 
-                                return;
-                            }
+                                    return;
+                                }
 
-                            Store.putBooleanData(LoginActivity.this,Store.LOGGED,true);
-                            progressDialog.dismiss();
+                                Store.putBooleanData(LoginActivity.this, Store.LOGGED, true);
+                                progressDialog.dismiss();
                           /*  if(u.getPhonenumber()==null || u.getPhonenumber().isEmpty()) {
-                                if (LoginActivity.this.getCurrentFocus() != null) {
+                                if (LoginActivity.this.getCurrentFocus() != null) {6
                                     InputMethodManager imm = (InputMethodManager) LoginActivity.this.getSystemService(Context.INPUT_METHOD_SERVICE);
                                     imm.hideSoftInputFromWindow(LoginActivity.this.getCurrentFocus().getWindowToken(), 0);
                                 }
                                 showLoginUpdate();
                             }
                             else*/
-                            {
-                                Intent intent = new Intent(LoginActivity.this , MainActivity.class);
-                                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                startActivity(intent);
-                                finish();
+                                {
+                                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                    startActivity(intent);
+                                    finish();
+                                }
+
                             }
+                        });
 
-                        }
-                    });
+                        //  UserModel u = gson.fromJson(jsonObject.getAsJsonArray("result").get(0).getAsJsonObject(), UserModel.class);
+                        //  UserModel u  =  RealmManager.open().createObjectFromJson(UserModel.class, JSONObject);
 
-                    //  UserModel u = gson.fromJson(jsonObject.getAsJsonArray("result").get(0).getAsJsonObject(), UserModel.class);
-                  //  UserModel u  =  RealmManager.open().createObjectFromJson(UserModel.class, JSONObject);
+                        // if(jsons.get("status").getAsInt() == 200)
+                        // {
 
-                  //  if(jsonObject.get("status").getAsInt() == 200)
-                   // {
+                        //}
 
-                    //}
+                    }
+                    else
+                    {
+                        progressDialog.dismiss();
+                        Toast.makeText(getBaseContext(), getString(RestAPI.checkStatusCode(statuscode)), Toast.LENGTH_LONG).show();
+                    }
+                    } catch(Exception ex){
+                        progressDialog.dismiss();
+                        Toast.makeText(getBaseContext(), ex.getMessage(), Toast.LENGTH_LONG).show();
+                            ex.printStackTrace();
+                    }
 
-
-                } catch (Exception ex) {
-
-                    ex.printStackTrace();
-                }
 
             }
         });
@@ -562,29 +585,6 @@ public class LoginActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         switch(requestCode) {
-            case PICK_IMAGE_CAMERA:
-                if(resultCode == RESULT_OK){
-                    Uri selectedImage = data.getData();
-                    Intent intent = CropImage.activity(selectedImage)
-                            .setGuidelines(CropImageView.Guidelines.ON)
-                            .getIntent(this);
-
-                    startActivityForResult(intent, CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE);
-                 //   Glide.with(this).load( selectedImage).into( _avatarimage);
-                }
-
-                break;
-            case PICK_IMAGE_GALLERY:
-                if(resultCode == RESULT_OK){
-                    Uri selectedImage = data.getData();
-                    Intent intent = CropImage.activity(selectedImage)
-                            .setGuidelines(CropImageView.Guidelines.ON)
-                            .getIntent(this);
-
-                    startActivityForResult(intent, CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE);
-                   // Glide.with(this).load( selectedImage).into( _avatarimage);
-                }
-                break;
             case FACEBOOK_LOGIN:
                 if(resultCode == RESULT_OK){
                     callbackManager.onActivityResult(requestCode, resultCode, data);

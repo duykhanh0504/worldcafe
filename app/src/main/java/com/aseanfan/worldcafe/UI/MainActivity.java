@@ -151,7 +151,7 @@ public class MainActivity extends AppCompatActivity {
 
        // NotificationCenter.getInstance().addObserver(this, NotificationCenter.callbackEventDetail);
 
-        mToolbar = (Toolbar) findViewById(R.id.app_toolbar);
+      /*  mToolbar = (Toolbar) findViewById(R.id.app_toolbar);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setTitle("Crosea");
         getSupportActionBar().setDisplayShowTitleEnabled(true);
@@ -170,7 +170,7 @@ public class MainActivity extends AppCompatActivity {
 
                                                       }
                                                   }
-                                              });
+                                              });*/
 
         App app = (App) getApplication();
         mSocket = app.getSocket();
