@@ -120,7 +120,7 @@ public class MainActivity extends AppCompatActivity {
 
     };
 
-    @Override
+  /*  @Override
     public boolean  onPrepareOptionsMenu(Menu menu) {
         MenuInflater menuInflater = getMenuInflater();
         menuInflater.inflate(R.menu.main_tool_bar, menu);
@@ -143,7 +143,7 @@ public class MainActivity extends AppCompatActivity {
         });
         return super.onCreateOptionsMenu(menu);
     }
-
+*/
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -207,11 +207,11 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    @Override
+    /*@Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
         return true;
-    }
+    }*/
 
 
     public void showFirstFragment() {

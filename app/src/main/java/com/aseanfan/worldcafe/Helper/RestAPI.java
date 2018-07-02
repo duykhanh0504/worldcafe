@@ -38,8 +38,8 @@ public class RestAPI {
 
     private static int TIME_OUT = 12000;
 
-   // public static String root_url = "http://10.0.2.2:8080";
-    public static String root_url = "http://192.168.10.141:8080";
+    public static String root_url = "http://10.0.2.2:8080";
+   // public static String root_url = "http://192.168.10.141:8080";
 
     public static String root_url_dev = "";
 

@@ -3,6 +3,7 @@ package com.aseanfan.worldcafe.UI.Fragment;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
@@ -22,6 +23,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import com.aseanfan.worldcafe.worldcafe.R;
 
@@ -43,16 +45,43 @@ public class MypageFragment extends android.support.v4.app.Fragment {
 
         Toolbar toolbar = (Toolbar) view.findViewById(R.id.toolbar);
         ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
-        ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle(null);
 
-        CollapsingToolbarLayout collapsingToolbar = (CollapsingToolbarLayout) view.findViewById(R.id.collapsing_toolbar);
+
+        AppBarLayout appBarLayout = view.findViewById(R.id.appBar);
+        final ImageView avatar = view.findViewById(R.id.avatar);
+        appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
+            boolean isShow;
+            int scrollRange = -1;
+
+            @Override
+            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+                if (scrollRange == -1) {
+                    scrollRange = appBarLayout.getTotalScrollRange();
+                }
+                if (scrollRange + verticalOffset == 0) {
+                    //visible image view
+                   // avatar.setVisibility(View.INVISIBLE);
+                    isShow = true;
+                } else if (isShow) {
+                    //invisible image view
+                   // avatar.setVisibility(View.VISIBLE);
+                    isShow = false;
+                }
+            }
+        });
+
+      //  ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+      /*  CollapsingToolbarLayout collapsingToolbar = (CollapsingToolbarLayout) view.findViewById(R.id.collapsing_toolbar);
+
         if(AccountController.getInstance().getAccount().getUsername()!=null) {
             collapsingToolbar.setTitle(AccountController.getInstance().getAccount().getUsername());
         }
         else
         {
             collapsingToolbar.setTitle(AccountController.getInstance().getAccount().getEmail());
-        }
+        }*/
 
         viewPager = (ViewPager)view.findViewById(R.id.view_mypage);
 

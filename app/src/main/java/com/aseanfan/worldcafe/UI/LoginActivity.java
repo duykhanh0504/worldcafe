@@ -599,7 +599,7 @@ public class LoginActivity extends AppCompatActivity {
                 if(resultCode == RESULT_OK){
                     CropImage.ActivityResult result = CropImage.getActivityResult(data);
                     selectedAvatar = result.getUri();
-                    Glide.with(this).load( selectedAvatar).into( _avatarimage);
+                    Glide.with(this).load( selectedAvatar).apply(RequestOptions.circleCropTransform()).into( _avatarimage);
                 }
                 break;
         }
