@@ -94,6 +94,9 @@ public class LoginActivity extends AppCompatActivity {
     private int LOGIN_FACEBOOK =1;
     private int LOGIN_NORMAL =2;
 
+    private String email;
+    private String password;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -124,8 +127,8 @@ public class LoginActivity extends AppCompatActivity {
         _signupButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String email = _emailTextSignup.getText().toString();
-                String password = _passwordTextSignup.getText().toString();
+                email = _emailTextSignup.getText().toString();
+                password = _passwordTextSignup.getText().toString();
                 register(email,password);
             }
         });
@@ -135,8 +138,8 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
-                String email = _emailText.getText().toString();
-                String password = _passwordText.getText().toString();
+                email = _emailText.getText().toString();
+                password = _passwordText.getText().toString();
                 login(email,password,LOGIN_NORMAL);
             }
         });
@@ -348,7 +351,7 @@ public class LoginActivity extends AppCompatActivity {
                     int statuscode = jsons.get("status").getAsInt();
                         progressDialog.dismiss();
                         if (statuscode == RestAPI.STATUS_SUCCESS) {
-                            AccountController.getInstance().SetAccountID(jsons.get("result").getAsLong());
+                            AccountController.getInstance().getAccount().setId(jsons.get("result").getAsLong());
                             showLoginUpdate();
                         } else if (statuscode == RestAPI.STATUS_ACCOUNTESIXT) {
                             if (USING_FACEBOOK == true) {
@@ -359,6 +362,7 @@ public class LoginActivity extends AppCompatActivity {
                         }
                 } catch (Exception ex) {
                     progressDialog.dismiss();
+                    Toast.makeText(LoginActivity.this, ex.getMessage(), Toast.LENGTH_SHORT).show();
                     ex.printStackTrace();
                 }
 
@@ -403,10 +407,10 @@ public class LoginActivity extends AppCompatActivity {
                         return;
                     }
 
-                    String email = _emailText.getText().toString();
-                    String password = _passwordText.getText().toString();
+                  //  String email = _emailText.getText().toString();
+                 //   String password = _passwordText.getText().toString();
                     if(USING_FACEBOOK==true) {
-                        login(email, password,LOGIN_FACEBOOK);
+                        login(AccountController.getInstance().getAccount().getEmail(), password,LOGIN_FACEBOOK);
                     }
                     else
                     {
@@ -463,7 +467,8 @@ public class LoginActivity extends AppCompatActivity {
                 try {
                     if (!RestAPI.checkHttpCode(httpCode)) {
                         //AppFuncs.alert(getApplicationContext(),s,true);
-
+                        progressDialog.dismiss();
+                        Toast.makeText(getBaseContext(),"Failed to connect to server, please try again", Toast.LENGTH_LONG).show();
                         return;
                     }
                     JsonObject jsons = (new JsonParser()).parse(s).getAsJsonObject();

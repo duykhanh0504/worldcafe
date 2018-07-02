@@ -61,6 +61,7 @@ public class CommunityFragment extends Fragment implements NotificationCenter.No
 
   //  @BindView(R.id.intro_view_pager)
     private ViewFlipper viewpager;
+    RecyclerView list_community;
 
     private CommunityAdapter mAdapter;
 
@@ -191,7 +192,7 @@ public class CommunityFragment extends Fragment implements NotificationCenter.No
         View tab1 = view.findViewById(R.id.community_tab1);
 
         mAdapter = new CommunityAdapter(null);
-        final RecyclerView list_community = (RecyclerView) tab1.findViewById(R.id.list_community);;
+        list_community = (RecyclerView) tab1.findViewById(R.id.list_community);;
         RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(container.getContext(),2);
         list_community.setLayoutManager(mLayoutManager);
         list_community.setItemAnimator(new DefaultItemAnimator());

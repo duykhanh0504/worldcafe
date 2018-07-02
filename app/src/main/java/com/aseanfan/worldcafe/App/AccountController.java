@@ -1,5 +1,7 @@
 package com.aseanfan.worldcafe.App;
 
+import android.accounts.Account;
+
 import com.aseanfan.worldcafe.Model.UserModel;
 
 import java.net.UnknownServiceException;
@@ -8,7 +10,7 @@ public class AccountController {
 
     private static volatile AccountController Instance = null;
 
-    private UserModel account = new UserModel();
+    private  UserModel account = new UserModel();
 
     public static AccountController getInstance() {
         AccountController localInstance = Instance;
@@ -35,6 +37,10 @@ public class AccountController {
 
     public UserModel getAccount()
     {
+        if(account == null)
+        {
+            account= new UserModel();
+        }
         return account;
     }
 

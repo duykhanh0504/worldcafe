@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.aseanfan.worldcafe.App.AccountController;
 import com.aseanfan.worldcafe.UI.Adapter.FragmentMyPagerAdapter;
 import com.aseanfan.worldcafe.worldcafe.R;
 
@@ -45,7 +46,13 @@ public class MypageFragment extends android.support.v4.app.Fragment {
         ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         CollapsingToolbarLayout collapsingToolbar = (CollapsingToolbarLayout) view.findViewById(R.id.collapsing_toolbar);
-        collapsingToolbar.setTitle("test");
+        if(AccountController.getInstance().getAccount().getUsername()!=null) {
+            collapsingToolbar.setTitle(AccountController.getInstance().getAccount().getUsername());
+        }
+        else
+        {
+            collapsingToolbar.setTitle(AccountController.getInstance().getAccount().getEmail());
+        }
 
         viewPager = (ViewPager)view.findViewById(R.id.view_mypage);
 

@@ -38,8 +38,8 @@ public class RestAPI {
 
     private static int TIME_OUT = 12000;
 
-    public static String root_url = "http://10.0.2.2:8080";
-   // public static String root_url = "http://192.168.10.141:8080";
+   // public static String root_url = "http://10.0.2.2:8080";
+    public static String root_url = "http://192.168.10.141:8080";
 
     public static String root_url_dev = "";
 
@@ -48,6 +48,7 @@ public class RestAPI {
     public static String POST_UPDATESOCKET = root_url + "/api/user/updatesocket";
     public static String POST_UPDATEUSER = root_url + "/api/user/update";
     public static String GET_LISTEVENT = /*root_url + */"http://www.mocky.io/v2/5b30ad6c3100009909129002";
+    public static String GET_LISTPOSTMYPAGE = /*root_url + */"http://www.mocky.io/v2/5b35eff73400004c00f887c2";
 
     public final static int STATUS_SUCCESS = 200;
     public final static int STATUS_WRONGPASSWORD = 2;

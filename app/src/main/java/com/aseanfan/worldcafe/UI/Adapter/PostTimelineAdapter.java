@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.aseanfan.worldcafe.Model.EventModel;
+import com.aseanfan.worldcafe.Model.PostTimelineModel;
 import com.aseanfan.worldcafe.Utils.Constants;
 import com.aseanfan.worldcafe.worldcafe.R;
 
@@ -17,7 +18,7 @@ import java.util.List;
 public class PostTimelineAdapter extends RecyclerView.Adapter<PostTimelineAdapter.MyViewHolder> {
 
 
-    private List<EventModel> eventList;
+    private List<PostTimelineModel> eventList;
 
     private static PostTimelineAdapter.ClickListener clickListener;
 
@@ -31,23 +32,25 @@ public class PostTimelineAdapter extends RecyclerView.Adapter<PostTimelineAdapte
 
     public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public TextView title;
-        public TextView name;
-        public TextView price;
-        public ImageView imageEvent;
+        public TextView detail;
+        public TextView like;
+        public TextView comment;
+       // public ImageView imageEvent;
 
         public MyViewHolder(View view) {
             super(view);
-            title = (TextView) view.findViewById(R.id.txttitle);
-            name = (TextView) view.findViewById(R.id.txtname);
-            price = (TextView) view.findViewById(R.id.txtprice);
-            imageEvent = (ImageView) view.findViewById(R.id.imageEvent);
+            title = (TextView) view.findViewById(R.id.titlePost);
+            detail = (TextView) view.findViewById(R.id.detailPost);
+            like = (TextView) view.findViewById(R.id.textLike);
+            comment = (TextView) view.findViewById(R.id.textComment);
+           // imageEvent = (ImageView) view.findViewById(R.id.imageEvent);
             view.setOnClickListener(this);
-            imageEvent.setOnClickListener(new View.OnClickListener() {
+         /*   imageEvent.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     clickListener.onItemClick(getAdapterPosition(), view , Constants.CLICK_IMAGE_EVENT);
                 }
-            });
+            });*/
 
         }
 
@@ -58,11 +61,11 @@ public class PostTimelineAdapter extends RecyclerView.Adapter<PostTimelineAdapte
     }
 
 
-    public PostTimelineAdapter(List<EventModel> eventList) {
+    public PostTimelineAdapter(List<PostTimelineModel> eventList) {
         this.eventList = eventList;
     }
 
-    public void setEventList (List<EventModel> eventList) {
+    public void setPostList (List<PostTimelineModel> eventList) {
         this.eventList = eventList;
         this.notifyDataSetChanged();
     }
@@ -71,14 +74,14 @@ public class PostTimelineAdapter extends RecyclerView.Adapter<PostTimelineAdapte
     @Override
     public PostTimelineAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         View itemView = LayoutInflater.from(viewGroup.getContext())
-                .inflate(R.layout.community_row, viewGroup, false);
+                .inflate(R.layout.post_row, viewGroup, false);
 
         return new PostTimelineAdapter.MyViewHolder(itemView);
     }
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder myViewHolder, int i) {
-        EventModel event = eventList.get(i);
+        PostTimelineModel event = eventList.get(i);
         myViewHolder.title.setText(event.getTitle());
 
     }
