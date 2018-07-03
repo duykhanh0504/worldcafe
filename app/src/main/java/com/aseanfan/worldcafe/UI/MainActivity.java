@@ -182,7 +182,8 @@ public class MainActivity extends AppCompatActivity {
         mSocket.on(Socket.EVENT_RECONNECT_ERROR, onConnectError);
         mSocket.on(Socket.EVENT_RECONNECT_FAILED, onConnectError);
 
-        UserModel user = new UserModel();
+
+        UserModel user = AccountController.getInstance().getAccount();
 
         Cursor cursor = DBHelper.getInstance(getApplicationContext()).getAllPersons();
         if(cursor!=null) {

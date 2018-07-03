@@ -5,13 +5,19 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
+import com.aseanfan.worldcafe.Model.PostTimelineModel;
+import com.aseanfan.worldcafe.UI.Fragment.AlbumFragment;
 import com.aseanfan.worldcafe.UI.Fragment.MyPageDetailFragment;
 import com.aseanfan.worldcafe.UI.Fragment.MyPostFragment;
 import com.aseanfan.worldcafe.worldcafe.R;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class FragmentMyPagerAdapter  extends FragmentPagerAdapter {
 
     private Context mContext;
+    private AlbumFragment albumFragment;
 
     public FragmentMyPagerAdapter(Context context, FragmentManager fm) {
         super(fm);
@@ -22,15 +28,32 @@ public class FragmentMyPagerAdapter  extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
         if (position == 0) {
             return new MyPostFragment();
-        } else{
+        } else if(position ==1){
             return new MyPageDetailFragment();
+        }
+        else {
+            albumFragment =  new AlbumFragment();
+            return albumFragment;
         }
     }
 
-    // This determines the number of tabs
+    public void updateFragmentAlbum(List<PostTimelineModel> data)
+    {
+        List<String> listImage = new ArrayList<>();
+        for(PostTimelineModel item : data)
+        {
+            if(item.getUrlImage()!=null) {
+                for (String url : item.getUrlImage()) {
+                    listImage.add(url);
+                }
+            }
+        }
+        albumFragment.setAlbumData(listImage);
+    }
+
     @Override
     public int getCount() {
-        return 2;
+        return 3;
     }
 
     @Override
@@ -40,7 +63,9 @@ public class FragmentMyPagerAdapter  extends FragmentPagerAdapter {
             case 0:
                 return mContext.getString(R.string.My_Post);
             case 1:
-                return mContext.getString(R.string.Dtail_page);
+                return mContext.getString(R.string.Detail_page);
+            case 2:
+                return mContext.getString(R.string.Album_page);
             default:
                 return null;
         }

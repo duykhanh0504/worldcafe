@@ -258,7 +258,8 @@ public class LoginActivity extends AppCompatActivity {
             UserModel u = AccountController.getInstance().getAccount();
             if (u.getAvarta() != null) {
                 RequestOptions requestOptions = new RequestOptions()
-                        .diskCacheStrategy(DiskCacheStrategy.ALL);
+                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                        .circleCropTransform();
 
                 Glide.with(this)
                         .load(u.getAvarta()).apply(requestOptions)

@@ -23,8 +23,14 @@ public class AlbumAdapter  extends RecyclerView.Adapter<AlbumAdapter.MyViewHolde
     private List<String> imageListUrl;
     private static ClickListener clickListener;
 
-    private static  void setOnItemClickListener(AlbumAdapter.ClickListener clickListener) {
+    public  void  setOnItemClickListener(AlbumAdapter.ClickListener clickListener) {
         AlbumAdapter.clickListener = clickListener;
+    }
+
+    public void setData(List<String> data)
+    {
+        imageListUrl = data;
+        notifyDataSetChanged();
     }
 
     public interface ClickListener {
@@ -38,7 +44,7 @@ public class AlbumAdapter  extends RecyclerView.Adapter<AlbumAdapter.MyViewHolde
 
         public MyViewHolder(View view) {
             super(view);
-            imageView = new ImageView(view.getContext());
+            imageView = (ImageView) view;
             context = view.getContext();
             view.setOnClickListener(this);
         }
@@ -63,8 +69,8 @@ public class AlbumAdapter  extends RecyclerView.Adapter<AlbumAdapter.MyViewHolde
     @NonNull
     @Override
     public AlbumAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        View itemView = LayoutInflater.from(viewGroup.getContext())
-                .inflate(R.layout.community_row, viewGroup, false);
+        View itemView =new ImageView(viewGroup.getContext());
+
 
         return new AlbumAdapter.MyViewHolder(itemView);
     }

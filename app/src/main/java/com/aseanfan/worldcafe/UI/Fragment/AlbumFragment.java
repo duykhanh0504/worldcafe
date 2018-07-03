@@ -18,7 +18,11 @@ import android.widget.ImageView;
 import com.aseanfan.worldcafe.UI.Adapter.AlbumAdapter;
 import com.aseanfan.worldcafe.UI.Adapter.CommunityAdapter;
 import com.aseanfan.worldcafe.UI.Adapter.FragmentMyPagerAdapter;
+import com.aseanfan.worldcafe.UI.MainActivity;
+import com.aseanfan.worldcafe.Utils.Constants;
 import com.aseanfan.worldcafe.worldcafe.R;
+
+import java.util.List;
 
 public class AlbumFragment  extends android.support.v4.app.Fragment {
 
@@ -29,6 +33,11 @@ public class AlbumFragment  extends android.support.v4.app.Fragment {
     public static AlbumFragment newInstance() {
         AlbumFragment albumFrag = new AlbumFragment();
         return albumFrag;
+    }
+
+    public void setAlbumData(List<String> data)
+    {
+        mAdapter.setData(data);
     }
 
     @Nullable
@@ -44,6 +53,14 @@ public class AlbumFragment  extends android.support.v4.app.Fragment {
         listalbum.setLayoutManager(mLayoutManager);
         listalbum.setItemAnimator(new DefaultItemAnimator());
         listalbum.setAdapter(mAdapter);
+
+        mAdapter.setOnItemClickListener(new AlbumAdapter.ClickListener() {
+            @Override
+            public void onItemClick(int position, View v) {
+
+            }
+        });
+
 
         return view;
     }
