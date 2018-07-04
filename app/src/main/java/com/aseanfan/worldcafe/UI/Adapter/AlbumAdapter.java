@@ -45,6 +45,7 @@ public class AlbumAdapter  extends RecyclerView.Adapter<AlbumAdapter.MyViewHolde
         public MyViewHolder(View view) {
             super(view);
             imageView = (ImageView) view;
+            imageView.setScaleType(ImageView.ScaleType.FIT_XY);
             context = view.getContext();
             view.setOnClickListener(this);
         }

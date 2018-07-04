@@ -1,5 +1,6 @@
 package com.aseanfan.worldcafe.UI.Adapter;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -12,13 +13,16 @@ import com.aseanfan.worldcafe.Model.EventModel;
 import com.aseanfan.worldcafe.Model.PostTimelineModel;
 import com.aseanfan.worldcafe.Utils.Constants;
 import com.aseanfan.worldcafe.worldcafe.R;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class PostTimelineAdapter extends RecyclerView.Adapter<PostTimelineAdapter.MyViewHolder> {
 
 
-    private List<PostTimelineModel> eventList;
+    private List<PostTimelineModel> postList;
 
     private static PostTimelineAdapter.ClickListener clickListener;
 
@@ -27,7 +31,7 @@ public class PostTimelineAdapter extends RecyclerView.Adapter<PostTimelineAdapte
     }
 
     public interface ClickListener {
-        void onItemClick(int position, View v, int Type);
+        void onItemClick(int position, View v);
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -35,7 +39,10 @@ public class PostTimelineAdapter extends RecyclerView.Adapter<PostTimelineAdapte
         public TextView detail;
         public TextView like;
         public TextView comment;
-       // public ImageView imageEvent;
+        public ImageView imagePost;
+        public Context context;
+        public ImageView avatar;
+
 
         public MyViewHolder(View view) {
             super(view);
@@ -43,7 +50,9 @@ public class PostTimelineAdapter extends RecyclerView.Adapter<PostTimelineAdapte
             detail = (TextView) view.findViewById(R.id.detailPost);
             like = (TextView) view.findViewById(R.id.textLike);
             comment = (TextView) view.findViewById(R.id.textComment);
-           // imageEvent = (ImageView) view.findViewById(R.id.imageEvent);
+            imagePost = (ImageView) view.findViewById(R.id.imagePost);
+            avatar = (ImageView) view.findViewById(R.id.imageAvatar);
+            context = view.getContext();
             view.setOnClickListener(this);
          /*   imageEvent.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -56,17 +65,17 @@ public class PostTimelineAdapter extends RecyclerView.Adapter<PostTimelineAdapte
 
         @Override
         public void onClick(View view) {
-            clickListener.onItemClick(getAdapterPosition(), view , Constants.CLICK_EVENT);
+            clickListener.onItemClick(getAdapterPosition(), view );
         }
     }
 
 
-    public PostTimelineAdapter(List<PostTimelineModel> eventList) {
-        this.eventList = eventList;
+    public PostTimelineAdapter(List<PostTimelineModel> postList) {
+        this.postList = postList;
     }
 
-    public void setPostList (List<PostTimelineModel> eventList) {
-        this.eventList = eventList;
+    public void setPostList (List<PostTimelineModel> postList) {
+        this.postList = postList;
         this.notifyDataSetChanged();
     }
 
@@ -81,8 +90,29 @@ public class PostTimelineAdapter extends RecyclerView.Adapter<PostTimelineAdapte
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder myViewHolder, int i) {
-        PostTimelineModel event = eventList.get(i);
-        myViewHolder.title.setText(event.getTitle());
+        PostTimelineModel post = postList.get(i);
+        String urlimg = null;
+        myViewHolder.title.setText(post.getTitle());
+        myViewHolder.like.setText(String.valueOf(post.getNumberLike()));
+        myViewHolder.comment.setText(String.valueOf(post.getNumberComment()));
+        if(post.getUrlAvatar()!=null)
+        {
+            Glide.with(myViewHolder.context).load(post.getUrlAvatar()).apply(RequestOptions.circleCropTransform()).into(myViewHolder.avatar);
+        }
+        if(post.getDetail()!=null) {
+            myViewHolder.detail.setText(post.getDetail());
+        }
+
+            if(post.getUrlImage()!=null) {
+                for (String url : post.getUrlImage()) {
+                    //listImage.add(url);
+                    urlimg = url;
+                }
+                if(urlimg!=null) {
+                    Glide.with(myViewHolder.context).load(urlimg).into(myViewHolder.imagePost);
+                }
+        }
+
 
     }
 
@@ -90,10 +120,10 @@ public class PostTimelineAdapter extends RecyclerView.Adapter<PostTimelineAdapte
 
     @Override
     public int getItemCount() {
-        if (eventList == null)
+        if (postList == null)
         {
             return 0;
         }
-        return eventList.size();
+        return postList.size();
     }
 }

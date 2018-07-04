@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="margin_left_right">15dp</dimen>
+    <dimen name="margin_top_mypage">100dp</dimen>
+    <dimen name="margin_line_mypage">10dp</dimen>
+    <dimen name="space_icon_text">5dp</dimen>
+</resources>

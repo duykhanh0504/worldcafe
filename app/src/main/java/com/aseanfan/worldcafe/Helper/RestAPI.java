@@ -48,7 +48,7 @@ public class RestAPI {
     public static String POST_UPDATESOCKET = root_url + "/api/user/updatesocket";
     public static String POST_UPDATEUSER = root_url + "/api/user/update";
     public static String GET_LISTEVENT = /*root_url + */"http://www.mocky.io/v2/5b30ad6c3100009909129002";
-    public static String GET_LISTPOSTMYPAGE = /*root_url + */"http://www.mocky.io/v2/5b3af26f2e00005f3015833c";
+    public static String GET_LISTPOSTMYPAGE = /*root_url + */"http://www.mocky.io/v2/5b3ca7ef31000010006ddddc";
 
     public final static int STATUS_SUCCESS = 200;
     public final static int STATUS_WRONGPASSWORD = 2;

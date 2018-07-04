@@ -1,13 +1,17 @@
 package com.aseanfan.worldcafe.UI.Fragment;
 
 import android.content.Context;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,11 +29,14 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 
 import com.aseanfan.worldcafe.worldcafe.R;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.transition.Transition;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonParser;
@@ -41,7 +48,8 @@ import java.util.List;
 public class MypageFragment extends android.support.v4.app.Fragment {
 
     ViewPager viewPager;
-    ImageView avatar;
+    FrameLayout avatar;
+    CardView background;
 
     List<PostTimelineModel> posttimeline;
 
@@ -88,9 +96,21 @@ public class MypageFragment extends android.support.v4.app.Fragment {
         ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle(null);
 
         avatar = view.findViewById(R.id.avatar);
-        Glide.with(getContext()).load( AccountController.getInstance().getAccount().getAvarta()).apply(RequestOptions.circleCropTransform()).into( avatar);
+        background = view.findViewById(R.id.background);
+        Glide.with(getContext()).load( "https://png.pngtree.com/thumb_back/fh260/back_pic/00/15/30/4656e81f6dc57c5.jpg").into(new SimpleTarget<Drawable>() {
+            @Override
+            public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
+                background.setBackgroundDrawable(resource);
+            }
+        });
+        Glide.with(getContext()).load( AccountController.getInstance().getAccount().getAvarta()).apply(RequestOptions.circleCropTransform()).into(new SimpleTarget<Drawable>() {
+            @Override
+            public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
+               avatar.setBackgroundDrawable(resource);
+            }
+        });
         AppBarLayout appBarLayout = view.findViewById(R.id.appBar);
-        final ImageView avatar = view.findViewById(R.id.avatar);
+
         appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
             boolean isShow;
             int scrollRange = -1;
@@ -132,6 +152,23 @@ public class MypageFragment extends android.support.v4.app.Fragment {
 
         TabLayout tabLayout = (TabLayout) view.findViewById(R.id.tab_mypage);
         tabLayout.setupWithViewPager(viewPager);
+
+        tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
 
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
 
