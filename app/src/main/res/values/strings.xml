@@ -37,11 +37,20 @@
     <string name="Detail_page">Detail</string>
     <string name="Album_page">Album</string>
 
-    <string name="Following">Following</string>
-    <string name="Followers">Followers</string>
+    <string name="Following">Following: %d</string>
+    <string name="Followers">Followers: %d</string>
     <string name="Rank">Rank</string>
 
+    <string name="Introduce">Introduce</string>
+    <string name="Interested">Interested </string>
 
-
+    <string name="Rating">Rating</string>
+    <string name="titlenumberthanks">Number of times you gave and got "thanks"</string>
+    <string name="givethanks">Give: %d times</string>
+    <string name="receivethanks">Receive: %d times</string>
+    <string name="Direct_mesage">Direct message</string>
+    <string name="Event_exhibition">Event Exhibition</string>
+    <string name="School">School</string>
+    <string name="Company">Company</string>
 
 </resources>

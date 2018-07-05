@@ -6,11 +6,13 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.aseanfan.worldcafe.Model.EventModel;
 import com.aseanfan.worldcafe.Utils.Constants;
+import com.aseanfan.worldcafe.Utils.Utils;
 import com.aseanfan.worldcafe.worldcafe.R;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
@@ -45,8 +47,10 @@ public class AlbumAdapter  extends RecyclerView.Adapter<AlbumAdapter.MyViewHolde
         public MyViewHolder(View view) {
             super(view);
             imageView = (ImageView) view;
-            imageView.setScaleType(ImageView.ScaleType.FIT_XY);
             context = view.getContext();
+            int padding = Utils.convertDpToPixel(1,context);
+            imageView.setPadding(padding,padding,padding,padding);
+            imageView.setScaleType(ImageView.ScaleType.FIT_XY);
             view.setOnClickListener(this);
         }
 

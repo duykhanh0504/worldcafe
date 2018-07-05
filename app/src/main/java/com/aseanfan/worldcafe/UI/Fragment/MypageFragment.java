@@ -31,6 +31,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.aseanfan.worldcafe.worldcafe.R;
 import com.bumptech.glide.Glide;
@@ -50,6 +51,7 @@ public class MypageFragment extends android.support.v4.app.Fragment {
     ViewPager viewPager;
     FrameLayout avatar;
     CardView background;
+    TextView name;
 
     List<PostTimelineModel> posttimeline;
 
@@ -89,11 +91,15 @@ public class MypageFragment extends android.support.v4.app.Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_mypage, container, false);
+
         LoadListMyPost();
 
         Toolbar toolbar = (Toolbar) view.findViewById(R.id.toolbar);
         ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
         ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle(null);
+
+        name = view.findViewById(R.id.Name);
+        name.setText(AccountController.getInstance().getAccount().getUsername());
 
         avatar = view.findViewById(R.id.avatar);
         background = view.findViewById(R.id.background);
@@ -174,7 +180,7 @@ public class MypageFragment extends android.support.v4.app.Fragment {
 
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-                if(position ==2)
+                if(position ==FragmentMyPagerAdapter.ALBUM_PAGE)
                 {
                     adapter.updateFragmentAlbum(posttimeline);
                 }

@@ -19,6 +19,11 @@ public class FragmentMyPagerAdapter  extends FragmentPagerAdapter {
     private Context mContext;
     private AlbumFragment albumFragment;
 
+    public final static int MYPPOST_PAGE = 0;
+    public final static int DETAIL_PAGE = 2;
+    public final static int ALBUM_PAGE = 1;
+
+
     public FragmentMyPagerAdapter(Context context, FragmentManager fm) {
         super(fm);
         mContext = context;
@@ -26,15 +31,16 @@ public class FragmentMyPagerAdapter  extends FragmentPagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
-        if (position == 0) {
+        if (position == MYPPOST_PAGE) {
             return new MyPostFragment();
-        } else if(position ==1){
+        } else if(position ==DETAIL_PAGE){
             return new MyPageDetailFragment();
         }
-        else {
+        else if(position == ALBUM_PAGE){
             albumFragment =  new AlbumFragment();
             return albumFragment;
         }
+        return new MyPostFragment();
     }
 
     public void updateFragmentAlbum(List<PostTimelineModel> data)
@@ -60,12 +66,12 @@ public class FragmentMyPagerAdapter  extends FragmentPagerAdapter {
     public CharSequence getPageTitle(int position) {
         // Generate title based on item position
         switch (position) {
-            case 0:
+            case MYPPOST_PAGE:
                 return mContext.getString(R.string.My_Post);
-            case 1:
-                return mContext.getString(R.string.Detail_page);
-            case 2:
+            case ALBUM_PAGE:
                 return mContext.getString(R.string.Album_page);
+            case DETAIL_PAGE:
+                return mContext.getString(R.string.Detail_page);
             default:
                 return null;
         }

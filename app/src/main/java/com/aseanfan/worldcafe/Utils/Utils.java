@@ -1,10 +1,13 @@
 package com.aseanfan.worldcafe.Utils;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Point;
 import android.util.Base64;
+import android.util.DisplayMetrics;
 import android.view.Display;
 
 import java.io.ByteArrayOutputStream;
@@ -78,5 +81,20 @@ public class Utils {
         }
         return "jpg";
     }
+
+    public static int convertDpToPixel(float dp, Context context){
+        Resources resources = context.getResources();
+        DisplayMetrics metrics = resources.getDisplayMetrics();
+        int px = (int)(dp * ((float)metrics.densityDpi / DisplayMetrics.DENSITY_DEFAULT));
+        return px;
+    }
+
+    public static int convertPixelsToDp(float px, Context context){
+        Resources resources = context.getResources();
+        DisplayMetrics metrics = resources.getDisplayMetrics();
+        int dp = (int)(px / ((float)metrics.densityDpi / DisplayMetrics.DENSITY_DEFAULT));
+        return dp;
+    }
+
 
 }

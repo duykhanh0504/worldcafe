@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <TextView
+            android:id="@+id/titleIntroduce"
+            android:layout_gravity="left|center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawablePadding="10dp"
+            android:textStyle="bold"
+            android:text="@string/Introduce"
+            android:layout_marginTop="@dimen/margin_line_mypage"
+            android:layout_marginRight="@dimen/margin_left_right"
+            android:layout_marginLeft="@dimen/margin_left_right"/>
+
+        <TextView
+            android:id="@+id/txtintroduce"
+            android:layout_gravity="left|center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="TextView"
+            android:layout_marginTop="@dimen/margin_line_mypage"
+            android:layout_marginRight="@dimen/margin_left_right"
+            android:layout_marginLeft="@dimen/margin_left_right"/>
+
+        <FrameLayout
+            android:layout_marginTop="@dimen/margin_line_mypage"
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="@color/aqua">
+        </FrameLayout>
+
+        <TextView
+            android:layout_marginTop="@dimen/margin_line_mypage"
+            android:layout_marginRight="@dimen/margin_left_right"
+            android:layout_marginLeft="@dimen/margin_left_right"
+            android:id="@+id/titleInterested"
+            android:layout_gravity="left|center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawablePadding="10dp"
+            android:textStyle="bold"
+            android:text="@string/Interested" />
+        <LinearLayout
+            android:layout_marginTop="@dimen/margin_line_mypage"
+            android:layout_marginRight="@dimen/margin_left_right"
+            android:layout_marginLeft="@dimen/margin_left_right"
+            android:id="@+id/detailInterested"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"/>
+
+        <FrameLayout
+            android:layout_marginTop="@dimen/margin_line_mypage"
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="@color/aqua">
+        </FrameLayout>
+
+        <TextView
+            android:layout_marginTop="@dimen/margin_line_mypage"
+            android:layout_marginRight="@dimen/margin_left_right"
+            android:layout_marginLeft="@dimen/margin_left_right"
+            android:id="@+id/titleRating"
+            android:layout_gravity="left|center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawablePadding="10dp"
+            android:textStyle="bold"
+            android:text="@string/Rating" />
+        <LinearLayout
+            android:layout_marginTop="@dimen/margin_line_mypage"
+            android:layout_marginRight="@dimen/margin_left_right"
+            android:layout_marginLeft="@dimen/margin_left_right"
+            android:id="@+id/detailRating"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <ImageView
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:layout_gravity="left"
+                android:background="@drawable/starfill"
+                android:layout_marginRight="@dimen/rating_space"/>
+            <ImageView
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:layout_gravity="left"
+                android:background="@drawable/starfill"
+                android:layout_marginRight="@dimen/rating_space"/>
+            <ImageView
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:layout_gravity="left"
+                android:background="@drawable/starfill"
+                android:layout_marginRight="@dimen/rating_space"/>
+            <ImageView
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:layout_gravity="left"
+                android:background="@drawable/starfill"
+                android:layout_marginRight="@dimen/rating_space"/>
+            <ImageView
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:layout_gravity="left"
+                android:background="@drawable/starnull"
+                android:layout_marginRight="@dimen/rating_space"/>
+        </LinearLayout>
+
+        <FrameLayout
+            android:layout_marginTop="@dimen/margin_line_mypage"
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="@color/aqua">
+        </FrameLayout>
+
+        <TextView
+            android:layout_marginTop="@dimen/margin_line_mypage"
+            android:layout_marginRight="@dimen/margin_left_right"
+            android:layout_marginLeft="@dimen/margin_left_right"
+            android:id="@+id/titlenumberthanks"
+            android:layout_gravity="left|center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawablePadding="10dp"
+            android:textStyle="bold"
+            android:text="@string/titlenumberthanks" />
+        <LinearLayout
+            android:layout_marginTop="@dimen/margin_line_mypage"
+            android:layout_marginRight="@dimen/margin_left_right"
+            android:layout_marginLeft="@dimen/margin_left_right"
+            android:id="@+id/detailnumberthanks"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:id="@+id/txtgive"
+                android:layout_gravity="left|center"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/givethanks" />
+
+            <TextView
+                android:id="@+id/txtreceive"
+                android:layout_gravity="left|center"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/receivethanks" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_marginTop="@dimen/margin_line_mypage"
+            android:layout_marginRight="@dimen/margin_left_right"
+            android:layout_marginLeft="@dimen/margin_left_right"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center">
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/btn_directmessage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="12dp"
+            android:layout_gravity="center"
+            android:text="@string/Direct_mesage"
+            android:layout_marginRight="@dimen/margin_left_right"
+            android:layout_marginLeft="@dimen/margin_left_right"
+            />
+            <android.support.v7.widget.AppCompatButton
+                android:layout_gravity="center"
+                android:id="@+id/btn_createevent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="12dp"
+                android:text="@string/Event_exhibition"
+                android:layout_marginRight="@dimen/margin_left_right"
+                android:layout_marginLeft="@dimen/margin_left_right"/>
+        </LinearLayout>
+        <FrameLayout
+            android:layout_marginTop="@dimen/margin_line_mypage"
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="@color/aqua">
+        </FrameLayout>
+        <TextView
+            android:id="@+id/titleschool"
+            android:layout_marginTop="@dimen/margin_line_mypage"
+            android:layout_marginRight="@dimen/margin_left_right"
+            android:layout_marginLeft="@dimen/margin_left_right"
+            android:layout_gravity="left|center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawablePadding="10dp"
+            android:textStyle="bold"
+            android:text="@string/School" />
+        <TextView
+            android:layout_marginTop="@dimen/margin_line_mypage"
+            android:layout_marginRight="@dimen/margin_left_right"
+            android:layout_marginLeft="@dimen/margin_left_right"
+            android:id="@+id/txtschool"
+            android:layout_gravity="left|center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawablePadding="10dp"
+            android:textStyle="bold" />
+        <FrameLayout
+            android:layout_marginTop="@dimen/margin_line_mypage"
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="@color/aqua">
+        </FrameLayout>
+        <TextView
+            android:id="@+id/titlecompany"
+            android:layout_marginTop="@dimen/margin_line_mypage"
+            android:layout_marginRight="@dimen/margin_left_right"
+            android:layout_marginLeft="@dimen/margin_left_right"
+            android:layout_gravity="left|center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawablePadding="10dp"
+            android:textStyle="bold"
+            android:text="@string/Company" />
+        <TextView
+            android:layout_marginTop="@dimen/margin_line_mypage"
+            android:layout_marginRight="@dimen/margin_left_right"
+            android:layout_marginLeft="@dimen/margin_left_right"
+            android:id="@+id/txtcompany"
+            android:layout_gravity="left|center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawablePadding="10dp"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+</android.support.v4.widget.NestedScrollView>
