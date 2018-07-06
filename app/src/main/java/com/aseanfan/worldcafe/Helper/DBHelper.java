@@ -7,6 +7,8 @@ import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.aseanfan.worldcafe.Model.UserModel;
+
 public class DBHelper extends SQLiteOpenHelper {
 
     public static final String DATABASE_NAME = "CroseaDB.db";
@@ -18,6 +20,16 @@ public class DBHelper extends SQLiteOpenHelper {
     public static final String PERSON_COLUMN_EMAIL = "email";
     public static final String PERSON_PHONE_NUMBER = "phonenumber";
     public static final String PERSON_AVATAR_URL = "avarta";
+    public static final String PERSON_SEX = "sex";
+    public static final String PERSON_BIRTHDAY = "birthday";
+    public static final String PERSON_ADDRESS = "address";
+    public static final String PERSON_DISTRICT = "district";
+    public static final String PERSON_CITY = "city";
+    public static final String PERSON_COUNTRY = "country";
+    public static final String PERSON_COMPANY = "company";
+    public static final String PERSON_SCHOOL = "school";
+    public static final String PERSON_INTRODUCTION = "introduction";
+
 
     private static SQLiteDatabase db;
     private static DBHelper instance;
@@ -27,16 +39,24 @@ public class DBHelper extends SQLiteOpenHelper {
         super(context, DATABASE_NAME , null, DATABASE_VERSION);
     }
 
-    public boolean insertPerson(Long id,String name, String email, String phonenumber , String avarta) {
+    public boolean insertPerson(UserModel user) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
 
-        contentValues.put(PERSON_COLUMN_ID, id);
-        contentValues.put(PERSON_COLUMN_NAME, name);
-        contentValues.put(PERSON_COLUMN_EMAIL, email);
-        contentValues.put(PERSON_PHONE_NUMBER, phonenumber);
-        contentValues.put(PERSON_AVATAR_URL, avarta);
-
+        contentValues.put(PERSON_COLUMN_ID, user.getId());
+        contentValues.put(PERSON_COLUMN_NAME, user.getUsername());
+        contentValues.put(PERSON_COLUMN_EMAIL, user.getEmail());
+        contentValues.put(PERSON_PHONE_NUMBER, user.getPhonenumber());
+        contentValues.put(PERSON_AVATAR_URL, user.getAvarta());
+        contentValues.put(PERSON_SEX, user.getSex());
+        contentValues.put(PERSON_BIRTHDAY, user.getBirthday());
+        contentValues.put(PERSON_ADDRESS, user.getAddress());
+        contentValues.put(PERSON_DISTRICT, user.getDistrict());
+        contentValues.put(PERSON_CITY, user.getCity());
+        contentValues.put(PERSON_COUNTRY, user.getCountry());
+        contentValues.put(PERSON_COMPANY, user.getCompany());
+        contentValues.put(PERSON_SCHOOL, user.getSchool());
+        contentValues.put(PERSON_INTRODUCTION, user.getIntroduction());
 
         db.insert(PERSON_TABLE_USER, null, contentValues);
         return true;
@@ -48,14 +68,23 @@ public class DBHelper extends SQLiteOpenHelper {
         return numRows;
     }
 
-    public boolean updatePerson(Long id, String name, String email, String phonenumber,String avatar) {
+    public boolean updatePerson(UserModel user) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
-        contentValues.put(PERSON_COLUMN_NAME, name);
-        contentValues.put(PERSON_COLUMN_EMAIL, email);
-        contentValues.put(PERSON_PHONE_NUMBER, phonenumber);
-        contentValues.put(PERSON_AVATAR_URL, avatar);
-        db.update(PERSON_TABLE_USER, contentValues, PERSON_COLUMN_ID + " = ? ", new String[] { Long.toString(id) } );
+        contentValues.put(PERSON_COLUMN_NAME, user.getUsername());
+        contentValues.put(PERSON_COLUMN_EMAIL, user.getEmail());
+        contentValues.put(PERSON_PHONE_NUMBER, user.getPhonenumber());
+        contentValues.put(PERSON_AVATAR_URL, user.getAvarta());
+        contentValues.put(PERSON_SEX, user.getSex());
+        contentValues.put(PERSON_BIRTHDAY, user.getBirthday());
+        contentValues.put(PERSON_ADDRESS, user.getAddress());
+        contentValues.put(PERSON_DISTRICT, user.getDistrict());
+        contentValues.put(PERSON_CITY, user.getCity());
+        contentValues.put(PERSON_COUNTRY, user.getCountry());
+        contentValues.put(PERSON_COMPANY, user.getCompany());
+        contentValues.put(PERSON_SCHOOL, user.getSchool());
+        contentValues.put(PERSON_INTRODUCTION, user.getIntroduction());
+        db.update(PERSON_TABLE_USER, contentValues, PERSON_COLUMN_ID + " = ? ", new String[] { Long.toString(user.getId()) } );
         return true;
     }
 
@@ -87,7 +116,16 @@ public class DBHelper extends SQLiteOpenHelper {
                         PERSON_COLUMN_NAME + " TEXT, " +
                         PERSON_COLUMN_EMAIL + " TEXT, " +
                         PERSON_PHONE_NUMBER + " TEXT, " +
-                        PERSON_AVATAR_URL + " TEXT)"
+                        PERSON_AVATAR_URL + " TEXT, " +
+                        PERSON_SEX + " TEXT, " +
+                        PERSON_BIRTHDAY + " TEXT, " +
+                        PERSON_ADDRESS+ " TEXT, " +
+                        PERSON_DISTRICT + " TEXT, " +
+                        PERSON_CITY + " TEXT, " +
+                        PERSON_COUNTRY + " TEXT, " +
+                        PERSON_COMPANY + " TEXT, " +
+                        PERSON_SCHOOL + " TEXT, " +
+                        PERSON_INTRODUCTION + " TEXT)"
         );
     }
 

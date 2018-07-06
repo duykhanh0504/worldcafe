@@ -1,5 +1,6 @@
 package com.aseanfan.worldcafe.UI.Fragment;
 
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.media.Image;
 import android.os.Bundle;
@@ -8,14 +9,17 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.aseanfan.worldcafe.UI.CreateEventActivity;
+import com.aseanfan.worldcafe.UI.DirectMessageActivity;
 import com.aseanfan.worldcafe.Utils.Utils;
 import com.aseanfan.worldcafe.worldcafe.R;
 import com.koushikdutta.async.Util;
 
-public class MyPageDetailFragment extends android.support.v4.app.Fragment {
+public class MyPageDetailFragment extends android.support.v4.app.Fragment implements View.OnClickListener {
 
     private TextView titleintroduce;
     private TextView titleinterested;
@@ -23,6 +27,9 @@ public class MyPageDetailFragment extends android.support.v4.app.Fragment {
     private TextView titlenumberthanks;
     private TextView titleschool;
     private TextView titlecompany;
+
+    private Button directMessage;
+    private Button createEvent;
 
     public static MyPageDetailFragment newInstance() {
         MyPageDetailFragment firstFrag = new MyPageDetailFragment();
@@ -71,5 +78,27 @@ public class MyPageDetailFragment extends android.support.v4.app.Fragment {
         iconCompany.setBounds(0,0, Utils.convertDpToPixel(20,getContext()),Utils.convertDpToPixel(20,getContext()));
         titlecompany.setCompoundDrawables(iconCompany, null, null, null);
 
+        directMessage =(Button) view.findViewById(R.id.btn_directmessage);
+        createEvent =(Button) view.findViewById(R.id.btn_createevent);
+
+        directMessage.setOnClickListener(this);
+        createEvent.setOnClickListener(this);
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId())
+        {
+            case R.id.btn_directmessage: {
+                Intent intent = new Intent(getContext(), CreateEventActivity.class);
+                startActivity(intent);
+                break;
+            }
+            case R.id.btn_createevent: {
+                Intent intent = new Intent(getContext(), DirectMessageActivity.class);
+                startActivity(intent);
+                break;
+            }
+        }
     }
 }

@@ -478,7 +478,7 @@ public class LoginActivity extends AppCompatActivity {
                         JsonObject jsonObject = jsons.getAsJsonArray("result").get(0).getAsJsonObject();
                         Gson gson = new Gson();
                         final UserModel u = gson.fromJson(jsonObject, UserModel.class);
-                        DBHelper.getInstance(getApplicationContext()).insertPerson(u.getId(), u.getUsername(), u.getEmail(), u.getPhonenumber(), u.getAvarta());
+                        DBHelper.getInstance(getApplicationContext()).insertPerson(u);
                         AccountController.getInstance().SetAccount(u);
 
                         JsonObject dataJson = new JsonObject();

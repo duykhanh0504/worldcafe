@@ -8,6 +8,7 @@ import android.content.pm.PackageManager;
 import android.content.pm.Signature;
 import android.database.DataSetObserver;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -48,6 +49,7 @@ public class IntroActivity extends AppCompatActivity {
     private boolean justCreated = false;
     private boolean startPressed = false;
     private int[] images;
+    private int[] listtitle;
 
 
     @BindView(R.id.Signup)
@@ -95,18 +97,44 @@ public class IntroActivity extends AppCompatActivity {
         justCreated = true;
     }
 
+    public class FadePageTransformer implements ViewPager.PageTransformer {
+        public void transformPage(View view, float position) {
+
+            if (position <= -1.0F || position >= 1.0F) {        // [-Infinity,-1) OR (1,+Infinity]
+                view.setAlpha(0.0F);
+                view.setVisibility(View.GONE);
+            } else if( position == 0.0F ) {     // [0]
+                view.setAlpha(1.0F);
+                view.setVisibility(View.VISIBLE);
+            } else {
+
+                // Position is between [-1,1]
+                view.setAlpha(1.0F - Math.abs(position));
+              //  view.setTranslationX(-position * (view.getWidth() / 2));
+                view.setVisibility(View.VISIBLE);
+            }
+        }
+    }
+
     void UiInit()
     {
         images = new int[]{
-                R.drawable.introl1,
-                R.drawable.introl2,
-                R.drawable.introl3,
-                R.drawable.introl4
+                R.drawable.intro1,
+                R.drawable.intro2,
+                R.drawable.intro3,
+                R.drawable.intro4
+        };
+        listtitle = new int[]{
+                R.string.intro1,
+                R.string.intro2,
+                R.string.intro3
         };
 
         viewPager.setAdapter(new IntroAdapter());
         viewPager.setPageMargin(0);
         viewPager.setOffscreenPageLimit(1);
+
+        viewPager.setPageTransformer(true,new  FadePageTransformer());
     }
 
     @OnClick(R.id.Login)
@@ -149,10 +177,23 @@ public class IntroActivity extends AppCompatActivity {
         public Object instantiateItem(ViewGroup container, int position) {
             View view = View.inflate(container.getContext(), R.layout.intro_view_layout, null);
             ImageView headerimage = (ImageView) view.findViewById(R.id.header_image);
+            TextView title = (TextView) view.findViewById(R.id.txttitle);
+            ImageView icon = (ImageView) view.findViewById(R.id.icon_image);
+
             container.addView(view, 0);
 
             headerimage.setBackgroundResource(images[position]);
-
+            if(position ==0)
+            {
+                title.setVisibility(View.GONE);
+                icon.setVisibility(View.GONE);
+            }
+            else
+            {
+                title.setVisibility(View.VISIBLE);
+                icon.setVisibility(View.VISIBLE);
+                title.setText(getResources().getString(listtitle[position-1]));
+            }
             return view;
         }
 

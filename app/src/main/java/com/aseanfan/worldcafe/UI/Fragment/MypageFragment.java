@@ -48,12 +48,13 @@ import java.util.List;
 
 public class MypageFragment extends android.support.v4.app.Fragment {
 
-    ViewPager viewPager;
-    FrameLayout avatar;
-    CardView background;
-    TextView name;
+    private ViewPager viewPager;
+    private FrameLayout avatar;
+    private CardView background;
+    private TextView name;
 
-    List<PostTimelineModel> posttimeline;
+    private List<PostTimelineModel> posttimeline;
+    private ImageView rankImage;
 
 
     public void LoadListMyPost()
@@ -101,6 +102,8 @@ public class MypageFragment extends android.support.v4.app.Fragment {
         name = view.findViewById(R.id.Name);
         name.setText(AccountController.getInstance().getAccount().getUsername());
 
+        rankImage= (ImageView) view.findViewById(R.id.image_rank);
+
         avatar = view.findViewById(R.id.avatar);
         background = view.findViewById(R.id.background);
         Glide.with(getContext()).load( "https://png.pngtree.com/thumb_back/fh260/back_pic/00/15/30/4656e81f6dc57c5.jpg").into(new SimpleTarget<Drawable>() {
@@ -138,6 +141,12 @@ public class MypageFragment extends android.support.v4.app.Fragment {
             }
         });
 
+        rankImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                
+            }
+        });
       //  ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
       /*  CollapsingToolbarLayout collapsingToolbar = (CollapsingToolbarLayout) view.findViewById(R.id.collapsing_toolbar);

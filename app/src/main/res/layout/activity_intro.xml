@@ -20,80 +20,87 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:layout_gravity="top"
-            android:layout_marginTop="338dp"
+            android:layout_marginTop="455dp"
             >
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/bottom_pages"
+                android:orientation="horizontal"
+                android:layout_marginTop="@dimen/margin_line_mypage"
+                android:layout_marginBottom="@dimen/margin_line_mypage"
+                android:layout_gravity="center_horizontal"
+               >
+
+                <FrameLayout
+                    android:layout_width="8dp"
+                    android:radius="100dp"
+                    android:layout_height="8dp"
+                    android:background="@drawable/circle"/>
+
+                <FrameLayout
+                    android:layout_width="8dp"
+                    android:layout_height="8dp"
+                    android:shape="ring"
+                    android:background="@drawable/circle"
+                    android:layout_marginLeft="7dp"
+                    android:layout_marginStart="7dp" />
+
+                <FrameLayout
+                    android:layout_width="8dp"
+                    android:layout_height="8dp"
+                    android:shape="ring"
+                    android:background="@drawable/circle"
+                    android:layout_marginLeft="7dp"
+                    android:layout_marginStart="7dp" />
+
+                <FrameLayout
+                    android:layout_width="8dp"
+                    android:layout_height="8dp"
+                    android:shape="ring"
+                    android:background="@drawable/circle"
+                    android:layout_marginLeft="7dp"
+                    android:layout_marginStart="7dp" />
+
+            </LinearLayout>
 
             <ImageView
                 android:id="@+id/icon_introtext"
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"
                 android:layout_gravity="center"
-                android:layout_weight="1"
-                android:layout_marginTop="2dp"
-                android:contentDescription="TODO" />
+                android:layout_marginTop="2dp" />
 
-            <FrameLayout
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="100dp">
+                android:layout_marginTop="@dimen/margin_line_mypage"
+                android:layout_marginLeft="24dp"
+                android:layout_marginRight="24dp"
+                android:orientation="vertical">
 
                 <Button
                     android:id="@+id/Signup"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="left"
-                    android:layout_marginLeft="20dp"
-                    android:text="@string/Signup" />
+                    android:layout_gravity="center"
+                    android:layout_marginBottom="@dimen/margin_line_mypage"
+                    android:text="@string/Signup"
+                    android:textColor="@color/white"
+                    android:background="@drawable/background_button" />
 
                 <Button
                     android:id="@+id/Login"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="right"
-                    android:layout_marginRight="20dp"
-                    android:text="@string/Login" />
-            </FrameLayout>
+                    android:layout_gravity="center"
+                    android:text="@string/Login"
+                    android:background="@drawable/background_button_gray" />
+            </LinearLayout>
         </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/bottom_pages"
-            android:orientation="horizontal"
-            android:layout_gravity="bottom|center_horizontal"
-            android:layout_marginBottom="26dp">
 
-            <FrameLayout
-                android:layout_width="8dp"
-                android:radius="100dp"
-                android:layout_height="8dp"
-                android:background="@drawable/circle"/>
-
-            <FrameLayout
-                android:layout_width="8dp"
-                android:layout_height="8dp"
-                android:shape="ring"
-                android:background="@drawable/circle"
-                android:layout_marginLeft="7dp"
-                android:layout_marginStart="7dp" />
-
-            <FrameLayout
-                android:layout_width="8dp"
-                android:layout_height="8dp"
-                android:shape="ring"
-                android:background="@drawable/circle"
-                android:layout_marginLeft="7dp"
-                android:layout_marginStart="7dp" />
-
-            <FrameLayout
-                android:layout_width="8dp"
-                android:layout_height="8dp"
-                android:shape="ring"
-                android:background="@drawable/circle"
-                android:layout_marginLeft="7dp"
-                android:layout_marginStart="7dp" />
-
-        </LinearLayout>
 
     </FrameLayout>
 

@@ -90,6 +90,7 @@
                         android:layout_gravity="center"
                     android:layout_marginLeft="@dimen/header_space"/>
                     <ImageView
+                        android:id="@+id/image_rank"
                         android:layout_width="45dp"
                         android:layout_height="45dp"
                         android:layout_gravity="center"

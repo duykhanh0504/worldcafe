@@ -193,6 +193,15 @@ public class MainActivity extends AppCompatActivity {
             user.setEmail(cursor.getString(cursor.getColumnIndex(DBHelper.PERSON_COLUMN_EMAIL)));
             user.setPhonenumber(cursor.getString(cursor.getColumnIndex(DBHelper.PERSON_PHONE_NUMBER)));
             user.setAvarta(cursor.getString(cursor.getColumnIndex(DBHelper.PERSON_AVATAR_URL)));
+            user.setSex(cursor.getString(cursor.getColumnIndex(DBHelper.PERSON_SEX)));
+            user.setBirthday(cursor.getString(cursor.getColumnIndex(DBHelper.PERSON_BIRTHDAY)));
+            user.setAddress(cursor.getString(cursor.getColumnIndex(DBHelper.PERSON_ADDRESS)));
+            user.setDistrict(cursor.getString(cursor.getColumnIndex(DBHelper.PERSON_DISTRICT)));
+            user.setCity(cursor.getString(cursor.getColumnIndex(DBHelper.PERSON_CITY)));
+            user.setCountry(cursor.getString(cursor.getColumnIndex(DBHelper.PERSON_COUNTRY)));
+            user.setCompany(cursor.getString(cursor.getColumnIndex(DBHelper.PERSON_COMPANY)));
+            user.setSchool(cursor.getString(cursor.getColumnIndex(DBHelper.PERSON_SCHOOL)));
+            user.setIntroduction(cursor.getString(cursor.getColumnIndex(DBHelper.PERSON_INTRODUCTION)));
             AccountController.getInstance().SetAccount(user);
         }
 
