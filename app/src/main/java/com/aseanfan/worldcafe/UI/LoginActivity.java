@@ -188,7 +188,8 @@ public class LoginActivity extends AppCompatActivity {
                                             UserModel u =  new UserModel();
                                             u.setEmail(object.getString("email"));
                                             u.setUsername(object.getString("name"));
-                                            u.setAvarta( object.getJSONObject("picture").getJSONObject("data").getString("url"));
+                                          //  u.setAvarta( object.getJSONObject("picture").getJSONObject("data").getString("url"));
+                                            u.setAvarta(String.format(getString(R.string.facebookAvatarUrl),object.getString("id")));
                                             AccountController.getInstance().SetAccount(u);
                                             register(u.getEmail(),null);
 

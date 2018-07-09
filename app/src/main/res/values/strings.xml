@@ -57,4 +57,5 @@
     <string name="intro2">Crosea\n· Community you want to join\n· Information and knowledge you want\nYou can find it under the conditions you desire.\n\nLet"'"s go beyond the framework of your </string>
     <string name="intro3">At Crosea.\n· Community you want to plan\n· Your information · knowledge\nYou can sell it under the conditions you desire.\n\nLet"'"s connect with people around the world </string>
 
+    <string name="facebookAvatarUrl">https://graph.facebook.com/%s/picture?type=square</string>
 </resources>

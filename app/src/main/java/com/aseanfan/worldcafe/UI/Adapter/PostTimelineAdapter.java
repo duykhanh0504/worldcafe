@@ -31,7 +31,7 @@ public class PostTimelineAdapter extends RecyclerView.Adapter<PostTimelineAdapte
     }
 
     public interface ClickListener {
-        void onItemClick(int position, View v);
+        void onItemClick(int position, View v ,int type);
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -42,6 +42,7 @@ public class PostTimelineAdapter extends RecyclerView.Adapter<PostTimelineAdapte
         public ImageView imagePost;
         public Context context;
         public ImageView avatar;
+        public ImageView imagelike;
 
 
         public MyViewHolder(View view) {
@@ -52,20 +53,21 @@ public class PostTimelineAdapter extends RecyclerView.Adapter<PostTimelineAdapte
             comment = (TextView) view.findViewById(R.id.textComment);
             imagePost = (ImageView) view.findViewById(R.id.imagePost);
             avatar = (ImageView) view.findViewById(R.id.imageAvatar);
+            imagelike = (ImageView) view.findViewById(R.id.imageLike) ;
             context = view.getContext();
             view.setOnClickListener(this);
-         /*   imageEvent.setOnClickListener(new View.OnClickListener() {
+            imagelike.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    clickListener.onItemClick(getAdapterPosition(), view , Constants.CLICK_IMAGE_EVENT);
+                    clickListener.onItemClick(getAdapterPosition(), view , Constants.CLICK_IMAGE_LIKE);
                 }
-            });*/
+            });
 
         }
 
         @Override
         public void onClick(View view) {
-            clickListener.onItemClick(getAdapterPosition(), view );
+            clickListener.onItemClick(getAdapterPosition(), view ,Constants.CLICK_TIMELINE);
         }
     }
 

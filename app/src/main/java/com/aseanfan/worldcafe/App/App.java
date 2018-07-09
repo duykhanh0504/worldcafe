@@ -20,6 +20,7 @@ public class App  extends Application {
         super.onCreate();
         DBHelper.getInstance(getApplicationContext());
         applicationHandler = new Handler(getApplicationContext().getMainLooper());
+        mSocket.connect();
     }
     private Socket mSocket;
     {

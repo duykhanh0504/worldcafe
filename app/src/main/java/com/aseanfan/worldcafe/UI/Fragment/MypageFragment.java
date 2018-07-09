@@ -144,7 +144,7 @@ public class MypageFragment extends android.support.v4.app.Fragment {
         rankImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                
+
             }
         });
       //  ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);

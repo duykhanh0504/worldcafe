@@ -52,6 +52,7 @@ public class AlbumAdapter  extends RecyclerView.Adapter<AlbumAdapter.MyViewHolde
             imageView.setPadding(padding,padding,padding,padding);
             imageView.setScaleType(ImageView.ScaleType.FIT_XY);
             view.setOnClickListener(this);
+
         }
 
         @Override

@@ -15,6 +15,7 @@ import com.aseanfan.worldcafe.Model.EventModel;
 import com.aseanfan.worldcafe.Model.PostTimelineModel;
 import com.aseanfan.worldcafe.UI.Adapter.CommunityAdapter;
 import com.aseanfan.worldcafe.UI.Adapter.PostTimelineAdapter;
+import com.aseanfan.worldcafe.Utils.Constants;
 import com.aseanfan.worldcafe.worldcafe.R;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
@@ -78,6 +79,16 @@ public class MyPostFragment  extends android.support.v4.app.Fragment {
         list_mypost.setLayoutManager(mLayoutManager);
         list_mypost.setItemAnimator(new DefaultItemAnimator());
         list_mypost.setAdapter(mAdapter);
+
+        mAdapter.setOnItemClickListener(new PostTimelineAdapter.ClickListener() {
+            @Override
+            public void onItemClick(int position, View v,int type) {
+                if(type == Constants.CLICK_IMAGE_LIKE)
+                {
+                    //posttimeline.get(position).getNumberLike() =
+                }
+            }
+        });
 
         LoadListMyPost();
 
