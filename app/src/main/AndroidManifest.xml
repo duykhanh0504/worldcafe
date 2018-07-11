@@ -17,6 +17,7 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
 
     <application
         android:name="com.aseanfan.worldcafe.App.App"
@@ -73,7 +74,8 @@
             android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
             android:theme="@style/Base.Theme.AppCompat" />
         <activity android:name="com.aseanfan.worldcafe.UI.CreateEventActivity" />
-        <activity android:name="com.aseanfan.worldcafe.UI.DirectMessageActivity"></activity>
+        <activity android:name="com.aseanfan.worldcafe.UI.DirectMessageActivity" />
+        <activity android:name="com.aseanfan.worldcafe.UI.PostTimeLineActivity"></activity>
     </application>
 
 </manifest>

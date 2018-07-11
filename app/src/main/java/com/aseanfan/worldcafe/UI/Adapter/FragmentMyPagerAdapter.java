@@ -50,7 +50,9 @@ public class FragmentMyPagerAdapter  extends FragmentPagerAdapter {
         {
             if(item.getUrlImage()!=null) {
                 for (String url : item.getUrlImage()) {
-                    listImage.add(url);
+                    if(!url.isEmpty()) {
+                        listImage.add(url);
+                    }
                 }
             }
         }

@@ -8,6 +8,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
@@ -50,6 +51,7 @@ public class AlbumFragment  extends android.support.v4.app.Fragment {
         mAdapter = new AlbumAdapter(null);
 
         RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(container.getContext(),3);
+       // RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(container.getContext(), LinearLayoutManager.HORIZONTAL, false);
         listalbum.setLayoutManager(mLayoutManager);
         listalbum.setItemAnimator(new DefaultItemAnimator());
         listalbum.setAdapter(mAdapter);

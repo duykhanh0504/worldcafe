@@ -111,7 +111,7 @@ public class PostTimelineAdapter extends RecyclerView.Adapter<PostTimelineAdapte
                     urlimg = url;
                 }
                 if(urlimg!=null) {
-                    Glide.with(myViewHolder.context).load(urlimg).into(myViewHolder.imagePost);
+                    Glide.with(myViewHolder.context).load(post.getUrlImage().get(0)).into(myViewHolder.imagePost);
                 }
         }
 

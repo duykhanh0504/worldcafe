@@ -16,7 +16,6 @@ public class PostTimelineModel {
     public PostTimelineModel() {
     }
 
-
     public Long getEventid() {
         return timeline_id;
     }

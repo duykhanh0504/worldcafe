@@ -72,10 +72,10 @@ public class MainActivity extends AppCompatActivity {
                 public void run() {
                     Toast.makeText(getApplicationContext(), "connect error", Toast.LENGTH_LONG).show();
                     mSocket.disconnect();
-                    Intent intent = new Intent(getApplicationContext(), IntroActivity.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                 //   Intent intent = new Intent(getApplicationContext(), IntroActivity.class);
+                   // intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
-                    getApplicationContext().startActivity(intent);
+                   // getApplicationContext().startActivity(intent);
                 }
             });
         }

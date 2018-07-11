@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.aseanfan.worldcafe.App.AccountController;
 import com.aseanfan.worldcafe.Helper.RestAPI;
 import com.aseanfan.worldcafe.Model.EventModel;
 import com.aseanfan.worldcafe.Model.PostTimelineModel;
@@ -19,6 +20,7 @@ import com.aseanfan.worldcafe.Utils.Constants;
 import com.aseanfan.worldcafe.worldcafe.R;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
 
@@ -42,7 +44,11 @@ public class MyPostFragment  extends android.support.v4.app.Fragment {
 
     public void LoadListMyPost()
     {
-        RestAPI.GetDataMaster(getActivity().getApplicationContext(),RestAPI.GET_LISTPOSTMYPAGE, new RestAPI.RestAPIListenner() {
+        JsonObject dataJson = new JsonObject();
+        dataJson.addProperty("account_id", AccountController.getInstance().getAccount().getId());
+        dataJson.addProperty("index",0);
+
+        RestAPI.PostDataMaster(getActivity().getApplicationContext(),dataJson,RestAPI.GET_LISTPOSTMYPAGE, new RestAPI.RestAPIListenner() {
             @Override
             public void OnComplete(int httpCode, String error, String s) {
                 try {
@@ -51,7 +57,7 @@ public class MyPostFragment  extends android.support.v4.app.Fragment {
 
                         return;
                     }
-                    JsonArray jsonArray = (new JsonParser()).parse(s).getAsJsonObject().getAsJsonArray("result");
+                    JsonArray jsonArray = (new JsonParser()).parse(s).getAsJsonObject().getAsJsonArray("result1");
                     Gson gson = new Gson();
                     java.lang.reflect.Type type = new TypeToken<List<PostTimelineModel>>(){}.getType();
                     posttimeline = gson.fromJson(jsonArray, type);

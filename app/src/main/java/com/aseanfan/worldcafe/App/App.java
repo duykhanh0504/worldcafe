@@ -4,9 +4,13 @@ import android.app.Application;
 import android.os.Handler;
 
 import com.aseanfan.worldcafe.Helper.DBHelper;
+import com.aseanfan.worldcafe.UI.MediaLoader;
 import com.aseanfan.worldcafe.Utils.Constants;
+import com.yanzhenjie.album.Album;
+import com.yanzhenjie.album.AlbumConfig;
 
 import java.net.URISyntaxException;
+import java.util.Locale;
 
 import io.socket.client.IO;
 import io.socket.client.Socket;
@@ -21,6 +25,11 @@ public class App  extends Application {
         DBHelper.getInstance(getApplicationContext());
         applicationHandler = new Handler(getApplicationContext().getMainLooper());
         mSocket.connect();
+        Album.initialize(AlbumConfig.newBuilder(this)
+                .setAlbumLoader(new MediaLoader())
+                .setLocale(Locale.getDefault())
+                .build()
+        );
     }
     private Socket mSocket;
     {

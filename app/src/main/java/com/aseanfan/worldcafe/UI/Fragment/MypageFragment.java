@@ -40,6 +40,7 @@ import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
 
@@ -57,9 +58,14 @@ public class MypageFragment extends android.support.v4.app.Fragment {
     private ImageView rankImage;
 
 
+
     public void LoadListMyPost()
     {
-        RestAPI.GetDataMaster(getActivity().getApplicationContext(),RestAPI.GET_LISTPOSTMYPAGE, new RestAPI.RestAPIListenner() {
+        JsonObject dataJson = new JsonObject();
+        dataJson.addProperty("account_id", AccountController.getInstance().getAccount().getId());
+        dataJson.addProperty("index",0);
+
+        RestAPI.PostDataMaster(getActivity().getApplicationContext(),dataJson,RestAPI.GET_LISTPOSTMYPAGE, new RestAPI.RestAPIListenner() {
             @Override
             public void OnComplete(int httpCode, String error, String s) {
                 try {
@@ -68,11 +74,11 @@ public class MypageFragment extends android.support.v4.app.Fragment {
 
                         return;
                     }
-                    JsonArray jsonArray = (new JsonParser()).parse(s).getAsJsonObject().getAsJsonArray("result");
+                    JsonArray jsonArray = (new JsonParser()).parse(s).getAsJsonObject().getAsJsonArray("result1");
                     Gson gson = new Gson();
                     java.lang.reflect.Type type = new TypeToken<List<PostTimelineModel>>(){}.getType();
                     posttimeline = gson.fromJson(jsonArray, type);
-                    //     mAdapter.setPostList(posttimeline);
+                   // mAdapter.setPostList(posttimeline);
 
                 }
                 catch (Exception ex) {
