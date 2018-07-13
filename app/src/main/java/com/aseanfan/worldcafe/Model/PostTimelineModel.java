@@ -12,6 +12,8 @@ public class PostTimelineModel {
     private int numberComment;
     private int numberLike;
     private int type;
+    private int islike;
+    private Long account_id;
 
     public PostTimelineModel() {
     }
@@ -76,12 +78,28 @@ public class PostTimelineModel {
         this.detail = detail;
     }
 
+    public int getIslike() {
+        return islike;
+    }
+
+    public void setIslike(int islike) {
+        this.islike = islike;
+    }
+
     public int getType() {
         return type;
     }
 
     public void setType(int type) {
         this.type = type;
+    }
+
+    public Long getAccountid() {
+        return account_id;
+    }
+
+    public void setAccount_id(Long account_id) {
+        this.account_id = account_id;
     }
 
 }

@@ -56,13 +56,24 @@ public class MypageFragment extends android.support.v4.app.Fragment {
 
     private List<PostTimelineModel> posttimeline;
     private ImageView rankImage;
+    private Long accountid;
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        LoadListMyPost(accountid);
+    }
 
+    @Override
+    public void onDetach() {
+        super.onDetach();
 
-    public void LoadListMyPost()
+    }
+
+    public void LoadListMyPost(Long account)
     {
         JsonObject dataJson = new JsonObject();
-        dataJson.addProperty("account_id", AccountController.getInstance().getAccount().getId());
+        dataJson.addProperty("account_id", account);
         dataJson.addProperty("index",0);
 
         RestAPI.PostDataMaster(getActivity().getApplicationContext(),dataJson,RestAPI.GET_LISTPOSTMYPAGE, new RestAPI.RestAPIListenner() {
@@ -89,17 +100,18 @@ public class MypageFragment extends android.support.v4.app.Fragment {
         });
     }
 
-    public static MypageFragment newInstance() {
-        MypageFragment firstFrag = new MypageFragment();
-        return firstFrag;
-    }
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_mypage, container, false);
+        if(getArguments()!=null) {
+            accountid = getArguments().getLong("account_id");
+        }
+        else
+        {
+            accountid = AccountController.getInstance().getAccount().getId();
+        }
 
-        LoadListMyPost();
 
         Toolbar toolbar = (Toolbar) view.findViewById(R.id.toolbar);
         ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
@@ -198,6 +210,10 @@ public class MypageFragment extends android.support.v4.app.Fragment {
                 if(position ==FragmentMyPagerAdapter.ALBUM_PAGE)
                 {
                     adapter.updateFragmentAlbum(posttimeline);
+                }
+                if(position ==FragmentMyPagerAdapter.MYPPOST_PAGE)
+                {
+                    adapter.updateFragmentPost(posttimeline);
                 }
             }
 

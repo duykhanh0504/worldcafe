@@ -1,6 +1,7 @@
 package com.aseanfan.worldcafe.UI.Fragment;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
@@ -9,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.aseanfan.worldcafe.App.AccountController;
 import com.aseanfan.worldcafe.Helper.RestAPI;
@@ -27,18 +29,31 @@ import com.google.gson.reflect.TypeToken;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
-public class MyPostFragment  extends android.support.v4.app.Fragment {
+public class MyPostFragment  extends android.support.v4.app.Fragment implements PostTimelineAdapter.ClickListener {
 
     RecyclerView list_mypost;
 
-    private PostTimelineAdapter mAdapter;
+    private PostTimelineAdapter Adapter;
 
     List<PostTimelineModel> posttimeline;
+
+    private boolean isloading = false;
+
+
 
     public static MyPostFragment newInstance() {
         MyPostFragment firstFrag = new MyPostFragment();
         return firstFrag;
+    }
+
+    public void setData(List<PostTimelineModel> data)
+    {
+        Adapter.setPostList(data);
+
+        Adapter.notifyDataSetChanged();
     }
 
 
@@ -61,16 +76,37 @@ public class MyPostFragment  extends android.support.v4.app.Fragment {
                     Gson gson = new Gson();
                     java.lang.reflect.Type type = new TypeToken<List<PostTimelineModel>>(){}.getType();
                     posttimeline = gson.fromJson(jsonArray, type);
-                    mAdapter.setPostList(posttimeline);
+                    Adapter.setPostList(posttimeline);
+
+                    new Timer().schedule(new TimerTask() {
+                        @Override
+                        public void run() {
+                            isloading = false;
+                        }
+                    }, 3000);
+
 
                 }
                 catch (Exception ex) {
 
                     ex.printStackTrace();
+                    new Timer().schedule(new TimerTask() {
+                        @Override
+                        public void run() {
+                            isloading = false;
+                        }
+                    }, 3000);
                 }
             }
         });
     }
+
+
+    @Override
+    public void onResume() {
+        super.onResume();
+    }
+
 
     @Nullable
     @Override
@@ -79,25 +115,48 @@ public class MyPostFragment  extends android.support.v4.app.Fragment {
 
         posttimeline = new ArrayList<>();
 
-        mAdapter = new PostTimelineAdapter(null);
+        Adapter = new PostTimelineAdapter(null);
         list_mypost = (RecyclerView) view.findViewById(R.id.list_post_mypage);
-        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(container.getContext());
+        final RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(container.getContext());
         list_mypost.setLayoutManager(mLayoutManager);
         list_mypost.setItemAnimator(new DefaultItemAnimator());
-        list_mypost.setAdapter(mAdapter);
+        list_mypost.setAdapter(Adapter);
 
-        mAdapter.setOnItemClickListener(new PostTimelineAdapter.ClickListener() {
+        list_mypost.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
-            public void onItemClick(int position, View v,int type) {
-                if(type == Constants.CLICK_IMAGE_LIKE)
-                {
-                    //posttimeline.get(position).getNumberLike() =
+            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                int visibleItemCount = mLayoutManager.getChildCount();
+                int totalItemCount = mLayoutManager.getItemCount();
+                int pastVisibleItems = ((LinearLayoutManager)recyclerView.getLayoutManager()).findFirstVisibleItemPosition();;
+                if (pastVisibleItems + visibleItemCount >= totalItemCount) {
+                    if(!recyclerView.canScrollVertically(1)) {
+                        Toast.makeText(getContext(), "LAst", Toast.LENGTH_LONG).show();
+                    }
                 }
+
+                if (((LinearLayoutManager)recyclerView.getLayoutManager()).findFirstVisibleItemPosition() == 0) {
+                    if(isloading==false) {
+                        Toast.makeText(getContext(), "Top", Toast.LENGTH_LONG).show();
+                        LoadListMyPost();
+                        isloading = true;
+                    }
+
+                }
+
+
             }
         });
-
-        LoadListMyPost();
+       // LoadListMyPost();
 
         return view;
+    }
+
+    @Override
+    public void onItemClick(int position, View v, int type) {
+        if(type == Constants.CLICK_IMAGE_LIKE)
+        {
+            //posttimeline.get(position).getNumberLike() =
+        }
     }
 }

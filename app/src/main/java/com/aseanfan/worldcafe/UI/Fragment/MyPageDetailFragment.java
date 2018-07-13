@@ -31,11 +31,6 @@ public class MyPageDetailFragment extends android.support.v4.app.Fragment implem
     private Button directMessage;
     private Button createEvent;
 
-    public static MyPageDetailFragment newInstance() {
-        MyPageDetailFragment firstFrag = new MyPageDetailFragment();
-        return firstFrag;
-    }
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {

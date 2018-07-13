@@ -2,6 +2,9 @@ package com.aseanfan.worldcafe.UI.Adapter;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -39,10 +42,11 @@ public class PostTimelineAdapter extends RecyclerView.Adapter<PostTimelineAdapte
         public TextView detail;
         public TextView like;
         public TextView comment;
-        public ImageView imagePost;
+        public RecyclerView imagePost;
         public Context context;
         public ImageView avatar;
         public ImageView imagelike;
+        public AlbumAdapter mAdapter;
 
 
         public MyViewHolder(View view) {
@@ -51,7 +55,7 @@ public class PostTimelineAdapter extends RecyclerView.Adapter<PostTimelineAdapte
             detail = (TextView) view.findViewById(R.id.detailPost);
             like = (TextView) view.findViewById(R.id.textLike);
             comment = (TextView) view.findViewById(R.id.textComment);
-            imagePost = (ImageView) view.findViewById(R.id.imagePost);
+            imagePost = (RecyclerView) view.findViewById(R.id.list_image);
             avatar = (ImageView) view.findViewById(R.id.imageAvatar);
             imagelike = (ImageView) view.findViewById(R.id.imageLike) ;
             context = view.getContext();
@@ -62,6 +66,20 @@ public class PostTimelineAdapter extends RecyclerView.Adapter<PostTimelineAdapte
                     clickListener.onItemClick(getAdapterPosition(), view , Constants.CLICK_IMAGE_LIKE);
                 }
             });
+            avatar.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    clickListener.onItemClick(getAdapterPosition(), view , Constants.CLICK_AVATAR);
+                }
+            });
+
+            mAdapter = new AlbumAdapter(null);
+
+           // RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(view.getContext(),3);
+             RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(view.getContext(), LinearLayoutManager.HORIZONTAL, false);
+            imagePost.setLayoutManager(mLayoutManager);
+            imagePost.setItemAnimator(new DefaultItemAnimator());
+            imagePost.setAdapter(mAdapter);
 
         }
 
@@ -97,6 +115,14 @@ public class PostTimelineAdapter extends RecyclerView.Adapter<PostTimelineAdapte
         myViewHolder.title.setText(post.getTitle());
         myViewHolder.like.setText(String.valueOf(post.getNumberLike()));
         myViewHolder.comment.setText(String.valueOf(post.getNumberComment()));
+        if(post.getIslike() == 0)
+        {
+            myViewHolder.imagelike.setBackgroundResource(R.drawable.unlike);
+        }
+        else
+        {
+            myViewHolder.imagelike.setBackgroundResource(R.drawable.like);
+        }
         if(post.getUrlAvatar()!=null)
         {
             Glide.with(myViewHolder.context).load(post.getUrlAvatar()).apply(RequestOptions.circleCropTransform()).into(myViewHolder.avatar);
@@ -106,13 +132,14 @@ public class PostTimelineAdapter extends RecyclerView.Adapter<PostTimelineAdapte
         }
 
             if(post.getUrlImage()!=null) {
-                for (String url : post.getUrlImage()) {
+                myViewHolder.mAdapter.setData(post.getUrlImage());
+               /* for (String url : post.getUrlImage()) {
                     //listImage.add(url);
                     urlimg = url;
                 }
                 if(urlimg!=null) {
                     Glide.with(myViewHolder.context).load(post.getUrlImage().get(0)).into(myViewHolder.imagePost);
-                }
+                }*/
         }
 
 

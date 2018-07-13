@@ -27,6 +27,7 @@ import com.aseanfan.worldcafe.Model.UserModel;
 import com.aseanfan.worldcafe.UI.Adapter.CommunityAdapter;
 import com.aseanfan.worldcafe.UI.Fragment.CommunityFragment;
 import com.aseanfan.worldcafe.UI.Fragment.DetailCommunityFragment;
+import com.aseanfan.worldcafe.UI.Fragment.MyPageDetailFragment;
 import com.aseanfan.worldcafe.UI.Fragment.MypageFragment;
 import com.aseanfan.worldcafe.UI.Fragment.NotifyFragment;
 import com.aseanfan.worldcafe.UI.Fragment.SettingFragment;
@@ -55,14 +56,17 @@ public class MainActivity extends AppCompatActivity {
     private String TAG_SETTING="setting";
 
     private String TAG_COMMUNITY_DETAIL = "community_detail";
+    private String TAG_FRIENDPAGE = "friend_page";
 
     private DetailCommunityFragment detailcomunityfragment;
+    private MypageFragment friendPage;
 
     private Socket mSocket ;
 
     private Toolbar mToolbar;
 
     private SearchView searchView;
+    private  BottomNavigationView navigation;
 
     private Emitter.Listener onConnectError = new Emitter.Listener() {
         @Override
@@ -148,7 +152,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
        // NotificationCenter.getInstance().addObserver(this, NotificationCenter.callbackEventDetail);
 
       /*  mToolbar = (Toolbar) findViewById(R.id.app_toolbar);
@@ -211,7 +214,7 @@ public class MainActivity extends AppCompatActivity {
         notifyFragment = new NotifyFragment();
         settingFragment = new SettingFragment();
 
-        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
+        navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
         showFirstFragment();
@@ -224,10 +227,16 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }*/
 
+    public void gotoMypage()
+    {
+        Menu menu = navigation.getMenu();
+        mOnNavigationItemSelectedListener.onNavigationItemSelected(menu.findItem(R.id.navigation_mypage));
+    }
 
     public void showFirstFragment() {
-
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.replace(R.id.content, communityFragment, TAG_COMMUNITY);
+       /* FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         if (communityFragment.isAdded()) {
             ft.show(communityFragment);
         } else {
@@ -244,12 +253,14 @@ public class MainActivity extends AppCompatActivity {
         }
         if (settingFragment.isAdded()) {
             ft.hide(settingFragment);
-        }
+        }*/
         ft.commit();
     }
 
     public void showSecondFragment() {
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.replace(R.id.content, timelineFragment, TAG_TIMELINE);
+       /* FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         if (timelineFragment.isAdded()) {
             ft.show(timelineFragment);
         } else {
@@ -266,13 +277,14 @@ public class MainActivity extends AppCompatActivity {
         }
         if (settingFragment.isAdded()) {
             ft.hide(settingFragment);
-        }
+        }*/
         ft.commit();
     }
 
     public void showThirdFragment() {
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        if (mypageFragment.isAdded()) {
+        ft.replace(R.id.content, mypageFragment, TAG_MYPAGE);
+       /* if (mypageFragment.isAdded()) {
             ft.show(mypageFragment);
         } else {
             ft.add(R.id.content, mypageFragment, TAG_MYPAGE);
@@ -288,12 +300,14 @@ public class MainActivity extends AppCompatActivity {
         }
         if (settingFragment.isAdded()) {
             ft.hide(settingFragment);
-        }
+        }*/
         ft.commit();
     }
 
     public void showfourFragment() {
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.replace(R.id.content, notifyFragment, TAG_NOTIFY);
+      /*  FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         if (notifyFragment.isAdded()) {
             ft.show(notifyFragment);
         } else {
@@ -310,11 +324,14 @@ public class MainActivity extends AppCompatActivity {
         }
         if (settingFragment.isAdded()) {
             ft.hide(settingFragment);
-        }
+        }*/
         ft.commit();
     }
 
     public void showfifthFragment() {
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.replace(R.id.content, settingFragment, TAG_SETTING);
+        /*
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         if (settingFragment.isAdded()) {
             ft.show(settingFragment);
@@ -332,7 +349,7 @@ public class MainActivity extends AppCompatActivity {
         }
         if (mypageFragment.isAdded()) {
             ft.hide(mypageFragment);
-        }
+        }*/
         ft.commit();
     }
 
@@ -342,7 +359,20 @@ public class MainActivity extends AppCompatActivity {
          detailcomunityfragment = new DetailCommunityFragment();
           FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
           ft.add(R.id.content, detailcomunityfragment,TAG_COMMUNITY_DETAIL).commit();
-          ft.show(detailcomunityfragment);
-          ft.hide(communityFragment);
+        //  ft.show(detailcomunityfragment);
+        //  ft.hide(communityFragment);
+    }
+
+    public void callFriendPage(Long id) {
+
+        Bundle bundle = new Bundle();
+        bundle.putLong("account_id",id);
+
+        friendPage = new MypageFragment();
+        friendPage.setArguments(bundle);
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.add(R.id.content, friendPage,TAG_FRIENDPAGE).commit();
+      //  ft.show(friendPage);
+       // ft.hide(timelineFragment);
     }
 }

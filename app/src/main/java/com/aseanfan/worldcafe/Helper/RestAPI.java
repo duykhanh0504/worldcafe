@@ -49,9 +49,11 @@ public class RestAPI {
     public static String POST_UPDATEUSER = root_url + "/api/user/update";
     public static String GET_LISTEVENT = /*root_url + */"http://www.mocky.io/v2/5b30ad6c3100009909129002";
    // public static String GET_LISTPOSTMYPAGE = /*root_url + */"http://www.mocky.io/v2/5b3ca7ef31000010006ddddc";
-     public static String GET_LISTPOSTMYPAGE = root_url + "/api/newfeed/getnewfeedbyaccount";
+   public static String GET_LISTPOSTMYPAGE = root_url + "/api/newfeed/getnewfeedbyaccount";
+    public static String GET_LISTPOSTTIMELINE= root_url + "/api/newfeed/getallnewfeeds";
     public static String POST_TIMELINE = root_url + "/api/newfeed/postnewfeed";
     public static String POST_TIMELINEIMAGE = root_url + "/api/newfeed/postnewfeed_image";
+    public static String POST_LIKEPOST = root_url + "/api/newfeed/clicklike";
 
     public final static int STATUS_SUCCESS = 200;
     public final static int STATUS_WRONGPASSWORD = 2;

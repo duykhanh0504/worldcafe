@@ -18,6 +18,8 @@ public class FragmentMyPagerAdapter  extends FragmentPagerAdapter {
 
     private Context mContext;
     private AlbumFragment albumFragment;
+    private MyPostFragment mypostFragment;
+
 
     public final static int MYPPOST_PAGE = 0;
     public final static int DETAIL_PAGE = 2;
@@ -32,7 +34,8 @@ public class FragmentMyPagerAdapter  extends FragmentPagerAdapter {
     @Override
     public Fragment getItem(int position) {
         if (position == MYPPOST_PAGE) {
-            return new MyPostFragment();
+            mypostFragment = new MyPostFragment();
+            return mypostFragment;
         } else if(position ==DETAIL_PAGE){
             return new MyPageDetailFragment();
         }
@@ -41,6 +44,11 @@ public class FragmentMyPagerAdapter  extends FragmentPagerAdapter {
             return albumFragment;
         }
         return new MyPostFragment();
+    }
+
+    public void updateFragmentPost(List<PostTimelineModel> data)
+    {
+        mypostFragment.setData(data);
     }
 
     public void updateFragmentAlbum(List<PostTimelineModel> data)
