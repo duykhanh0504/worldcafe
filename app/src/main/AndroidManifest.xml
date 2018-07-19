@@ -75,7 +75,8 @@
             android:theme="@style/Base.Theme.AppCompat" />
         <activity android:name="com.aseanfan.worldcafe.UI.CreateEventActivity" />
         <activity android:name="com.aseanfan.worldcafe.UI.DirectMessageActivity" />
-        <activity android:name="com.aseanfan.worldcafe.UI.PostTimeLineActivity"></activity>
+        <activity android:name="com.aseanfan.worldcafe.UI.PostTimeLineActivity" />
+        <activity android:name="com.aseanfan.worldcafe.UI.CommentActivity"></activity>
     </application>
 
 </manifest>

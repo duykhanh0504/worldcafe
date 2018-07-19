@@ -37,7 +37,7 @@ public class PostTimelineAdapter extends RecyclerView.Adapter<PostTimelineAdapte
         void onItemClick(int position, View v ,int type);
     }
 
-    public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener,PostImageAdapter.ClickListener {
         public TextView title;
         public TextView detail;
         public TextView like;
@@ -46,7 +46,8 @@ public class PostTimelineAdapter extends RecyclerView.Adapter<PostTimelineAdapte
         public Context context;
         public ImageView avatar;
         public ImageView imagelike;
-        public AlbumAdapter mAdapter;
+        public ImageView imageComment;
+        public PostImageAdapter mAdapter;
 
 
         public MyViewHolder(View view) {
@@ -58,6 +59,7 @@ public class PostTimelineAdapter extends RecyclerView.Adapter<PostTimelineAdapte
             imagePost = (RecyclerView) view.findViewById(R.id.list_image);
             avatar = (ImageView) view.findViewById(R.id.imageAvatar);
             imagelike = (ImageView) view.findViewById(R.id.imageLike) ;
+            imageComment = (ImageView)view.findViewById(R.id.imageComment) ;
             context = view.getContext();
             view.setOnClickListener(this);
             imagelike.setOnClickListener(new View.OnClickListener() {
@@ -66,6 +68,14 @@ public class PostTimelineAdapter extends RecyclerView.Adapter<PostTimelineAdapte
                     clickListener.onItemClick(getAdapterPosition(), view , Constants.CLICK_IMAGE_LIKE);
                 }
             });
+
+            imageComment.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    clickListener.onItemClick(getAdapterPosition(), view , Constants.CLICK_IMAGE_COMMENT);
+                }
+            });
+
             avatar.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -73,19 +83,26 @@ public class PostTimelineAdapter extends RecyclerView.Adapter<PostTimelineAdapte
                 }
             });
 
-            mAdapter = new AlbumAdapter(null);
+            mAdapter = new PostImageAdapter(null);
 
            // RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(view.getContext(),3);
              RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(view.getContext(), LinearLayoutManager.HORIZONTAL, false);
             imagePost.setLayoutManager(mLayoutManager);
             imagePost.setItemAnimator(new DefaultItemAnimator());
             imagePost.setAdapter(mAdapter);
+            mAdapter.setOnItemClickListener(this);
+
 
         }
 
         @Override
         public void onClick(View view) {
             clickListener.onItemClick(getAdapterPosition(), view ,Constants.CLICK_TIMELINE);
+        }
+
+        @Override
+        public void onItemClick(int position, View v) {
+            clickListener.onItemClick(getAdapterPosition(), v ,Constants.CLICK_TIMELINE);
         }
     }
 

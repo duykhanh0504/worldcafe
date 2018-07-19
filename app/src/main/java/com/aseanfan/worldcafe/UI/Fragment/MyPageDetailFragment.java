@@ -1,5 +1,6 @@
 package com.aseanfan.worldcafe.UI.Fragment;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.media.Image;
@@ -13,6 +14,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.aseanfan.worldcafe.UI.ChatActivity;
 import com.aseanfan.worldcafe.UI.CreateEventActivity;
 import com.aseanfan.worldcafe.UI.DirectMessageActivity;
 import com.aseanfan.worldcafe.Utils.Utils;
@@ -31,10 +33,17 @@ public class MyPageDetailFragment extends android.support.v4.app.Fragment implem
     private Button directMessage;
     private Button createEvent;
 
+    private Long friendid;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_mypage_detail, container, false);
+        Bundle bundle = this.getArguments();
+
+        if(bundle != null){
+            friendid = bundle.getLong("chat_id");
+        }
 
         initView(view);
 
@@ -85,12 +94,15 @@ public class MyPageDetailFragment extends android.support.v4.app.Fragment implem
         switch (view.getId())
         {
             case R.id.btn_directmessage: {
-                Intent intent = new Intent(getContext(), CreateEventActivity.class);
-                startActivity(intent);
+              //  Intent intent = new Intent(getContext(), DirectMessageActivity.class);
+               // startActivity(intent);
+                  Intent intent = new Intent(getContext(), ChatActivity.class);
+                  intent.putExtra("chat_id",friendid);
+                  startActivity(intent);
                 break;
             }
             case R.id.btn_createevent: {
-                Intent intent = new Intent(getContext(), DirectMessageActivity.class);
+                Intent intent = new Intent(getContext(), CreateEventActivity.class);
                 startActivity(intent);
                 break;
             }

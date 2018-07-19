@@ -38,8 +38,8 @@ public class RestAPI {
 
     private static int TIME_OUT = 12000;
 
-  //  public static String root_url = "http://10.0.2.2:8080";
-    public static String root_url = "http://192.168.10.141:8080";
+  // public static String root_url = "http://crosea1.g-days.net:3004";
+   public static String root_url = "http://192.168.10.141:3004";
 
     public static String root_url_dev = "";
 
@@ -49,11 +49,13 @@ public class RestAPI {
     public static String POST_UPDATEUSER = root_url + "/api/user/update";
     public static String GET_LISTEVENT = /*root_url + */"http://www.mocky.io/v2/5b30ad6c3100009909129002";
    // public static String GET_LISTPOSTMYPAGE = /*root_url + */"http://www.mocky.io/v2/5b3ca7ef31000010006ddddc";
-   public static String GET_LISTPOSTMYPAGE = root_url + "/api/newfeed/getnewfeedbyaccount";
+    public static String GET_LISTPOSTMYPAGE = root_url + "/api/newfeed/getnewfeedbyaccount";
     public static String GET_LISTPOSTTIMELINE= root_url + "/api/newfeed/getallnewfeeds";
     public static String POST_TIMELINE = root_url + "/api/newfeed/postnewfeed";
     public static String POST_TIMELINEIMAGE = root_url + "/api/newfeed/postnewfeed_image";
     public static String POST_LIKEPOST = root_url + "/api/newfeed/clicklike";
+    public static String POST_COMMENT = root_url + "/api/newfeed/postcomment";
+    public static String GET_COMMENT = root_url + "/api/newfeed/comments";
 
     public final static int STATUS_SUCCESS = 200;
     public final static int STATUS_WRONGPASSWORD = 2;

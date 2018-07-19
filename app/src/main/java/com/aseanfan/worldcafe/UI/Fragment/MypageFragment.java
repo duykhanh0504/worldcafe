@@ -31,6 +31,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.aseanfan.worldcafe.worldcafe.R;
@@ -53,10 +54,11 @@ public class MypageFragment extends android.support.v4.app.Fragment {
     private FrameLayout avatar;
     private CardView background;
     private TextView name;
-
+    private ProgressBar loading;
     private List<PostTimelineModel> posttimeline;
     private ImageView rankImage;
     private Long accountid;
+    private FragmentMyPagerAdapter adapter;
 
     @Override
     public void onResume() {
@@ -75,6 +77,7 @@ public class MypageFragment extends android.support.v4.app.Fragment {
         JsonObject dataJson = new JsonObject();
         dataJson.addProperty("account_id", account);
         dataJson.addProperty("index",0);
+        loading.setVisibility(View.VISIBLE);
 
         RestAPI.PostDataMaster(getActivity().getApplicationContext(),dataJson,RestAPI.GET_LISTPOSTMYPAGE, new RestAPI.RestAPIListenner() {
             @Override
@@ -90,11 +93,18 @@ public class MypageFragment extends android.support.v4.app.Fragment {
                     java.lang.reflect.Type type = new TypeToken<List<PostTimelineModel>>(){}.getType();
                     posttimeline = gson.fromJson(jsonArray, type);
                    // mAdapter.setPostList(posttimeline);
+                    if(  viewPager.getCurrentItem() == FragmentMyPagerAdapter.MYPPOST_PAGE)
+                    {
+                        adapter.updateFragmentPost(posttimeline);
+                    }
 
                 }
                 catch (Exception ex) {
 
                     ex.printStackTrace();
+                }
+                finally {
+                    loading.setVisibility(View.GONE);
                 }
             }
         });
@@ -124,6 +134,7 @@ public class MypageFragment extends android.support.v4.app.Fragment {
 
         avatar = view.findViewById(R.id.avatar);
         background = view.findViewById(R.id.background);
+        loading = view.findViewById(R.id.loading_spinner);
         Glide.with(getContext()).load( "https://png.pngtree.com/thumb_back/fh260/back_pic/00/15/30/4656e81f6dc57c5.jpg").into(new SimpleTarget<Drawable>() {
             @Override
             public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
@@ -179,7 +190,7 @@ public class MypageFragment extends android.support.v4.app.Fragment {
 
         viewPager = (ViewPager)view.findViewById(R.id.view_mypage);
 
-        final FragmentMyPagerAdapter adapter = new FragmentMyPagerAdapter(getActivity(),getChildFragmentManager());
+        adapter = new FragmentMyPagerAdapter(accountid, getActivity(),getChildFragmentManager());
 
         viewPager.setAdapter(adapter);
 
@@ -219,12 +230,12 @@ public class MypageFragment extends android.support.v4.app.Fragment {
 
             @Override
             public void onPageSelected(int position) {
-
+                int i=0;
             }
 
             @Override
             public void onPageScrollStateChanged(int state) {
-
+                int i=0;
             }
         });
 

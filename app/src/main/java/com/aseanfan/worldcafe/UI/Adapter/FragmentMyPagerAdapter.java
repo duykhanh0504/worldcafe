@@ -1,6 +1,7 @@
 package com.aseanfan.worldcafe.UI.Adapter;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -19,6 +20,8 @@ public class FragmentMyPagerAdapter  extends FragmentPagerAdapter {
     private Context mContext;
     private AlbumFragment albumFragment;
     private MyPostFragment mypostFragment;
+    private MyPageDetailFragment myPageDetailFragment;
+    private Long friendid;
 
 
     public final static int MYPPOST_PAGE = 0;
@@ -26,9 +29,10 @@ public class FragmentMyPagerAdapter  extends FragmentPagerAdapter {
     public final static int ALBUM_PAGE = 1;
 
 
-    public FragmentMyPagerAdapter(Context context, FragmentManager fm) {
+    public FragmentMyPagerAdapter(Long id ,Context context, FragmentManager fm) {
         super(fm);
         mContext = context;
+        friendid = id;
     }
 
     @Override
@@ -37,7 +41,11 @@ public class FragmentMyPagerAdapter  extends FragmentPagerAdapter {
             mypostFragment = new MyPostFragment();
             return mypostFragment;
         } else if(position ==DETAIL_PAGE){
-            return new MyPageDetailFragment();
+            myPageDetailFragment = new MyPageDetailFragment();
+            Bundle bundle = new Bundle();
+            bundle.putLong("chat_id",friendid);
+            myPageDetailFragment.setArguments(bundle);
+            return myPageDetailFragment;
         }
         else if(position == ALBUM_PAGE){
             albumFragment =  new AlbumFragment();
@@ -54,12 +62,13 @@ public class FragmentMyPagerAdapter  extends FragmentPagerAdapter {
     public void updateFragmentAlbum(List<PostTimelineModel> data)
     {
         List<String> listImage = new ArrayList<>();
-        for(PostTimelineModel item : data)
-        {
-            if(item.getUrlImage()!=null) {
-                for (String url : item.getUrlImage()) {
-                    if(!url.isEmpty()) {
-                        listImage.add(url);
+        if(data!=null) {
+            for (PostTimelineModel item : data) {
+                if (item.getUrlImage() != null) {
+                    for (String url : item.getUrlImage()) {
+                        if (!url.isEmpty()) {
+                            listImage.add(url);
+                        }
                     }
                 }
             }

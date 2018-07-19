@@ -51,7 +51,8 @@ public class MyPostFragment  extends android.support.v4.app.Fragment implements 
 
     public void setData(List<PostTimelineModel> data)
     {
-        Adapter.setPostList(data);
+        posttimeline =data;
+        Adapter.setPostList(posttimeline);
 
         Adapter.notifyDataSetChanged();
     }
@@ -116,6 +117,7 @@ public class MyPostFragment  extends android.support.v4.app.Fragment implements 
         posttimeline = new ArrayList<>();
 
         Adapter = new PostTimelineAdapter(null);
+        Adapter.setOnItemClickListener(this);
         list_mypost = (RecyclerView) view.findViewById(R.id.list_post_mypage);
         final RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(container.getContext());
         list_mypost.setLayoutManager(mLayoutManager);
@@ -131,13 +133,13 @@ public class MyPostFragment  extends android.support.v4.app.Fragment implements 
                 int pastVisibleItems = ((LinearLayoutManager)recyclerView.getLayoutManager()).findFirstVisibleItemPosition();;
                 if (pastVisibleItems + visibleItemCount >= totalItemCount) {
                     if(!recyclerView.canScrollVertically(1)) {
-                        Toast.makeText(getContext(), "LAst", Toast.LENGTH_LONG).show();
+                       // Toast.makeText(getContext(), "LAst", Toast.LENGTH_LONG).show();
                     }
                 }
 
                 if (((LinearLayoutManager)recyclerView.getLayoutManager()).findFirstVisibleItemPosition() == 0) {
                     if(isloading==false) {
-                        Toast.makeText(getContext(), "Top", Toast.LENGTH_LONG).show();
+                      //  Toast.makeText(getContext(), "Top", Toast.LENGTH_LONG).show();
                         LoadListMyPost();
                         isloading = true;
                     }
@@ -152,11 +154,50 @@ public class MyPostFragment  extends android.support.v4.app.Fragment implements 
         return view;
     }
 
+    public void LikePost(Long Postid)
+    {
+        JsonObject dataJson = new JsonObject();
+        dataJson.addProperty("account_id", AccountController.getInstance().getAccount().getId());
+        dataJson.addProperty("newfeed_id",Postid);
+
+        RestAPI.PostDataMaster(getActivity().getApplicationContext(),dataJson,RestAPI.POST_LIKEPOST, new RestAPI.RestAPIListenner() {
+            @Override
+            public void OnComplete(int httpCode, String error, String s) {
+                try {
+                    if (!RestAPI.checkHttpCode(httpCode)) {
+                        //AppFuncs.alert(getApplicationContext(),s,true);
+
+                        return;
+                    }
+
+                }
+                catch (Exception ex) {
+
+                    ex.printStackTrace();
+                }
+            }
+        });
+    }
+
     @Override
     public void onItemClick(int position, View v, int type) {
         if(type == Constants.CLICK_IMAGE_LIKE)
         {
-            //posttimeline.get(position).getNumberLike() =
+            if(posttimeline.get(position).getIslike() == 0)
+            {
+                posttimeline.get(position).setIslike(1);
+                posttimeline.get(position).setNumberLike(posttimeline.get(position).getNumberLike() + 1);
+            }
+            else
+            {
+
+                posttimeline.get(position).setIslike(0);
+                posttimeline.get(position).setNumberLike(posttimeline.get(position).getNumberLike() -1);
+
+            }
+            LikePost( posttimeline.get(position).getEventid());
+            Adapter.setPostList(posttimeline);
+
         }
     }
 }

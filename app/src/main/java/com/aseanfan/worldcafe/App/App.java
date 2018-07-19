@@ -1,6 +1,7 @@
 package com.aseanfan.worldcafe.App;
 
 import android.app.Application;
+import android.content.Context;
 import android.os.Handler;
 
 import com.aseanfan.worldcafe.Helper.DBHelper;
@@ -42,5 +43,9 @@ public class App  extends Application {
 
     public Socket getSocket() {
         return mSocket;
+    }
+
+    public Context getContext() {
+        return this.getContext();
     }
 }

@@ -1,6 +1,7 @@
 package com.aseanfan.worldcafe.Utils;
 
 import android.app.Activity;
+import android.app.Application;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -10,8 +11,17 @@ import android.util.Base64;
 import android.util.DisplayMetrics;
 import android.view.Display;
 
+
+import com.aseanfan.worldcafe.App.App;
+
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+import java.util.TimeZone;
 
 public class Utils {
 
@@ -89,11 +99,85 @@ public class Utils {
         return px;
     }
 
+    public static int getwidthScreen(Context context){
+        Resources resources = context.getResources();
+        DisplayMetrics metrics = resources.getDisplayMetrics();
+        return metrics.widthPixels;
+    }
+
+    public static int getheightScreen(Context context){
+        Resources resources = context.getResources();
+        DisplayMetrics metrics = resources.getDisplayMetrics();
+        return metrics.heightPixels;
+    }
+
+
+
     public static int convertPixelsToDp(float px, Context context){
         Resources resources = context.getResources();
         DisplayMetrics metrics = resources.getDisplayMetrics();
         int dp = (int)(px / ((float)metrics.densityDpi / DisplayMetrics.DENSITY_DEFAULT));
         return dp;
+    }
+
+    public static String stringConvertDateString(String date) {
+        String outputText = "";
+        if (date.contains("T")) {
+            DateFormat inputFormat = null;
+            inputFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.ENGLISH);
+
+            inputFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+            DateFormat outputFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
+
+            Date parsed = null;
+
+            try {
+                parsed = inputFormat.parse(date);
+                outputText = outputFormat.format(parsed);
+            } catch (ParseException e) {
+
+            }
+
+        } else {
+            SimpleDateFormat input = new SimpleDateFormat("HH:mm:ss", Locale.ENGLISH);
+            SimpleDateFormat output = new SimpleDateFormat("HH:mm", Locale.ENGLISH);
+            try {
+                Date day = null;
+                String str = null;
+                day = input.parse(date);
+                outputText = output.format(day);
+
+            } catch (ParseException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+
+        }
+
+        return outputText;
+    }
+
+    public static String convertStringToLocalTime(String time) {
+
+        DateFormat readFormat = new SimpleDateFormat("EEE, dd MMM yyyy hh:mm:ss Z", Locale.ENGLISH);
+
+        DateFormat writeFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm");// ("HH:mm:ss
+        // aaa
+        // dd/MM/yyy");
+        TimeZone utcZone = TimeZone.getDefault();
+        writeFormat.setTimeZone(utcZone);
+        Date date = null;
+        try {
+            date = readFormat.parse(time);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        String formattedDate = "";
+        if (date != null) {
+            formattedDate = writeFormat.format(date);
+        }
+        return formattedDate;
+
     }
 
 

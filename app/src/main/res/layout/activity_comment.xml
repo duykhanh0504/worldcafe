@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.aseanfan.worldcafe.UI.ChatActivity">
+    tools:context="com.aseanfan.worldcafe.UI.CommentActivity">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/appbar"
@@ -13,24 +13,22 @@
         android:layout_height="wrap_content"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/app_toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="?attr/colorPrimary"
-        app:layout_scrollFlags="scroll|enterAlways|snap"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
-
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/app_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:layout_scrollFlags="scroll|enterAlways|snap"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
     </android.support.design.widget.AppBarLayout>
-
 
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <android.support.v7.widget.RecyclerView
-            android:id="@+id/listChat"
+            android:id="@+id/listComment"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
@@ -55,21 +53,20 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
             <EditText
-                android:id="@+id/input_message"
+                android:id="@+id/input_comment"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:hint=""
+                android:hint="Your Comment"
                 android:layout_weight="2.3"/>
 
 
-            <ImageButton
-                android:id="@+id/btn_send"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_gravity="right"
-                />
+        <ImageButton
+            android:id="@+id/btn_postcomment"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_gravity="right"
+            />
         </FrameLayout>
     </LinearLayout>
-
 
 </LinearLayout>

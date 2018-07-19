@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -20,6 +21,7 @@ import com.aseanfan.worldcafe.App.AccountController;
 import com.aseanfan.worldcafe.Helper.RestAPI;
 import com.aseanfan.worldcafe.Model.PostTimelineModel;
 import com.aseanfan.worldcafe.UI.Adapter.PostTimelineAdapter;
+import com.aseanfan.worldcafe.UI.CommentActivity;
 import com.aseanfan.worldcafe.UI.MainActivity;
 import com.aseanfan.worldcafe.UI.PostTimeLineActivity;
 import com.aseanfan.worldcafe.Utils.Constants;
@@ -47,6 +49,8 @@ public class TimelineFragment extends android.support.v4.app.Fragment implements
 
     private boolean isloading = false;
 
+    private ProgressBar loading;
+
 
 
     public void LoadListTimeLinePost()
@@ -54,6 +58,7 @@ public class TimelineFragment extends android.support.v4.app.Fragment implements
         JsonObject dataJson = new JsonObject();
         dataJson.addProperty("account_id", AccountController.getInstance().getAccount().getId());
         dataJson.addProperty("index",0);
+        loading.setVisibility(View.VISIBLE);
 
         RestAPI.PostDataMaster(getActivity().getApplicationContext(),dataJson,RestAPI.GET_LISTPOSTTIMELINE, new RestAPI.RestAPIListenner() {
             @Override
@@ -88,6 +93,9 @@ public class TimelineFragment extends android.support.v4.app.Fragment implements
                         }
                     }, 3000);
 
+                }
+                finally {
+                    loading.setVisibility(View.GONE);
                 }
             }
         });
@@ -137,17 +145,7 @@ public class TimelineFragment extends android.support.v4.app.Fragment implements
         list_post.setLayoutManager(mLayoutManager);
         list_post.setItemAnimator(new DefaultItemAnimator());
         list_post.setAdapter(mAdapter);
-
-        list_post.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
-                super.onScrollStateChanged(recyclerView, newState);
-                if (!recyclerView.canScrollVertically(1)) {
-                    Toast.makeText(getContext(),"LAst",Toast.LENGTH_LONG).show();
-
-                }
-            }
-        });
+        loading = (ProgressBar)view.findViewById(R.id.loading_spinner);
 
         mAdapter.setOnItemClickListener(this);
         txtPost.setOnClickListener(new View.OnClickListener() {
@@ -167,13 +165,13 @@ public class TimelineFragment extends android.support.v4.app.Fragment implements
                 int pastVisibleItems = ((LinearLayoutManager)recyclerView.getLayoutManager()).findFirstVisibleItemPosition();;
                 if (pastVisibleItems + visibleItemCount >= totalItemCount) {
                     if(!recyclerView.canScrollVertically(1)) {
-                        Toast.makeText(getContext(), "LAst", Toast.LENGTH_LONG).show();
+                     //   Toast.makeText(getContext(), "LAst", Toast.LENGTH_LONG).show();
                     }
                 }
 
                 if (((LinearLayoutManager)recyclerView.getLayoutManager()).findFirstVisibleItemPosition() == 0) {
                     if(isloading==false) {
-                        Toast.makeText(getContext(), "Top", Toast.LENGTH_LONG).show();
+                      //  Toast.makeText(getContext(), "Top", Toast.LENGTH_LONG).show();
                         LoadListTimeLinePost();
                         isloading = true;
                     }
@@ -213,9 +211,16 @@ public class TimelineFragment extends android.support.v4.app.Fragment implements
 
             if(timeline.get(position).getAccountid().compareTo(AccountController.getInstance().getAccount().getId()) != 0)
             {
-              //  ((MainActivity) getActivity()).callFriendPage(timeline.get(position).getEventid());
+                ((MainActivity) getActivity()).callFriendPage(timeline.get(position).getAccountid());
 
             }
+
+        }
+        if(type == Constants.CLICK_IMAGE_COMMENT) {
+            Intent intent = new Intent(getContext(), CommentActivity.class);
+            intent.putExtra("Timeline_id", timeline.get(position).getEventid());
+            intent.putExtra("Account_id", timeline.get(position).getAccountid());
+            startActivity(intent);
 
         }
     }
