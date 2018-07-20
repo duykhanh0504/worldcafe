@@ -1,5 +1,10 @@
 package com.aseanfan.worldcafe.UI;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
@@ -12,6 +17,7 @@ import com.aseanfan.worldcafe.Model.ChatMessageModel;
 import com.aseanfan.worldcafe.Model.CommentModel;
 import com.aseanfan.worldcafe.UI.Adapter.ChatMessageAdapter;
 import com.aseanfan.worldcafe.UI.Adapter.CommentAdapter;
+import com.aseanfan.worldcafe.Utils.Constants;
 import com.aseanfan.worldcafe.worldcafe.R;
 
 import org.json.JSONException;
@@ -34,6 +40,9 @@ public class ChatActivity extends AppCompatActivity {
 
     private List<ChatMessageModel> listmessage;
 
+
+    private LocalBroadcastManager mLocalBroadcastManager;
+
     Socket mSocket;
 
     @Override
@@ -42,9 +51,12 @@ public class ChatActivity extends AppCompatActivity {
         setContentView(R.layout.activity_chat);
 
         App app = (App) getApplication();
-        mSocket = app.getSocket();
-
-        mSocket.on("server_to_client", onReceiveMessgeFromServer);
+       // mSocket = app.getSocket();
+        mLocalBroadcastManager = LocalBroadcastManager.getInstance(getApplicationContext());
+        IntentFilter mIntentFilter = new IntentFilter();
+        mIntentFilter.addAction(Constants.REICEVE_ACTION);
+        mLocalBroadcastManager.registerReceiver(mBroadcastReceiver, mIntentFilter);
+      //  mSocket.on("server_to_client", onReceiveMessgeFromServer);
 
         btnSend = (ImageButton) this.findViewById(R.id.btn_send);
         edtChat = (EditText)this.findViewById(R.id.input_message);
@@ -65,7 +77,7 @@ public class ChatActivity extends AppCompatActivity {
 
     }
 
-    private Emitter.Listener onReceiveMessgeFromServer = new Emitter.Listener() {
+  /*  private Emitter.Listener onReceiveMessgeFromServer = new Emitter.Listener() {
         @Override
         public void call(final Object... args) {
             runOnUiThread(new Runnable() {
@@ -81,6 +93,27 @@ public class ChatActivity extends AppCompatActivity {
 
                 }
             });
+        }
+    };*/
+
+    private final BroadcastReceiver mBroadcastReceiver  = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent.getAction().equals(Constants.REICEVE_ACTION)) {
+                String friendid = intent.getExtras().getString(Constants.FRIENDID);
+                JSONObject data = new JSONObject();
+                try {
+                    data.put("type", 2);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+             //   mSocket.emit("message", data);
+
+                //   Intent i = new Intent(Send_Ethereum_Activity.SEND_STATUS);
+                //  i.putExtra(Send_Ethereum_Activity.STATUS, status);
+                //  mLocalBroadcastManager.sendBroadcast(i);
+
+            }
         }
     };
 
@@ -101,7 +134,11 @@ public class ChatActivity extends AppCompatActivity {
                     data.put("message", objMessage);
                     data.put("receiver_id", chatid);
 
-                    mSocket.emit("message", data);
+                    Intent i = new Intent(Constants.SEND_ACTION);
+                    i.putExtra(Constants.FRIENDID,chatid);
+                    mLocalBroadcastManager.sendBroadcast(i);
+
+               //     mSocket.emit("message", data);
 
                 }
                 break;

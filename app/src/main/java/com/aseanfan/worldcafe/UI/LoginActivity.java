@@ -8,8 +8,11 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.provider.MediaStore;
+import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -56,6 +59,7 @@ import org.json.JSONObject;
 
 
 import java.util.Arrays;
+import java.util.List;
 
 import io.socket.client.Socket;
 
@@ -89,13 +93,42 @@ public class LoginActivity extends AppCompatActivity {
 
     private final int FACEBOOK_LOGIN = 64206;
 
-    private  boolean USING_FACEBOOK = false;
+    private boolean USING_FACEBOOK = false;
 
-    private int LOGIN_FACEBOOK =1;
-    private int LOGIN_NORMAL =2;
+    private int LOGIN_FACEBOOK = 1;
+    private int LOGIN_NORMAL = 2;
 
     private String email;
     private String password;
+
+    LocationManager locationManager;
+    Location mCurrentLocation = null;
+    double latitude; // latitude
+    double longitude; // longitude
+
+
+    public void getlocation() {
+        try {
+            if (ContextCompat.checkSelfPermission(getApplicationContext(), android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED ) {
+                ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, 101);
+            }
+            else
+            {
+                locationManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
+                if (locationManager != null) {
+                    mCurrentLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                    if (mCurrentLocation != null) {
+                        latitude = mCurrentLocation.getLatitude();
+                        longitude = mCurrentLocation.getLongitude();
+                    }
+                }
+            }
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+
+
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,8 +136,7 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
 
-        App app = (App) getApplication();
-        mSocket = app.getSocket();
+        getlocation();
 
         LoginManager.getInstance().logOut();
 
@@ -461,6 +493,8 @@ public class LoginActivity extends AppCompatActivity {
         JsonObject dataJson = new JsonObject();
         dataJson.addProperty("password",password);
         dataJson.addProperty("email",email);
+        dataJson.addProperty("location_lag",latitude);
+        dataJson.addProperty("location_lng",longitude);
 
         RestAPI.PostDataMaster(getApplicationContext(), dataJson, RestAPI.POST_LOGIN, new RestAPI.RestAPIListenner() {
 

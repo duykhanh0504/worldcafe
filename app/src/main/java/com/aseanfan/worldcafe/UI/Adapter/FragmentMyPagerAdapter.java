@@ -37,13 +37,14 @@ public class FragmentMyPagerAdapter  extends FragmentPagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
+        Bundle bundle = new Bundle();
+        bundle.putLong("chat_id",friendid);
         if (position == MYPPOST_PAGE) {
             mypostFragment = new MyPostFragment();
+            mypostFragment.setArguments(bundle);
             return mypostFragment;
         } else if(position ==DETAIL_PAGE){
             myPageDetailFragment = new MyPageDetailFragment();
-            Bundle bundle = new Bundle();
-            bundle.putLong("chat_id",friendid);
             myPageDetailFragment.setArguments(bundle);
             return myPageDetailFragment;
         }

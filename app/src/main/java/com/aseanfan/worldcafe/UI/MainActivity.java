@@ -68,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
     private SearchView searchView;
     private  BottomNavigationView navigation;
 
-    private Emitter.Listener onConnectError = new Emitter.Listener() {
+   /* private Emitter.Listener onConnectError = new Emitter.Listener() {
         @Override
         public void call(Object... args) {
             runOnUiThread(new Runnable() {
@@ -95,7 +95,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
         }
-    };
+    };*/
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -176,14 +176,14 @@ public class MainActivity extends AppCompatActivity {
                                               });*/
 
         App app = (App) getApplication();
-        mSocket = app.getSocket();
+       // mSocket = app.getSocket();
 
-        mSocket.on(Socket.EVENT_CONNECT_ERROR, onConnectError);
+       /* mSocket.on(Socket.EVENT_CONNECT_ERROR, onConnectError);
         mSocket.on(Socket.EVENT_CONNECT_TIMEOUT, onConnectError);
         mSocket.on(Socket.EVENT_ERROR, onConnectError);
         mSocket.on(Socket.EVENT_DISCONNECT, onConnectError);
         mSocket.on(Socket.EVENT_RECONNECT_ERROR, onConnectError);
-        mSocket.on(Socket.EVENT_RECONNECT_FAILED, onConnectError);
+        mSocket.on(Socket.EVENT_RECONNECT_FAILED, onConnectError);*/
 
 
         UserModel user = AccountController.getInstance().getAccount();

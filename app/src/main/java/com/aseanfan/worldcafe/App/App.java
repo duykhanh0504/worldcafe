@@ -2,9 +2,11 @@ package com.aseanfan.worldcafe.App;
 
 import android.app.Application;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Handler;
 
 import com.aseanfan.worldcafe.Helper.DBHelper;
+import com.aseanfan.worldcafe.Service.SocketService;
 import com.aseanfan.worldcafe.UI.MediaLoader;
 import com.aseanfan.worldcafe.Utils.Constants;
 import com.yanzhenjie.album.Album;
@@ -25,25 +27,14 @@ public class App  extends Application {
         super.onCreate();
         DBHelper.getInstance(getApplicationContext());
         applicationHandler = new Handler(getApplicationContext().getMainLooper());
-        mSocket.connect();
+        startService(new Intent(this, SocketService.class));
         Album.initialize(AlbumConfig.newBuilder(this)
                 .setAlbumLoader(new MediaLoader())
                 .setLocale(Locale.getDefault())
                 .build()
         );
     }
-    private Socket mSocket;
-    {
-        try {
-            mSocket = IO.socket(Constants.CHAT_SERVER_URL);
-        } catch (URISyntaxException e) {
-            throw new RuntimeException(e);
-        }
-    }
 
-    public Socket getSocket() {
-        return mSocket;
-    }
 
     public Context getContext() {
         return this.getContext();

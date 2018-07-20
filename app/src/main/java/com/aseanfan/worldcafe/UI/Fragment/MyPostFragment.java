@@ -42,6 +42,8 @@ public class MyPostFragment  extends android.support.v4.app.Fragment implements 
 
     private boolean isloading = false;
 
+    private Long account_id;
+
 
 
     public static MyPostFragment newInstance() {
@@ -58,10 +60,10 @@ public class MyPostFragment  extends android.support.v4.app.Fragment implements 
     }
 
 
-    public void LoadListMyPost()
+    public void LoadListMyPost(Long account_id)
     {
         JsonObject dataJson = new JsonObject();
-        dataJson.addProperty("account_id", AccountController.getInstance().getAccount().getId());
+        dataJson.addProperty("account_id", account_id);
         dataJson.addProperty("index",0);
 
         RestAPI.PostDataMaster(getActivity().getApplicationContext(),dataJson,RestAPI.GET_LISTPOSTMYPAGE, new RestAPI.RestAPIListenner() {
@@ -113,6 +115,12 @@ public class MyPostFragment  extends android.support.v4.app.Fragment implements 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_post_mypage, container, false);
+        Bundle bundle = this.getArguments();
+        if(bundle != null){
+            account_id = bundle.getLong("chat_id");
+        }
+        else
+            account_id = AccountController.getInstance().getAccount().getId();
 
         posttimeline = new ArrayList<>();
 
@@ -140,7 +148,7 @@ public class MyPostFragment  extends android.support.v4.app.Fragment implements 
                 if (((LinearLayoutManager)recyclerView.getLayoutManager()).findFirstVisibleItemPosition() == 0) {
                     if(isloading==false) {
                       //  Toast.makeText(getContext(), "Top", Toast.LENGTH_LONG).show();
-                        LoadListMyPost();
+                        LoadListMyPost(account_id);
                         isloading = true;
                     }
 

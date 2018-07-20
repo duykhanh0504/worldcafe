@@ -18,8 +18,10 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.aseanfan.worldcafe.App.AccountController;
+import com.aseanfan.worldcafe.Helper.DBHelper;
 import com.aseanfan.worldcafe.Helper.RestAPI;
 import com.aseanfan.worldcafe.Model.PostTimelineModel;
+import com.aseanfan.worldcafe.Model.UserModel;
 import com.aseanfan.worldcafe.UI.Adapter.FragmentMyPagerAdapter;
 import com.aseanfan.worldcafe.worldcafe.R;
 
@@ -59,6 +61,7 @@ public class MypageFragment extends android.support.v4.app.Fragment {
     private ImageView rankImage;
     private Long accountid;
     private FragmentMyPagerAdapter adapter;
+    private  UserModel user = new UserModel();
 
     @Override
     public void onResume() {
@@ -70,6 +73,43 @@ public class MypageFragment extends android.support.v4.app.Fragment {
     public void onDetach() {
         super.onDetach();
 
+    }
+
+    public void LoadAccount(Long account)
+    {
+        String url =  String.format(RestAPI.GET_ACCOUNT_INFO,account);
+
+        RestAPI.GetDataMaster(getActivity().getApplicationContext(),url, new RestAPI.RestAPIListenner() {
+            @Override
+            public void OnComplete(int httpCode, String error, String s) {
+                try {
+                    if (!RestAPI.checkHttpCode(httpCode)) {
+                        //AppFuncs.alert(getApplicationContext(),s,true);
+
+                        return;
+                    }
+                    JsonObject jsons = (new JsonParser()).parse(s).getAsJsonObject();
+                    int statuscode = jsons.get("status").getAsInt();
+                    if (statuscode == RestAPI.STATUS_SUCCESS) {
+                        JsonObject jsonObject = jsons.getAsJsonArray("result").get(0).getAsJsonObject();
+                        Gson gson = new Gson();
+                        user = gson.fromJson(jsonObject, UserModel.class);
+                        name.setText(user.getUsername());
+                        Glide.with(getContext()).load( user.getAvarta()).apply(RequestOptions.circleCropTransform()).into(new SimpleTarget<Drawable>() {
+                            @Override
+                            public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
+                                avatar.setBackgroundDrawable(resource);
+                            }
+                        });
+
+                    }
+
+                } catch (Exception ex) {
+
+                    ex.printStackTrace();
+                }
+            }
+        });
     }
 
     public void LoadListMyPost(Long account)
@@ -114,13 +154,7 @@ public class MypageFragment extends android.support.v4.app.Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_mypage, container, false);
-        if(getArguments()!=null) {
-            accountid = getArguments().getLong("account_id");
-        }
-        else
-        {
-            accountid = AccountController.getInstance().getAccount().getId();
-        }
+
 
 
         Toolbar toolbar = (Toolbar) view.findViewById(R.id.toolbar);
@@ -128,7 +162,22 @@ public class MypageFragment extends android.support.v4.app.Fragment {
         ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle(null);
 
         name = view.findViewById(R.id.Name);
-        name.setText(AccountController.getInstance().getAccount().getUsername());
+
+        if(getArguments()!=null) {
+            accountid = getArguments().getLong("account_id");
+            LoadAccount(accountid);
+        }
+        else
+        {
+            accountid = AccountController.getInstance().getAccount().getId();
+            name.setText(AccountController.getInstance().getAccount().getUsername());
+            Glide.with(getContext()).load( AccountController.getInstance().getAccount().getAvarta()).apply(RequestOptions.circleCropTransform()).into(new SimpleTarget<Drawable>() {
+                @Override
+                public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
+                    avatar.setBackgroundDrawable(resource);
+                }
+            });
+        }
 
         rankImage= (ImageView) view.findViewById(R.id.image_rank);
 
@@ -139,12 +188,6 @@ public class MypageFragment extends android.support.v4.app.Fragment {
             @Override
             public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
                 background.setBackgroundDrawable(resource);
-            }
-        });
-        Glide.with(getContext()).load( AccountController.getInstance().getAccount().getAvarta()).apply(RequestOptions.circleCropTransform()).into(new SimpleTarget<Drawable>() {
-            @Override
-            public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
-               avatar.setBackgroundDrawable(resource);
             }
         });
         AppBarLayout appBarLayout = view.findViewById(R.id.appBar);

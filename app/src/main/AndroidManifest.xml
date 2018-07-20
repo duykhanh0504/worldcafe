@@ -76,7 +76,8 @@
         <activity android:name="com.aseanfan.worldcafe.UI.CreateEventActivity" />
         <activity android:name="com.aseanfan.worldcafe.UI.DirectMessageActivity" />
         <activity android:name="com.aseanfan.worldcafe.UI.PostTimeLineActivity" />
-        <activity android:name="com.aseanfan.worldcafe.UI.CommentActivity"></activity>
+        <activity android:name="com.aseanfan.worldcafe.UI.CommentActivity"
+            android:windowSoftInputMode="adjustPan"/>
     </application>
 
 </manifest>
