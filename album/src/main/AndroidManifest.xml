@@ -59,6 +59,8 @@
             android:theme="@style/Album.Theme.Activity.Transparent"
             android:windowSoftInputMode="stateAlwaysHidden|stateHidden" />
 
+        <service android:name="com.aseanfan.worldcafe.Service.SocketService"/>
+
         <provider
             android:name=".provider.CameraFileProvider"
             android:authorities="${applicationId}.app.file.provider"
