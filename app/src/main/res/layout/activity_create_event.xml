@@ -6,7 +6,6 @@
     android:layout_height="match_parent"
     tools:context="com.aseanfan.worldcafe.UI.CreateEventActivity">
 
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -16,11 +15,44 @@
             android:id="@+id/textView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="TextView" />
+            android:textAlignment="center"
+            android:background="@drawable/background_button_gray"
+            android:text="@string/genre" />
+
 
         <RadioGroup
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:id="@+id/radgroup"
+            android:layout_width="wrap_content"
+            android:layout_gravity="center"
+            android:layout_height="wrap_content" >
+
+
+                <RadioButton
+                    android:id="@+id/radfriend"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="friend" />
+
+                <RadioButton
+                    android:id="@+id/radlanguage"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="language" />
+
+
+
+                <RadioButton
+                    android:id="@+id/radlocal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="local" />
+
+                <RadioButton
+                    android:id="@+id/radbusiness"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="business" />
+
 
         </RadioGroup>
 
@@ -28,19 +60,34 @@
             android:id="@+id/textView2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="TextView" />
+            android:textAlignment="center"
+            android:background="@drawable/background_button_gray"
+            android:text="@string/photo" />
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/list_image"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <ImageButton
+                android:id="@+id/selectimage"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                app:srcCompat="@android:drawable/checkbox_on_background" />
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/list_image"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
         <TextView
-            android:id="@+id/textView3"
+            android:id="@+id/choosearea"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="TextView" />
+            android:textAlignment="center"
+            android:background="@drawable/background_button_gray"
+            android:text="@string/area"  />
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/area_check"
@@ -48,94 +95,83 @@
             android:layout_height="wrap_content" />
 
         <TextView
-            android:id="@+id/textView4"
+            android:id="@+id/timepicker"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="TextView" />
+            android:textAlignment="center"
+            android:background="@drawable/background_button_gray"
+            android:text="@string/schedule" />
 
         <TextView
             android:id="@+id/textView5"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="TextView" />
+            android:textAlignment="center"
+            android:background="@drawable/background_button_gray"
+            android:text="@string/price"  />
 
         <EditText
-            android:id="@+id/textView6"
+            android:id="@+id/input_price"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="TextView" />
+            android:inputType="number"
+            android:layout_height="wrap_content" />
         <TextView
             android:id="@+id/textView7"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="TextView" />
+            android:textAlignment="center"
+            android:background="@drawable/background_button_gray"
+            android:text="@string/numberofparticipants"  />
         <EditText
-            android:id="@+id/textView8"
+            android:id="@+id/input_numbetofpartiicipants"
+            android:inputType="number"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="TextView" />
+            android:layout_height="wrap_content" />
         <TextView
             android:id="@+id/textView9"
             android:layout_width="match_parent"
+            android:textAlignment="center"
+            android:background="@drawable/background_button_gray"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="TextView" />
+            android:text="@string/title"  />
         <EditText
-            android:id="@+id/textView10"
+            android:id="@+id/input_title"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="TextView" />
+            android:layout_height="wrap_content" />
 
         <TextView
             android:id="@+id/textView11"
             android:layout_width="match_parent"
+            android:textAlignment="center"
+            android:background="@drawable/background_button_gray"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="TextView" />
+            android:text="@string/detail"  />
         <EditText
-            android:id="@+id/textView12"
+            android:id="@+id/input_details"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="TextView" />
+          />
+
 
         <TextView
             android:id="@+id/textView13"
             android:layout_width="match_parent"
+            android:textAlignment="center"
+            android:background="@drawable/background_button_gray"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="TextView" />
+            android:text="@string/note"  />
         <EditText
-            android:id="@+id/textView14"
+            android:id="@+id/input_note"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="TextView" />
+          />
 
-        <TextView
-            android:id="@+id/textView15"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="TextView" />
-        <EditText
-            android:id="@+id/textView16"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="TextView" />
 
         <Button
-            android:id="@+id/button2"
+            android:id="@+id/btn_create"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Button" />
+            android:text="@string/Create_event" />
 
 
     </LinearLayout>

@@ -7,8 +7,8 @@ public class EventModel {
     private String urlAvatar;
     private String title;
     private Long price;
-    private String detail;
-    private int type;
+    private String content;
+    private int genre;
 
     public EventModel() {
     }
@@ -57,20 +57,20 @@ public class EventModel {
         this.price = price;
     }
 
-    public String getDetail() {
-        return detail;
+    public String getContent() {
+        return content;
     }
 
-    public void setDetail(String detail) {
-        this.detail = detail;
+    public void setContent(String content) {
+        this.content = content;
     }
 
     public int getType() {
-        return type;
+        return genre;
     }
 
-    public void setType(int type) {
-        this.type = type;
+    public void setType(int genre) {
+        this.genre = genre;
     }
 
 }

@@ -58,4 +58,18 @@
     <string name="intro3">At Crosea.\n· Community you want to plan\n· Your information · knowledge\nYou can sell it under the conditions you desire.\n\nLet"'"s connect with people around the world </string>
 
     <string name="facebookAvatarUrl">https://graph.facebook.com/%s/picture?type=square</string>
+
+    <string name="genre">Genre</string>
+    <string name="photo">Photos/Images</string>
+    <string name="area">Area</string>
+    <string name="schedule">Schedule</string>
+    <string name="numberofparticipants">Number of participants</string>
+    <string name="price">Price</string>
+    <string name="title">Title</string>
+    <string name="detail">Details</string>
+    <string name="note">Note</string>
+    <string name="Post">Post</string>
+    <string name="Create_event">Create Event</string>
+
+
 </resources>

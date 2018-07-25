@@ -66,17 +66,20 @@
             android:name="com.parse.APPLICATION_ID"
             android:value="@string/back4app_app_id" />
 
-        <activity android:name="com.aseanfan.worldcafe.UI.ChatActivity" />
+        <activity android:name="com.aseanfan.worldcafe.UI.ChatActivity"
+            android:theme="@style/ThemeWithTabBar"/>
         <activity android:name="com.aseanfan.worldcafe.UI.RegisterActivity" />
         <activity android:name="com.aseanfan.worldcafe.UI.LaunchActivity" />
         <activity android:name="com.aseanfan.worldcafe.UI.SplashScreen" />
         <activity
             android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
             android:theme="@style/Base.Theme.AppCompat" />
-        <activity android:name="com.aseanfan.worldcafe.UI.CreateEventActivity" />
+        <activity android:name="com.aseanfan.worldcafe.UI.CreateEventActivity"
+            android:theme="@style/ThemeWithTabBar"/>
         <activity android:name="com.aseanfan.worldcafe.UI.DirectMessageActivity" />
         <activity android:name="com.aseanfan.worldcafe.UI.PostTimeLineActivity" />
         <activity android:name="com.aseanfan.worldcafe.UI.CommentActivity"
+            android:theme="@style/ThemeWithTabBar"
             android:windowSoftInputMode="adjustPan"/>
     </application>
 

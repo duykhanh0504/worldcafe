@@ -57,6 +57,7 @@ public class RestAPI {
     public static String POST_COMMENT = root_url + "/api/newfeed/postcomment";
     public static String GET_COMMENT = root_url + "/api/newfeed/comments";
     public static String GET_ACCOUNT_INFO = root_url + "/api/user/accountbyid?id=%d";
+    public static String POST_CREATEEVENT= root_url + "/api/event/createevent";
 
     public final static int STATUS_SUCCESS = 200;
     public final static int STATUS_WRONGPASSWORD = 2;
