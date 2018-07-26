@@ -14,6 +14,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -25,6 +26,7 @@ import com.aseanfan.worldcafe.Helper.RestAPI;
 import com.aseanfan.worldcafe.Model.EventModel;
 import com.aseanfan.worldcafe.UI.Adapter.ChooseAreaAdapter;
 import com.aseanfan.worldcafe.UI.Adapter.ImageTimelineAdapter;
+import com.aseanfan.worldcafe.Utils.Constants;
 import com.aseanfan.worldcafe.Utils.Utils;
 import com.aseanfan.worldcafe.worldcafe.R;
 import com.google.gson.JsonObject;
@@ -56,16 +58,21 @@ public class CreateEventActivity extends AppCompatActivity {
     private RadioButton friend,language,local,buissines;
     private RadioGroup radgroup;
     private Button btncreate;
+    private EditText price;
+    private EditText title;
+    private EditText content;
+    private EditText numberofparticipal;
 
+    private EventModel event;
 
     public void CreateEvent(final EventModel event)
     {
         JsonObject dataJson = new JsonObject();
         dataJson.addProperty("account_id", AccountController.getInstance().getAccount().getId());
-       dataJson.addProperty("contents","");
-        dataJson.addProperty("title","");
-        dataJson.addProperty("genre","");
-        dataJson.addProperty("price",0);
+        dataJson.addProperty("contents",event.getContent());
+        dataJson.addProperty("title",event.getTitle());
+        dataJson.addProperty("genre",event.getType());
+        dataJson.addProperty("price",event.getPrice());
         dataJson.addProperty("starttime","");
         dataJson.addProperty("endtime","");
         dataJson.addProperty("updatetime","");
@@ -76,6 +83,9 @@ public class CreateEventActivity extends AppCompatActivity {
         dataJson.addProperty("schedueltype",0);
         dataJson.addProperty("numbertime",0);
         dataJson.addProperty("pertime","");
+        dataJson.addProperty("base64",listImageBase64);
+        dataJson.addProperty("image",System.currentTimeMillis() + "");
+        dataJson.addProperty("type","image/jpeg");
 
         RestAPI.PostDataMaster(this,dataJson,RestAPI.POST_CREATEEVENT, new RestAPI.RestAPIListenner() {
             @Override
@@ -86,6 +96,7 @@ public class CreateEventActivity extends AppCompatActivity {
 
                         return;
                     }
+                    finish();
 
                //     ListComment(timelineid);
 
@@ -102,14 +113,14 @@ public class CreateEventActivity extends AppCompatActivity {
         int checkedRadioId = group.getCheckedRadioButtonId();
 
         if(checkedRadioId== R.id.radfriend) {
-            Toast.makeText(this,"You choose the level of difficulty: friend",Toast.LENGTH_SHORT).show();
+            event.setType(Constants.EVENT_FRIEND);
         } else if(checkedRadioId== R.id.radbusiness ) {
-            Toast.makeText(this,"You choose the level of difficulty: bussine",Toast.LENGTH_SHORT).show();
+            event.setType(Constants.EVENT_FRIEND);
         } else if(checkedRadioId== R.id.radlanguage) {
-            Toast.makeText(this,"You choose the level of difficulty: langudage",Toast.LENGTH_SHORT).show();
+            event.setType(Constants.EVENT_FRIEND);
         }
         else if(checkedRadioId== R.id.radlocal) {
-            Toast.makeText(this,"You choose the level of difficulty: local",Toast.LENGTH_SHORT).show();
+            event.setType(Constants.EVENT_FRIEND);
         }
     }
 
@@ -117,6 +128,8 @@ public class CreateEventActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_event);
+
+        event = new EventModel();
 
         listimage= findViewById(R.id.list_image);
         imgbutton= findViewById(R.id.selectimage);
@@ -130,11 +143,18 @@ public class CreateEventActivity extends AppCompatActivity {
         buissines =  findViewById(R.id.radbusiness);
         radgroup = findViewById(R.id.radgroup);
         btncreate = findViewById(R.id.btn_create);
+        price = findViewById(R.id.input_price);
+        title = findViewById(R.id.input_title);
+        content = findViewById(R.id.input_details);
+        numberofparticipal = findViewById(R.id.input_numbetofpartiicipants);
 
         btncreate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                CreateEvent(null);
+                event.setTitle(title.getText().toString());
+                event.setPrice(Long.valueOf(price.getText().toString()));
+                event.setContent(content.getText().toString());
+                CreateEvent(event);
             }
         });
 
@@ -201,10 +221,12 @@ public class CreateEventActivity extends AppCompatActivity {
 // add a checkbox list
                 final String[] areas = {"hanoi", "hcm", "da nang"};
                 final boolean[] checkedItems = {false, false, false};
-                builder.setMultiChoiceItems(areas, checkedItems, new DialogInterface.OnMultiChoiceClickListener() {
+                final int[] pos = {-1};
+                builder.setSingleChoiceItems(areas, 0, new DialogInterface.OnClickListener() {
+
                     @Override
-                    public void onClick(DialogInterface dialog, int which, boolean isChecked) {
-                        // user checked or unchecked a box
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        pos[0] = i;
                     }
                 });
 
@@ -213,14 +235,17 @@ public class CreateEventActivity extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         l.clear();
+                        if (pos[0] != -1) {
+                            l.add(areas[pos[0]]);
+                        }
                         // user clicked OK
-                        for(int i=0 ; i< checkedItems.length ; i++)
+                       /* for(int i=0 ; i< checkedItems.length ; i++)
                         {
                             if( checkedItems[i]== true)
                             {
                                 l.add(areas[i]);
                             }
-                        }
+                        }*/
                         areaAdapter.updatedata(l);
                     }
                 });

@@ -235,7 +235,7 @@ public class CommunityFragment extends Fragment implements NotificationCenter.No
 
         mAdapter = new CommunityAdapter(null);
         list_community = (RecyclerView) tab1.findViewById(R.id.list_community);;
-        RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(container.getContext(),2);
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(container.getContext());
         list_community.setLayoutManager(mLayoutManager);
         list_community.setItemAnimator(new DefaultItemAnimator());
         list_community.setAdapter(mAdapter);
