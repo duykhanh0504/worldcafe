@@ -16,7 +16,8 @@ public class Constants {
     public static  String FRIENDID = "FRIEND_ID";
 
     public static  int EVENT_FRIEND = 0;
-    public static  int EVENT_LOCAL = 1;
-    public static  int EVENT_BUSSINESS = 2;
+    public static  int EVENT_BUSSINESS = 1;
+    public static  int EVENT_LOCAL = 2;
     public static  int EVENT_LANGUAGE = 3;
+
 }

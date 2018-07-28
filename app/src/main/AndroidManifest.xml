@@ -66,6 +66,31 @@
             android:name="com.parse.APPLICATION_ID"
             android:value="@string/back4app_app_id" />
 
+        <service
+            android:name="com.aseanfan.worldcafe.Service.MyFirebaseMessagingService">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+            </intent-filter>
+        </service>
+
+        <service
+            android:name="com.aseanfan.worldcafe.Service.MyFirebaseInstanceIDService">
+            <intent-filter>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
+            </intent-filter>
+        </service>
+
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@drawable/ic_launcher_background" />
+        <!-- Set color used with incoming notification messages. This is used when no color is set for the incoming
+             notification message. See README(https://goo.gl/6BKBk7) for more. -->
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_color"
+            android:resource="@color/colorAccent" />
+
+        <service android:name="com.aseanfan.worldcafe.Service.SocketService"/>
+
         <activity android:name="com.aseanfan.worldcafe.UI.ChatActivity"
             android:theme="@style/ThemeWithTabBar"/>
         <activity android:name="com.aseanfan.worldcafe.UI.RegisterActivity" />

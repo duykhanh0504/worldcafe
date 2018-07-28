@@ -1,14 +1,21 @@
 package com.aseanfan.worldcafe.Model;
 
+import java.util.List;
+
 public class EventModel {
 
     private Long event_id;
-    private String urlImage;
+    private List<String> urlImage;
+    private String username;
     private String urlAvatar;
     private String title;
     private Long price;
     private String content;
     private int genre;
+    private int numberComment;
+    private int numberLike;
+    private int islike;
+    private Long account_id;
 
     public EventModel() {
     }
@@ -22,10 +29,16 @@ public class EventModel {
         this.event_id = event_id;
     }
 
-
-    public String getUrlImage() {
-        return urlImage;
+    public String getUsername() {
+        return username;
     }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+
+
 
     public void setUrlAvatar(String urlAvatar) {
         this.urlAvatar = urlAvatar;
@@ -35,7 +48,11 @@ public class EventModel {
         return urlAvatar;
     }
 
-    public void setUrlImage(String urlImage) {
+    public List<String> getUrlImage() {
+        return urlImage;
+    }
+
+    public void setUrlImage(List<String> urlImage) {
         this.urlImage = urlImage;
     }
 
@@ -71,6 +88,39 @@ public class EventModel {
 
     public void setType(int genre) {
         this.genre = genre;
+    }
+
+    public int getNumberComment() {
+        return numberComment;
+    }
+
+    public void setNumberComment(int numberComment) {
+        this.numberComment = numberComment;
+    }
+
+    public int getNumberLike() {
+        return numberLike;
+    }
+
+    public void setNumberLike(int numberLike) {
+        this.numberLike = numberLike;
+    }
+
+    public int getIslike() {
+        return islike;
+    }
+
+    public void setIslike(int islike) {
+        this.islike = islike;
+    }
+
+
+    public Long getAccountid() {
+        return account_id;
+    }
+
+    public void setAccount_id(Long account_id) {
+        this.account_id = account_id;
     }
 
 }

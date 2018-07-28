@@ -359,6 +359,7 @@ public class MainActivity extends AppCompatActivity {
          detailcomunityfragment = new DetailCommunityFragment();
           FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
           ft.add(R.id.content, detailcomunityfragment,TAG_COMMUNITY_DETAIL).commit();
+          communityFragment.onPause();
         //  ft.show(detailcomunityfragment);
         //  ft.hide(communityFragment);
     }

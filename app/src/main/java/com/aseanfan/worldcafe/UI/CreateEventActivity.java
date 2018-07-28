@@ -115,12 +115,12 @@ public class CreateEventActivity extends AppCompatActivity {
         if(checkedRadioId== R.id.radfriend) {
             event.setType(Constants.EVENT_FRIEND);
         } else if(checkedRadioId== R.id.radbusiness ) {
-            event.setType(Constants.EVENT_FRIEND);
+            event.setType(Constants.EVENT_BUSSINESS);
         } else if(checkedRadioId== R.id.radlanguage) {
-            event.setType(Constants.EVENT_FRIEND);
+            event.setType(Constants.EVENT_LANGUAGE);
         }
         else if(checkedRadioId== R.id.radlocal) {
-            event.setType(Constants.EVENT_FRIEND);
+            event.setType(Constants.EVENT_LOCAL);
         }
     }
 

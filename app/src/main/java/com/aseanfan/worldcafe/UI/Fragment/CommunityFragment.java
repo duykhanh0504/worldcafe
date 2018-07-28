@@ -127,7 +127,9 @@ public class CommunityFragment extends Fragment implements NotificationCenter.No
 
     public void LoadListEvent(final int Type)
     {
-        RestAPI.GetDataMaster(getActivity().getApplicationContext(),RestAPI.GET_LISTEVENT, new RestAPI.RestAPIListenner() {
+        String url =  String.format(RestAPI.GET_LISTEVENT,AccountController.getInstance().getAccount().getId(),Type,0);
+
+        RestAPI.GetDataMaster(getActivity().getApplicationContext(),url, new RestAPI.RestAPIListenner() {
             @Override
             public void OnComplete(int httpCode, String error, String s) {
                 try {
@@ -136,9 +138,9 @@ public class CommunityFragment extends Fragment implements NotificationCenter.No
 
                         return;
                     }
-                    JsonArray jsonArray = (new JsonParser()).parse(s).getAsJsonObject().getAsJsonArray("result");
+                    JsonArray jsonArray = (new JsonParser()).parse(s).getAsJsonObject().getAsJsonArray("result1");
                     Gson gson = new Gson();
-                    Type type = new TypeToken<List<EventModel>>(){}.getType();
+                    java.lang.reflect.Type type = new TypeToken<List<EventModel>>(){}.getType();
                     switch(Type)
                     {
                         case TAB_FRIEND:
@@ -150,19 +152,19 @@ public class CommunityFragment extends Fragment implements NotificationCenter.No
                         case TAB_BUSINESS:
                             listEventBusiness = gson.fromJson(jsonArray, type);
                             if (tabcommunity.getSelectedTabPosition() == TAB_BUSINESS) {
-                                mAdapter.setEventList(listEventFriend);
+                                mAdapter.setEventList(listEventBusiness);
                             }
                             break;
                         case TAB_LOCAL:
                             listEventLocal = gson.fromJson(jsonArray, type);
                             if (tabcommunity.getSelectedTabPosition() == TAB_LOCAL) {
-                                mAdapter.setEventList(listEventFriend);
+                                mAdapter.setEventList(listEventLocal);
                             }
                             break;
                         case TAB_LANGUAGE:
                             listEventLanguage = gson.fromJson(jsonArray, type);
                             if (tabcommunity.getSelectedTabPosition() == TAB_LANGUAGE) {
-                                mAdapter.setEventList(listEventFriend);
+                                mAdapter.setEventList(listEventLanguage);
                             }
                             break;
                     }

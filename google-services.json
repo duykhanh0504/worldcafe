@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "247236409836",
+    "firebase_url": "https://mytest-8acf3.firebaseio.com",
+    "project_id": "mytest-8acf3",
+    "storage_bucket": "mytest-8acf3.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:247236409836:android:d72ef0c2baafdaec",
+        "android_client_info": {
+          "package_name": "com.aseanfan.worldcafe.worldcafe"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "247236409836-i4gofiprfghht8vqr8bk57dju4og2198.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCD8rJJUHiFpL8Kjy2tePUCMZMd_pCZMBI"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -70,6 +70,7 @@
     <string name="note">Note</string>
     <string name="Post">Post</string>
     <string name="Create_event">Create Event</string>
+    <string name="notification_channel_id">default</string>
 
 
 </resources>
