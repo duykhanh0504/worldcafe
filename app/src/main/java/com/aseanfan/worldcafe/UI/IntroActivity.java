@@ -28,12 +28,7 @@ import android.widget.TextView;
 
 import com.aseanfan.worldcafe.Provider.Store;
 import com.aseanfan.worldcafe.worldcafe.R;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.FirebaseApp;
 import com.google.firebase.iid.FirebaseInstanceId;
-import com.google.firebase.iid.InstanceIdResult;
-
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -110,6 +105,7 @@ public class IntroActivity extends AppCompatActivity {
         UiInit();
 
         justCreated = true;
+        String token = FirebaseInstanceId.getInstance().getToken();
       /*  FirebaseApp.initializeApp(this);
 
         FirebaseInstanceId.getInstance().getInstanceId()
