@@ -6,6 +6,7 @@ import android.content.pm.ActivityInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
+import android.database.Cursor;
 import android.database.DataSetObserver;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
@@ -26,7 +27,12 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.aseanfan.worldcafe.App.AccountController;
+import com.aseanfan.worldcafe.Helper.DBHelper;
+import com.aseanfan.worldcafe.Model.UserModel;
 import com.aseanfan.worldcafe.Provider.Store;
+import com.aseanfan.worldcafe.Service.SocketService;
+import com.aseanfan.worldcafe.Utils.Constants;
 import com.aseanfan.worldcafe.worldcafe.R;
 import com.google.firebase.iid.FirebaseInstanceId;
 
@@ -93,6 +99,7 @@ public class IntroActivity extends AppCompatActivity {
 
         if(Store.getBooleanData(IntroActivity.this , Store.LOGGED) == true)
         {
+
             Intent intent = new Intent(IntroActivity.this , MainActivity.class);
             startActivity(intent);
             finish();
@@ -173,14 +180,14 @@ public class IntroActivity extends AppCompatActivity {
     @OnClick(R.id.Login)
     public void Login() {
         Intent intent = new Intent(IntroActivity.this, LoginActivity.class);
-        intent.putExtra("type",0);
+        intent.putExtra("type", Constants.PAGE_LOGIN);
         startActivity(intent);
     }
 
     @OnClick(R.id.Signup)
     public void Signup() {
         Intent intent = new Intent(IntroActivity.this, LoginActivity.class);
-        intent.putExtra("type",2);
+        intent.putExtra("type",Constants.PAGE_REGISTER);
         startActivity(intent);
     }
 

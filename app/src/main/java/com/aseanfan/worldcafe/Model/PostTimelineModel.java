@@ -7,7 +7,7 @@ public class PostTimelineModel {
     private Long timeline_id;
     private List<String> urlImage;
     private String urlAvatar;
-    private String title;
+    private String username;
     private String detail;
     private int numberComment;
     private int numberLike;
@@ -18,11 +18,11 @@ public class PostTimelineModel {
     public PostTimelineModel() {
     }
 
-    public Long getEventid() {
+    public Long getTimelineid() {
         return timeline_id;
     }
 
-    public void setEventid(Long event_id) {
+    public void setTimelineid(Long event_id) {
         this.timeline_id = event_id;
     }
 
@@ -45,12 +45,12 @@ public class PostTimelineModel {
 
 
 
-    public String getTitle() {
-        return title;
+    public String getUsername() {
+        return username;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public int getNumberComment() {

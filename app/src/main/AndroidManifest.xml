@@ -89,7 +89,7 @@
             android:name="com.google.firebase.messaging.default_notification_color"
             android:resource="@color/colorAccent" />
 
-        <service android:name="com.aseanfan.worldcafe.Service.SocketService"/>
+        <service android:enabled="true" android:name="com.aseanfan.worldcafe.Service.SocketService"/>
 
         <activity android:name="com.aseanfan.worldcafe.UI.ChatActivity"
             android:theme="@style/ThemeWithTabBar"/>

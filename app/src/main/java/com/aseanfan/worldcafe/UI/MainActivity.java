@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.support.annotation.NonNull;
+import android.support.design.internal.BottomNavigationItemView;
+import android.support.design.internal.BottomNavigationMenuView;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -13,6 +15,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -186,27 +189,6 @@ public class MainActivity extends AppCompatActivity {
         mSocket.on(Socket.EVENT_RECONNECT_FAILED, onConnectError);*/
 
 
-        UserModel user = AccountController.getInstance().getAccount();
-
-        Cursor cursor = DBHelper.getInstance(getApplicationContext()).getAllPersons();
-        if(cursor!=null) {
-            cursor.moveToFirst();
-            user.setId(cursor.getLong(cursor.getColumnIndex(DBHelper.PERSON_COLUMN_ID)));
-            user.setUsername(cursor.getString(cursor.getColumnIndex(DBHelper.PERSON_COLUMN_NAME)));
-            user.setEmail(cursor.getString(cursor.getColumnIndex(DBHelper.PERSON_COLUMN_EMAIL)));
-            user.setPhonenumber(cursor.getString(cursor.getColumnIndex(DBHelper.PERSON_PHONE_NUMBER)));
-            user.setAvarta(cursor.getString(cursor.getColumnIndex(DBHelper.PERSON_AVATAR_URL)));
-            user.setSex(cursor.getString(cursor.getColumnIndex(DBHelper.PERSON_SEX)));
-            user.setBirthday(cursor.getString(cursor.getColumnIndex(DBHelper.PERSON_BIRTHDAY)));
-            user.setAddress(cursor.getString(cursor.getColumnIndex(DBHelper.PERSON_ADDRESS)));
-            user.setDistrict(cursor.getString(cursor.getColumnIndex(DBHelper.PERSON_DISTRICT)));
-            user.setCity(cursor.getString(cursor.getColumnIndex(DBHelper.PERSON_CITY)));
-            user.setCountry(cursor.getString(cursor.getColumnIndex(DBHelper.PERSON_COUNTRY)));
-            user.setCompany(cursor.getString(cursor.getColumnIndex(DBHelper.PERSON_COMPANY)));
-            user.setSchool(cursor.getString(cursor.getColumnIndex(DBHelper.PERSON_SCHOOL)));
-            user.setIntroduction(cursor.getString(cursor.getColumnIndex(DBHelper.PERSON_INTRODUCTION)));
-            AccountController.getInstance().SetAccount(user);
-        }
 
         communityFragment = new CommunityFragment();
         timelineFragment = new TimelineFragment();
@@ -216,6 +198,16 @@ public class MainActivity extends AppCompatActivity {
 
         navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+
+        BottomNavigationMenuView bottomNavigationMenuView =
+                (BottomNavigationMenuView) navigation.getChildAt(0);
+        View v = bottomNavigationMenuView.getChildAt(3);
+        BottomNavigationItemView itemView = (BottomNavigationItemView) v;
+
+        View badge = LayoutInflater.from(this)
+                .inflate(R.layout.notification_badge, bottomNavigationMenuView, false);
+
+        itemView.addView(badge);
 
         showFirstFragment();
 
@@ -359,7 +351,7 @@ public class MainActivity extends AppCompatActivity {
          detailcomunityfragment = new DetailCommunityFragment();
           FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
           ft.add(R.id.content, detailcomunityfragment,TAG_COMMUNITY_DETAIL).commit();
-          communityFragment.onPause();
+        //  communityFragment.onPause();
         //  ft.show(detailcomunityfragment);
         //  ft.hide(communityFragment);
     }

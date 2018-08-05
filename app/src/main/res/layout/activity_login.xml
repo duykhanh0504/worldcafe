@@ -41,6 +41,9 @@
             android:id="@+id/flipViewRegister"
             layout="@layout/flip_register" />
 
+        <include
+            android:id="@+id/flipViewActivation"
+            layout="@layout/flip_activation" />
 
     </ViewFlipper>
 

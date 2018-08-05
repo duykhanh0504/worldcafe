@@ -50,7 +50,7 @@ public class AlbumFragment  extends android.support.v4.app.Fragment {
 
         mAdapter = new AlbumAdapter(null);
 
-        RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(container.getContext(),3);
+        RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(container.getContext(),2);
        // RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(container.getContext(), LinearLayoutManager.HORIZONTAL, false);
         listalbum.setLayoutManager(mLayoutManager);
         listalbum.setItemAnimator(new DefaultItemAnimator());

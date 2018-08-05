@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.aseanfan.worldcafe.App.AccountController;
 import com.aseanfan.worldcafe.UI.ChatActivity;
 import com.aseanfan.worldcafe.UI.CreateEventActivity;
 import com.aseanfan.worldcafe.UI.DirectMessageActivity;
@@ -35,6 +36,7 @@ public class MyPageDetailFragment extends android.support.v4.app.Fragment implem
 
     private Long friendid;
 
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -43,6 +45,9 @@ public class MyPageDetailFragment extends android.support.v4.app.Fragment implem
 
         if(bundle != null){
             friendid = bundle.getLong("chat_id");
+        }
+        else {
+            friendid = Long.valueOf(-1);
         }
 
         initView(view);
@@ -87,6 +92,18 @@ public class MyPageDetailFragment extends android.support.v4.app.Fragment implem
 
         directMessage.setOnClickListener(this);
         createEvent.setOnClickListener(this);
+
+
+        if(!friendid.equals(AccountController.getInstance().getAccount().getId()))
+        {
+            createEvent.setVisibility(View.GONE);
+
+        }
+        else
+        {
+            createEvent.setVisibility(View.VISIBLE);
+
+        }
     }
 
     @Override

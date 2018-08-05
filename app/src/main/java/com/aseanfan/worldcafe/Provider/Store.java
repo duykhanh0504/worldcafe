@@ -11,6 +11,7 @@ import android.preference.PreferenceManager;
 public class Store {
 
     public final static String USERNAME = "wr_username";
+    public final static String TOKENFACEBOOK = "facebook_token";
     public final static String LOGGED = "logged";
 
     public static void putStringData(Context context, String key, String data) {

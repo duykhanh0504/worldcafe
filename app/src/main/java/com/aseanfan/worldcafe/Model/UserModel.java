@@ -8,15 +8,17 @@ public class UserModel {
     private String email;
     private String phonenumber;
     private String avarta;
-    private String sex;
+    private int sex;
     private String birthday;
     private String address;
     private String district;
-    private String city;
-    private String country;
+    private int city;
+    private int country;
     private String company;
     private String school;
     private String introduction;
+    private int status;
+    private String facebook_id;
 
 
 
@@ -26,6 +28,22 @@ public class UserModel {
     }
 
     public UserModel() {
+    }
+
+    public String getFacebookid() {
+        return facebook_id;
+    }
+
+    public void setFacebookid(String facebookid) {
+        this.facebook_id = facebookid;
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
     }
 
 
@@ -71,11 +89,11 @@ public class UserModel {
         this.avarta = avarta;
     }
 
-    public String getSex() {
+    public int getSex() {
         return sex;
     }
 
-    public void setSex(String sex) {
+    public void setSex(int sex) {
         this.sex = sex;
     }
 
@@ -103,19 +121,19 @@ public class UserModel {
         this.district = district;
     }
 
-    public String getCity() {
+    public int getCity() {
         return city;
     }
 
-    public void setCity(String city) {
+    public void setCity(int city) {
         this.city = city;
     }
 
-    public String getCountry() {
+    public int getCountry() {
         return country;
     }
 
-    public void setCountry(String country) {
+    public void setCountry(int country) {
         this.country = country;
     }
 

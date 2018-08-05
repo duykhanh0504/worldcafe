@@ -31,6 +31,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -62,6 +63,7 @@ public class MypageFragment extends android.support.v4.app.Fragment {
     private Long accountid;
     private FragmentMyPagerAdapter adapter;
     private  UserModel user = new UserModel();
+    private Button flolow;
 
     @Override
     public void onResume() {
@@ -112,14 +114,14 @@ public class MypageFragment extends android.support.v4.app.Fragment {
         });
     }
 
-    public void LoadListMyPost(Long account)
+    public void UnFollow(Long followid)
     {
         JsonObject dataJson = new JsonObject();
-        dataJson.addProperty("account_id", account);
-        dataJson.addProperty("index",0);
+        dataJson.addProperty("account_id", AccountController.getInstance().getAccount().getId());
+        dataJson.addProperty("follower_id",followid);
         loading.setVisibility(View.VISIBLE);
 
-        RestAPI.PostDataMaster(getActivity().getApplicationContext(),dataJson,RestAPI.GET_LISTPOSTMYPAGE, new RestAPI.RestAPIListenner() {
+        RestAPI.PostDataMaster(getActivity().getApplicationContext(),dataJson,RestAPI.POST_UNFOLLOW, new RestAPI.RestAPIListenner() {
             @Override
             public void OnComplete(int httpCode, String error, String s) {
                 try {
@@ -128,7 +130,65 @@ public class MypageFragment extends android.support.v4.app.Fragment {
 
                         return;
                     }
-                    JsonArray jsonArray = (new JsonParser()).parse(s).getAsJsonObject().getAsJsonArray("result1");
+
+
+                }
+                catch (Exception ex) {
+
+                    ex.printStackTrace();
+                }
+                finally {
+                    loading.setVisibility(View.GONE);
+                }
+            }
+        });
+    }
+
+    public void Follow(Long followid)
+    {
+        JsonObject dataJson = new JsonObject();
+        dataJson.addProperty("account_id", AccountController.getInstance().getAccount().getId());
+        dataJson.addProperty("follower_id",followid);
+        loading.setVisibility(View.VISIBLE);
+
+        RestAPI.PostDataMaster(getActivity().getApplicationContext(),dataJson,RestAPI.POST_FOLLOW, new RestAPI.RestAPIListenner() {
+            @Override
+            public void OnComplete(int httpCode, String error, String s) {
+                try {
+                    if (!RestAPI.checkHttpCode(httpCode)) {
+                        //AppFuncs.alert(getApplicationContext(),s,true);
+
+                        return;
+                    }
+
+
+                }
+                catch (Exception ex) {
+
+                    ex.printStackTrace();
+                }
+                finally {
+                    loading.setVisibility(View.GONE);
+                }
+            }
+        });
+    }
+
+    public void LoadListMyPost(Long account)
+    {
+        String url =  String.format(RestAPI.GET_LISTPOSTMYPAGE,account,0);
+        loading.setVisibility(View.VISIBLE);
+
+        RestAPI.GetDataMaster(getActivity().getApplicationContext(),url, new RestAPI.RestAPIListenner() {
+            @Override
+            public void OnComplete(int httpCode, String error, String s) {
+                try {
+                    if (!RestAPI.checkHttpCode(httpCode)) {
+                        //AppFuncs.alert(getApplicationContext(),s,true);
+
+                        return;
+                    }
+                    JsonArray jsonArray = (new JsonParser()).parse(s).getAsJsonObject().getAsJsonArray("result");
                     Gson gson = new Gson();
                     java.lang.reflect.Type type = new TypeToken<List<PostTimelineModel>>(){}.getType();
                     posttimeline = gson.fromJson(jsonArray, type);
@@ -155,6 +215,8 @@ public class MypageFragment extends android.support.v4.app.Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_mypage, container, false);
 
+        flolow =(Button)view.findViewById(R.id.btn_follow);
+
 
 
         Toolbar toolbar = (Toolbar) view.findViewById(R.id.toolbar);
@@ -177,6 +239,16 @@ public class MypageFragment extends android.support.v4.app.Fragment {
                     avatar.setBackgroundDrawable(resource);
                 }
             });
+        }
+
+        if(!accountid.equals(AccountController.getInstance().getAccount().getId()))
+        {
+
+            flolow.setVisibility(View.VISIBLE);
+        }
+        else
+        {
+            flolow.setVisibility(View.GONE);
         }
 
         rankImage= (ImageView) view.findViewById(R.id.image_rank);

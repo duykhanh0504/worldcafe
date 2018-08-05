@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.aseanfan.worldcafe.App.AccountController;
 import com.aseanfan.worldcafe.Model.EventModel;
 import com.aseanfan.worldcafe.Model.PostTimelineModel;
 import com.aseanfan.worldcafe.Utils.Constants;
@@ -47,6 +48,7 @@ public class PostTimelineAdapter extends RecyclerView.Adapter<PostTimelineAdapte
         public ImageView avatar;
         public ImageView imagelike;
         public ImageView imageComment;
+        public ImageView image_menu;
         public PostImageAdapter mAdapter;
 
 
@@ -59,6 +61,7 @@ public class PostTimelineAdapter extends RecyclerView.Adapter<PostTimelineAdapte
             imagePost = (RecyclerView) view.findViewById(R.id.list_image);
             avatar = (ImageView) view.findViewById(R.id.imageAvatar);
             imagelike = (ImageView) view.findViewById(R.id.imageLike) ;
+            image_menu = (ImageView) view.findViewById(R.id.image_menu) ;
             imageComment = (ImageView)view.findViewById(R.id.imageComment) ;
             context = view.getContext();
             view.setOnClickListener(this);
@@ -66,6 +69,13 @@ public class PostTimelineAdapter extends RecyclerView.Adapter<PostTimelineAdapte
                 @Override
                 public void onClick(View view) {
                     clickListener.onItemClick(getAdapterPosition(), view , Constants.CLICK_IMAGE_LIKE);
+                }
+            });
+
+            image_menu.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    clickListener.onItemClick(getAdapterPosition(), view , Constants.CLICK_IMAGE_MENU);
                 }
             });
 
@@ -129,9 +139,17 @@ public class PostTimelineAdapter extends RecyclerView.Adapter<PostTimelineAdapte
     public void onBindViewHolder(@NonNull MyViewHolder myViewHolder, int i) {
         PostTimelineModel post = postList.get(i);
         String urlimg = null;
-        myViewHolder.title.setText(post.getTitle());
+        myViewHolder.title.setText(post.getUsername());
         myViewHolder.like.setText(String.valueOf(post.getNumberLike()));
         myViewHolder.comment.setText(String.valueOf(post.getNumberComment()));
+        if(post.getAccountid().equals(AccountController.getInstance().getAccount().getId()))
+        {
+            myViewHolder.image_menu.setVisibility(View.VISIBLE);
+        }
+        else
+        {
+            myViewHolder.image_menu.setVisibility(View.GONE);
+        }
         if(post.getIslike() == 0)
         {
             myViewHolder.imagelike.setBackgroundResource(R.drawable.unlike);

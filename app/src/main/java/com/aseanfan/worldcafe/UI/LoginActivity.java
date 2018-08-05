@@ -2,6 +2,7 @@ package com.aseanfan.worldcafe.UI;
 
 import android.Manifest;
 import android.app.AlertDialog;
+import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -11,8 +12,10 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
 import android.net.Uri;
+import android.os.Build;
 import android.provider.MediaStore;
 import android.provider.Settings;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -20,9 +23,14 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RadioGroup;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ViewFlipper;
@@ -31,8 +39,15 @@ import com.aseanfan.worldcafe.App.AccountController;
 import com.aseanfan.worldcafe.App.App;
 import com.aseanfan.worldcafe.Helper.DBHelper;
 import com.aseanfan.worldcafe.Helper.RestAPI;
+import com.aseanfan.worldcafe.Model.AreaModel;
+import com.aseanfan.worldcafe.Model.CityModel;
+import com.aseanfan.worldcafe.Model.EventModel;
 import com.aseanfan.worldcafe.Model.UserModel;
 import com.aseanfan.worldcafe.Provider.Store;
+import com.aseanfan.worldcafe.Service.SocketService;
+import com.aseanfan.worldcafe.UI.Adapter.SpinnerAreaAdapter;
+import com.aseanfan.worldcafe.UI.Adapter.SpinnerCityAdapter;
+import com.aseanfan.worldcafe.Utils.Constants;
 import com.aseanfan.worldcafe.Utils.Utils;
 import com.aseanfan.worldcafe.worldcafe.R;
 import com.bumptech.glide.Glide;
@@ -49,8 +64,10 @@ import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.google.gson.reflect.TypeToken;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
@@ -58,7 +75,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.List;
 
 import io.socket.client.Socket;
@@ -82,11 +101,16 @@ public class LoginActivity extends AppCompatActivity {
     private ImageView _avatarimage;
 
     private EditText _mobileupdate;
-    private EditText _emailupdate;
     private EditText _usernameupdate;
+    private EditText _birthdayupdate;
+    private RadioGroup radgroup;
+    private Spinner country;
+    private Spinner city;
     private Button _update;
 
-    private Socket mSocket;
+    private EditText _inputactivecode;
+    private Button _submit;
+
     CallbackManager callbackManager;
 
     Uri selectedAvatar = null;
@@ -96,7 +120,7 @@ public class LoginActivity extends AppCompatActivity {
     private boolean USING_FACEBOOK = false;
 
     private int LOGIN_FACEBOOK = 1;
-    private int LOGIN_NORMAL = 2;
+    private int LOGIN_NORMAL = 0;
 
     private String email;
     private String password;
@@ -105,7 +129,13 @@ public class LoginActivity extends AppCompatActivity {
     Location mCurrentLocation = null;
     double latitude; // latitude
     double longitude; // longitude
+    private int mYear, mMonth, mDay;
 
+    private static  List<AreaModel> listarea = new ArrayList<>();
+    private static  int countryid = 1;
+
+    private SpinnerCityAdapter  adaptercity;
+    private SpinnerAreaAdapter adaptercountry;
 
     public void getlocation() {
         try {
@@ -130,6 +160,65 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
+    public void initDefaultCountry()
+    {
+        if(listarea ==null) {
+            listarea = new ArrayList<>();
+        }
+        listarea.clear();
+        List<CityModel> listcity = new ArrayList();
+        listcity.add(new CityModel(1,"HCM"));
+        listcity.add(new CityModel(2,"HA NOI"));
+        listcity.add(new CityModel(3,"DA NANG"));
+
+        listarea.add(new AreaModel(1,"Viet Nam",listcity));
+        List<CityModel> listcity1 = new ArrayList();
+        listcity1.add(new CityModel(4,"Tokyo"));
+        listcity1.add(new CityModel(5,"Osaka"));
+        listarea.add(new AreaModel(2,"Japan",listcity1));
+
+    }
+
+    void getlistcountry()
+    {
+       RestAPI.GetDataMaster(this, RestAPI.GET_LISTCOUNTRYANDCITY, new RestAPI.RestAPIListenner() {
+           @Override
+           public void OnComplete(int httpCode, String error, String s) {
+               try {
+                   if (!RestAPI.checkHttpCode(httpCode)) {
+                       //AppFuncs.alert(getApplicationContext(),s,true);
+
+                       return;
+                   }
+                   JsonArray jsonArray = (new JsonParser()).parse(s).getAsJsonObject().getAsJsonArray("list");
+                   Gson gson = new Gson();
+                   java.lang.reflect.Type type = new TypeToken<List<AreaModel>>(){}.getType();
+                   listarea = gson.fromJson(jsonArray, type);
+            //       adaptercountry.setdata(listcountry);
+                 //  getlistcity(listcountry.get(0).getid());
+
+               }
+               catch (Exception ex) {
+
+                   ex.printStackTrace();
+               }
+           }
+       });
+    }
+
+    public List<CityModel> getlistcity(int countryid)
+    {
+        for (AreaModel temp: listarea)
+        {
+            if(temp.getid() == countryid)
+            {
+                return temp.getListCity();
+            }
+
+        }
+        return null;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -137,6 +226,10 @@ public class LoginActivity extends AppCompatActivity {
 
 
         getlocation();
+
+        initDefaultCountry();
+
+        getlistcountry();
 
         LoginManager.getInstance().logOut();
 
@@ -184,6 +277,82 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
+        _submit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                activation(AccountController.getInstance().getAccount().getEmail(),_inputactivecode.getText().toString());
+            }
+        });
+
+        radgroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                changeSex(group, checkedId);
+            }
+        });
+
+        _birthdayupdate.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.N)
+            @Override
+            public void onClick(View view) {
+                final Calendar c = Calendar.getInstance();
+                mYear = c.get(Calendar.YEAR);
+                mMonth = c.get(Calendar.MONTH);
+                mDay = c.get(Calendar.DAY_OF_MONTH);
+                DatePickerDialog datePickerDialog = new DatePickerDialog(LoginActivity.this,
+                        new DatePickerDialog.OnDateSetListener() {
+
+                            @Override
+                            public void onDateSet(DatePicker view, int year,
+                                                  int monthOfYear, int dayOfMonth) {
+
+                                _birthdayupdate.setText(dayOfMonth + "-" + (monthOfYear + 1) + "-" + year);
+                                AccountController.getInstance().getAccount().setBirthday(dayOfMonth + "-" + (monthOfYear + 1) + "-" + year);
+
+                            }
+                        }, mYear, mMonth, mDay);
+                datePickerDialog.show();
+            }
+        });
+
+         adaptercountry = new SpinnerAreaAdapter(LoginActivity.this,
+                android.R.layout.simple_spinner_item,listarea);
+
+        adaptercountry.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        country.setAdapter(adaptercountry);
+        country.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                countryid = listarea.get(i).getid();
+                getlistcity(countryid);
+                adaptercity.setdata( getlistcity(countryid));
+                AccountController.getInstance().getAccount().setCountry(countryid);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
+         adaptercity = new SpinnerCityAdapter(LoginActivity.this,
+                android.R.layout.simple_spinner_item,getlistcity(countryid));
+
+        adaptercity.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        city.setAdapter(adaptercity);
+        city.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                AccountController.getInstance().getAccount().setCity(getlistcity(countryid).get(i).getid());
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
+
         callbackManager = CallbackManager.Factory.create();
         _loginFacebookButton.setReadPermissions(Arrays.asList(
                 "public_profile", "email", "user_birthday"));
@@ -199,6 +368,27 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
+    private boolean checkrequire(UserModel u)
+    {
+        if(u.getPhonenumber()!=null &&
+                u.getCity()!= 0 &&
+                u.getCountry()!=0 &&
+                u.getUsername()!=null &&
+                u.getBirthday()!=null)
+            return true;
+        return false;
+    }
+
+    private void changeSex(RadioGroup group, int checkedId) {
+        int checkedRadioId = group.getCheckedRadioButtonId();
+
+        if(checkedRadioId== R.id.rad_male) {
+            AccountController.getInstance().getAccount().setSex(Constants.MALE);
+        } else if(checkedRadioId== R.id.rad_female ) {
+            AccountController.getInstance().getAccount().setSex(Constants.FEMALE);
+        }
+    }
+
     public void facebookManagerCallback()
     {
         LoginManager.getInstance().registerCallback(callbackManager,
@@ -206,7 +396,7 @@ public class LoginActivity extends AppCompatActivity {
                     @Override
                     public void onSuccess(LoginResult loginResult) {
                         // App code
-                        String  i = "";
+                        Store.putStringData(LoginActivity.this, Store.TOKENFACEBOOK, loginResult.getAccessToken().getToken());
                         GraphRequest request = GraphRequest.newMeRequest(
                                 loginResult.getAccessToken(),
                                 new GraphRequest.GraphJSONObjectCallback() {
@@ -220,6 +410,14 @@ public class LoginActivity extends AppCompatActivity {
                                             UserModel u =  new UserModel();
                                             u.setEmail(object.getString("email"));
                                             u.setUsername(object.getString("name"));
+                                            u.setFacebookid(object.getString("id"));
+                                            if(object.getString("gender").equals("male")) {
+                                                u.setSex(Constants.MALE);
+                                            }
+                                            else
+                                            {
+                                                u.setSex(Constants.FEMALE);
+                                            }
                                           //  u.setAvarta( object.getJSONObject("picture").getJSONObject("data").getString("url"));
                                             u.setAvarta(String.format(getString(R.string.facebookAvatarUrl),object.getString("id")));
                                             AccountController.getInstance().SetAccount(u);
@@ -257,6 +455,7 @@ public class LoginActivity extends AppCompatActivity {
         View viewLogin = this.findViewById(R.id.flipViewLogin);
         View viewLoginUpdate =  this.findViewById(R.id.flipViewUpdateLogin);
         View viewRegister =  this.findViewById(R.id.flipViewRegister);
+        View viewActivation =  this.findViewById(R.id.flipViewActivation);
 
         _loginButton = (Button)viewLogin.findViewById(R.id.btn_login);
         _loginFacebookButton = (LoginButton)viewLogin.findViewById(R.id.btn_facebook_login);
@@ -270,9 +469,15 @@ public class LoginActivity extends AppCompatActivity {
         _emailTextSignup = (EditText)viewRegister.findViewById(R.id.input_email);
 
         _mobileupdate = (EditText)viewLoginUpdate.findViewById(R.id.input_mobile_update);
-        _emailupdate = (EditText)viewLoginUpdate.findViewById(R.id.input_email_update);
         _usernameupdate = (EditText)viewLoginUpdate.findViewById(R.id.input_username_update);
+        _birthdayupdate = (EditText)viewLoginUpdate.findViewById(R.id.input_birthday);
+        radgroup = (RadioGroup) viewLoginUpdate.findViewById(R.id.rad_sex);
+        country = (Spinner)viewLoginUpdate.findViewById(R.id.spinner_country);
+        city = (Spinner)viewLoginUpdate.findViewById(R.id.spinner_city);
         _update = (Button) viewLoginUpdate.findViewById(R.id.btn_update);
+
+        _inputactivecode = (EditText)viewActivation.findViewById(R.id.input_code);
+        _submit = (Button) viewActivation.findViewById(R.id.btn_submit);
 
         _avatarimage = (ImageView) viewLoginUpdate.findViewById(R.id.imageAvatar);
 
@@ -284,8 +489,7 @@ public class LoginActivity extends AppCompatActivity {
         _viewfliper.setDisplayedChild(Type);
     }
 
-
-    private void showLoginUpdate()
+    private void showActive()
     {
         if(USING_FACEBOOK  ==true) {
             UserModel u = AccountController.getInstance().getAccount();
@@ -298,13 +502,18 @@ public class LoginActivity extends AppCompatActivity {
                         .load(u.getAvarta()).apply(requestOptions)
                         .into(_avatarimage);
             }
-            _emailupdate.setEnabled(false);
             _usernameupdate.setEnabled(false);
-            _emailupdate.setText(u.getEmail());
             _usernameupdate.setText(u.getUsername());
-
+            showLoginUpdate();
+            return;
         }
-        _viewfliper.setDisplayedChild(1);
+        showPage(Constants.PAGE_ACTIVE);
+
+    }
+
+    private void showLoginUpdate()
+    {
+        showPage(Constants.PAGE_UPDATE);
 
     }
 
@@ -347,6 +556,48 @@ public class LoginActivity extends AppCompatActivity {
             e.printStackTrace();
         }
     }
+    public void activation(final String email , final String code) {
+        final ProgressDialog progressDialog = new ProgressDialog(LoginActivity.this);
+        progressDialog.setIndeterminate(true);
+        progressDialog.setMessage("Waiting...");
+        progressDialog.show();
+        JsonObject dataJson = new JsonObject();
+        dataJson.addProperty("email",email);
+        dataJson.addProperty("active_code",code);
+
+        RestAPI.PostDataMaster(getApplicationContext(), dataJson, RestAPI.POST_ACTIVATION, new RestAPI.RestAPIListenner() {
+
+            @Override
+            public void OnComplete(int httpCode, String error, String s) {
+                try {
+                    if (!RestAPI.checkHttpCode(httpCode)) {
+
+                        return;
+                    }
+                    JsonObject jsons = (new JsonParser()).parse(s).getAsJsonObject();
+                    int statuscode = jsons.get("status").getAsInt();
+                    if(statuscode == RestAPI.STATUS_SUCCESS)
+                    {
+                        showPage(Constants.PAGE_UPDATE);
+                    }
+                    else if(statuscode == 2)
+                    {
+                        Toast.makeText(LoginActivity.this, "Invalid Activation Code", Toast.LENGTH_SHORT).show();
+
+                    }
+
+                } catch (Exception ex) {
+
+                    Toast.makeText(LoginActivity.this, ex.getMessage(), Toast.LENGTH_SHORT).show();
+                    ex.printStackTrace();
+                }
+                finally {
+                    progressDialog.dismiss();
+                }
+
+            }
+        });
+    }
 
     public void register(final String email , final String password) {
 
@@ -355,23 +606,38 @@ public class LoginActivity extends AppCompatActivity {
         progressDialog.setMessage("Create account...");
         progressDialog.show();
         JsonObject dataJson = new JsonObject();
+        String url;
       //  _signupButton.setEnabled(false);
         if(USING_FACEBOOK ==true) {
             Gson gson = new Gson();
             JsonParser jsonParser = new JsonParser();
              dataJson = (JsonObject) jsonParser.parse(gson.toJson(AccountController.getInstance().getAccount()));
+             url = RestAPI.POST_SIGNUPBYFACEBOOK;
         }
         else
         {
-            dataJson.addProperty("email",email);
+            if(validateEmail(email)==false)
+            {
+                return;
+            }
+
+            if(validatePassword(password)==false)
+            {
+                return;
+            }
+            url = RestAPI.POST_SIGNUP;
+            dataJson.addProperty("password", password);
         }
-        dataJson.addProperty("password", password);
+
+        dataJson.addProperty("email",email);
+
         if(USING_FACEBOOK == true)
         {
             dataJson.addProperty("username",AccountController.getInstance().getAccount().getUsername());
+           // dataJson.addProperty("facebook_id", AccountController.getInstance().getAccount().getFacebookid());
         }
 
-        RestAPI.PostDataMaster(getApplicationContext(), dataJson, RestAPI.POST_SIGNUP, new RestAPI.RestAPIListenner() {
+        RestAPI.PostDataMaster(getApplicationContext(), dataJson, url, new RestAPI.RestAPIListenner() {
 
             @Override
             public void OnComplete(int httpCode, String error, String s) {
@@ -385,12 +651,26 @@ public class LoginActivity extends AppCompatActivity {
                     int statuscode = jsons.get("status").getAsInt();
                         progressDialog.dismiss();
                         if (statuscode == RestAPI.STATUS_SUCCESS) {
-                            AccountController.getInstance().getAccount().setId(jsons.get("result").getAsLong());
-                            showLoginUpdate();
-                        } else if (statuscode == RestAPI.STATUS_ACCOUNTESIXT) {
+
                             if (USING_FACEBOOK == true) {
+                                AccountController.getInstance().getAccount().setId(jsons.get("account_id").getAsLong());
+                                login(  AccountController.getInstance().getAccount().getEmail(), null, LOGIN_FACEBOOK);
+                            }
+                            else {
+                                AccountController.getInstance().getAccount().setId(jsons.get("result").getAsJsonObject().get("account_id").getAsLong());
+                                AccountController.getInstance().getAccount().setEmail(jsons.get("result").getAsJsonObject().get("email").getAsString());
+                                showActive();
+                            }
+                           /* if(checkrequire(AccountController.getInstance().getAccount()) == true)
+                            {
                                 login(email, password, LOGIN_FACEBOOK);
-                            } else {
+                            }
+                            else
+                                showActive();*/
+                        } else if (statuscode == RestAPI.STATUS_ACCOUNTESIXT) {
+                           /* if (USING_FACEBOOK == true) {
+                                login(email, password, LOGIN_FACEBOOK);
+                            } else*/ {
                                 Toast.makeText(LoginActivity.this, "Account exist!!!", Toast.LENGTH_SHORT).show();
                             }
                         }
@@ -415,10 +695,31 @@ public class LoginActivity extends AppCompatActivity {
 
         final UserModel u = AccountController.getInstance().getAccount();
         u.setPhonenumber(mobilephone);
+        u.setUsername(_usernameupdate.getText().toString());
 
+        if(validatePhonenumber(mobilephone) == false)
+        {
+            return;
+        }
+        if(_usernameupdate.getText().toString().isEmpty())
+        {
+            Toast.makeText(LoginActivity.this, "User name can not empty ", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if(_birthdayupdate.getText().toString().isEmpty())
+        {
+            Toast.makeText(LoginActivity.this, "Birthday can not empty ", Toast.LENGTH_SHORT).show();
+            return;
+        }
         JsonObject dataJson = new JsonObject();
         dataJson.addProperty("account_id",u.getId());
         dataJson.addProperty("phonenumber",mobilephone);
+        dataJson.addProperty("sex",u.getSex());
+        dataJson.addProperty("birthday",u.getBirthday());
+        dataJson.addProperty("username",u.getUsername());
+        dataJson.addProperty("city",u.getCity());
+        dataJson.addProperty("country",u.getCountry());
+
         if(selectedAvatar!=null)
         {
             String[] bb = Utils.compressFormat(selectedAvatar.getPath(), this);
@@ -465,7 +766,7 @@ public class LoginActivity extends AppCompatActivity {
 
     public void login( String email ,String password,int type) {
 
-      /*  if (!validate()) {
+        /*if (!validate()) {
             onLoginFailed();
             return;
         }*/
@@ -493,8 +794,10 @@ public class LoginActivity extends AppCompatActivity {
         JsonObject dataJson = new JsonObject();
         dataJson.addProperty("password",password);
         dataJson.addProperty("email",email);
+        dataJson.addProperty("device","android");
         dataJson.addProperty("location_lag",latitude);
         dataJson.addProperty("location_lng",longitude);
+        dataJson.addProperty("login_type",type);
 
         RestAPI.PostDataMaster(getApplicationContext(), dataJson, RestAPI.POST_LOGIN, new RestAPI.RestAPIListenner() {
 
@@ -510,13 +813,25 @@ public class LoginActivity extends AppCompatActivity {
                     JsonObject jsons = (new JsonParser()).parse(s).getAsJsonObject();
                     int statuscode = jsons.get("status").getAsInt();
                     if (statuscode == RestAPI.STATUS_SUCCESS) {
+                       // DBHelper.getInstance(getApplicationContext()).CreateMessageTable();
                         JsonObject jsonObject = jsons.getAsJsonArray("result").get(0).getAsJsonObject();
                         Gson gson = new Gson();
                         final UserModel u = gson.fromJson(jsonObject, UserModel.class);
                         DBHelper.getInstance(getApplicationContext()).insertPerson(u);
                         AccountController.getInstance().SetAccount(u);
 
-                        JsonObject dataJson = new JsonObject();
+                        startService(new Intent(getApplicationContext(), SocketService.class));
+
+                        Store.putBooleanData(LoginActivity.this, Store.LOGGED, true);
+
+                        {
+                            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            startActivity(intent);
+                            finish();
+                        }
+
+                     /*   JsonObject dataJson = new JsonObject();
                         dataJson.addProperty("account_id", u.getId());
 
                         RestAPI.PostDataMaster(getApplicationContext(), dataJson, RestAPI.POST_UPDATESOCKET, new RestAPI.RestAPIListenner() {
@@ -530,14 +845,7 @@ public class LoginActivity extends AppCompatActivity {
 
                                 Store.putBooleanData(LoginActivity.this, Store.LOGGED, true);
                                 progressDialog.dismiss();
-                          /*  if(u.getPhonenumber()==null || u.getPhonenumber().isEmpty()) {
-                                if (LoginActivity.this.getCurrentFocus() != null) {6
-                                    InputMethodManager imm = (InputMethodManager) LoginActivity.this.getSystemService(Context.INPUT_METHOD_SERVICE);
-                                    imm.hideSoftInputFromWindow(LoginActivity.this.getCurrentFocus().getWindowToken(), 0);
-                                }
-                                showLoginUpdate();
-                            }
-                            else*/
+
                                 {
                                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -546,7 +854,7 @@ public class LoginActivity extends AppCompatActivity {
                                 }
 
                             }
-                        });
+                        });*/
 
                         //  UserModel u = gson.fromJson(jsonObject.getAsJsonArray("result").get(0).getAsJsonObject(), UserModel.class);
                         //  UserModel u  =  RealmManager.open().createObjectFromJson(UserModel.class, JSONObject);
@@ -567,12 +875,47 @@ public class LoginActivity extends AppCompatActivity {
                         Toast.makeText(getBaseContext(), ex.getMessage(), Toast.LENGTH_LONG).show();
                             ex.printStackTrace();
                     }
+                    finally {
+                    progressDialog.dismiss();
+                }
 
 
             }
         });
         // TODO: Implement your own authentication logic here.
 
+    }
+
+    public boolean validateEmail(String email)
+    {
+        boolean valid = true;
+        if (email.isEmpty() || !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            Toast.makeText(getBaseContext(), "enter a valid email address", Toast.LENGTH_LONG).show();
+            valid = false;
+        } else {
+            _emailText.setError(null);
+        }
+        return valid;
+    }
+
+    public boolean validatePassword(String password)
+    {
+        boolean valid = true;
+        if (password.isEmpty() || password.length() < 6 || password.length() > 20) {
+            Toast.makeText(getBaseContext(), "between 6 and 20 alphanumeric characters", Toast.LENGTH_LONG).show();
+            valid = false;
+        } else {
+            _passwordText.setError(null);
+        }
+        return valid;
+    }
+    public boolean validatePhonenumber(String phone)
+    {
+        if (phone.isEmpty()) {
+            return false;
+        } else {
+            return android.util.Patterns.PHONE.matcher(phone).matches();
+        }
     }
 
     public boolean validate() {

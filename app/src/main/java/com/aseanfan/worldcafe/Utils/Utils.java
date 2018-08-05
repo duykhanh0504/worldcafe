@@ -16,6 +16,9 @@ import com.aseanfan.worldcafe.App.App;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -24,6 +27,27 @@ import java.util.Locale;
 import java.util.TimeZone;
 
 public class Utils {
+
+    public static String encodeStringUrl(String url) {
+        String encodedUrl =null;
+        try {
+            encodedUrl = URLEncoder.encode(url, "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            return encodedUrl;
+        }
+        return encodedUrl;
+    }
+
+    public static String decodeStringUrl(String encodedUrl) {
+        String decodedUrl =null;
+        try {
+            decodedUrl = URLDecoder.decode(encodedUrl, "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            return decodedUrl;
+        }
+        return decodedUrl;
+    }
+
 
     public static String getStringImage(Bitmap bmp) {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();

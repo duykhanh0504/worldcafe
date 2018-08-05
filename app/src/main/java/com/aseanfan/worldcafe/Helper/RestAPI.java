@@ -44,13 +44,14 @@ public class RestAPI {
     public static String root_url_dev = "";
 
     public static String POST_SIGNUP = root_url + "/api/signup";// identifier
+    public static String POST_SIGNUPBYFACEBOOK = root_url + "/api/signup/signupbyfacebook";// identifier
     public static String POST_LOGIN = root_url + "/api/login";
     public static String POST_UPDATESOCKET = root_url + "/api/user/updatesocket";
     public static String POST_UPDATEUSER = root_url + "/api/user/update";
  //   public static String GET_LISTEVENT = /*root_url + */"http://www.mocky.io/v2/5b30ad6c3100009909129002";
    // public static String GET_LISTPOSTMYPAGE = /*root_url + */"http://www.mocky.io/v2/5b3ca7ef31000010006ddddc";
-    public static String GET_LISTPOSTMYPAGE = root_url + "/api/newfeed/getnewfeedbyaccount";
-    public static String GET_LISTPOSTTIMELINE= root_url + "/api/newfeed/getallnewfeeds";
+    public static String GET_LISTPOSTMYPAGE = root_url + "/api/newfeed/getnewfeedbyaccount?account_id=%d&index=%d";
+    public static String GET_LISTPOSTTIMELINE= root_url + "/api/newfeed/getallnewfeeds?account_id=%d&index=%d";
     public static String POST_TIMELINE = root_url + "/api/newfeed/postnewfeed";
     public static String POST_TIMELINEIMAGE = root_url + "/api/newfeed/postnewfeed_image";
     public static String POST_LIKEPOST = root_url + "/api/newfeed/clicklike";
@@ -59,6 +60,16 @@ public class RestAPI {
     public static String GET_ACCOUNT_INFO = root_url + "/api/user/accountbyid?id=%d";
     public static String POST_CREATEEVENT= root_url + "/api/event/createevent";
     public static String GET_LISTEVENT= root_url + "/api/event/getalleventsbygenre?account_id=%d&genre=%d&index=%d";
+    public static String POST_ACTIVATION= root_url + "/api/user/activation";
+    public static String GET_LISTCOUNTRY= root_url + "/api/city/getAllCountry";
+    public static String GET_LISTCITY= root_url + "/api/city/getAllCityByCountry?id=%d";
+    public static String GET_LISTCOUNTRYANDCITY= root_url + "/api/city/getAllCityandCountry";
+    public static String POST_FOLLOW= root_url + "/api/follow/setFollow";
+    public static String POST_UNFOLLOW= root_url + "/api/follow/unFollow";
+    public static String POST_EDIT_TIMELINE= root_url + "/api/newfeed/setFollow";
+    public static String POST_DELETE_TIMELINE= root_url + "/api/newfeed/deletenewfeed";
+    public static String POST_CHECK_FOLLOW= root_url + "/api/newfeed/checkFollow";
+
 
     public final static int STATUS_SUCCESS = 200;
     public final static int STATUS_WRONGPASSWORD = 2;
@@ -193,6 +204,10 @@ public class RestAPI {
         return Ion.with(context).load(method,url).setTimeout(TIME_OUT);
     }
 
+    public static Future<Response<String>> apiGETwithtoken(Context context, String url,JsonObject jsonObject) {
+        return getIon(context,url,"GET").setJsonObjectBody((jsonObject==null)? new JsonObject() : jsonObject).asString().withResponse();
+    }
+
     public static Future<Response<String>> apiGET(Context context, String url) {
         return getIon(context,url,"GET").asString().withResponse();
     }
@@ -247,6 +262,17 @@ public class RestAPI {
             public void onCompleted(Exception e, Response<String> result) {
 
                     listenner.OnComplete((result != null && result.getHeaders() != null) ? result.getHeaders().code() : 0, (e != null) ? e.getLocalizedMessage() : null, (result != null) ? result.getResult() : null);
+
+            }
+        });
+    }
+
+    public static void GetDataMasterWithToken(final Context context, final JsonObject jsonObject, final String url, final RestAPIListenner listenner) {
+        apiGETwithtoken(context,url,jsonObject).setCallback(new FutureCallback<Response<String>>() {
+            @Override
+            public void onCompleted(Exception e, Response<String> result) {
+
+                listenner.OnComplete((result != null && result.getHeaders() != null) ? result.getHeaders().code() : 0, (e != null) ? e.getLocalizedMessage() : null, (result != null) ? result.getResult() : null);
 
             }
         });

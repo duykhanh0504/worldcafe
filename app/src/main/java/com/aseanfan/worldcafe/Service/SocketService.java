@@ -11,13 +11,21 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.aseanfan.worldcafe.App.AccountController;
+import com.aseanfan.worldcafe.Helper.RestAPI;
+import com.aseanfan.worldcafe.Provider.Store;
 import com.aseanfan.worldcafe.UI.ChatActivity;
+import com.aseanfan.worldcafe.UI.LoginActivity;
+import com.aseanfan.worldcafe.UI.MainActivity;
 import com.aseanfan.worldcafe.Utils.Constants;
+import com.google.gson.JsonObject;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.net.URISyntaxException;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import io.socket.client.IO;
 import io.socket.client.Socket;
@@ -26,6 +34,7 @@ import io.socket.emitter.Emitter;
 public class SocketService extends Service {
 
     private LocalBroadcastManager mLocalBroadcastManager;
+    private int RESTARTSERVICE = 0;
 
     private Socket mSocket;
     {
@@ -38,6 +47,11 @@ public class SocketService extends Service {
 
     public Socket getSocket() {
         return mSocket;
+    }
+
+    public void SocketDisconnect() {
+         RESTARTSERVICE = 2;
+         mSocket.disconnect();
     }
 
     private Emitter.Listener onConnectError = new Emitter.Listener() {
@@ -55,6 +69,10 @@ public class SocketService extends Service {
                 }
             });*/
             mSocket.disconnect();
+            if(RESTARTSERVICE !=2) {
+                RESTARTSERVICE = 1;
+            }
+            stopService(new Intent(SocketService.this, SocketService.class));
         }
     };
 
@@ -71,7 +89,7 @@ public class SocketService extends Service {
             Intent i = new Intent(Constants.REICEVE_ACTION);
           //  i.putExtra(Constants.FRIENDID,data.getString(""));
             mLocalBroadcastManager.sendBroadcast(i);
-            mSocket.disconnect();
+           // mSocket.disconnect();
         }
     };
 
@@ -93,7 +111,43 @@ public class SocketService extends Service {
 
         IntentFilter mIntentFilter = new IntentFilter();
         mIntentFilter.addAction(Constants.SEND_ACTION);
+        mIntentFilter.addAction(Constants.DISCONECT_SOCKET_ACTION);
         mLocalBroadcastManager.registerReceiver(mBroadcastReceiver, mIntentFilter);
+
+        new Timer().schedule(new TimerTask() {
+            @Override
+            public void run() {
+                JSONObject data = new JSONObject();
+                try {
+                    data.put("account_id", AccountController.getInstance().getAccount().getId());
+                    data.put("username", AccountController.getInstance().getAccount().getUsername());
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                mSocket.emit("message_updateinfo", data);
+           /*    if(AccountController.getInstance().getAccount().getId()!=null) {
+                    JsonObject dataJson = new JsonObject();
+                    dataJson.addProperty("account_id", AccountController.getInstance().getAccount().getId());
+
+                    RestAPI.PostDataMaster(getApplicationContext(), dataJson, RestAPI.POST_UPDATESOCKET, new RestAPI.RestAPIListenner() {
+                        @Override
+                        public void OnComplete(int httpCode, String error, String s) {
+                            if (!RestAPI.checkHttpCode(httpCode)) {
+                                //AppFuncs.alert(getApplicationContext(),s,true);
+
+                                return;
+                            }
+
+
+                        }
+                    });
+                }*/
+            }
+        }, 1000);
+
+
+        RESTARTSERVICE = 0;
+
     }
 
     @Override
@@ -106,6 +160,10 @@ public class SocketService extends Service {
     public void onDestroy() {
 
         // We should here clean up everything we used.
+        if (RESTARTSERVICE == 1)
+        {
+            startService(new Intent(SocketService.this, SocketService.class));
+        }
         super.onDestroy();
     }
 
@@ -113,19 +171,28 @@ public class SocketService extends Service {
         @Override
         public void onReceive(Context context, Intent intent) {
             if (intent.getAction().equals(Constants.SEND_ACTION)) {
-                String friendid = intent.getExtras().getString(Constants.FRIENDID);
+                Long friendid = intent.getExtras().getLong(Constants.FRIENDID);
+                String message = intent.getExtras().getString(Constants.MESSAGE);
+                int type = intent.getExtras().getInt(Constants.TYPE_MEASSAGE);
                 JSONObject data = new JSONObject();
                 try {
-                    data.put("type", 2);
+                    data.put("type", type);
+                    data.put("message", message);
+                    data.put("receiver_id", friendid);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                mSocket.emit("message", data);
+                mSocket.emit("message_chat", data);
 
              //   Intent i = new Intent(Send_Ethereum_Activity.SEND_STATUS);
               //  i.putExtra(Send_Ethereum_Activity.STATUS, status);
               //  mLocalBroadcastManager.sendBroadcast(i);
 
+            }
+            if (intent.getAction().equals(Constants.DISCONECT_SOCKET_ACTION))
+            {
+                SocketDisconnect();
+                stopService(new Intent(SocketService.this, SocketService.class));
             }
         }
     };

@@ -11,6 +11,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 
 import com.aseanfan.worldcafe.App.App;
 import com.aseanfan.worldcafe.Model.ChatMessageModel;
@@ -25,6 +26,9 @@ import org.json.JSONObject;
 
 import java.util.List;
 
+import hani.momanii.supernova_emoji_library.Actions.EmojIconActions;
+import hani.momanii.supernova_emoji_library.Helper.EmojiconEditText;
+import hani.momanii.supernova_emoji_library.Helper.EmojiconTextView;
 import io.socket.client.Socket;
 import io.socket.emitter.Emitter;
 
@@ -32,7 +36,9 @@ public class ChatActivity extends AppCompatActivity {
 
     private ImageButton btnSend;
     private Long chatid;
-    private EditText edtChat;
+    private EmojiconEditText edtChat;
+    ImageView emojiImageView;
+    View rootView;
 
     private RecyclerView rcychat;
 
@@ -43,7 +49,7 @@ public class ChatActivity extends AppCompatActivity {
 
     private LocalBroadcastManager mLocalBroadcastManager;
 
-    Socket mSocket;
+    EmojIconActions emojIcon;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,9 +64,26 @@ public class ChatActivity extends AppCompatActivity {
         mLocalBroadcastManager.registerReceiver(mBroadcastReceiver, mIntentFilter);
       //  mSocket.on("server_to_client", onReceiveMessgeFromServer);
 
+        rootView = findViewById(R.id.root_view);
+        emojiImageView = (ImageView) findViewById(R.id.emoji_btn);
         btnSend = (ImageButton) this.findViewById(R.id.btn_send);
-        edtChat = (EditText)this.findViewById(R.id.input_message);
+        edtChat = (EmojiconEditText)this.findViewById(R.id.input_message);
         rcychat = (RecyclerView)this.findViewById(R.id.listChat);
+
+        emojIcon = new EmojIconActions(this,rootView, edtChat ,emojiImageView);
+        emojIcon.ShowEmojIcon();
+        emojIcon.setIconsIds(R.drawable.ic_action_keyboard, R.drawable.smiley);
+        emojIcon.setKeyboardListener(new EmojIconActions.KeyboardListener() {
+            @Override
+            public void onKeyboardOpen() {
+               // Log.e(TAG, "Keyboard opened!");
+            }
+
+            @Override
+            public void onKeyboardClose() {
+               // Log.e(TAG, "Keyboard closed");
+            }
+        });
 
         Bundle extras = getIntent().getExtras();
         if(extras != null){
@@ -119,34 +142,24 @@ public class ChatActivity extends AppCompatActivity {
 
     private void sendMessage(int typeMessage) {
 
-        try {
+        switch (typeMessage) {
+            case 0: {
+                String messageText = edtChat.getText().toString();
+                if (messageText.trim().length() == 0)
+                    return;
 
-            switch (typeMessage) {
-                case 0: {
-                    String messageText = edtChat.getText().toString();
-                    if (messageText.trim().length() == 0)
-                        return;
-                    JSONObject objMessage = new JSONObject();
-                    objMessage.put("type", typeMessage);
-                    objMessage.put("message", messageText);
-                    JSONObject data = new JSONObject();
-                    data.put("type", 2);
-                    data.put("message", objMessage);
-                    data.put("receiver_id", chatid);
 
-                    Intent i = new Intent(Constants.SEND_ACTION);
-                    i.putExtra(Constants.FRIENDID,chatid);
-                    mLocalBroadcastManager.sendBroadcast(i);
+                Intent i = new Intent(Constants.SEND_ACTION);
+                i.putExtra(Constants.FRIENDID,chatid);
+                i.putExtra(Constants.TYPE_MEASSAGE,3);
+                i.putExtra(Constants.MESSAGE,messageText);
+                mLocalBroadcastManager.sendBroadcast(i);
 
-               //     mSocket.emit("message", data);
-
-                }
-                break;
+           //     mSocket.emit("message", data);
 
             }
+            break;
 
-        } catch (JSONException e) {
-            e.printStackTrace();
         }
 
         edtChat.setText("");
