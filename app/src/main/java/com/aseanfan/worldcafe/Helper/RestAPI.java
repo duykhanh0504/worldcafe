@@ -59,7 +59,7 @@ public class RestAPI {
     public static String GET_COMMENT = root_url + "/api/newfeed/comments?newfeed_id=%d";
     public static String GET_ACCOUNT_INFO = root_url + "/api/user/accountbyid?id=%d";
     public static String POST_CREATEEVENT= root_url + "/api/event/createevent";
-    public static String GET_LISTEVENT= root_url + "/api/event/getalleventsbygenre?account_id=%d&genre=%d&index=%d";
+    public static String GET_LISTEVENT= root_url + "/api/event/getallevents?account_id=%d&genre=%d&index=%d";
     public static String POST_ACTIVATION= root_url + "/api/user/activation";
     public static String GET_LISTCOUNTRY= root_url + "/api/city/getAllCountry";
     public static String GET_LISTCITY= root_url + "/api/city/getAllCityByCountry?id=%d";

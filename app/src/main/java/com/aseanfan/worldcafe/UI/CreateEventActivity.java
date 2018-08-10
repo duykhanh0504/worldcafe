@@ -87,7 +87,7 @@ public class CreateEventActivity extends AppCompatActivity {
         dataJson.addProperty("image",System.currentTimeMillis() + "");
         dataJson.addProperty("type","image/jpeg");
 
-        RestAPI.PostDataMaster(this,dataJson,RestAPI.POST_CREATEEVENT, new RestAPI.RestAPIListenner() {
+        RestAPI.PostDataMasterWithToken(this,dataJson,RestAPI.POST_CREATEEVENT, new RestAPI.RestAPIListenner() {
             @Override
             public void OnComplete(int httpCode, String error, String s) {
                 try {

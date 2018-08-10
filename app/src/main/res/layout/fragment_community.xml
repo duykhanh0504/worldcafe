@@ -27,28 +27,17 @@
     <android.support.design.widget.TabLayout
         android:id="@+id/tab_community"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="40dp"
+        app:tabIndicatorHeight="0dp"
+        app:tabPaddingStart="0dp"
+        app:tabPaddingEnd="0dp"
+        app:tabMode="fixed"
+        app:tabGravity="fill"
+        app:tabTextColor="#000"
+        app:tabSelectedTextColor="#fff"
+        app:tabBackground="@drawable/tab_color_selector"
+        android:background="@android:color/white">
 
-        <android.support.design.widget.TabItem
-            android:id="@+id/tabItem1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/Friend" />
-        <android.support.design.widget.TabItem
-            android:id="@+id/tabItem2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/Business" />
-        <android.support.design.widget.TabItem
-            android:id="@+id/tabItem3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/Local" />
-        <android.support.design.widget.TabItem
-            android:id="@+id/tabItem4"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/Language" />
     </android.support.design.widget.TabLayout>
 
     <LinearLayout
@@ -69,16 +58,13 @@
             android:layout_height="50dp"
             android:layout_gravity="right"/>
 
-        <ViewFlipper
-            android:id="@+id/viewFlippercommunity"
+        <android.support.v4.view.ViewPager
+            android:id="@+id/view_event"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_margin="0dp">
-            <include
-                android:id="@+id/community_tab1"
-                layout="@layout/community_view_layout" />
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        </ViewFlipper>
+        </android.support.v4.view.ViewPager>
     </LinearLayout>
 
 </LinearLayout>

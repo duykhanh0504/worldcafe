@@ -30,6 +30,12 @@ public class CommunityAdapter extends RecyclerView.Adapter<CommunityAdapter.MyVi
         CommunityAdapter.clickListener = clickListener;
     }
 
+    public void setData(List<EventModel> data) {
+        eventList = data;
+        notifyDataSetChanged();
+    }
+
+
     public interface ClickListener {
         void onItemClick(int position, View v,int Type);
     }
