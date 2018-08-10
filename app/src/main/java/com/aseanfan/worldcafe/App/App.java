@@ -53,6 +53,11 @@ public class App  extends Application {
                 user.setSchool(cursor.getString(cursor.getColumnIndex(DBHelper.PERSON_SCHOOL)));
                 user.setIntroduction(cursor.getString(cursor.getColumnIndex(DBHelper.PERSON_INTRODUCTION)));
                 AccountController.getInstance().SetAccount(user);
+                cursor.moveToFirst();
+                while (cursor.isAfterLast() == false) {
+                    Long i = cursor.getLong(cursor.getColumnIndex(DBHelper.PERSON_COLUMN_ID));
+                    cursor.moveToNext();
+                }
             }
 
             startService(new Intent(getApplicationContext(), SocketService.class));

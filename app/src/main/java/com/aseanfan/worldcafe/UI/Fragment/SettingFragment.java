@@ -58,6 +58,7 @@ public class SettingFragment extends android.support.v4.app.Fragment {
         mLocalBroadcastManager.sendBroadcast(i);
         Store.putBooleanData(getContext(),Store.LOGGED,false);
         DBHelper.getInstance(getContext()).deletePerson(AccountController.getInstance().getAccount().getId());
+        DBHelper.getInstance(getContext()).deleteTableChat();
         AccountController.getInstance().SetAccount(null);
         LoginManager.getInstance().logOut();
         Intent intent = new Intent(getActivity() , IntroActivity.class);

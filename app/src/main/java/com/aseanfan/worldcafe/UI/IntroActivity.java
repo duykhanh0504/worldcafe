@@ -79,7 +79,7 @@ public class IntroActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        try {
+     /*   try {
             PackageInfo info = getPackageManager().getPackageInfo(
                     "com.aseanfan.worldcafe.worldcafe",
                     PackageManager.GET_SIGNATURES);
@@ -95,7 +95,7 @@ public class IntroActivity extends AppCompatActivity {
             }
         } catch (PackageManager.NameNotFoundException e) {
 
-        }
+        }*/
 
         if(Store.getBooleanData(IntroActivity.this , Store.LOGGED) == true)
         {

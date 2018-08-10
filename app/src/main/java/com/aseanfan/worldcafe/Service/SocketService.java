@@ -12,7 +12,9 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.aseanfan.worldcafe.App.AccountController;
+import com.aseanfan.worldcafe.Helper.DBHelper;
 import com.aseanfan.worldcafe.Helper.RestAPI;
+import com.aseanfan.worldcafe.Model.ChatMessageModel;
 import com.aseanfan.worldcafe.Provider.Store;
 import com.aseanfan.worldcafe.UI.ChatActivity;
 import com.aseanfan.worldcafe.UI.LoginActivity;
@@ -69,9 +71,9 @@ public class SocketService extends Service {
                 }
             });*/
             mSocket.disconnect();
-            if(RESTARTSERVICE !=2) {
+          //  if(RESTARTSERVICE !=2) {
                 RESTARTSERVICE = 1;
-            }
+          //  }
             stopService(new Intent(SocketService.this, SocketService.class));
         }
     };
@@ -79,16 +81,31 @@ public class SocketService extends Service {
     private Emitter.Listener onReceiveMessgeFromServer = new Emitter.Listener() {
         @Override
         public void call(Object... args) {
-           /* runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
+            if((JSONObject) args[0]!=null) {
+                JSONObject data = (JSONObject) args[0];
+                ChatMessageModel message = new ChatMessageModel();
+                try {
+                    message.setMessage_id(data.getLong("message_id"));
+                    message.setMessageText(data.getString("message"));
+                    message.setSend_account(data.getLong("from_account_id"));
+                    message.setReceiver(data.getLong("to_account_ids"));
+                    message.setGroupid(Long.valueOf(0));
+                    DBHelper.getInstance(getApplicationContext()).InsertMessageChat(message);
 
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
-            });*/
-            JSONObject data = (JSONObject) args[0];
-            Intent i = new Intent(Constants.REICEVE_ACTION);
-          //  i.putExtra(Constants.FRIENDID,data.getString(""));
-            mLocalBroadcastManager.sendBroadcast(i);
+                if((int) args[1]==0) {
+                    Intent i = new Intent(Constants.REICEVE_ACTION);
+
+                    i.putExtra(Constants.FRIENDID, message.getSend_account());
+                    i.putExtra(Constants.MESSAGE, message.getMessageText());
+                    i.putExtra(Constants.MESSAGEID, message.getMessage_id());
+
+
+                    mLocalBroadcastManager.sendBroadcast(i);
+                }
+            }
            // mSocket.disconnect();
         }
     };

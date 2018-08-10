@@ -245,7 +245,7 @@ public class MyPostFragment  extends android.support.v4.app.Fragment implements 
         dataJson.addProperty("account_id", AccountController.getInstance().getAccount().getId());
         dataJson.addProperty("newfeed_id",Postid);
 
-        RestAPI.PostDataMaster(getActivity().getApplicationContext(),dataJson,RestAPI.POST_LIKEPOST, new RestAPI.RestAPIListenner() {
+        RestAPI.PostDataMasterWithToken(getActivity().getApplicationContext(),dataJson,RestAPI.POST_LIKEPOST, new RestAPI.RestAPIListenner() {
             @Override
             public void OnComplete(int httpCode, String error, String s) {
                 try {

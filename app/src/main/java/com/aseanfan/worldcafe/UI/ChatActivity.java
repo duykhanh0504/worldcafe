@@ -4,26 +4,48 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.database.Cursor;
+import android.os.AsyncTask;
+import android.os.SystemClock;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 
+import com.aseanfan.worldcafe.App.AccountController;
 import com.aseanfan.worldcafe.App.App;
+import com.aseanfan.worldcafe.Helper.DBHelper;
+import com.aseanfan.worldcafe.Helper.RestAPI;
+import com.aseanfan.worldcafe.Model.AreaModel;
 import com.aseanfan.worldcafe.Model.ChatMessageModel;
 import com.aseanfan.worldcafe.Model.CommentModel;
+import com.aseanfan.worldcafe.Model.UserModel;
+import com.aseanfan.worldcafe.Provider.Store;
+import com.aseanfan.worldcafe.Service.SyncDataService;
 import com.aseanfan.worldcafe.UI.Adapter.ChatMessageAdapter;
 import com.aseanfan.worldcafe.UI.Adapter.CommentAdapter;
 import com.aseanfan.worldcafe.Utils.Constants;
+import com.aseanfan.worldcafe.Utils.Utils;
 import com.aseanfan.worldcafe.worldcafe.R;
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import com.google.gson.reflect.TypeToken;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import hani.momanii.supernova_emoji_library.Actions.EmojIconActions;
@@ -36,9 +58,11 @@ public class ChatActivity extends AppCompatActivity {
 
     private ImageButton btnSend;
     private Long chatid;
+    private String chatavatar;
     private EmojiconEditText edtChat;
     ImageView emojiImageView;
     View rootView;
+    private ProgressBar loading;
 
     private RecyclerView rcychat;
 
@@ -51,13 +75,61 @@ public class ChatActivity extends AppCompatActivity {
 
     EmojIconActions emojIcon;
 
+    private class ListHistoryChatAsync extends AsyncTask<Long, Long, List<ChatMessageModel>> {
+
+        @Override
+        protected List<ChatMessageModel> doInBackground(Long... ints) {
+            List<ChatMessageModel> list = new ArrayList<>();
+
+            Cursor cursor = DBHelper.getInstance(getApplicationContext()).getAllMessageChat(ints[0]);
+                if (cursor != null) {
+                    cursor.moveToFirst();
+                    while (cursor.isAfterLast() == false) {
+                        ChatMessageModel message = new ChatMessageModel();
+                        message.setMessage_id(cursor.getLong(cursor.getColumnIndex(DBHelper.MESSAGE_ID)));
+                        message.setMessageText(cursor.getString(cursor.getColumnIndex(DBHelper.MESSAGE)));
+                        message.setSend_account(cursor.getLong(cursor.getColumnIndex(DBHelper.SEND_ACCOUNT)));
+                        message.setReceiver(cursor.getLong(cursor.getColumnIndex(DBHelper.RECEIVER_ACCOUNT)));
+                        list.add(message);
+                        cursor.moveToNext();
+                    }
+                }
+         //   SystemClock.sleep(1000);
+            return list;
+        }
+
+        @Override
+        protected void onPostExecute(List<ChatMessageModel> param) {
+            if(listmessage==null)
+            {
+                listmessage = new ArrayList<>();
+            }
+            listmessage.clear();
+            listmessage =param;
+            rcychat.smoothScrollToPosition(0);
+            Collections.reverse(listmessage);
+            mAdapter.setData(listmessage);
+
+        }
+
+    }
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
 
-        App app = (App) getApplication();
-       // mSocket = app.getSocket();
+
+        Bundle extras = getIntent().getExtras();
+        if(extras != null){
+            chatid= extras.getLong("chat_id");
+            chatavatar = extras.getString("avatarurl");
+            new ListHistoryChatAsync().execute(chatid);
+        }
+
+
         mLocalBroadcastManager = LocalBroadcastManager.getInstance(getApplicationContext());
         IntentFilter mIntentFilter = new IntentFilter();
         mIntentFilter.addAction(Constants.REICEVE_ACTION);
@@ -69,6 +141,20 @@ public class ChatActivity extends AppCompatActivity {
         btnSend = (ImageButton) this.findViewById(R.id.btn_send);
         edtChat = (EmojiconEditText)this.findViewById(R.id.input_message);
         rcychat = (RecyclerView)this.findViewById(R.id.listChat);
+
+        mAdapter = new ChatMessageAdapter(null,chatavatar);
+
+         LinearLayoutManager mLayoutManager = new LinearLayoutManager(this, LinearLayout.VERTICAL,true);
+
+      //  mLayoutManager.setStackFromEnd(true);
+        rcychat.setLayoutManager(mLayoutManager);
+        rcychat.setItemAnimator(new DefaultItemAnimator());
+        rcychat.setAdapter(mAdapter);
+
+      //  ListComment(timelineId);
+
+        loading = (ProgressBar) this.findViewById(R.id.loading);
+
 
         emojIcon = new EmojIconActions(this,rootView, edtChat ,emojiImageView);
         emojIcon.ShowEmojIcon();
@@ -84,11 +170,6 @@ public class ChatActivity extends AppCompatActivity {
                // Log.e(TAG, "Keyboard closed");
             }
         });
-
-        Bundle extras = getIntent().getExtras();
-        if(extras != null){
-            chatid= extras.getLong("chat_id");
-        }
 
         btnSend.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -123,18 +204,19 @@ public class ChatActivity extends AppCompatActivity {
         @Override
         public void onReceive(Context context, Intent intent) {
             if (intent.getAction().equals(Constants.REICEVE_ACTION)) {
-                String friendid = intent.getExtras().getString(Constants.FRIENDID);
-                JSONObject data = new JSONObject();
-                try {
-                    data.put("type", 2);
-                } catch (JSONException e) {
-                    e.printStackTrace();
+                Long friendid = intent.getExtras().getLong(Constants.FRIENDID);
+                if(friendid.equals(chatid)) {
+                    Long messageid = intent.getExtras().getLong(Constants.MESSAGEID);
+                    String message = intent.getExtras().getString(Constants.MESSAGE);
+                    ChatMessageModel m = new ChatMessageModel();
+                    m.setReceiver(AccountController.getInstance().getAccount().getId());
+                    m.setMessage_id(messageid);
+                    m.setMessageText(message);
+                    m.setSend_account(friendid);
+                    listmessage.add(0,m);
+                    mAdapter.setData(listmessage);
+                    rcychat.smoothScrollToPosition(0);
                 }
-             //   mSocket.emit("message", data);
-
-                //   Intent i = new Intent(Send_Ethereum_Activity.SEND_STATUS);
-                //  i.putExtra(Send_Ethereum_Activity.STATUS, status);
-                //  mLocalBroadcastManager.sendBroadcast(i);
 
             }
         }
@@ -144,7 +226,7 @@ public class ChatActivity extends AppCompatActivity {
 
         switch (typeMessage) {
             case 0: {
-                String messageText = edtChat.getText().toString();
+                String messageText = Utils.encodeStringUrl(edtChat.getText().toString());
                 if (messageText.trim().length() == 0)
                     return;
 
@@ -154,6 +236,15 @@ public class ChatActivity extends AppCompatActivity {
                 i.putExtra(Constants.TYPE_MEASSAGE,3);
                 i.putExtra(Constants.MESSAGE,messageText);
                 mLocalBroadcastManager.sendBroadcast(i);
+
+                ChatMessageModel m = new ChatMessageModel();
+                m.setReceiver(chatid);
+                m.setMessageText(messageText);
+                m.setSend_account(AccountController.getInstance().getAccount().getId());
+              //  listmessage.add(m);
+                mAdapter.setDataRow(m);
+                rcychat.smoothScrollToPosition(0);
+
 
            //     mSocket.emit("message", data);
 
@@ -168,6 +259,7 @@ public class ChatActivity extends AppCompatActivity {
         }
 
     }
+
 
 
 }

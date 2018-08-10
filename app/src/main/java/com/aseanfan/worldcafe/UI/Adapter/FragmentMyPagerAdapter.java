@@ -22,6 +22,7 @@ public class FragmentMyPagerAdapter  extends FragmentPagerAdapter {
     private MyPostFragment mypostFragment;
     private MyPageDetailFragment myPageDetailFragment;
     private Long friendid;
+    private String friendavarta="";
 
 
     public final static int MYPPOST_PAGE = 0;
@@ -35,10 +36,18 @@ public class FragmentMyPagerAdapter  extends FragmentPagerAdapter {
         friendid = id;
     }
 
+    public FragmentMyPagerAdapter(Long id ,Context context, FragmentManager fm,String avatar) {
+        super(fm);
+        mContext = context;
+        friendid = id;
+        friendavarta =avatar;
+    }
+
     @Override
     public Fragment getItem(int position) {
         Bundle bundle = new Bundle();
         bundle.putLong("chat_id",friendid);
+        bundle.putString("chat_avarta",friendavarta);
         if (position == MYPPOST_PAGE) {
             mypostFragment = new MyPostFragment();
             mypostFragment.setArguments(bundle);

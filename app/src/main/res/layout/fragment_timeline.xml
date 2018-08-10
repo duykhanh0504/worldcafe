@@ -22,23 +22,30 @@
 
     </android.support.design.widget.AppBarLayout>
 
+    <Spinner
+        android:id="@+id/spinnersort"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:drawable/btn_dropdown"
+        android:spinnerMode="dropdown" />
+
     <FrameLayout
         android:id="@+id/framelayout"
         android:layout_width="match_parent"
-        android:layout_height="80dp"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
         android:orientation="vertical"
-        android:layout_margin="@dimen/margin_left_right"
-        android:background="@drawable/background_button_gray">
+        >
 
         <LinearLayout
+            android:id="@+id/posttimeline"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="horizontal"
-            android:layout_margin="@dimen/margin_left_right">
+            android:orientation="horizontal">
             <ImageView
                 android:id="@+id/imageAvatar"
-                android:layout_width="45dp"
-                android:layout_height="45dp"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
                 android:layout_gravity="left|center"
 
                 android:contentDescription="TODO" />
@@ -54,21 +61,6 @@
 
 
     </FrameLayout>
-        <Spinner
-            android:id="@+id/spinnersort"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@android:drawable/btn_dropdown"
-            android:spinnerMode="dropdown" />
-
-        <ImageButton
-            android:id="@+id/btn_narrow"
-            android:layout_width="50dp"
-            android:background="@drawable/icon_timeline"
-            android:layout_height="50dp"
-            android:layout_marginRight="@dimen/margin_left_right"
-            android:layout_marginBottom="@dimen/margin_left_right"
-            android:layout_gravity="right"/>
 
     <FrameLayout
         android:layout_width="match_parent"

@@ -19,6 +19,8 @@ public class UserModel {
     private String introduction;
     private int status;
     private String facebook_id;
+    private int v_followed;
+    private int v_follower;
 
 
 
@@ -159,6 +161,22 @@ public class UserModel {
 
     public void setIntroduction(String introduction) {
         this.introduction = introduction;
+    }
+
+    public int getFollowed() {
+        return v_followed;
+    }
+
+    public void setFollowed(int v_followed) {
+        this.v_followed = v_followed;
+    }
+
+    public int getFollower() {
+        return v_follower;
+    }
+
+    public void setFollower(int v_follower) {
+        this.v_follower = v_follower;
     }
 
 

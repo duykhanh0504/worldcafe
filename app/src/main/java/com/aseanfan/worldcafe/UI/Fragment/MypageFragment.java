@@ -22,7 +22,9 @@ import com.aseanfan.worldcafe.Helper.DBHelper;
 import com.aseanfan.worldcafe.Helper.RestAPI;
 import com.aseanfan.worldcafe.Model.PostTimelineModel;
 import com.aseanfan.worldcafe.Model.UserModel;
+import com.aseanfan.worldcafe.Provider.Store;
 import com.aseanfan.worldcafe.UI.Adapter.FragmentMyPagerAdapter;
+import com.aseanfan.worldcafe.Utils.Constants;
 import com.aseanfan.worldcafe.worldcafe.R;
 
 import android.os.Bundle;
@@ -31,16 +33,24 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.aseanfan.worldcafe.worldcafe.R;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.target.Target;
 import com.bumptech.glide.request.transition.Transition;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
@@ -54,7 +64,7 @@ import java.util.List;
 public class MypageFragment extends android.support.v4.app.Fragment {
 
     private ViewPager viewPager;
-    private FrameLayout avatar;
+    private ImageView avatar;
     private CardView background;
     private TextView name;
     private ProgressBar loading;
@@ -63,7 +73,25 @@ public class MypageFragment extends android.support.v4.app.Fragment {
     private Long accountid;
     private FragmentMyPagerAdapter adapter;
     private  UserModel user = new UserModel();
-    private Button flolow;
+    private Button btn_follow;
+    private int isfollow;
+
+    private LinearLayout content_info;
+    private LinearLayout content_toolbar;
+
+    private TextView followed;
+    private TextView follower;
+    private Toolbar toolbar;
+
+    private ImageView avatartoolbar;
+    private TextView nametoolbar;
+
+    private static final float PERCENTAGE_TO_SHOW  = 0.9f;
+    private static final float PERCENTAGE_TO_HIDE  = 0.3f;
+    private static final int ALPHA_ANIMATIONS_DURATION              = 200;
+    private boolean mIsTheVisible          = true;
+    private boolean mIsTheinVisible          = true;
+
 
     @Override
     public void onResume() {
@@ -97,12 +125,14 @@ public class MypageFragment extends android.support.v4.app.Fragment {
                         Gson gson = new Gson();
                         user = gson.fromJson(jsonObject, UserModel.class);
                         name.setText(user.getUsername());
-                        Glide.with(getContext()).load( user.getAvarta()).apply(RequestOptions.circleCropTransform()).into(new SimpleTarget<Drawable>() {
-                            @Override
-                            public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
-                                avatar.setBackgroundDrawable(resource);
-                            }
-                        });
+                        final Drawable mDefaultBackground = getContext().getResources().getDrawable(R.drawable.avata_defaul);
+                        Glide.with(getContext()).load( user.getAvarta()).apply(RequestOptions.circleCropTransform().diskCacheStrategy(DiskCacheStrategy.ALL).error(mDefaultBackground)).into(avatar);
+                        final Drawable mDefaultBackground1 = getContext().getResources().getDrawable(R.drawable.avata_defaul);
+                        nametoolbar.setText(user.getUsername());
+                        Glide.with(getContext()).load( user.getAvarta()).apply(RequestOptions.circleCropTransform().diskCacheStrategy(DiskCacheStrategy.ALL).error(mDefaultBackground1)).into(avatartoolbar);
+
+                        followed.setText(getString(R.string.Following) + user.getFollowed());
+                        follower.setText(getString(R.string.Followers) + user.getFollower());
 
                     }
 
@@ -121,7 +151,7 @@ public class MypageFragment extends android.support.v4.app.Fragment {
         dataJson.addProperty("follower_id",followid);
         loading.setVisibility(View.VISIBLE);
 
-        RestAPI.PostDataMaster(getActivity().getApplicationContext(),dataJson,RestAPI.POST_UNFOLLOW, new RestAPI.RestAPIListenner() {
+        RestAPI.PostDataMasterWithToken(getActivity().getApplicationContext(),dataJson,RestAPI.POST_UNFOLLOW, new RestAPI.RestAPIListenner() {
             @Override
             public void OnComplete(int httpCode, String error, String s) {
                 try {
@@ -129,6 +159,13 @@ public class MypageFragment extends android.support.v4.app.Fragment {
                         //AppFuncs.alert(getApplicationContext(),s,true);
 
                         return;
+                    }
+                    JsonObject jsons = (new JsonParser()).parse(s).getAsJsonObject();
+                    int statuscode = jsons.get("status").getAsInt();
+                    if (statuscode == RestAPI.STATUS_SUCCESS) {
+                        isfollow = Constants.FOLLOW;
+                        btn_follow.setText("Follow");
+
                     }
 
 
@@ -144,6 +181,8 @@ public class MypageFragment extends android.support.v4.app.Fragment {
         });
     }
 
+
+
     public void Follow(Long followid)
     {
         JsonObject dataJson = new JsonObject();
@@ -151,7 +190,7 @@ public class MypageFragment extends android.support.v4.app.Fragment {
         dataJson.addProperty("follower_id",followid);
         loading.setVisibility(View.VISIBLE);
 
-        RestAPI.PostDataMaster(getActivity().getApplicationContext(),dataJson,RestAPI.POST_FOLLOW, new RestAPI.RestAPIListenner() {
+        RestAPI.PostDataMasterWithToken(getActivity().getApplicationContext(),dataJson,RestAPI.POST_FOLLOW, new RestAPI.RestAPIListenner() {
             @Override
             public void OnComplete(int httpCode, String error, String s) {
                 try {
@@ -160,6 +199,14 @@ public class MypageFragment extends android.support.v4.app.Fragment {
 
                         return;
                     }
+                    JsonObject jsons = (new JsonParser()).parse(s).getAsJsonObject();
+                    int statuscode = jsons.get("status").getAsInt();
+                    if (statuscode == RestAPI.STATUS_SUCCESS) {
+                        isfollow = Constants.UNFOLLOW;
+                        btn_follow.setText("unFollow");
+
+                    }
+
 
 
                 }
@@ -179,7 +226,7 @@ public class MypageFragment extends android.support.v4.app.Fragment {
         String url =  String.format(RestAPI.GET_LISTPOSTMYPAGE,account,0);
         loading.setVisibility(View.VISIBLE);
 
-        RestAPI.GetDataMaster(getActivity().getApplicationContext(),url, new RestAPI.RestAPIListenner() {
+        RestAPI.GetDataMasterWithToken(getActivity().getApplicationContext(),url, new RestAPI.RestAPIListenner() {
             @Override
             public void OnComplete(int httpCode, String error, String s) {
                 try {
@@ -210,50 +257,125 @@ public class MypageFragment extends android.support.v4.app.Fragment {
         });
     }
 
+    public void CheckFollow(Long followid)
+    {
+        JsonObject dataJson = new JsonObject();
+        dataJson.addProperty("account_id", AccountController.getInstance().getAccount().getId());
+        dataJson.addProperty("follower_id",followid);
+
+
+        RestAPI.PostDataMasterWithToken(getActivity().getApplicationContext(),dataJson,RestAPI.POST_CHECK_FOLLOW, new RestAPI.RestAPIListenner() {
+            @Override
+            public void OnComplete(int httpCode, String error, String s) {
+                try {
+                    if (!RestAPI.checkHttpCode(httpCode)) {
+                        //AppFuncs.alert(getApplicationContext(),s,true);
+
+                        return;
+                    }
+
+                    JsonObject jsons = (new JsonParser()).parse(s).getAsJsonObject();
+                    int statuscode = jsons.get("status").getAsInt();
+                    if (statuscode == RestAPI.STATUS_SUCCESS) {
+                        isfollow = jsons.get("result").getAsInt();
+                    }
+                    if(isfollow == Constants.FOLLOW)
+                    {
+                        btn_follow.setText("Follow");
+                    }
+                    else
+                    {
+                        btn_follow.setText("Unfollow");
+                    }
+                }
+                catch (Exception ex) {
+
+                    ex.printStackTrace();
+                }
+
+            }
+        });
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_mypage, container, false);
 
-        flolow =(Button)view.findViewById(R.id.btn_follow);
+        btn_follow =(Button)view.findViewById(R.id.btn_follow);
+        avatar = view.findViewById(R.id.avatar);
+        followed = (TextView) view.findViewById(R.id.txt_followed);
+        follower =(TextView)view.findViewById(R.id.txt_follower);
+
+        content_info = (LinearLayout) view.findViewById(R.id.content_info);
+        content_toolbar = (LinearLayout) view.findViewById(R.id.content_toolbar);
+
+        AlphaAnimation alphaAnimation = new AlphaAnimation(1f, 0f);
+
+        alphaAnimation.setDuration(0);
+        alphaAnimation.setFillAfter(true);
+        content_toolbar.startAnimation(alphaAnimation);
+
+        avatartoolbar = view.findViewById(R.id.imageAvatar);
+        nametoolbar = view.findViewById(R.id.txtusername);
 
 
-
-        Toolbar toolbar = (Toolbar) view.findViewById(R.id.toolbar);
+        toolbar = (Toolbar) view.findViewById(R.id.toolbar);
         ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
         ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle(null);
+      //  ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
 
         name = view.findViewById(R.id.Name);
 
         if(getArguments()!=null) {
             accountid = getArguments().getLong("account_id");
-            LoadAccount(accountid);
+
         }
         else
         {
             accountid = AccountController.getInstance().getAccount().getId();
             name.setText(AccountController.getInstance().getAccount().getUsername());
-            Glide.with(getContext()).load( AccountController.getInstance().getAccount().getAvarta()).apply(RequestOptions.circleCropTransform()).into(new SimpleTarget<Drawable>() {
-                @Override
-                public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
-                    avatar.setBackgroundDrawable(resource);
-                }
-            });
+            Drawable mDefaultBackground = getContext().getResources().getDrawable(R.drawable.avata_defaul);
+            Glide.with(getContext()).load( AccountController.getInstance().getAccount().getAvarta()).apply(RequestOptions.circleCropTransform().diskCacheStrategy(DiskCacheStrategy.ALL).error(mDefaultBackground)).into(avatar);
+            nametoolbar.setText(AccountController.getInstance().getAccount().getUsername());
+            Drawable mDefaultBackground1 = getContext().getResources().getDrawable(R.drawable.avata_defaul);
+            Glide.with(getContext()).load( AccountController.getInstance().getAccount().getAvarta()).apply(RequestOptions.circleCropTransform().diskCacheStrategy(DiskCacheStrategy.ALL).error(mDefaultBackground1)).into(avatartoolbar);
+
         }
+
+        LoadAccount(accountid);
 
         if(!accountid.equals(AccountController.getInstance().getAccount().getId()))
         {
 
-            flolow.setVisibility(View.VISIBLE);
+            btn_follow.setVisibility(View.VISIBLE);
+            CheckFollow(accountid);
         }
         else
         {
-            flolow.setVisibility(View.GONE);
+            btn_follow.setVisibility(View.GONE);
         }
 
+        btn_follow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(isfollow == Constants.FOLLOW)
+                {
+                    Follow(accountid);
+                }
+                else
+                {
+                    UnFollow(accountid);
+                }
+            }
+        });
+        //visible image view
+        avatar.getLayoutParams().height = 150;
+        avatar.getLayoutParams().width = 150;
+        avatar.setScaleType(ImageView.ScaleType.FIT_XY);
         rankImage= (ImageView) view.findViewById(R.id.image_rank);
 
-        avatar = view.findViewById(R.id.avatar);
         background = view.findViewById(R.id.background);
         loading = view.findViewById(R.id.loading_spinner);
         Glide.with(getContext()).load( "https://png.pngtree.com/thumb_back/fh260/back_pic/00/15/30/4656e81f6dc57c5.jpg").into(new SimpleTarget<Drawable>() {
@@ -265,23 +387,16 @@ public class MypageFragment extends android.support.v4.app.Fragment {
         AppBarLayout appBarLayout = view.findViewById(R.id.appBar);
 
         appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
-            boolean isShow;
+
             int scrollRange = -1;
 
             @Override
             public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
-                if (scrollRange == -1) {
-                    scrollRange = appBarLayout.getTotalScrollRange();
-                }
-                if (scrollRange + verticalOffset == 0) {
-                    //visible image view
-                   // avatar.setVisibility(View.INVISIBLE);
-                    isShow = true;
-                } else if (isShow) {
-                    //invisible image view
-                   // avatar.setVisibility(View.VISIBLE);
-                    isShow = false;
-                }
+
+                scrollRange = appBarLayout.getTotalScrollRange();
+                float percentage = (float) Math.abs(verticalOffset) / (float) scrollRange;
+                handleVisible(percentage);
+                handleinVisible(percentage);
             }
         });
 
@@ -305,7 +420,7 @@ public class MypageFragment extends android.support.v4.app.Fragment {
 
         viewPager = (ViewPager)view.findViewById(R.id.view_mypage);
 
-        adapter = new FragmentMyPagerAdapter(accountid, getActivity(),getChildFragmentManager());
+        adapter = new FragmentMyPagerAdapter(accountid, getActivity(),getChildFragmentManager(),user.getAvarta());
 
         viewPager.setAdapter(adapter);
 
@@ -356,4 +471,69 @@ public class MypageFragment extends android.support.v4.app.Fragment {
 
         return view;
     }
+    public static void startAlphaAnimation (final View v, long duration, final int visibility) {
+        AlphaAnimation alphaAnimation = (visibility == View.VISIBLE)
+                ? new AlphaAnimation(0f, 1f)
+                : new AlphaAnimation(1f, 0f);
+
+        alphaAnimation.setDuration(duration);
+        alphaAnimation.setFillAfter(true);
+        v.startAnimation(alphaAnimation);
+
+        alphaAnimation.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+    }
+
+    private void handleinVisible(float percentage) {
+        if (percentage >= PERCENTAGE_TO_SHOW) {
+
+            if(!mIsTheinVisible) {
+
+                startAlphaAnimation(content_toolbar, ALPHA_ANIMATIONS_DURATION, View.VISIBLE);
+                mIsTheinVisible = true;
+            }
+
+        } else {
+
+            if (mIsTheinVisible) {
+
+                startAlphaAnimation(content_toolbar, ALPHA_ANIMATIONS_DURATION, View.INVISIBLE);
+                mIsTheinVisible = false;
+            }
+        }
+    }
+
+    private void handleVisible(float percentage) {
+        if (percentage >= PERCENTAGE_TO_HIDE) {
+
+            if(!mIsTheVisible) {
+                startAlphaAnimation(content_info, ALPHA_ANIMATIONS_DURATION, View.INVISIBLE);
+
+                mIsTheVisible = true;
+            }
+
+        } else {
+
+            if (mIsTheVisible) {
+                startAlphaAnimation(content_info, ALPHA_ANIMATIONS_DURATION, View.VISIBLE);
+
+                mIsTheVisible = false;
+            }
+        }
+    }
+
 }

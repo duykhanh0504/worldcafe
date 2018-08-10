@@ -6,18 +6,23 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:id="@+id/root_view"
-    tools:context="com.aseanfan.worldcafe.UI.ChatActivity">
-
+    tools:context="com.aseanfan.worldcafe.UI.ChatActivity"
+    android:fitsSystemWindows="true"
+    android:weightSum="2">
 
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent"
+        android:layout_weight="1.9"
+        android:layout_marginBottom="20dp">
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/listChat"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:stackFromBottom ="true"
+           />
 
         <ProgressBar
             android:id="@+id/loading"
@@ -28,43 +33,44 @@
             android:visibility="gone" />
 
     </FrameLayout>
-
     <LinearLayout
-        android:gravity="bottom"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:weightSum="2">
+       >
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            >
 
             <ImageView
                 android:id="@+id/emoji_btn"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:layout_alignParentBottom="true"
-                android:layout_alignParentLeft="true"
-                android:padding="4dp"
+
                 android:src="@drawable/photo" />
+
             <hani.momanii.supernova_emoji_library.Helper.EmojiconEditText
+                android:privateImeOptions="nm"
                 android:id="@+id/input_message"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:hint=""
-                android:layout_weight="2.3"/>
-
+                android:layout_height="wrap_content"
+                android:layout_weight="2.3"
+                />
 
             <ImageButton
                 android:id="@+id/btn_send"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:layout_gravity="right"
+                android:layout_gravity="right|top"
                 />
         </LinearLayout>
+
     </LinearLayout>
+
+
 
 
 </LinearLayout>

@@ -27,6 +27,7 @@ import com.aseanfan.worldcafe.App.App;
 import com.aseanfan.worldcafe.Helper.DBHelper;
 import com.aseanfan.worldcafe.Helper.NotificationCenter;
 import com.aseanfan.worldcafe.Model.UserModel;
+import com.aseanfan.worldcafe.Service.SyncDataService;
 import com.aseanfan.worldcafe.UI.Adapter.CommunityAdapter;
 import com.aseanfan.worldcafe.UI.Fragment.CommunityFragment;
 import com.aseanfan.worldcafe.UI.Fragment.DetailCommunityFragment;
@@ -210,6 +211,10 @@ public class MainActivity extends AppCompatActivity {
         itemView.addView(badge);
 
         showFirstFragment();
+
+        SyncDataService.listmessage(AccountController.getInstance().getAccount().getId(),getApplicationContext());
+
+       // new SyncDataService(getApplicationContext()).execute(AccountController.getInstance().getAccount().getId());
 
     }
 

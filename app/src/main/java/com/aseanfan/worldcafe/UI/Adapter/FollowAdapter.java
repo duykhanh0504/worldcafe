@@ -11,7 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.aseanfan.worldcafe.Model.CommentModel;
-import com.aseanfan.worldcafe.Utils.Constants;
+import com.aseanfan.worldcafe.Model.FollowModel;
 import com.aseanfan.worldcafe.worldcafe.R;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -19,19 +19,19 @@ import com.bumptech.glide.request.RequestOptions;
 
 import java.util.List;
 
-public class CommentAdapter  extends RecyclerView.Adapter<CommentAdapter.MyViewHolder> {
+public class FollowAdapter  extends RecyclerView.Adapter<FollowAdapter.MyViewHolder> {
 
 
-    private List<CommentModel> commentlist;
+    private List<FollowModel> followlist;
 
-    private static CommentAdapter.ClickListener clickListener;
+    private static FollowAdapter.ClickListener clickListener;
 
-    public void setOnItemClickListener(CommentAdapter.ClickListener clickListener) {
-        CommentAdapter.clickListener = clickListener;
+    public void setOnItemClickListener(FollowAdapter.ClickListener clickListener) {
+        FollowAdapter.clickListener = clickListener;
     }
 
     public interface ClickListener {
-        void onItemClick(int position, View v, int Type);
+        void onItemClick(int position, View v);
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -48,57 +48,50 @@ public class CommentAdapter  extends RecyclerView.Adapter<CommentAdapter.MyViewH
             date = (TextView) view.findViewById(R.id.txtdate);
             avatar = (ImageView) view.findViewById(R.id.imageAvatar);
             view.setOnClickListener(this);
-            avatar.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    //clickListener.onItemClick(getAdapterPosition(), view , Constants.CLICK_IMAGE_EVENT);
-                }
-            });
+
 
         }
 
         @Override
         public void onClick(View view) {
-          //  clickListener.onItemClick(getAdapterPosition(), view , Constants.CLICK_EVENT);
+              clickListener.onItemClick(getAdapterPosition(), view );
         }
     }
 
 
-    public CommentAdapter(List<CommentModel> commentList) {
-        this.commentlist = commentList;
+    public FollowAdapter(List<FollowModel> followlist) {
+        this.followlist = followlist;
     }
 
 
-    public void setCommentList (List<CommentModel> commentList) {
-        this.commentlist = commentList;
+    public void setFollowlist (List<FollowModel> followList) {
+        this.followlist = followList;
         this.notifyDataSetChanged();
     }
 
     @NonNull
     @Override
-    public CommentAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+    public FollowAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         View itemView = LayoutInflater.from(viewGroup.getContext())
                 .inflate(R.layout.comment_row, viewGroup, false);
 
-        return new CommentAdapter.MyViewHolder(itemView);
+        return new FollowAdapter.MyViewHolder(itemView);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull MyViewHolder myViewHolder, int i) {
-        CommentModel commentModel = commentlist.get(i);
-        myViewHolder.name.setText(commentModel.getUsername());
-        myViewHolder.detail.setText(commentModel.getContent());
-        myViewHolder.date.setText(commentModel.getCreatetime());
+    public void onBindViewHolder(@NonNull FollowAdapter.MyViewHolder myViewHolder, int i) {
+        FollowModel follow = followlist.get(i);
+        myViewHolder.name.setText(follow.getUsername());
         Drawable mDefaultBackground = myViewHolder.avatar.getContext().getResources().getDrawable(R.drawable.avata_defaul);
-        Glide.with(myViewHolder.avatar.getContext()).load(commentModel.getAvarta()).apply(RequestOptions.circleCropTransform().diskCacheStrategy(DiskCacheStrategy.ALL).error(mDefaultBackground)).into(myViewHolder.avatar);
+        Glide.with(myViewHolder.avatar.getContext()).load(follow.getAvarta()).apply(RequestOptions.circleCropTransform().diskCacheStrategy(DiskCacheStrategy.ALL).error(mDefaultBackground)).into(myViewHolder.avatar);
     }
 
     @Override
     public int getItemCount() {
-        if (commentlist == null)
+        if (followlist == null)
         {
             return 0;
         }
-        return commentlist.size();
+        return followlist.size();
     }
 }

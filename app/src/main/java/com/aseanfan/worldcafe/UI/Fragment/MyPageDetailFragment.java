@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.media.Image;
 import android.os.Bundle;
+import android.os.ConditionVariable;
 import android.support.annotation.Nullable;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
@@ -15,9 +16,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.aseanfan.worldcafe.App.AccountController;
+import com.aseanfan.worldcafe.UI.Adapter.ConctactChatAdapter;
 import com.aseanfan.worldcafe.UI.ChatActivity;
+import com.aseanfan.worldcafe.UI.ContactChatActivity;
 import com.aseanfan.worldcafe.UI.CreateEventActivity;
 import com.aseanfan.worldcafe.UI.DirectMessageActivity;
+import com.aseanfan.worldcafe.UI.ListFollowActivity;
 import com.aseanfan.worldcafe.Utils.Utils;
 import com.aseanfan.worldcafe.worldcafe.R;
 import com.koushikdutta.async.Util;
@@ -35,7 +39,7 @@ public class MyPageDetailFragment extends android.support.v4.app.Fragment implem
     private Button createEvent;
 
     private Long friendid;
-
+    private String friendavatar;
 
     @Nullable
     @Override
@@ -45,6 +49,8 @@ public class MyPageDetailFragment extends android.support.v4.app.Fragment implem
 
         if(bundle != null){
             friendid = bundle.getLong("chat_id");
+            friendavatar = bundle.getString("chat_avarta");
+
         }
         else {
             friendid = Long.valueOf(-1);
@@ -113,9 +119,21 @@ public class MyPageDetailFragment extends android.support.v4.app.Fragment implem
             case R.id.btn_directmessage: {
               //  Intent intent = new Intent(getContext(), DirectMessageActivity.class);
                // startActivity(intent);
-                  Intent intent = new Intent(getContext(), ChatActivity.class);
-                  intent.putExtra("chat_id",friendid);
-                  startActivity(intent);
+                if(!friendid.equals(AccountController.getInstance().getAccount().getId()))
+                {
+                    Intent intent = new Intent(getContext(), ChatActivity.class);
+                    intent.putExtra("chat_id",friendid);
+                    intent.putExtra("avatarurl",friendavatar);
+                    startActivity(intent);
+
+                }
+                else
+                {
+                    Intent intent = new Intent(getContext(), ContactChatActivity.class);
+                    startActivity(intent);
+
+                }
+
                 break;
             }
             case R.id.btn_createevent: {

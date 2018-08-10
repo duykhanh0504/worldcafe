@@ -1,6 +1,7 @@
 package com.aseanfan.worldcafe.UI.Adapter;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
@@ -18,6 +19,7 @@ import com.aseanfan.worldcafe.Model.PostTimelineModel;
 import com.aseanfan.worldcafe.Utils.Constants;
 import com.aseanfan.worldcafe.worldcafe.R;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 
 import java.util.ArrayList;
@@ -39,7 +41,7 @@ public class PostTimelineAdapter extends RecyclerView.Adapter<PostTimelineAdapte
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener,PostImageAdapter.ClickListener {
-        public TextView title;
+        public TextView username;
         public TextView detail;
         public TextView like;
         public TextView comment;
@@ -54,7 +56,7 @@ public class PostTimelineAdapter extends RecyclerView.Adapter<PostTimelineAdapte
 
         public MyViewHolder(View view) {
             super(view);
-            title = (TextView) view.findViewById(R.id.titlePost);
+            username = (TextView) view.findViewById(R.id.namePost);
             detail = (TextView) view.findViewById(R.id.detailPost);
             like = (TextView) view.findViewById(R.id.textLike);
             comment = (TextView) view.findViewById(R.id.textComment);
@@ -63,7 +65,6 @@ public class PostTimelineAdapter extends RecyclerView.Adapter<PostTimelineAdapte
             imagelike = (ImageView) view.findViewById(R.id.imageLike) ;
             image_menu = (ImageView) view.findViewById(R.id.image_menu) ;
             imageComment = (ImageView)view.findViewById(R.id.imageComment) ;
-            context = view.getContext();
             view.setOnClickListener(this);
             imagelike.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -139,7 +140,7 @@ public class PostTimelineAdapter extends RecyclerView.Adapter<PostTimelineAdapte
     public void onBindViewHolder(@NonNull MyViewHolder myViewHolder, int i) {
         PostTimelineModel post = postList.get(i);
         String urlimg = null;
-        myViewHolder.title.setText(post.getUsername());
+        myViewHolder.username.setText(post.getUsername());
         myViewHolder.like.setText(String.valueOf(post.getNumberLike()));
         myViewHolder.comment.setText(String.valueOf(post.getNumberComment()));
         if(post.getAccountid().equals(AccountController.getInstance().getAccount().getId()))
@@ -158,10 +159,9 @@ public class PostTimelineAdapter extends RecyclerView.Adapter<PostTimelineAdapte
         {
             myViewHolder.imagelike.setBackgroundResource(R.drawable.like);
         }
-        if(post.getUrlAvatar()!=null)
-        {
-            Glide.with(myViewHolder.context).load(post.getUrlAvatar()).apply(RequestOptions.circleCropTransform()).into(myViewHolder.avatar);
-        }
+        Drawable mDefaultBackground = myViewHolder.avatar.getContext().getResources().getDrawable(R.drawable.avata_defaul);
+        Glide.with(myViewHolder.avatar.getContext()).load(post.getUrlAvatar()).apply(RequestOptions.circleCropTransform().diskCacheStrategy(DiskCacheStrategy.ALL).error(mDefaultBackground)).into(myViewHolder.avatar);
+
         if(post.getDetail()!=null) {
             myViewHolder.detail.setText(post.getDetail());
         }

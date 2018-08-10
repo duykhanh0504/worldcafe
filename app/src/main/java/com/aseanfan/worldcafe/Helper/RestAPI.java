@@ -38,8 +38,8 @@ public class RestAPI {
 
     private static int TIME_OUT = 12000;
 
-  // public static String root_url = "http://crosea1.g-days.net:3004";
-   public static String root_url = "http://192.168.10.141:3004";
+   public static String root_url = "http://crosea1.g-days.net:3004";
+ //  public static String root_url = "http://192.168.10.141:3004";
 
     public static String root_url_dev = "";
 
@@ -51,12 +51,12 @@ public class RestAPI {
  //   public static String GET_LISTEVENT = /*root_url + */"http://www.mocky.io/v2/5b30ad6c3100009909129002";
    // public static String GET_LISTPOSTMYPAGE = /*root_url + */"http://www.mocky.io/v2/5b3ca7ef31000010006ddddc";
     public static String GET_LISTPOSTMYPAGE = root_url + "/api/newfeed/getnewfeedbyaccount?account_id=%d&index=%d";
-    public static String GET_LISTPOSTTIMELINE= root_url + "/api/newfeed/getallnewfeeds?account_id=%d&index=%d";
+    public static String GET_LISTPOSTTIMELINE= root_url + "/api/newfeed/getallnewfeeds?account_id=%d&index=%d&type=%d";
     public static String POST_TIMELINE = root_url + "/api/newfeed/postnewfeed";
     public static String POST_TIMELINEIMAGE = root_url + "/api/newfeed/postnewfeed_image";
     public static String POST_LIKEPOST = root_url + "/api/newfeed/clicklike";
     public static String POST_COMMENT = root_url + "/api/newfeed/postcomment";
-    public static String GET_COMMENT = root_url + "/api/newfeed/comments";
+    public static String GET_COMMENT = root_url + "/api/newfeed/comments?newfeed_id=%d";
     public static String GET_ACCOUNT_INFO = root_url + "/api/user/accountbyid?id=%d";
     public static String POST_CREATEEVENT= root_url + "/api/event/createevent";
     public static String GET_LISTEVENT= root_url + "/api/event/getalleventsbygenre?account_id=%d&genre=%d&index=%d";
@@ -68,8 +68,11 @@ public class RestAPI {
     public static String POST_UNFOLLOW= root_url + "/api/follow/unFollow";
     public static String POST_EDIT_TIMELINE= root_url + "/api/newfeed/setFollow";
     public static String POST_DELETE_TIMELINE= root_url + "/api/newfeed/deletenewfeed";
-    public static String POST_CHECK_FOLLOW= root_url + "/api/newfeed/checkFollow";
-
+    public static String POST_CHECK_FOLLOW= root_url + "/api/follow/checkFollow";
+    public static String GET_MESSAGECHAT= root_url + "/api/message/getmessagechat?account_id=%d&offset_id=%d";
+    public static String GET_LISTFOLLOW= root_url + "/api/follow/getListFollowed?account_id=%d";
+    public static String GET_CONTACT_CHAT= root_url + "/api/follow/getListChatbyid?account_id=%d";
+    public static String GET_LISTTIMELINEFOLLOWED= root_url + "/api/newfeed/getfollowednewfeeds?account_id=%d&index=%d";
 
     public final static int STATUS_SUCCESS = 200;
     public final static int STATUS_WRONGPASSWORD = 2;
@@ -240,6 +243,23 @@ public class RestAPI {
         });
     }
 
+    public static void PostDataMasterWithToken(final Context context,  JsonObject jsonObject, final String url, final RestAPIListenner listenner) {
+        jsonObject.addProperty("login_token", Store.getStringData(context,Store.ACCESSTOKEN));
+        apiPOST(context,url,jsonObject).setCallback(new FutureCallback<Response<String>>() {
+            @Override
+            public void onCompleted(Exception e, Response<String> result) {
+                try {
+
+                    listenner.OnComplete((result != null) ? result.getHeaders().code() : 0, (e != null) ? e.getLocalizedMessage() : null, (result != null) ? result.getResult() : null);
+
+                }catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+
+            }
+        });
+    }
+
     public static void DeleteDataMaster(final Context context, final JsonObject jsonObject, final String url, final RestAPIListenner listenner) {
         apiDELETE(context, url, jsonObject).setCallback(new FutureCallback<Response<String>>() {
             @Override
@@ -267,8 +287,11 @@ public class RestAPI {
         });
     }
 
-    public static void GetDataMasterWithToken(final Context context, final JsonObject jsonObject, final String url, final RestAPIListenner listenner) {
-        apiGETwithtoken(context,url,jsonObject).setCallback(new FutureCallback<Response<String>>() {
+    public static void GetDataMasterWithToken(final Context context,  String url, final RestAPIListenner listenner) {
+       // JsonObject dataJson = new JsonObject();
+       // dataJson.addProperty("login_token", Store.getStringData(context,Store.ACCESSTOKEN));
+        url = url + "&login_token=" + Store.getStringData(context,Store.ACCESSTOKEN);
+        apiGET(context,url).setCallback(new FutureCallback<Response<String>>() {
             @Override
             public void onCompleted(Exception e, Response<String> result) {
 

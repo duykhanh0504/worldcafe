@@ -45,7 +45,7 @@ public class CommentActivity extends AppCompatActivity {
         dataJson.addProperty("newfeed_id",timelineid);
         dataJson.addProperty("content",edtComent.getText().toString());
 
-        RestAPI.PostDataMaster(this,dataJson,RestAPI.POST_COMMENT, new RestAPI.RestAPIListenner() {
+        RestAPI.PostDataMasterWithToken(this,dataJson,RestAPI.POST_COMMENT, new RestAPI.RestAPIListenner() {
             @Override
             public void OnComplete(int httpCode, String error, String s) {
                 try {
@@ -68,10 +68,10 @@ public class CommentActivity extends AppCompatActivity {
 
     public void ListComment(Long timelineid)
     {
-        JsonObject dataJson = new JsonObject();
-        dataJson.addProperty("newfeed_id",timelineid);
+        String url;
+        url = String.format(RestAPI.GET_COMMENT, timelineid);
 
-        RestAPI.PostDataMaster(this,dataJson,RestAPI.GET_COMMENT, new RestAPI.RestAPIListenner() {
+        RestAPI.GetDataMasterWithToken(this,url, new RestAPI.RestAPIListenner() {
             @Override
             public void OnComplete(int httpCode, String error, String s) {
                 try {

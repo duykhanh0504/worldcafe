@@ -612,6 +612,8 @@ public class LoginActivity extends AppCompatActivity {
             Gson gson = new Gson();
             JsonParser jsonParser = new JsonParser();
              dataJson = (JsonObject) jsonParser.parse(gson.toJson(AccountController.getInstance().getAccount()));
+            dataJson.remove("v_followed");
+            dataJson.remove("v_follower");
              url = RestAPI.POST_SIGNUPBYFACEBOOK;
         }
         else
@@ -813,6 +815,7 @@ public class LoginActivity extends AppCompatActivity {
                     JsonObject jsons = (new JsonParser()).parse(s).getAsJsonObject();
                     int statuscode = jsons.get("status").getAsInt();
                     if (statuscode == RestAPI.STATUS_SUCCESS) {
+                        DBHelper.getInstance(getApplicationContext()).CreateMessageTable();
                        // DBHelper.getInstance(getApplicationContext()).CreateMessageTable();
                         JsonObject jsonObject = jsons.getAsJsonArray("result").get(0).getAsJsonObject();
                         Gson gson = new Gson();
@@ -823,6 +826,7 @@ public class LoginActivity extends AppCompatActivity {
                         startService(new Intent(getApplicationContext(), SocketService.class));
 
                         Store.putBooleanData(LoginActivity.this, Store.LOGGED, true);
+                        Store.putStringData(LoginActivity.this, Store.ACCESSTOKEN, jsons.get("access_token").getAsString());
 
                         {
                             Intent intent = new Intent(LoginActivity.this, MainActivity.class);

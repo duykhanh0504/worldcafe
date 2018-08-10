@@ -5,90 +5,85 @@ import com.aseanfan.worldcafe.Utils.Utils;
 
 public class ChatMessageModel {
 
-    private String messageText;
-    private int receive_id;
-    private String usernameReceive;
-    private String message_id;
-    private String create_time;
-    private int numnerline;
-    private int type;// text,image,record
-    private int relationship = 0;
+    private Long message_id;
+    private String message;
+    private String received_accounts;
+    private Long send_account;
+    private String create_date;
+    private Long receiver_accounts;
+    private Long room_id;
+    private int type;
 
 
     public ChatMessageModel() {
         // TODO Auto-generated constructor stub
     }
 
+
+    public Long getSend_account() {
+        return send_account;
+    }
+
+    public void setGroupid(Long groupid) {
+        this.room_id = groupid;
+    }
+
+    public Long getGroupid() {
+        return room_id;
+    }
+
+    public void setSend_account(Long send_account) {
+        this.send_account = send_account;
+    }
+
     public void setMessageText(String messageText) {
-        this.messageText = messageText;
+        this.message = messageText;
     }
 
 
     public String getMessageText() {
 
-        return messageText;
-    }
-
-
-    public String getUsernameReceive() {
-        return usernameReceive;
-    }
-
-    public void setUsernameReceive(String username) {
-        this.usernameReceive = username;
+        return message;
     }
 
 
     public String getCreate_day() {
-        if (create_time == null)
-            create_time = "";
-        else {
-            if (create_time.contains("GMT")) {
-                return Utils.convertStringToLocalTime(create_time);
-            }
-
-        }
-
-        return create_time;
+        return create_date;
     }
 
 
     public void setCreate_day(String create_day) {
-        this.create_time = create_day;
+        this.create_date = create_day;
     }
 
 
-    public String getMessage_id() {
+    public Long getMessage_id() {
         return message_id;
     }
 
 
-    public void setMessage_id(String message_id) {
+    public void setMessage_id(Long message_id) {
         this.message_id = message_id;
     }
 
 
-    public int getNumnerline() {
-        return numnerline;
+    public Long getReceiver() {
+        return receiver_accounts;
     }
 
 
-    public void setNumnerline(int numnerline) {
-        this.numnerline = numnerline;
+    public void setReceiver(Long receiver_accounts) {
+        this.receiver_accounts = receiver_accounts;
     }
 
-    /**
-     * @return the receive_id
-     */
-    public int getReceive_id() {
-        return receive_id;
+
+    public String getReceived() {
+        return received_accounts;
     }
 
-    /**
-     * @param receive_id the receive_id to set
-     */
-    public void setReceive_id(int receive_id) {
-        this.receive_id = receive_id;
+
+    public void setReceived(String received_accounts) {
+        this.received_accounts = received_accounts;
     }
 
     public int getType() {
@@ -100,11 +95,4 @@ public class ChatMessageModel {
     }
 
 
-    public int getRelationship() {
-        return relationship;
-    }
-
-    public void setRelationship(int relationship) {
-        this.relationship = relationship;
-    }
 }

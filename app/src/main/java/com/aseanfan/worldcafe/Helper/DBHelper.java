@@ -7,7 +7,11 @@ import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.aseanfan.worldcafe.Model.ChatMessageModel;
 import com.aseanfan.worldcafe.Model.UserModel;
+
+import java.security.acl.Group;
+import java.util.List;
 
 public class DBHelper extends SQLiteOpenHelper {
 
@@ -36,13 +40,14 @@ public class DBHelper extends SQLiteOpenHelper {
 
     public static final String TABLE_MESSAGE_CHAT = "message_chat";
     public static final String MESSAGE_ID = "message_id";
-    public static final String MAEEAGE = "message";
+    public static final String MESSAGE = "message";
     public static final String TYPE = "type";
-    public static final String FROM_ACCOUNT_ID = "from_account_id";
-    public static final String ISRECEIVE = "isreceive";
+    public static final String RECEIVER_ACCOUNT = "receiver_account";
+    public static final String RECEIVED_ACCOUNT = "received_account";
+    public static final String SEND_ACCOUNT = "send_account";
+    public static final String GROUP_ID = "group_id";
     public static final String CREATE_TIME = "create_time";
-    public static final String STATUS = "status";
-    public static final String GENDER = "gender";
+    public static final String RECEIVER_TIME = "receiver_time";
 
 
     private static SQLiteDatabase db;
@@ -101,6 +106,7 @@ public class DBHelper extends SQLiteOpenHelper {
         contentValues.put(PERSON_STATUS, user.getStatus());
         contentValues.put(PERSON_FACEBOOKID, user.getFacebookid());
         db.update(PERSON_TABLE_USER, contentValues, PERSON_COLUMN_ID + " = ? ", new String[] { Long.toString(user.getId()) } );
+        db.close();
         return true;
     }
 
@@ -109,6 +115,14 @@ public class DBHelper extends SQLiteOpenHelper {
         return db.delete(PERSON_TABLE_USER,
                 PERSON_COLUMN_ID + " = ? ",
                 new String[] { Long.toString(id) });
+    }
+
+    public void deleteTableChat() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_MESSAGE_CHAT);
+    /*    return db.delete(TABLE_MESSAGE_CHAT,
+                null,
+              null);*/
     }
 
     public Cursor getPerson(Long id) {
@@ -123,14 +137,14 @@ public class DBHelper extends SQLiteOpenHelper {
         db.execSQL(
                 "CREATE TABLE IF NOT EXISTS " + TABLE_MESSAGE_CHAT +
                         "(" + MESSAGE_ID + " INTEGER, " /*INTEGER PRIMARY KEY,*/  +
-                        MAEEAGE + " TEXT, " +
+                        MESSAGE + " TEXT, " +
                         TYPE + " INTEGER, " +
-                        FROM_ACCOUNT_ID + " INTEGER, " +
-                        PERSON_AVATAR_URL + " TEXT, " +
-                        ISRECEIVE + " INTEGER, " +
-                        CREATE_TIME + " TEXT, " +
-                        STATUS+ " TEXT, " +
-                        GENDER + " TEXT)"
+                        RECEIVED_ACCOUNT + " TEXT, " +
+                        RECEIVER_ACCOUNT + " INTEGER, " +
+                        SEND_ACCOUNT + " INTEGER, " +
+                        GROUP_ID + " INTEGER, " +
+                        RECEIVER_TIME + " TEXT, " +
+                        CREATE_TIME + " TEXT)"
 
         );
     }
@@ -141,11 +155,64 @@ public class DBHelper extends SQLiteOpenHelper {
         return res;
     }
 
-    public Cursor getAllMessagebyId(Integer id) {
+    public Cursor getAllMessageChat(Long accountid) {
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor res =  db.rawQuery( "SELECT * FROM " + TABLE_MESSAGE_CHAT + "WHERE " + FROM_ACCOUNT_ID + " = " + id, null );
+        Cursor res =  db.rawQuery( "SELECT DISTINCT * FROM " + TABLE_MESSAGE_CHAT + " WHERE " + SEND_ACCOUNT + " = " + accountid + " OR " + RECEIVER_ACCOUNT +
+                " = " + accountid  , null );
         return res;
     }
+
+    public Long getlastMessageChat(Long accountid) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor res =  db.rawQuery( "SELECT DISTINCT "+ MESSAGE_ID + " FROM " + TABLE_MESSAGE_CHAT  + " ORDER BY " +  MESSAGE_ID  +" DESC LIMIT 1", null );
+        if (res != null) {
+            res.moveToFirst();
+            if(res.isAfterLast()==false) {
+                return res.getLong(res.getColumnIndex(DBHelper.MESSAGE_ID));
+            }
+
+        }
+
+        return Long.valueOf(0);
+    }
+
+    public Cursor getAllMessage(Long accountid ) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor res =  db.rawQuery( "SELECT * FROM " + TABLE_MESSAGE_CHAT + " WHERE " + SEND_ACCOUNT + " = " + accountid  +
+                 " AND " + GROUP_ID + " = -1" , null );
+        return res;
+    }
+
+    public Cursor getAllMessage() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor res =  db.rawQuery( "SELECT * FROM " + TABLE_MESSAGE_CHAT , null );
+        return res;
+    }
+
+
+
+
+    public boolean InsertMessageChat(ChatMessageModel message) {
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+
+        contentValues.put(MESSAGE_ID, message.getMessage_id());
+        contentValues.put(MESSAGE, message.getMessageText());
+        contentValues.put(TYPE, message.getType());
+        contentValues.put(RECEIVED_ACCOUNT, message.getReceived());
+        contentValues.put(RECEIVER_ACCOUNT, message.getReceiver());
+        contentValues.put(SEND_ACCOUNT, message.getSend_account());
+        contentValues.put(GROUP_ID, message.getGroupid());
+        contentValues.put(CREATE_TIME, message.getCreate_day());
+        contentValues.put(RECEIVER_TIME, 0);
+
+        db.insert(TABLE_MESSAGE_CHAT, null, contentValues);
+        db.close();
+        return true;
+
+    }
+
 
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
@@ -173,14 +240,14 @@ public class DBHelper extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL(
                 "CREATE TABLE IF NOT EXISTS " + TABLE_MESSAGE_CHAT +
                         "(" + MESSAGE_ID + " INTEGER, " /*INTEGER PRIMARY KEY,*/  +
-                        MAEEAGE + " TEXT, " +
+                        MESSAGE + " TEXT, " +
                         TYPE + " INTEGER, " +
-                        FROM_ACCOUNT_ID + " INTEGER, " +
-                        PERSON_AVATAR_URL + " TEXT, " +
-                        ISRECEIVE + " INTEGER, " +
-                        CREATE_TIME + " TEXT, " +
-                        STATUS+ " TEXT, " +
-                        GENDER + " TEXT)"
+                        RECEIVED_ACCOUNT + " TEXT, " +
+                        RECEIVER_ACCOUNT + " INTEGER, " +
+                        SEND_ACCOUNT + " INTEGER, " +
+                        GROUP_ID + " INTEGER, " +
+                        RECEIVER_TIME + " TEXT, " +
+                        CREATE_TIME + " TEXT)"
 
         );
 

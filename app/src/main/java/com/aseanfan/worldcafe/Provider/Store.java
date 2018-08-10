@@ -13,6 +13,7 @@ public class Store {
     public final static String USERNAME = "wr_username";
     public final static String TOKENFACEBOOK = "facebook_token";
     public final static String LOGGED = "logged";
+    public final static String ACCESSTOKEN = "access_token";
 
     public static void putStringData(Context context, String key, String data) {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);

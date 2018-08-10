@@ -1,29 +1,41 @@
 package com.aseanfan.worldcafe.UI.Fragment;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.aseanfan.worldcafe.App.AccountController;
+import com.aseanfan.worldcafe.Helper.NotificationCenter;
 import com.aseanfan.worldcafe.Helper.RestAPI;
 import com.aseanfan.worldcafe.Model.PostTimelineModel;
+import com.aseanfan.worldcafe.Provider.Store;
 import com.aseanfan.worldcafe.UI.Adapter.PostTimelineAdapter;
 import com.aseanfan.worldcafe.UI.CommentActivity;
 import com.aseanfan.worldcafe.UI.MainActivity;
@@ -32,6 +44,7 @@ import com.aseanfan.worldcafe.Utils.Constants;
 import com.aseanfan.worldcafe.Utils.Utils;
 import com.aseanfan.worldcafe.worldcafe.R;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
@@ -46,7 +59,7 @@ import java.util.TimerTask;
 
 public class TimelineFragment extends android.support.v4.app.Fragment implements PostTimelineAdapter.ClickListener{
 
-    private static final String[]paths = {"All","Question", "Follow", "Timeline"};
+    private static final String[]paths = {"Timeline","Question", "Follow"};
 
     private RecyclerView list_post;
 
@@ -54,7 +67,7 @@ public class TimelineFragment extends android.support.v4.app.Fragment implements
 
     private List<PostTimelineModel> timeline;
 
-    private TextView txtPost;
+    private LinearLayout posttimeline;
 
     private boolean isloading = false;
 
@@ -67,12 +80,125 @@ public class TimelineFragment extends android.support.v4.app.Fragment implements
 
     private int current_pos;
 
+    private int type;
+    private List<Integer> area = new ArrayList<>();
+
+    private String keyword = "";
+
+    private SearchView searchView;
+
+    String[] listcity = {"HCM", "Ha Noi", "Da Nang", "Tokyo", "Osaka"};
+    int[] listidcity = {1, 2, 3, 4, 5};
+    boolean[] checkedItems = {false, false, false, false, false};
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.main_tool_bar, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+
+        MenuItem searchItem = menu.findItem(R.id.action_search);
+
+        searchView = (SearchView) searchItem.getActionView();
+
+        searchView.setOnQueryTextFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus) {
+                    // searchView expanded
+                } else {
+                    keyword = "";
+                    LoadListTimeLinePost();
+                    // searchView not expanded
+                }
+            }
+        });
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+                keyword = s;
+                LoadListTimeLinePost();
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String s) {
+                NotificationCenter.getInstance().postNotificationName(NotificationCenter.callbacksearch,s);
+                return false;
+            }
+        });
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.buttonarea) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+            builder.setTitle("Choose some areas");
+
+
+            builder.setMultiChoiceItems(listcity, checkedItems, new DialogInterface.OnMultiChoiceClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which, boolean isChecked) {
+                    if (isChecked) {
+                        area.add(listidcity[which]);
+                    } else if (area.contains(listidcity[which])) {
+                        area.remove(listidcity[which]);
+                    }
+                }
+            });
+
+
+            builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    LoadListTimeLinePost();
+                }
+            });
+            builder.setNegativeButton("Cancel", null);
+
+            AlertDialog dialog = builder.create();
+            dialog.show();
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+
     public void LoadListTimeLinePost()
     {
-        String url =  String.format(RestAPI.GET_LISTPOSTTIMELINE,AccountController.getInstance().getAccount().getId(),current_pos);
+        String url="";
+
+        if(type ==2) {
+
+            url = String.format(RestAPI.GET_LISTTIMELINEFOLLOWED, AccountController.getInstance().getAccount().getId(), current_pos);
+
+        }
+        else
+        {
+            url = String.format(RestAPI.GET_LISTPOSTTIMELINE, AccountController.getInstance().getAccount().getId(), current_pos,type);
+        }
+        if(area.size()>0)
+        {
+            String city = "&city=";
+            for( int i = 0 ; i <area.size() ; i++)
+            {
+                if(i == area.size()-1)
+                    city = city + area.get(i) ;
+                else
+                   city = city + area.get(i) + ",";
+            }
+            url = url + city;
+        }
+        if(!keyword.isEmpty())
+        {
+            url = url + "&keyword=" + keyword;
+        }
+
         loading.setVisibility(View.VISIBLE);
 
-        RestAPI.GetDataMaster(getActivity().getApplicationContext(),url, new RestAPI.RestAPIListenner() {
+        RestAPI.GetDataMasterWithToken(getActivity().getApplicationContext(),url, new RestAPI.RestAPIListenner() {
             @Override
             public void OnComplete(int httpCode, String error, String s) {
                 try {
@@ -140,7 +266,7 @@ public class TimelineFragment extends android.support.v4.app.Fragment implements
         dataJson.addProperty("account_id", AccountController.getInstance().getAccount().getId());
         dataJson.addProperty("newfeed_id",Postid);
 
-        RestAPI.PostDataMaster(getActivity().getApplicationContext(),dataJson,RestAPI.POST_LIKEPOST, new RestAPI.RestAPIListenner() {
+        RestAPI.PostDataMasterWithToken(getActivity().getApplicationContext(),dataJson,RestAPI.POST_LIKEPOST, new RestAPI.RestAPIListenner() {
             @Override
             public void OnComplete(int httpCode, String error, String s) {
                 try {
@@ -164,10 +290,20 @@ public class TimelineFragment extends android.support.v4.app.Fragment implements
         return firstFrag;
     }
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_timeline, container, false);
+
+        Toolbar toolbar = (Toolbar) view.findViewById(R.id.app_toolbar);
+        ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
 
         timeline = new ArrayList<>();
 
@@ -175,14 +311,15 @@ public class TimelineFragment extends android.support.v4.app.Fragment implements
 
         mAdapter = new PostTimelineAdapter(null);
         list_post = (RecyclerView) view.findViewById(R.id.listtimeline);
-        txtPost = (TextView) view.findViewById(R.id.txtpost);
+        posttimeline = (LinearLayout) view.findViewById(R.id.posttimeline);
         final RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(container.getContext());
         list_post.setLayoutManager(mLayoutManager);
         list_post.setItemAnimator(new DefaultItemAnimator());
         list_post.setAdapter(mAdapter);
         loading = (ProgressBar)view.findViewById(R.id.loading_spinner);
         imageAvatar = (ImageView)view.findViewById(R.id.imageAvatar);
-        Glide.with(getContext()).load(AccountController.getInstance().getAccount().getAvarta()).apply(RequestOptions.circleCropTransform()).into(imageAvatar);
+        Drawable mDefaultBackground = getContext().getResources().getDrawable(R.drawable.avata_defaul);
+        Glide.with(getContext()).load(AccountController.getInstance().getAccount().getAvarta()).apply(RequestOptions.circleCropTransform().diskCacheStrategy(DiskCacheStrategy.ALL).error(mDefaultBackground)).into(imageAvatar);
 
 
         dropdown = (Spinner)view.findViewById(R.id.spinnersort);
@@ -194,7 +331,7 @@ public class TimelineFragment extends android.support.v4.app.Fragment implements
         dropdown.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-
+                type = i;
                 LoadListTimeLinePost();
             }
 
@@ -204,7 +341,7 @@ public class TimelineFragment extends android.support.v4.app.Fragment implements
         });
 
         mAdapter.setOnItemClickListener(this);
-        txtPost.setOnClickListener(new View.OnClickListener() {
+        posttimeline.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getContext(), PostTimeLineActivity.class);

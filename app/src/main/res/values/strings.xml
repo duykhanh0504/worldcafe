@@ -37,8 +37,8 @@
     <string name="Detail_page">Detail</string>
     <string name="Album_page">Album</string>
 
-    <string name="Following">Following: %d</string>
-    <string name="Followers">Followers: %d</string>
+    <string name="Following">Following: </string>
+    <string name="Followers">Followers: </string>
     <string name="Rank">Rank</string>
 
     <string name="Introduce">Introduce</string>
@@ -75,7 +75,7 @@
     <string name="activation_text">We have sent you a code via Email. \nPlease enter it below </string>
     <string name="male">male</string>
     <string name="female">female</string>
-
+    <string name="title_activity_list_follow">ListFollowActivity</string>
 
 
 </resources>
