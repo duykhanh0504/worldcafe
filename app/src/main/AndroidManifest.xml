@@ -124,9 +124,11 @@
             android:screenOrientation="portrait"/>
         <activity
             android:name="com.aseanfan.worldcafe.UI.ListFollowActivity"
+            android:theme="@style/ThemeWithTabBar"
             android:label="@string/title_activity_list_follow"
             android:screenOrientation="portrait"/>
         <activity android:name="com.aseanfan.worldcafe.UI.ContactChatActivity"
+            android:theme="@style/ThemeWithTabBar"
             android:screenOrientation="portrait"></activity>
     </application>
 
