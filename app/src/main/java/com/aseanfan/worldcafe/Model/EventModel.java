@@ -1,5 +1,6 @@
 package com.aseanfan.worldcafe.Model;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 public class EventModel {
@@ -16,9 +17,19 @@ public class EventModel {
     private int numberLike;
     private int islike;
     private Long account_id;
+    private String start_time;
 
     public EventModel() {
     }
+
+    public String getStarttime() {
+        return start_time;
+    }
+
+    public void setStarttime(String start_time) {
+        this.start_time = start_time;
+    }
+
 
 
     public Long getEventid() {

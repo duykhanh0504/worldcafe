@@ -45,6 +45,14 @@
             android:id="@+id/flipViewActivation"
             layout="@layout/flip_activation" />
 
+        <include
+            android:id="@+id/flipViewForgetPass"
+            layout="@layout/flip_forget_password" />
+
+        <include
+            android:id="@+id/flipViewChangePass"
+            layout="@layout/flip_change_password" />
+
     </ViewFlipper>
 
 </LinearLayout>

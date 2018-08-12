@@ -44,7 +44,6 @@ public class CommunityAdapter extends RecyclerView.Adapter<CommunityAdapter.MyVi
         public TextView title;
         public TextView name;
         public TextView price;
-        public ImageView imageEvent;
         public ImageView imageAvatar;
         public TextView numberlike;
         public TextView numbercomment;
@@ -56,17 +55,10 @@ public class CommunityAdapter extends RecyclerView.Adapter<CommunityAdapter.MyVi
             title = (TextView) view.findViewById(R.id.txttitle);
             name = (TextView) view.findViewById(R.id.txtname);
             price = (TextView) view.findViewById(R.id.txtprice);
-            imageEvent = (ImageView) view.findViewById(R.id.imageEvent);
             imageAvatar = (ImageView) view.findViewById(R.id.imageAvatar);
             numberlike = (TextView) view.findViewById(R.id.textLike);
             numbercomment = (TextView) view.findViewById(R.id.textComment);
             view.setOnClickListener(this);
-            imageEvent.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    clickListener.onItemClick(getAdapterPosition(), view , Constants.CLICK_IMAGE_EVENT);
-                }
-            });
 
         }
 
@@ -107,10 +99,6 @@ public class CommunityAdapter extends RecyclerView.Adapter<CommunityAdapter.MyVi
         if(event.getUrlAvatar()!=null)
         {
             Glide.with(holder.context).load(event.getUrlAvatar()).apply(RequestOptions.circleCropTransform()).into(holder.imageAvatar);
-        }
-        if(event.getUrlImage()!=null && event.getUrlImage().get(0)!=null )
-        {
-            Glide.with(holder.context).load(event.getUrlImage().get(0)).into(holder.imageEvent);
         }
     }
 

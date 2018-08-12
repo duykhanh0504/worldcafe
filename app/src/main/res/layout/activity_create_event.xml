@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.aseanfan.worldcafe.UI.CreateEventActivity">
+    tools:context="com.aseanfan.worldcafe.UI.CreateEventActivity"
+    android:layout_margin="@dimen/margin_left_right">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -15,29 +16,38 @@
             android:id="@+id/textView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textAlignment="center"
-            android:background="@drawable/background_button_gray"
-            android:text="@string/genre" />
+            android:text="@string/genre"
+            android:layout_marginBottom="@dimen/margin_left_right"/>
 
 
         <RadioGroup
             android:id="@+id/radgroup"
             android:layout_width="wrap_content"
             android:layout_gravity="center"
-            android:layout_height="wrap_content" >
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="@dimen/margin_left_right">
 
 
                 <RadioButton
                     android:id="@+id/radfriend"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="friend" />
+                    android:text="friend"
+                    android:padding="5dp"
+                    android:background="@drawable/radiobtnbackground"
+                    android:button="@android:color/transparent"
+                    android:layout_marginRight="20dp"/>
 
                 <RadioButton
                     android:id="@+id/radlanguage"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="language" />
+                    android:text="language"
+                    android:padding="5dp"
+                    android:background="@drawable/radiobtnbackground"
+                    android:button="@android:color/transparent"
+                    android:layout_marginRight="20dp"/>
 
 
 
@@ -45,13 +55,21 @@
                     android:id="@+id/radlocal"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="local" />
+                    android:text="local"
+                    android:padding="5dp"
+                    android:background="@drawable/radiobtnbackground"
+                    android:button="@android:color/transparent"
+                    android:layout_marginRight="20dp"/>
 
                 <RadioButton
                     android:id="@+id/radbusiness"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="business" />
+                    android:text="business"
+                    android:padding="5dp"
+                    android:background="@drawable/radiobtnbackground"
+                    android:button="@android:color/transparent"
+                    android:layout_marginRight="20dp"/>
 
 
         </RadioGroup>
@@ -60,9 +78,8 @@
             android:id="@+id/textView2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textAlignment="center"
-            android:background="@drawable/background_button_gray"
-            android:text="@string/photo" />
+            android:text="@string/photo"
+            android:layout_marginBottom="@dimen/margin_left_right"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -85,14 +102,14 @@
             android:id="@+id/choosearea"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textAlignment="center"
-            android:background="@drawable/background_button_gray"
+            android:layout_marginBottom="@dimen/margin_left_right"
             android:text="@string/area"  />
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/area_check"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/margin_left_right"/>
 
         <TextView
             android:id="@+id/timepicker"
