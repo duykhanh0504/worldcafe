@@ -8,6 +8,7 @@ import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.aseanfan.worldcafe.Model.ChatMessageModel;
+import com.aseanfan.worldcafe.Model.NotificationModel;
 import com.aseanfan.worldcafe.Model.UserModel;
 
 import java.security.acl.Group;
@@ -48,6 +49,16 @@ public class DBHelper extends SQLiteOpenHelper {
     public static final String GROUP_ID = "group_id";
     public static final String CREATE_TIME = "create_time";
     public static final String RECEIVER_TIME = "receiver_time";
+
+    public static final String TABLE_NOTIFICATION = "notification";
+    public static final String NOTIFY_ID = "notify_id";
+    public static final String NOTIFY_MESSAGE = "notify_message";
+    public static final String NOTIFY_TITLE= "notify_title";
+    public static final String NOTIFY_TIME= "notify_time";
+    public static final String NOTIFY_STATUS= "notify_status";
+    public static final String NOTIFY_FROMID= "notify_fromid";
+    public static final String NOTIFY_AVATAR= "notify_avatar";
+    public static final String NOTIFY_TYPE= "notify_type";
 
 
     private static SQLiteDatabase db;
@@ -125,10 +136,24 @@ public class DBHelper extends SQLiteOpenHelper {
               null);*/
     }
 
+    public void deleteTableNotify() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_NOTIFICATION);
+    /*    return db.delete(TABLE_MESSAGE_CHAT,
+                null,
+              null);*/
+    }
+
     public Cursor getPerson(Long id) {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor res =  db.rawQuery("SELECT * FROM " + PERSON_TABLE_USER + " WHERE " +
                 PERSON_COLUMN_ID + "=?", new String[]{Long.toString(id)});
+        return res;
+    }
+
+    public Cursor getNotify() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor res =  db.rawQuery("SELECT * FROM " + TABLE_NOTIFICATION ,null);
         return res;
     }
 
@@ -145,6 +170,22 @@ public class DBHelper extends SQLiteOpenHelper {
                         GROUP_ID + " INTEGER, " +
                         RECEIVER_TIME + " TEXT, " +
                         CREATE_TIME + " TEXT)"
+
+        );
+    }
+
+    public void CreateNotifyTable() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.execSQL(
+                "CREATE TABLE IF NOT EXISTS " + TABLE_NOTIFICATION +
+                        "(" + NOTIFY_ID + " INTEGER, " /*INTEGER PRIMARY KEY,*/  +
+                        NOTIFY_MESSAGE + " TEXT, " +
+                        NOTIFY_TIME + " TEXT, " +
+                        NOTIFY_TITLE + " TEXT, " +
+                        NOTIFY_AVATAR + " INTEGER, " +
+                        NOTIFY_STATUS + " INTEGER, " +
+                        NOTIFY_TYPE + " INTEGER, " +
+                        NOTIFY_STATUS + " INTEGER)"
 
         );
     }
@@ -213,6 +254,26 @@ public class DBHelper extends SQLiteOpenHelper {
 
     }
 
+    public boolean InsertNotify(NotificationModel notify) {
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+
+        contentValues.put(NOTIFY_AVATAR, notify.getAvarta());
+        contentValues.put(NOTIFY_FROMID, notify.getFromid());
+        contentValues.put(NOTIFY_MESSAGE, notify.getMessage());
+        contentValues.put(NOTIFY_STATUS, notify.getStatus());
+        contentValues.put(NOTIFY_TIME, notify.getCreatetime());
+        contentValues.put(NOTIFY_TYPE, notify.getType());
+        contentValues.put(NOTIFY_TITLE, notify.getTitle());
+
+        db.insert(TABLE_NOTIFICATION, null, contentValues);
+        db.close();
+        return true;
+
+    }
+
+
 
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
@@ -248,6 +309,19 @@ public class DBHelper extends SQLiteOpenHelper {
                         GROUP_ID + " INTEGER, " +
                         RECEIVER_TIME + " TEXT, " +
                         CREATE_TIME + " TEXT)"
+
+        );
+
+        sqLiteDatabase.execSQL(
+                "CREATE TABLE IF NOT EXISTS " + TABLE_NOTIFICATION +
+                        "(" + NOTIFY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, " /*INTEGER PRIMARY KEY,*/  +
+                        NOTIFY_MESSAGE + " TEXT, " +
+                        NOTIFY_TIME + " TEXT, " +
+                        NOTIFY_TITLE + " TEXT, " +
+                        NOTIFY_AVATAR + " INTEGER, " +
+                        NOTIFY_STATUS + " INTEGER, " +
+                        NOTIFY_TYPE + " INTEGER, " +
+                        NOTIFY_STATUS + " INTEGER)"
 
         );
 
