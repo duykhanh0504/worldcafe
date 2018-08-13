@@ -18,6 +18,8 @@ public class EventModel {
     private int islike;
     private Long account_id;
     private String start_time;
+    private String city_name;
+
 
     public EventModel() {
     }
@@ -31,6 +33,13 @@ public class EventModel {
     }
 
 
+    public String getCityname() {
+        return city_name;
+    }
+
+    public void setCityname(String city_name) {
+        this.city_name = city_name;
+    }
 
     public Long getEventid() {
         return event_id;

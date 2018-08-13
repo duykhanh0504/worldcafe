@@ -1,6 +1,7 @@
 package com.aseanfan.worldcafe.UI.Adapter;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -13,8 +14,10 @@ import android.widget.TextView;
 
 import com.aseanfan.worldcafe.Model.EventModel;
 import com.aseanfan.worldcafe.Utils.Constants;
+import com.aseanfan.worldcafe.Utils.Utils;
 import com.aseanfan.worldcafe.worldcafe.R;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 
 import java.util.List;
@@ -48,6 +51,9 @@ public class CommunityAdapter extends RecyclerView.Adapter<CommunityAdapter.MyVi
         public TextView numberlike;
         public TextView numbercomment;
         public Context context;
+        public TextView type;
+        public TextView time;
+        public TextView location;
 
         public MyViewHolder(View view) {
             super(view);
@@ -58,13 +64,16 @@ public class CommunityAdapter extends RecyclerView.Adapter<CommunityAdapter.MyVi
             imageAvatar = (ImageView) view.findViewById(R.id.imageAvatar);
             numberlike = (TextView) view.findViewById(R.id.textLike);
             numbercomment = (TextView) view.findViewById(R.id.textComment);
+            type = (TextView) view.findViewById(R.id.txttype);
+            time = (TextView) view.findViewById(R.id.txtdate);
+            location = (TextView) view.findViewById(R.id.txtlocation);
             view.setOnClickListener(this);
 
         }
 
         @Override
         public void onClick(View view) {
-            clickListener.onItemClick(getAdapterPosition(), view , Constants.CLICK_EVENT);
+         //   clickListener.onItemClick(getAdapterPosition(), view , Constants.CLICK_EVENT);
         }
     }
 
@@ -93,13 +102,31 @@ public class CommunityAdapter extends RecyclerView.Adapter<CommunityAdapter.MyVi
         EventModel event = eventList.get(position);
         holder.title.setText(event.getTitle());
         holder.name.setText(event.getUsername());
-        holder.price.setText(event.getPrice().toString());
+        holder.price.setText(Utils.currencyFormat(event.getPrice()) + " $");
+        if(event.getType() == Constants.EVENT_FRIEND)
+        {
+            holder.type.setText(holder.type.getContext().getText(R.string.Friend));
+        }
+        else if (event.getType() == Constants.EVENT_BUSSINESS)
+        {
+            holder.type.setText(holder.type.getContext().getText(R.string.Business));
+        }
+        else if (event.getType() == Constants.EVENT_LOCAL)
+        {
+            holder.type.setText(holder.type.getContext().getText(R.string.Local));
+        }
+        else
+        {
+            holder.type.setText(holder.type.getContext().getText(R.string.Language));
+        }
+        holder.time.setText(Utils.ConvertDate(event.getStarttime()));
+        holder.location.setText(event.getCityname());
+
         holder.numberlike.setText(String.valueOf(event.getNumberLike()));
         holder.numbercomment.setText(String.valueOf(event.getNumberComment()));
-        if(event.getUrlAvatar()!=null)
-        {
-            Glide.with(holder.context).load(event.getUrlAvatar()).apply(RequestOptions.circleCropTransform()).into(holder.imageAvatar);
-        }
+        Drawable mDefaultBackground = holder.imageAvatar.getContext().getResources().getDrawable(R.drawable.avata_defaul);
+        Glide.with(holder.imageAvatar.getContext()).load(event.getUrlAvatar()).apply(RequestOptions.circleCropTransform().diskCacheStrategy(DiskCacheStrategy.ALL).error(mDefaultBackground)).into(holder.imageAvatar);
+
     }
 
     @Override

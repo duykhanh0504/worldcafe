@@ -38,9 +38,14 @@ import com.yanzhenjie.album.impl.OnItemClickListener;
 import com.yanzhenjie.album.widget.divider.Api21ItemDivider;
 import com.yanzhenjie.album.widget.divider.Divider;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
 public class CreateEventActivity extends AppCompatActivity {
 
@@ -73,9 +78,8 @@ public class CreateEventActivity extends AppCompatActivity {
         dataJson.addProperty("title",event.getTitle());
         dataJson.addProperty("genre",event.getType());
         dataJson.addProperty("price",event.getPrice());
-        dataJson.addProperty("starttime","");
+        dataJson.addProperty("starttime",event.getStarttime());
         dataJson.addProperty("endtime","");
-        dataJson.addProperty("updatetime","");
         dataJson.addProperty("address","");
         dataJson.addProperty("country","");
         dataJson.addProperty("city","");
@@ -154,6 +158,18 @@ public class CreateEventActivity extends AppCompatActivity {
                 event.setTitle(title.getText().toString());
                 event.setPrice(Long.valueOf(price.getText().toString()));
                 event.setContent(content.getText().toString());
+                TimeZone tz = TimeZone.getTimeZone("UTC");
+                DateFormat df = new SimpleDateFormat("yyy-MM-dd HH:mm:ss");
+                df.setTimeZone(tz);
+                Date convertedDate = new Date();
+                try {
+                    convertedDate = df.parse(scheduel.getText().toString());
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                String nowAsISO = df.format(convertedDate);
+
+                event.setStarttime(nowAsISO);
                 CreateEvent(event);
             }
         });
@@ -205,7 +221,6 @@ public class CreateEventActivity extends AppCompatActivity {
                                                   int monthOfYear, int dayOfMonth) {
 
                                 scheduel.setText(dayOfMonth + "-" + (monthOfYear + 1) + "-" + year);
-
                             }
                         }, mYear, mMonth, mDay);
                 datePickerDialog.show();

@@ -408,6 +408,10 @@ public class TimelineFragment extends android.support.v4.app.Fragment implements
                 ((MainActivity) getActivity()).callFriendPage(timeline.get(position).getAccountid());
 
             }
+            else
+            {
+                ((MainActivity) getActivity()).gotoMypage();
+            }
 
         }
         if(type == Constants.CLICK_IMAGE_COMMENT) {

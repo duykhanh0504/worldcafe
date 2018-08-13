@@ -20,6 +20,8 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.text.DateFormat;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -27,6 +29,31 @@ import java.util.Locale;
 import java.util.TimeZone;
 
 public class Utils {
+
+
+    public static String ConvertDate(String s)
+    {
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MMM-dd HH:mm",Locale.US);
+        DateFormat targetFormat = new SimpleDateFormat("dd MMM", Locale.getDefault());
+        String formattedDate = null;
+        Date convertedDate = new Date();
+        try {
+            convertedDate = dateFormat.parse(s);
+            formattedDate = targetFormat.format(convertedDate);
+        } catch (ParseException e) {
+// TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return formattedDate;
+    }
+
+    public static String currencyFormat(Long amount) {
+        NumberFormat formatter = new DecimalFormat("#,###");
+        Long myNumber = amount;
+        String formattedNumber = formatter.format(myNumber);
+        return formattedNumber;
+    }
 
     public static String encodeStringUrl(String url) {
         String encodedUrl =null;

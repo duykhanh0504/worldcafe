@@ -165,6 +165,8 @@ public class MypageFragment extends android.support.v4.app.Fragment {
                     if (statuscode == RestAPI.STATUS_SUCCESS) {
                         isfollow = Constants.FOLLOW;
                         btn_follow.setText("Follow");
+                        user.setFollower(user.getFollower() -1);
+                        follower.setText(getString(R.string.Followers) + user.getFollower());
 
                     }
 
@@ -204,6 +206,8 @@ public class MypageFragment extends android.support.v4.app.Fragment {
                     if (statuscode == RestAPI.STATUS_SUCCESS) {
                         isfollow = Constants.UNFOLLOW;
                         btn_follow.setText("unFollow");
+                        user.setFollower(user.getFollower() +1);
+                        follower.setText(getString(R.string.Followers) + user.getFollower());
 
                     }
 

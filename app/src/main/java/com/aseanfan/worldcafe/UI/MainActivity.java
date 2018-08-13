@@ -228,6 +228,9 @@ public class MainActivity extends AppCompatActivity {
     {
         Menu menu = navigation.getMenu();
         mOnNavigationItemSelectedListener.onNavigationItemSelected(menu.findItem(R.id.navigation_mypage));
+
+        navigation.setSelectedItemId(R.id.navigation_mypage);
+        showThirdFragment();
     }
 
     public void showFirstFragment() {
@@ -369,7 +372,7 @@ public class MainActivity extends AppCompatActivity {
         friendPage = new MypageFragment();
         friendPage.setArguments(bundle);
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.add(R.id.content, friendPage,TAG_FRIENDPAGE).commit();
+        ft.replace(R.id.content, friendPage,TAG_FRIENDPAGE).commit();
       //  ft.show(friendPage);
        // ft.hide(timelineFragment);
     }

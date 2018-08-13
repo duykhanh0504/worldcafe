@@ -219,7 +219,7 @@ public class PostTimeLineActivity extends AppCompatActivity {
         }
 
 
-        RestAPI.PostDataMaster(this,dataJson,urlApi, new RestAPI.RestAPIListenner() {
+        RestAPI.PostDataMasterWithToken(this,dataJson,urlApi, new RestAPI.RestAPIListenner() {
             @Override
             public void OnComplete(int httpCode, String error, String s) {
                 try {

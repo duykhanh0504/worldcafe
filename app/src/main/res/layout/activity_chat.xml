@@ -64,6 +64,7 @@
                 android:id="@+id/btn_send"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
+                android:background="@drawable/ic_chat_send_active"
                 android:layout_gravity="right|top"
                 />
         </LinearLayout>

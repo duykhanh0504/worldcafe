@@ -120,7 +120,6 @@
         <activity
             android:name="com.aseanfan.worldcafe.UI.CommentActivity"
             android:theme="@style/ThemeWithTabBar"
-            android:windowSoftInputMode="adjustPan"
             android:screenOrientation="portrait"/>
         <activity
             android:name="com.aseanfan.worldcafe.UI.ListFollowActivity"

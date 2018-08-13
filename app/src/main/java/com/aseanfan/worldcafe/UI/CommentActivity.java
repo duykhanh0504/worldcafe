@@ -56,6 +56,8 @@ public class CommentActivity extends AppCompatActivity {
                     }
 
                     ListComment(timelineid);
+                    edtComent.setText("");
+
 
                 }
                 catch (Exception ex) {
@@ -86,6 +88,7 @@ public class CommentActivity extends AppCompatActivity {
                     java.lang.reflect.Type type = new TypeToken<List<CommentModel>>(){}.getType();
                     listcomment = gson.fromJson(jsonArray, type);
                     mAdapter.setCommentList(listcomment);
+                    rcycoment.smoothScrollToPosition(listcomment.size());
 
                 }
                 catch (Exception ex) {

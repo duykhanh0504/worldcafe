@@ -72,7 +72,7 @@ public class SocketService extends Service {
             });*/
             mSocket.disconnect();
           //  if(RESTARTSERVICE !=2) {
-                RESTARTSERVICE = 1;
+             //   RESTARTSERVICE = 1;
           //  }
             stopService(new Intent(SocketService.this, SocketService.class));
         }
@@ -163,7 +163,7 @@ public class SocketService extends Service {
         }, 1000);
 
 
-        RESTARTSERVICE = 0;
+      //  RESTARTSERVICE = 0;
 
     }
 
@@ -177,7 +177,7 @@ public class SocketService extends Service {
     public void onDestroy() {
 
         // We should here clean up everything we used.
-        if (RESTARTSERVICE == 1)
+        //if (RESTARTSERVICE == 1)
         {
             startService(new Intent(SocketService.this, SocketService.class));
         }

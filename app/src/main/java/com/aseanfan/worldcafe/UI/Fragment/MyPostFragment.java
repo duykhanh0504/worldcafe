@@ -72,8 +72,9 @@ public class MyPostFragment  extends android.support.v4.app.Fragment implements 
     {
         JsonObject dataJson = new JsonObject();
         dataJson.addProperty("newfeed_id", posttimeline.get(pos).getTimelineid());
+        dataJson.addProperty("account_id", AccountController.getInstance().getAccount().getId());
 
-        RestAPI.PostDataMaster(getActivity().getApplicationContext(),dataJson,RestAPI.POST_DELETE_TIMELINE, new RestAPI.RestAPIListenner() {
+        RestAPI.PostDataMasterWithToken(getActivity().getApplicationContext(),dataJson,RestAPI.POST_DELETE_TIMELINE, new RestAPI.RestAPIListenner() {
             @Override
             public void OnComplete(int httpCode, String error, String s) {
                 try {
