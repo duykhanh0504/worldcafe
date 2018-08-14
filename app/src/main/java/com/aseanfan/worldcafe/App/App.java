@@ -17,6 +17,8 @@ import com.aseanfan.worldcafe.UI.IntroActivity;
 import com.aseanfan.worldcafe.UI.MainActivity;
 import com.aseanfan.worldcafe.UI.MediaLoader;
 
+import com.aseanfan.worldcafe.Utils.Constants;
+import com.facebook.login.LoginManager;
 import com.yanzhenjie.album.Album;
 import com.yanzhenjie.album.AlbumConfig;
 
@@ -43,6 +45,19 @@ public class App  extends Application {
             }
         }
         return false;
+    }
+
+    public void Logout()
+    {
+        stopService(new Intent(getApplicationContext(), SocketService.class));
+        Store.putBooleanData(this,Store.LOGGED,false);
+        DBHelper.getInstance(this).deletePerson(AccountController.getInstance().getAccount().getId());
+        DBHelper.getInstance(this).deleteTableChat();
+        AccountController.getInstance().SetAccount(null);
+        LoginManager.getInstance().logOut();
+        Intent intent = new Intent(this , IntroActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
     }
 
     @Override
