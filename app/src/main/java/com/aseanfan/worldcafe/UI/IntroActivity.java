@@ -112,7 +112,7 @@ public class IntroActivity extends AppCompatActivity {
         UiInit();
 
         justCreated = true;
-        String token = FirebaseInstanceId.getInstance().getToken();
+       // String token = FirebaseInstanceId.getInstance().getToken();
       /*  FirebaseApp.initializeApp(this);
 
         FirebaseInstanceId.getInstance().getInstanceId()
@@ -182,6 +182,7 @@ public class IntroActivity extends AppCompatActivity {
         Intent intent = new Intent(IntroActivity.this, LoginActivity.class);
         intent.putExtra("type", Constants.PAGE_LOGIN);
         startActivity(intent);
+        finish();
     }
 
     @OnClick(R.id.Signup)
@@ -189,6 +190,7 @@ public class IntroActivity extends AppCompatActivity {
         Intent intent = new Intent(IntroActivity.this, LoginActivity.class);
         intent.putExtra("type",Constants.PAGE_REGISTER);
         startActivity(intent);
+        finish();
     }
 
     @Override

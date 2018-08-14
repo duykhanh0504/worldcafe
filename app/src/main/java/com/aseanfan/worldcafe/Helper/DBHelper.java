@@ -153,7 +153,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
     public Cursor getNotify() {
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor res =  db.rawQuery("SELECT * FROM " + TABLE_NOTIFICATION ,null);
+        Cursor res =  db.rawQuery("SELECT * FROM " + TABLE_NOTIFICATION + " LIMIT 50" ,null);
         return res;
     }
 
@@ -199,7 +199,7 @@ public class DBHelper extends SQLiteOpenHelper {
     public Cursor getAllMessageChat(Long accountid) {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor res =  db.rawQuery( "SELECT DISTINCT * FROM " + TABLE_MESSAGE_CHAT + " WHERE " + SEND_ACCOUNT + " = " + accountid + " OR " + RECEIVER_ACCOUNT +
-                " = " + accountid  , null );
+                " = " + accountid  + " LIMIT 100" , null );
         return res;
     }
 
@@ -319,7 +319,7 @@ public class DBHelper extends SQLiteOpenHelper {
                         NOTIFY_TIME + " TEXT, " +
                         NOTIFY_TITLE + " TEXT, " +
                         NOTIFY_AVATAR + " INTEGER, " +
-                        NOTIFY_STATUS + " INTEGER, " +
+                        NOTIFY_FROMID + " INTEGER, " +
                         NOTIFY_TYPE + " INTEGER, " +
                         NOTIFY_STATUS + " INTEGER)"
 

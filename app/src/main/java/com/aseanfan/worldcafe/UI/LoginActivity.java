@@ -44,6 +44,7 @@ import com.aseanfan.worldcafe.Model.CityModel;
 import com.aseanfan.worldcafe.Model.EventModel;
 import com.aseanfan.worldcafe.Model.UserModel;
 import com.aseanfan.worldcafe.Provider.Store;
+import com.aseanfan.worldcafe.Service.MyFirebaseInstanceIDService;
 import com.aseanfan.worldcafe.Service.SocketService;
 import com.aseanfan.worldcafe.UI.Adapter.SpinnerAreaAdapter;
 import com.aseanfan.worldcafe.UI.Adapter.SpinnerCityAdapter;
@@ -766,6 +767,19 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public void onBackPressed() {
+        //Execute your code here
+        if( _viewfliper.getDisplayedChild () == Constants.PAGE_LOGIN ||
+                _viewfliper.getDisplayedChild () == Constants.PAGE_REGISTER)
+        {
+             Intent intent = new Intent(this , IntroActivity.class);
+             startActivity(intent);
+        }
+        finish();
+
+    }
+
     public void login( String email ,String password,int type) {
 
         /*if (!validate()) {
@@ -824,6 +838,7 @@ public class LoginActivity extends AppCompatActivity {
                         AccountController.getInstance().SetAccount(u);
 
                         startService(new Intent(getApplicationContext(), SocketService.class));
+                        startService(new Intent(getApplicationContext(), MyFirebaseInstanceIDService.class));
 
                         Store.putBooleanData(LoginActivity.this, Store.LOGGED, true);
                         Store.putStringData(LoginActivity.this, Store.ACCESSTOKEN, jsons.get("access_token").getAsString());
@@ -968,6 +983,8 @@ public class LoginActivity extends AppCompatActivity {
         AlertDialog ok = builder.create();
         ok.show();
     }
+
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

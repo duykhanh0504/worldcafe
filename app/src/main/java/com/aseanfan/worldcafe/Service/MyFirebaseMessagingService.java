@@ -17,7 +17,9 @@ import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
 import com.aseanfan.worldcafe.UI.MainActivity;
+import com.aseanfan.worldcafe.Utils.Utils;
 import com.aseanfan.worldcafe.worldcafe.R;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
@@ -31,6 +33,10 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     private static final String CHANNEL_DESC = "Firebase Cloud Messaging";
     private int numMessages = 0;
 
+    @Override
+    public void onCreate() {
+        String token = FirebaseInstanceId.getInstance().getToken();
+    }
 
     private void sendRegistrationToServer(String token) {
         // TODO: Implement this method to send token to your app server.
@@ -45,6 +51,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         sendNotification(notification, data);
     }
 
+
     private void sendNotification(RemoteMessage.Notification notification, Map<String, String> data) {
         Bundle bundle = new Bundle();
         bundle.putString(FCM_PARAM, data.get(FCM_PARAM));
@@ -56,14 +63,14 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this, getString(R.string.notification_channel_id))
                 .setContentTitle(notification.getTitle())
-                .setContentText(notification.getBody())
+                .setContentText(Utils.decodeStringUrl(notification.getBody()))
                 .setAutoCancel(true)
                 .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
                 //.setSound(Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.win))
                 .setContentIntent(pendingIntent)
                 .setContentInfo("Hello")
                 .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher))
-                .setColor(getColor(R.color.colorAccent))
+                .setColor(getResources().getColor(R.color.colorAccent))
                 .setLights(Color.RED, 1000, 300)
                 .setDefaults(Notification.DEFAULT_VIBRATE)
                 .setNumber(++numMessages)

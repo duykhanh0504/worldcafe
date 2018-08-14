@@ -1,12 +1,21 @@
 package com.aseanfan.worldcafe.Service;
 
+import android.annotation.SuppressLint;
+import android.app.ActivityManager;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.IBinder;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.widget.Toast;
@@ -20,12 +29,25 @@ import com.aseanfan.worldcafe.UI.ChatActivity;
 import com.aseanfan.worldcafe.UI.LoginActivity;
 import com.aseanfan.worldcafe.UI.MainActivity;
 import com.aseanfan.worldcafe.Utils.Constants;
+import com.aseanfan.worldcafe.Utils.Utils;
+import com.aseanfan.worldcafe.worldcafe.R;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.target.Target;
+import com.bumptech.glide.request.transition.Transition;
+import com.google.firebase.messaging.RemoteMessage;
 import com.google.gson.JsonObject;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.net.URISyntaxException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -81,6 +103,7 @@ public class SocketService extends Service {
     private Emitter.Listener onReceiveMessgeFromServer = new Emitter.Listener() {
         @Override
         public void call(Object... args) {
+
             if((JSONObject) args[0]!=null) {
                 JSONObject data = (JSONObject) args[0];
                 ChatMessageModel message = new ChatMessageModel();
@@ -105,10 +128,92 @@ public class SocketService extends Service {
 
                     mLocalBroadcastManager.sendBroadcast(i);
                 }
+                if(isApplicationInForeground() == false)
+                {
+                    Map<String, String> datamessage = new HashMap<>();
+                    String avatar = AccountController.getInstance().getAccount().getAvarta();
+                    if(avatar ==null)
+                        avatar = "";
+                    datamessage.put("avatar" , avatar);
+                    datamessage.put("username" ,AccountController.getInstance().getAccount().getUsername());
+                    datamessage.put("message", Utils.decodeStringUrl(message.getMessageText()));
+                    sendNotification(datamessage);
+                }
             }
            // mSocket.disconnect();
         }
     };
+
+
+    @SuppressLint("CheckResult")
+    private void sendNotification(final Map<String, String> data) {
+
+
+        if(data.get("avatar").isEmpty()) {
+            Drawable mDefaultBackground = SocketService.this.getResources().getDrawable(R.drawable.avata_defaul);
+            NotificationCompat.Builder builder =
+                    new NotificationCompat.Builder(SocketService.this)
+                            .setLargeIcon(((BitmapDrawable) mDefaultBackground).getBitmap())
+                            .setSmallIcon(R.drawable.ic_launcher_foreground)
+                            .setContentTitle(data.get("username"))
+                            .setContentText(data.get("message"));
+
+            Intent notificationIntent = new Intent(SocketService.this, MainActivity.class);
+            PendingIntent contentIntent = PendingIntent.getActivity(SocketService.this, 0, notificationIntent,
+                    PendingIntent.FLAG_UPDATE_CURRENT);
+            builder.setContentIntent(contentIntent);
+
+            // Add as notification
+            NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            manager.notify(0, builder.build());
+        }
+        else {
+            Glide.with(SocketService.this).load(data.get("avatar")).listener(new RequestListener<Drawable>() {
+                @Override
+                public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                    e.printStackTrace();
+                    Drawable mDefaultBackground = SocketService.this.getResources().getDrawable(R.drawable.avata_defaul);
+                    NotificationCompat.Builder builder =
+                            new NotificationCompat.Builder(SocketService.this)
+                                    .setLargeIcon(((BitmapDrawable) mDefaultBackground).getBitmap())
+                                    .setSmallIcon(R.drawable.ic_launcher_foreground)
+                                    .setContentTitle(data.get("username"))
+                                    .setContentText(data.get("message"));
+
+                    Intent notificationIntent = new Intent(SocketService.this, MainActivity.class);
+                    PendingIntent contentIntent = PendingIntent.getActivity(SocketService.this, 0, notificationIntent,
+                            PendingIntent.FLAG_UPDATE_CURRENT);
+                    builder.setContentIntent(contentIntent);
+
+                    // Add as notification
+                    NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                    manager.notify(0, builder.build());
+                    return false;
+                }
+
+                @Override
+                public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                    NotificationCompat.Builder builder =
+                            new NotificationCompat.Builder(SocketService.this)
+                                    .setLargeIcon(((BitmapDrawable) resource).getBitmap())
+                                    .setSmallIcon(R.drawable.ic_launcher_foreground)
+                                    .setContentTitle("Notifications Example")
+                                    .setContentText("This is a test notification");
+
+                    Intent notificationIntent = new Intent(SocketService.this, MainActivity.class);
+                    PendingIntent contentIntent = PendingIntent.getActivity(SocketService.this, 0, notificationIntent,
+                            PendingIntent.FLAG_UPDATE_CURRENT);
+                    builder.setContentIntent(contentIntent);
+
+                    // Add as notification
+                    NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                    manager.notify(0, builder.build());
+                    return false;
+                }
+            });
+        }
+
+}
 
     @Override
     public void onCreate() {
@@ -162,7 +267,6 @@ public class SocketService extends Service {
             }
         }, 1000);
 
-
       //  RESTARTSERVICE = 0;
 
     }
@@ -184,6 +288,20 @@ public class SocketService extends Service {
         super.onDestroy();
     }
 
+    public boolean isApplicationInForeground() {
+        final ActivityManager activityManager = (ActivityManager) getApplicationContext().getSystemService(Context.ACTIVITY_SERVICE);
+        // get the info from the currently running task
+
+        List< ActivityManager.RunningTaskInfo > taskInfo = activityManager.getRunningTasks(1);
+
+        if( taskInfo.get(0).topActivity.getClassName().equals("com.aseanfan.worldcafe.UI.ChatActivity"))
+        {
+            return true;
+        }
+
+        return false;
+    }
+
     private final BroadcastReceiver mBroadcastReceiver  = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -196,6 +314,8 @@ public class SocketService extends Service {
                     data.put("type", type);
                     data.put("message", message);
                     data.put("receiver_id", friendid);
+                    data.put("fullname", AccountController.getInstance().getAccount().getUsername());
+                    data.put("avatar", AccountController.getInstance().getAccount().getAvarta());
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

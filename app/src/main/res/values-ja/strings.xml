@@ -27,8 +27,8 @@
 
     <string name="Signup">Sign up</string>
 
-    <string name="facebook_app_id">216205465084648</string>
-    <string name="fb_login_protocol_scheme">fb216205465084648</string>
+    <string name="facebook_app_id">512038499006720</string>
+    <string name="fb_login_protocol_scheme">fb512038499006720</string>
     <string name="back4app_server_url">https://parseapi.back4app.com/</string>
 
     <string name="back4app_app_id">216205465084648</string>
