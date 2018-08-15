@@ -734,7 +734,7 @@ public class LoginActivity extends AppCompatActivity {
         }
 
 
-        RestAPI.PostDataMaster(getApplicationContext(), dataJson, RestAPI.POST_UPDATEUSER, new RestAPI.RestAPIListenner() {
+        RestAPI.PostDataMasterWithToken(getApplicationContext(), dataJson, RestAPI.POST_UPDATEUSER, new RestAPI.RestAPIListenner() {
 
             @Override
             public void OnComplete(int httpCode, String error, String s) {

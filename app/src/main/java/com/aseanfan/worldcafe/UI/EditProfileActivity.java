@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -52,6 +53,7 @@ public class EditProfileActivity extends AppCompatActivity {
     private Spinner country;
     private Spinner city;
     private UserModel user;
+    private Button Button;
 
     private static List<AreaModel> listarea = new ArrayList<>();
 
@@ -187,7 +189,7 @@ public class EditProfileActivity extends AppCompatActivity {
                 countryid = listarea.get(i).getid();
                 getlistcity(countryid);
                 adaptercity.setdata( getlistcity(countryid));
-                AccountController.getInstance().getAccount().setCountry(countryid);
+                user.setCountry(countryid);
             }
 
             @Override
@@ -204,7 +206,7 @@ public class EditProfileActivity extends AppCompatActivity {
         city.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                AccountController.getInstance().getAccount().setCity(getlistcity(countryid).get(i).getid());
+                user.setCity(getlistcity(countryid).get(i).getid());
             }
 
             @Override
@@ -216,6 +218,18 @@ public class EditProfileActivity extends AppCompatActivity {
           radgroup.check(R.id.rad_male);
         else
           radgroup.check(R.id.rad_female);
+
+        Button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                user.setUsername(username.getText().toString());
+                user.setIntroduction(introduce.getText().toString());
+                user.setSchool(school.getText().toString());
+                user.setCompany(company.getText().toString());
+                update(user);
+            }
+        });
 
     }
 
@@ -240,10 +254,11 @@ public class EditProfileActivity extends AppCompatActivity {
         radgroup = (RadioGroup) this.findViewById(R.id.rad_sex);
         country = (Spinner) this.findViewById(R.id.spinner_country);
         city = (Spinner) this.findViewById(R.id.spinner_city);
+        Button = (Button) this.findViewById(R.id.btn_update);
 
     }
 
-    public void update(UserModel u) {
+    public void update(final UserModel u) {
 
 
 
@@ -256,7 +271,7 @@ public class EditProfileActivity extends AppCompatActivity {
         dataJson.addProperty("country",u.getCountry());
 
 
-        RestAPI.PostDataMaster(getApplicationContext(), dataJson, RestAPI.POST_UPDATEUSER, new RestAPI.RestAPIListenner() {
+        RestAPI.PostDataMasterWithToken(getApplicationContext(), dataJson, RestAPI.POST_UPDATEUSER, new RestAPI.RestAPIListenner() {
 
             @Override
             public void OnComplete(int httpCode, String error, String s) {
@@ -266,7 +281,7 @@ public class EditProfileActivity extends AppCompatActivity {
 
                         return;
                     }
-
+                AccountController.getInstance().SetAccount(u);
 
 
 
