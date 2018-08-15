@@ -48,6 +48,8 @@ public class RestAPI {
     public static String POST_LOGIN = root_url + "/api/login";
     public static String POST_UPDATESOCKET = root_url + "/api/user/updatesocket";
     public static String POST_UPDATEUSER = root_url + "/api/user/update";
+    public static String POST_UPDATECOVER = root_url + "/api/user/updatecover";
+    public static String POST_UPDATEAVATAR = root_url + "/api/user/updateavarta";
  //   public static String GET_LISTEVENT = /*root_url + */"http://www.mocky.io/v2/5b30ad6c3100009909129002";
    // public static String GET_LISTPOSTMYPAGE = /*root_url + */"http://www.mocky.io/v2/5b3ca7ef31000010006ddddc";
     public static String GET_LISTPOSTMYPAGE = root_url + "/api/newfeed/getnewfeedbyaccount?account_id=%d&index=%d";
@@ -57,7 +59,7 @@ public class RestAPI {
     public static String POST_LIKEPOST = root_url + "/api/newfeed/clicklike";
     public static String POST_COMMENT = root_url + "/api/newfeed/postcomment";
     public static String GET_COMMENT = root_url + "/api/newfeed/comments?newfeed_id=%d";
-    public static String GET_ACCOUNT_INFO = root_url + "/api/user/accountbyid?id=%d";
+    public static String GET_ACCOUNT_INFO = root_url + "/api/user/accountbyid?account_id=%d";
     public static String POST_CREATEEVENT= root_url + "/api/event/createevent";
     public static String GET_LISTEVENT= root_url + "/api/event/getallevents?account_id=%d&genre=%d&index=%d";
     public static String POST_ACTIVATION= root_url + "/api/user/activation";

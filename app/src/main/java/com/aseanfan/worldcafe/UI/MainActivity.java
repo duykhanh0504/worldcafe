@@ -233,6 +233,12 @@ public class MainActivity extends AppCompatActivity {
         showThirdFragment();
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Fragment fragment = getSupportFragmentManager().findFragmentByTag(TAG_MYPAGE);
+        fragment.onActivityResult(requestCode, resultCode, data);
+    }
+
     public void showFirstFragment() {
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.replace(R.id.content, communityFragment, TAG_COMMUNITY);

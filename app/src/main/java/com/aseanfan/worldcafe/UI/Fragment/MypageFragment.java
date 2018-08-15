@@ -1,6 +1,8 @@
 package com.aseanfan.worldcafe.UI.Fragment;
 
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -24,7 +26,9 @@ import com.aseanfan.worldcafe.Model.PostTimelineModel;
 import com.aseanfan.worldcafe.Model.UserModel;
 import com.aseanfan.worldcafe.Provider.Store;
 import com.aseanfan.worldcafe.UI.Adapter.FragmentMyPagerAdapter;
+import com.aseanfan.worldcafe.UI.EditProfileActivity;
 import com.aseanfan.worldcafe.Utils.Constants;
+import com.aseanfan.worldcafe.Utils.Utils;
 import com.aseanfan.worldcafe.worldcafe.R;
 
 import android.os.Bundle;
@@ -57,8 +61,12 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
+import com.theartofdev.edmodo.cropper.CropImage;
+import com.theartofdev.edmodo.cropper.CropImageView;
 
 import java.util.List;
+
+import static android.app.Activity.RESULT_OK;
 
 
 public class MypageFragment extends android.support.v4.app.Fragment {
@@ -70,6 +78,7 @@ public class MypageFragment extends android.support.v4.app.Fragment {
     private ProgressBar loading;
     private List<PostTimelineModel> posttimeline;
     private ImageView rankImage;
+    private ImageView editImage;
     private Long accountid;
     private FragmentMyPagerAdapter adapter;
     private  UserModel user = new UserModel();
@@ -91,6 +100,7 @@ public class MypageFragment extends android.support.v4.app.Fragment {
     private static final int ALPHA_ANIMATIONS_DURATION              = 200;
     private boolean mIsTheVisible          = true;
     private boolean mIsTheinVisible          = true;
+    Uri selectedAvatar = null;
 
 
     @Override
@@ -105,11 +115,67 @@ public class MypageFragment extends android.support.v4.app.Fragment {
 
     }
 
+    public void UpdateImage(Uri image, final int type)
+    {
+
+        if(image==null)
+            return;
+
+        String[] bb = Utils.compressFormat(selectedAvatar.getPath(), getActivity());
+        String base64 = bb[0];
+        String imagename = System.currentTimeMillis() + "." + bb[1];
+
+        JsonObject dataJson = new JsonObject();
+        dataJson.addProperty("account_id",AccountController.getInstance().getAccount().getId());
+        dataJson.addProperty("base64",base64);
+        dataJson.addProperty("image",imagename);
+        dataJson.addProperty("type","image/");
+
+        String url = "";
+        if(type ==1)
+        {
+            url =RestAPI.POST_UPDATECOVER;
+        }
+        else if(type == 0)
+        {
+            url =RestAPI.POST_UPDATEAVATAR;
+        }
+
+        RestAPI.PostDataMasterWithToken(getActivity(), dataJson, url, new RestAPI.RestAPIListenner() {
+
+            @Override
+            public void OnComplete(int httpCode, String error, String s) {
+                try {
+                    if (!RestAPI.checkHttpCode(httpCode)) {
+                        //AppFuncs.alert(getApplicationContext(),s,true);
+
+                        return;
+                    }
+
+                    if(type==0) {
+                        JsonObject jsons = (new JsonParser()).parse(s).getAsJsonObject();
+                        AccountController.getInstance().getAccount().setAvarta(jsons.get("url").getAsString());
+                        DBHelper.getInstance(getActivity()).updatePerson(AccountController.getInstance().getAccount());
+                    }
+
+                    //  String email = _emailText.getText().toString();
+                    //   String password = _passwordText.getText().toString();
+
+
+                } catch (Exception ex) {
+
+                    ex.printStackTrace();
+                }
+
+            }
+        });
+    }
+
     public void LoadAccount(Long account)
     {
         String url =  String.format(RestAPI.GET_ACCOUNT_INFO,account);
 
-        RestAPI.GetDataMaster(getActivity().getApplicationContext(),url, new RestAPI.RestAPIListenner() {
+        RestAPI.GetDataMasterWithToken(getActivity().getApplicationContext(),url, new RestAPI.RestAPIListenner() {
             @Override
             public void OnComplete(int httpCode, String error, String s) {
                 try {
@@ -130,6 +196,19 @@ public class MypageFragment extends android.support.v4.app.Fragment {
                         final Drawable mDefaultBackground1 = getContext().getResources().getDrawable(R.drawable.avata_defaul);
                         nametoolbar.setText(user.getUsername());
                         Glide.with(getContext()).load( user.getAvarta()).apply(RequestOptions.circleCropTransform().diskCacheStrategy(DiskCacheStrategy.ALL).error(mDefaultBackground1)).into(avatartoolbar);
+
+                        if(user.getCover()!=null)
+                        {
+                            Glide.with(getContext()).load( user.getCover()).into(new SimpleTarget<Drawable>() {
+                                @Override
+                                public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
+                                    background.setBackgroundDrawable(resource);
+                                }
+                            });
+                            if(accountid ==AccountController.getInstance().getAccount().getId()) {
+                                AccountController.getInstance().getAccount().setCover(user.getCover());
+                            }
+                        }
 
                         followed.setText(getString(R.string.Following) + user.getFollowed());
                         follower.setText(getString(R.string.Followers) + user.getFollower());
@@ -310,6 +389,7 @@ public class MypageFragment extends android.support.v4.app.Fragment {
         avatar = view.findViewById(R.id.avatar);
         followed = (TextView) view.findViewById(R.id.txt_followed);
         follower =(TextView)view.findViewById(R.id.txt_follower);
+        editImage= (ImageView) view.findViewById(R.id.image_edit);
 
         content_info = (LinearLayout) view.findViewById(R.id.content_info);
         content_toolbar = (LinearLayout) view.findViewById(R.id.content_toolbar);
@@ -331,6 +411,20 @@ public class MypageFragment extends android.support.v4.app.Fragment {
 
 
         name = view.findViewById(R.id.Name);
+
+        avatar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = CropImage.activity(null)
+                        .setGuidelines(CropImageView.Guidelines.ON)
+                        .setAutoZoomEnabled(false)
+                        .setMultiTouchEnabled(false)
+                        .getIntent(getActivity());
+                intent.putExtra("type",0);
+                getActivity().startActivityForResult(intent, CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE);
+            }
+        });
+
 
         if(getArguments()!=null) {
             accountid = getArguments().getLong("account_id");
@@ -354,11 +448,13 @@ public class MypageFragment extends android.support.v4.app.Fragment {
         {
 
             btn_follow.setVisibility(View.VISIBLE);
+            editImage.setVisibility(View.GONE);
             CheckFollow(accountid);
         }
         else
         {
             btn_follow.setVisibility(View.GONE);
+            editImage.setVisibility(View.VISIBLE);
         }
 
         btn_follow.setOnClickListener(new View.OnClickListener() {
@@ -375,13 +471,38 @@ public class MypageFragment extends android.support.v4.app.Fragment {
             }
         });
         //visible image view
-        avatar.getLayoutParams().height = 150;
-        avatar.getLayoutParams().width = 150;
+    //    avatar.getLayoutParams().height = 150;
+      //  avatar.getLayoutParams().width = 150;
         avatar.setScaleType(ImageView.ScaleType.FIT_XY);
         rankImage= (ImageView) view.findViewById(R.id.image_rank);
 
+        editImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), EditProfileActivity.class);
+                startActivity(intent);
+            }
+        });
+
+
         background = view.findViewById(R.id.background);
+
+        background.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = CropImage.activity(null)
+                        .setGuidelines(CropImageView.Guidelines.ON)
+                        .setAutoZoomEnabled(false)
+                        .setMultiTouchEnabled(false)
+                        .getIntent(getActivity());
+                intent.putExtra("type",1);
+                getActivity().startActivityForResult(intent, CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE);
+            }
+        });
+
+
         loading = view.findViewById(R.id.loading_spinner);
+
         Glide.with(getContext()).load( "https://png.pngtree.com/thumb_back/fh260/back_pic/00/15/30/4656e81f6dc57c5.jpg").into(new SimpleTarget<Drawable>() {
             @Override
             public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
@@ -518,6 +639,37 @@ public class MypageFragment extends android.support.v4.app.Fragment {
                 startAlphaAnimation(content_toolbar, ALPHA_ANIMATIONS_DURATION, View.INVISIBLE);
                 mIsTheinVisible = false;
             }
+        }
+    }
+
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        switch(requestCode) {
+            case CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE:
+                if(resultCode == RESULT_OK){
+                    CropImage.ActivityResult result = CropImage.getActivityResult(data);
+                    if(result.getUri()!=null) {
+                        if(data.getIntExtra("type",0) ==0) {
+                            selectedAvatar = result.getUri();
+                            UpdateImage(selectedAvatar, 0);
+                            Glide.with(this).load( selectedAvatar).apply(RequestOptions.circleCropTransform()).into( avatar);
+                        }
+                        else if(data.getIntExtra("type",0) ==1) {
+                            selectedAvatar = result.getUri();
+                            UpdateImage(selectedAvatar, 1);
+                            Glide.with(this).load( selectedAvatar).into(new SimpleTarget<Drawable>() {
+                                @Override
+                                public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
+                                    background.setBackgroundDrawable(resource);
+                                }
+                            });
+                        }
+                    }
+                   // Glide.with(this).load( selectedAvatar).apply(RequestOptions.circleCropTransform()).into( _avatarimage);
+                }
+                break;
         }
     }
 

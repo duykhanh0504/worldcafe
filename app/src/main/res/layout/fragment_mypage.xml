@@ -10,26 +10,25 @@
     <android.support.design.widget.AppBarLayout
         android:id="@+id/appBar"
         android:layout_width="match_parent"
-        android:background="@drawable/com_facebook_button_icon_white"
         app:elevation="0dp"
         android:layout_height="wrap_content">
         <android.support.design.widget.CollapsingToolbarLayout
             android:id="@+id/collapsing_toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@color/white"
             app:layout_scrollFlags="scroll|exitUntilCollapsed|snap">
 
             <FrameLayout
                 android:layout_width="match_parent"
                 app:layout_collapseMode="pin"
-                android:layout_height="match_parent"
-                android:paddingBottom="91dp"
+                android:layout_height="190dp"
                 android:background="#fff">
 
                 <android.support.v7.widget.CardView
                     android:id="@+id/background"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="190dp"
                     app:cardBackgroundColor="@android:color/black"
                     app:cardCornerRadius="4dp"
                     app:cardElevation="8dp"
@@ -137,7 +136,15 @@
                         android:layout_height="45dp"
                         android:layout_gravity="center"
                         android:background="@drawable/rank_gold"
+                        android:layout_marginRight="@dimen/header_space"
                         />
+                        <ImageView
+                            android:id="@+id/image_edit"
+                            android:layout_width="45dp"
+                            android:layout_height="45dp"
+                            android:layout_gravity="center"
+                            android:background="@drawable/edit_name_on"
+                            />
 
 
                 </LinearLayout>

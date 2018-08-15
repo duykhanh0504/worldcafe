@@ -8,6 +8,7 @@ public class UserModel {
     private String email;
     private String phonenumber;
     private String avarta;
+    private String cover;
     private int sex;
     private String birthday;
     private String address;
@@ -81,6 +82,14 @@ public class UserModel {
 
     public void setPhonenumber(String username) {
         this.phonenumber = phonenumber;
+    }
+
+    public String getCover() {
+        return cover;
+    }
+
+    public void setCover(String cover) {
+        this.cover = cover;
     }
 
     public String getAvarta() {
