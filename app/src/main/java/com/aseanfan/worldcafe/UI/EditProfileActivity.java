@@ -1,7 +1,10 @@
 package com.aseanfan.worldcafe.UI;
 
 import android.app.ProgressDialog;
+import android.graphics.drawable.Drawable;
 import android.provider.ContactsContract;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -23,6 +26,11 @@ import com.aseanfan.worldcafe.UI.Adapter.SpinnerCityAdapter;
 import com.aseanfan.worldcafe.Utils.Constants;
 import com.aseanfan.worldcafe.Utils.Utils;
 import com.aseanfan.worldcafe.worldcafe.R;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
+import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.transition.Transition;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -123,6 +131,43 @@ public class EditProfileActivity extends AppCompatActivity {
 
 
         user = AccountController.getInstance().getAccount();
+
+        if(user.getCover()==null)
+        {
+            Glide.with(this).load( "https://png.pngtree.com/thumb_back/fh260/back_pic/00/15/30/4656e81f6dc57c5.jpg").into(new SimpleTarget<Drawable>() {
+                @Override
+                public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
+                    cover.setBackgroundDrawable(resource);
+                }
+            });
+        }
+        else
+        {
+            Glide.with(this).load( user.getCover()).into(new SimpleTarget<Drawable>() {
+                @Override
+                public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
+                    cover.setBackgroundDrawable(resource);
+                }
+            });
+        }
+
+        final Drawable mDefaultBackground1 = this.getResources().getDrawable(R.drawable.avata_defaul);
+        Glide.with(this).load( user.getAvarta()).apply(RequestOptions.circleCropTransform().diskCacheStrategy(DiskCacheStrategy.ALL).error(mDefaultBackground1)).into(avatar);
+
+    if(user.getUsername()!=null) {
+        username.setText(user.getUsername());
+    }
+
+        if(user.getIntroduction()!=null) {
+            introduce.setText(user.getIntroduction());
+        }
+        if(user.getSchool()!=null) {
+            school.setText(user.getSchool());
+        }
+        if(user.getCompany()!=null) {
+            company.setText(user.getCompany());
+        }
+
 
         radgroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
