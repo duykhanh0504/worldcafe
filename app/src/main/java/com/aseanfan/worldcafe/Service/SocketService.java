@@ -10,6 +10,8 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.IBinder;
@@ -44,7 +46,11 @@ import com.google.gson.JsonObject;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
 import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -168,53 +174,43 @@ public class SocketService extends Service {
             manager.notify(0, builder.build());
         }
         else {
-            Glide.with(SocketService.this).load(data.get("avatar")).listener(new RequestListener<Drawable>() {
-                @Override
-                public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
-                    e.printStackTrace();
-                    Drawable mDefaultBackground = SocketService.this.getResources().getDrawable(R.drawable.avata_defaul);
-                    NotificationCompat.Builder builder =
-                            new NotificationCompat.Builder(SocketService.this)
-                                    .setLargeIcon(((BitmapDrawable) mDefaultBackground).getBitmap())
-                                    .setSmallIcon(R.drawable.ic_launcher_foreground)
-                                    .setContentTitle(data.get("username"))
-                                    .setContentText(data.get("message"));
+            Bitmap bitmap = getBitmapFromURL(data.get("avatar"));
 
-                    Intent notificationIntent = new Intent(SocketService.this, MainActivity.class);
-                    PendingIntent contentIntent = PendingIntent.getActivity(SocketService.this, 0, notificationIntent,
-                            PendingIntent.FLAG_UPDATE_CURRENT);
-                    builder.setContentIntent(contentIntent);
+                        NotificationCompat.Builder builder =
+                                new NotificationCompat.Builder(SocketService.this)
+                                        .setLargeIcon(bitmap)
+                                        .setSmallIcon(R.drawable.ic_launcher_foreground)
+                                        .setContentTitle(data.get("username"))
+                                        .setContentText(data.get("message"));
 
-                    // Add as notification
-                    NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-                    manager.notify(0, builder.build());
-                    return false;
-                }
+                        /*Intent notificationIntent = new Intent(SocketService.this, MainActivity.class);
+                        PendingIntent contentIntent = PendingIntent.getActivity(SocketService.this, 0, notificationIntent,
+                                PendingIntent.FLAG_UPDATE_CURRENT);
+                        builder.setContentIntent(contentIntent);*/
 
-                @Override
-                public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
-                    NotificationCompat.Builder builder =
-                            new NotificationCompat.Builder(SocketService.this)
-                                    .setLargeIcon(((BitmapDrawable) resource).getBitmap())
-                                    .setSmallIcon(R.drawable.ic_launcher_foreground)
-                                    .setContentTitle("Notifications Example")
-                                    .setContentText("This is a test notification");
+                        // Add as notification
+                        NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                        manager.notify(0, builder.build());
 
-                    Intent notificationIntent = new Intent(SocketService.this, MainActivity.class);
-                    PendingIntent contentIntent = PendingIntent.getActivity(SocketService.this, 0, notificationIntent,
-                            PendingIntent.FLAG_UPDATE_CURRENT);
-                    builder.setContentIntent(contentIntent);
 
-                    // Add as notification
-                    NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-                    manager.notify(0, builder.build());
-                    return false;
-                }
-            });
         }
 
 }
 
+    public Bitmap getBitmapFromURL(String strURL) {
+        try {
+            URL url = new URL(strURL);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setDoInput(true);
+            connection.connect();
+            InputStream input = connection.getInputStream();
+            Bitmap myBitmap = BitmapFactory.decodeStream(input);
+            return myBitmap;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
     @Override
     public void onCreate() {
         super.onCreate();

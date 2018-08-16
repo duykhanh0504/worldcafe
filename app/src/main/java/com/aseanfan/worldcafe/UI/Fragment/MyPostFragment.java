@@ -121,7 +121,7 @@ public class MyPostFragment  extends android.support.v4.app.Fragment implements 
 
     public void LoadListMyPost(Long account_id)
     {
-        String url =  String.format(RestAPI.GET_LISTPOSTMYPAGE,account_id,current_pos);
+        String url =  String.format(RestAPI.GET_LISTPOSTMYPAGE,AccountController.getInstance().getAccount().getId(),account_id,current_pos);
 
         RestAPI.GetDataMaster(getActivity().getApplicationContext(),url, new RestAPI.RestAPIListenner() {
             @Override

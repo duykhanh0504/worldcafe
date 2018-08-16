@@ -1,7 +1,9 @@
 package com.aseanfan.worldcafe.UI;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -18,6 +20,7 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.aseanfan.worldcafe.App.AccountController;
+import com.aseanfan.worldcafe.Helper.DBHelper;
 import com.aseanfan.worldcafe.Helper.RestAPI;
 import com.aseanfan.worldcafe.Model.AreaModel;
 import com.aseanfan.worldcafe.Model.CityModel;
@@ -37,6 +40,8 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
+import com.theartofdev.edmodo.cropper.CropImage;
+import com.theartofdev.edmodo.cropper.CropImageView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -78,6 +83,92 @@ public class EditProfileActivity extends AppCompatActivity {
         listcity1.add(new CityModel(5,"Osaka"));
         listarea.add(new AreaModel(2,"Japan",listcity1));
 
+    }
+
+    public void UpdateImage(Uri image, final int type)
+    {
+
+        if(image==null)
+            return;
+
+        String[] bb = Utils.compressFormat(image.getPath(), this);
+        String base64 = bb[0];
+        String imagename = System.currentTimeMillis() + "." + bb[1];
+
+        JsonObject dataJson = new JsonObject();
+        dataJson.addProperty("account_id",AccountController.getInstance().getAccount().getId());
+        dataJson.addProperty("base64",base64);
+        dataJson.addProperty("image",imagename);
+        dataJson.addProperty("type","image/");
+
+        String url = "";
+        if(type ==1)
+        {
+            url =RestAPI.POST_UPDATECOVER;
+        }
+        else if(type == 0)
+        {
+            url =RestAPI.POST_UPDATEAVATAR;
+        }
+
+        RestAPI.PostDataMasterWithToken(this, dataJson, url, new RestAPI.RestAPIListenner() {
+
+            @Override
+            public void OnComplete(int httpCode, String error, String s) {
+                try {
+                    if (!RestAPI.checkHttpCode(httpCode)) {
+                        //AppFuncs.alert(getApplicationContext(),s,true);
+
+                        return;
+                    }
+
+                    if(type==0) {
+                        JsonObject jsons = (new JsonParser()).parse(s).getAsJsonObject();
+                        AccountController.getInstance().getAccount().setAvarta(jsons.get("url").getAsString());
+                        DBHelper.getInstance(EditProfileActivity.this).updatePerson(AccountController.getInstance().getAccount());
+                    }
+
+                    //  String email = _emailText.getText().toString();
+                    //   String password = _passwordText.getText().toString();
+
+
+                } catch (Exception ex) {
+
+                    ex.printStackTrace();
+                }
+
+            }
+        });
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        switch(requestCode) {
+            case CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE:
+                if(resultCode == RESULT_OK){
+                    CropImage.ActivityResult result = CropImage.getActivityResult(data);
+                    if(result.getUri()!=null) {
+                        if(data.getIntExtra("type",0) ==0) {
+
+                            UpdateImage(result.getUri(), 0);
+                            Glide.with(this).load( result.getUri()).apply(RequestOptions.circleCropTransform()).into( avatar);
+                        }
+                        else if(data.getIntExtra("type",0) ==1) {
+
+                            UpdateImage(result.getUri(), 1);
+                            Glide.with(this).load( result.getUri()).into(new SimpleTarget<Drawable>() {
+                                @Override
+                                public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
+                                    cover.setBackgroundDrawable(resource);
+                                }
+                            });
+                        }
+                    }
+                    // Glide.with(this).load( selectedAvatar).apply(RequestOptions.circleCropTransform()).into( _avatarimage);
+                }
+                break;
+        }
     }
 
     void getlistcountry()
@@ -214,7 +305,7 @@ public class EditProfileActivity extends AppCompatActivity {
 
             }
         });
-        if(user.getSex() == 0)
+        if(user.getSex() == Constants.MALE)
           radgroup.check(R.id.rad_male);
         else
           radgroup.check(R.id.rad_female);
@@ -231,6 +322,31 @@ public class EditProfileActivity extends AppCompatActivity {
             }
         });
 
+        avatar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = CropImage.activity(null)
+                        .setGuidelines(CropImageView.Guidelines.ON)
+                        .setAutoZoomEnabled(false)
+                        .setMultiTouchEnabled(false)
+                        .getIntent(EditProfileActivity.this);
+                intent.putExtra("type",0);
+                EditProfileActivity.this.startActivityForResult(intent, CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE);
+            }
+        });
+
+        cover.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = CropImage.activity(null)
+                        .setGuidelines(CropImageView.Guidelines.ON)
+                        .setAutoZoomEnabled(false)
+                        .setMultiTouchEnabled(false)
+                        .getIntent(EditProfileActivity.this);
+                intent.putExtra("type",1);
+                EditProfileActivity.this.startActivityForResult(intent, CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE);
+            }
+        });
     }
 
     private void changeSex(RadioGroup group, int checkedId) {
@@ -269,6 +385,16 @@ public class EditProfileActivity extends AppCompatActivity {
         dataJson.addProperty("username",u.getUsername());
         dataJson.addProperty("city",u.getCity());
         dataJson.addProperty("country",u.getCountry());
+
+        if(u.getIntroduction()!=null) {
+            dataJson.addProperty("introduction",u.getIntroduction());
+        }
+        if(u.getSchool()!=null) {
+            dataJson.addProperty("school",u.getSchool());
+        }
+        if(u.getCompany()!=null) {
+            dataJson.addProperty("company",u.getCompany());
+        }
 
 
         RestAPI.PostDataMasterWithToken(getApplicationContext(), dataJson, RestAPI.POST_UPDATEUSER, new RestAPI.RestAPIListenner() {

@@ -52,14 +52,14 @@ public class RestAPI {
     public static String POST_UPDATEAVATAR = root_url + "/api/user/updateavarta";
  //   public static String GET_LISTEVENT = /*root_url + */"http://www.mocky.io/v2/5b30ad6c3100009909129002";
    // public static String GET_LISTPOSTMYPAGE = /*root_url + */"http://www.mocky.io/v2/5b3ca7ef31000010006ddddc";
-    public static String GET_LISTPOSTMYPAGE = root_url + "/api/newfeed/getnewfeedbyaccount?account_id=%d&index=%d";
+    public static String GET_LISTPOSTMYPAGE = root_url + "/api/newfeed/getnewfeedbyaccount?account_id=%d&id=%d&index=%d";
     public static String GET_LISTPOSTTIMELINE= root_url + "/api/newfeed/getallnewfeeds?account_id=%d&index=%d&type=%d";
     public static String POST_TIMELINE = root_url + "/api/newfeed/postnewfeed";
     public static String POST_TIMELINEIMAGE = root_url + "/api/newfeed/postnewfeed_image";
     public static String POST_LIKEPOST = root_url + "/api/newfeed/clicklike";
     public static String POST_COMMENT = root_url + "/api/newfeed/postcomment";
     public static String GET_COMMENT = root_url + "/api/newfeed/comments?newfeed_id=%d";
-    public static String GET_ACCOUNT_INFO = root_url + "/api/user/accountbyid?account_id=%d";
+    public static String GET_ACCOUNT_INFO = root_url + "/api/user/accountbyid?account_id=%d&id=%d";
     public static String POST_CREATEEVENT= root_url + "/api/event/createevent";
     public static String GET_LISTEVENT= root_url + "/api/event/getallevents?account_id=%d&genre=%d&index=%d";
     public static String POST_ACTIVATION= root_url + "/api/user/activation";
@@ -75,6 +75,7 @@ public class RestAPI {
     public static String GET_LISTFOLLOW= root_url + "/api/follow/getListFollowed?account_id=%d";
     public static String GET_CONTACT_CHAT= root_url + "/api/follow/getListChatbyid?account_id=%d";
     public static String GET_LISTTIMELINEFOLLOWED= root_url + "/api/newfeed/getfollowednewfeeds?account_id=%d&index=%d";
+    public static String POST_JOINEVENT = root_url + "/api/event/joinevents";
 
     public final static int STATUS_SUCCESS = 200;
     public final static int STATUS_WRONGPASSWORD = 2;

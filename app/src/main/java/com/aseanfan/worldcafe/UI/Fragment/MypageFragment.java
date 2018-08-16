@@ -121,7 +121,7 @@ public class MypageFragment extends android.support.v4.app.Fragment {
         if(image==null)
             return;
 
-        String[] bb = Utils.compressFormat(selectedAvatar.getPath(), getActivity());
+        String[] bb = Utils.compressFormat(image.getPath(), getActivity());
         String base64 = bb[0];
         String imagename = System.currentTimeMillis() + "." + bb[1];
 
@@ -173,7 +173,7 @@ public class MypageFragment extends android.support.v4.app.Fragment {
 
     public void LoadAccount(Long account)
     {
-        String url =  String.format(RestAPI.GET_ACCOUNT_INFO,account);
+        String url =  String.format(RestAPI.GET_ACCOUNT_INFO,AccountController.getInstance().getAccount().getId(),account);
 
         RestAPI.GetDataMasterWithToken(getActivity().getApplicationContext(),url, new RestAPI.RestAPIListenner() {
             @Override
@@ -306,7 +306,7 @@ public class MypageFragment extends android.support.v4.app.Fragment {
 
     public void LoadListMyPost(Long account)
     {
-        String url =  String.format(RestAPI.GET_LISTPOSTMYPAGE,account,0);
+        String url =  String.format(RestAPI.GET_LISTPOSTMYPAGE,AccountController.getInstance().getAccount().getId(),account,0);
         loading.setVisibility(View.VISIBLE);
 
         RestAPI.GetDataMasterWithToken(getActivity().getApplicationContext(),url, new RestAPI.RestAPIListenner() {

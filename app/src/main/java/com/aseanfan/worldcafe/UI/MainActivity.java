@@ -26,6 +26,7 @@ import com.aseanfan.worldcafe.App.AccountController;
 import com.aseanfan.worldcafe.App.App;
 import com.aseanfan.worldcafe.Helper.DBHelper;
 import com.aseanfan.worldcafe.Helper.NotificationCenter;
+import com.aseanfan.worldcafe.Model.EventModel;
 import com.aseanfan.worldcafe.Model.UserModel;
 import com.aseanfan.worldcafe.Service.SyncDataService;
 import com.aseanfan.worldcafe.UI.Adapter.CommunityAdapter;
@@ -360,9 +361,18 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public void callDetailEvent(int id) {
+    public void callDetailEvent(EventModel eventid) {
 
-         detailcomunityfragment = new DetailCommunityFragment();
+          detailcomunityfragment = new DetailCommunityFragment();
+          Bundle bundle = new Bundle();
+          bundle.putLong("eventid",eventid.getEventid());
+          bundle.putString("title",eventid.getTitle());
+          bundle.putString("content",eventid.getContent());
+          if(eventid.getUrlImage() !=null && eventid.getUrlImage().size() >0) {
+            bundle.putString("image", eventid.getUrlImage().get(0));
+          }
+
+          detailcomunityfragment.setArguments(bundle);
           FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
           ft.add(R.id.content, detailcomunityfragment,TAG_COMMUNITY_DETAIL).commit();
         //  communityFragment.onPause();

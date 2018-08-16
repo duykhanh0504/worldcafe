@@ -139,7 +139,9 @@
             android:name="com.aseanfan.worldcafe.UI.ContactChatActivity"
             android:screenOrientation="portrait"
             android:theme="@style/ThemeWithTabBar" />
-        <activity android:name="com.aseanfan.worldcafe.UI.EditProfileActivity"></activity>
+        <activity android:name="com.aseanfan.worldcafe.UI.EditProfileActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/ThemeWithTabBar" ></activity>
     </application>
 
 </manifest>

@@ -135,8 +135,8 @@ public class TimelineFragment extends android.support.v4.app.Fragment implements
         int id = item.getItemId();
 
         if (id == R.id.buttonarea) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-            builder.setTitle("Choose some areas");
+                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                builder.setTitle("Choose some areas");
 
 
             builder.setMultiChoiceItems(listcity, checkedItems, new DialogInterface.OnMultiChoiceClickListener() {

@@ -52,12 +52,6 @@
             android:background="@android:drawable/btn_dropdown"
             android:spinnerMode="dropdown"/>
 
-        <ImageButton
-            android:id="@+id/btn_narrow"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_gravity="right"/>
-
         <android.support.v4.view.ViewPager
             android:id="@+id/view_event"
             android:layout_width="match_parent"

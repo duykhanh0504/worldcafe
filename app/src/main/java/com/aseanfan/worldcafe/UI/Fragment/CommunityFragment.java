@@ -75,7 +75,6 @@ public class CommunityFragment extends Fragment implements NotificationCenter.No
 
     private Spinner dropdown;
 
-    private ImageButton btn_narrow;
 
     List<EventModel> listEvent;
   //  List<EventModel> listEventBusiness;
@@ -93,6 +92,11 @@ public class CommunityFragment extends Fragment implements NotificationCenter.No
     private FragmentEventPageAdapter adapter;
 
     private static final String[]paths = {"item 1", "item 2", "item 3"};
+
+    private List<Integer> area = new ArrayList<>();
+    String[] listcity = {"HCM", "Ha Noi", "Da Nang", "Tokyo", "Osaka"};
+    int[] listidcity = {1, 2, 3, 4, 5};
+    boolean[] checkedItems = {false, false, false, false, false};
 
     public static CommunityFragment newInstance() {
         CommunityFragment firstFrag = new CommunityFragment();
@@ -188,6 +192,41 @@ public class CommunityFragment extends Fragment implements NotificationCenter.No
 
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.buttonarea) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+            builder.setTitle("Choose some areas");
+
+
+            builder.setMultiChoiceItems(listcity, checkedItems, new DialogInterface.OnMultiChoiceClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which, boolean isChecked) {
+                    if (isChecked) {
+                        area.add(listidcity[which]);
+                    } else if (area.contains(listidcity[which])) {
+                        area.remove(listidcity[which]);
+                    }
+                }
+            });
+
+
+            builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+
+                }
+            });
+            builder.setNegativeButton("Cancel", null);
+
+            AlertDialog dialog = builder.create();
+            dialog.show();
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable final ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -212,8 +251,6 @@ public class CommunityFragment extends Fragment implements NotificationCenter.No
         tabcommunity = (TabLayout)view.findViewById(R.id.tab_community);
 
         tabcommunity.setupWithViewPager(viewPager);
-
-        btn_narrow = (ImageButton)view.findViewById(R.id.btn_narrow);
 
         final Handler handler = new Handler();
         viewPager.setCurrentItem(0);
@@ -291,46 +328,7 @@ public class CommunityFragment extends Fragment implements NotificationCenter.No
             }
         });
 
-        btn_narrow.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(container.getContext());
-                builder.setTitle("Choose some animals");
 
-// add a checkbox list
-                String[] animals = {"horse", "cow", "camel", "sheep", "goat","horse", "cow", "camel", "sheep", "goat","horse", "cow", "camel", "sheep", "goat"};
-                boolean[] checkedItems = {true, false, false, true, false,true, false, false, true, false,true, false, false, true, false};
-                builder.setMultiChoiceItems(animals, checkedItems, new DialogInterface.OnMultiChoiceClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which, boolean isChecked) {
-                        // user checked or unchecked a box
-                    }
-                });
-
-// add OK and Cancel buttons
-                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        // user clicked OK
-                    }
-                });
-                builder.setNegativeButton("Cancel", null);
-
-// create and show the alert dialog
-                AlertDialog dialog = builder.create();
-                dialog.show();
-            }
-        });
-
-      /*  mAdapter.setOnItemClickListener(new CommunityAdapter.ClickListener() {
-            @Override
-            public void onItemClick(int position, View v,int Type) {
-                if(Type == Constants.CLICK_EVENT) {
-                    ((MainActivity)getActivity()).callDetailEvent(position);
-                }
-            }
-        });
-*/
       /*  tabcommunity.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
                                                   @Override
                                                   public void onTabSelected(TabLayout.Tab tab) {
