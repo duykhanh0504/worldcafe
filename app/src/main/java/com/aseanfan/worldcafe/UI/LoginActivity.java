@@ -112,6 +112,15 @@ public class LoginActivity extends AppCompatActivity {
     private EditText _inputactivecode;
     private Button _submit;
 
+    private EditText _emailForgetPass;
+    private Button _resetpassButton;
+
+    private EditText _passcode;
+    private EditText _newpass;
+    private EditText _renewpass;
+    private Button _changepassButton;
+
+
     CallbackManager callbackManager;
 
     Uri selectedAvatar = null;
@@ -182,7 +191,7 @@ public class LoginActivity extends AppCompatActivity {
 
     void getlistcountry()
     {
-       RestAPI.GetDataMaster(this, RestAPI.GET_LISTCOUNTRYANDCITY, new RestAPI.RestAPIListenner() {
+       RestAPI.GetDataMasterWithToken(this, RestAPI.GET_LISTCOUNTRYANDCITY, new RestAPI.RestAPIListenner() {
            @Override
            public void OnComplete(int httpCode, String error, String s) {
                try {
@@ -205,6 +214,96 @@ public class LoginActivity extends AppCompatActivity {
                }
            }
        });
+    }
+
+    void requestForgetPass( String email)
+    {
+        final ProgressDialog progressDialog = new ProgressDialog(LoginActivity.this);
+        progressDialog.setIndeterminate(true);
+        progressDialog.setMessage("Waiting...");
+        progressDialog.show();
+        JsonObject dataJson = new JsonObject();
+        dataJson.addProperty("email",email);
+
+
+        RestAPI.PostDataMaster(getApplicationContext(), dataJson, RestAPI.POST_FORGETPASS, new RestAPI.RestAPIListenner() {
+
+            @Override
+            public void OnComplete(int httpCode, String error, String s) {
+                try {
+                    if (!RestAPI.checkHttpCode(httpCode)) {
+
+                        return;
+                    }
+                    JsonObject jsons = (new JsonParser()).parse(s).getAsJsonObject();
+                    int statuscode = jsons.get("status").getAsInt();
+                    if(statuscode == RestAPI.STATUS_SUCCESS)
+                    {
+                        showPage(Constants.PAGE_CHANGEPASS);
+                    }
+                    else if(statuscode == 2)
+                    {
+                        Toast.makeText(LoginActivity.this, "Invalid Activation Code", Toast.LENGTH_SHORT).show();
+
+                    }
+
+                } catch (Exception ex) {
+
+                    Toast.makeText(LoginActivity.this, ex.getMessage(), Toast.LENGTH_SHORT).show();
+                    ex.printStackTrace();
+                }
+                finally {
+                    progressDialog.dismiss();
+                }
+
+            }
+        });
+    }
+
+    void changePass( String passcode , String newpass)
+    {
+        final ProgressDialog progressDialog = new ProgressDialog(LoginActivity.this);
+        progressDialog.setIndeterminate(true);
+        progressDialog.setMessage("Waiting...");
+        progressDialog.show();
+        JsonObject dataJson = new JsonObject();
+        dataJson.addProperty("email",email);
+        dataJson.addProperty("forgot_pass_code",passcode);
+        dataJson.addProperty("password",newpass);
+
+
+        RestAPI.PostDataMaster(getApplicationContext(), dataJson, RestAPI.POST_CHANGEFORGETPASS, new RestAPI.RestAPIListenner() {
+
+            @Override
+            public void OnComplete(int httpCode, String error, String s) {
+                try {
+                    if (!RestAPI.checkHttpCode(httpCode)) {
+
+                        return;
+                    }
+                    JsonObject jsons = (new JsonParser()).parse(s).getAsJsonObject();
+                    int statuscode = jsons.get("status").getAsInt();
+                    if(statuscode == RestAPI.STATUS_SUCCESS)
+                    {
+                        showPage(Constants.PAGE_LOGIN);
+                    }
+                    else if(statuscode == 2)
+                    {
+                        Toast.makeText(LoginActivity.this, "Invalid Activation Code", Toast.LENGTH_SHORT).show();
+
+                    }
+
+                } catch (Exception ex) {
+
+                    Toast.makeText(LoginActivity.this, ex.getMessage(), Toast.LENGTH_SHORT).show();
+                    ex.printStackTrace();
+                }
+                finally {
+                    progressDialog.dismiss();
+                }
+
+            }
+        });
     }
 
     public List<CityModel> getlistcity(int countryid)
@@ -245,6 +344,8 @@ public class LoginActivity extends AppCompatActivity {
                 /*Intent intent = new Intent(getApplicationContext(), RegisterActivity.class);
                 startActivityForResult(intent, REQUEST_SIGNUP);
                 finish();*/
+                showPage(Constants.PAGE_FORGETPASS);
+
             }
         });
         int typePage = getIntent().getIntExtra("type",0);
@@ -353,6 +454,41 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
+        _resetpassButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(_emailForgetPass.getText().toString().isEmpty())
+                {
+                    Toast.makeText(LoginActivity.this, "Email can not empty", Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    requestForgetPass(_emailForgetPass.getText().toString());
+                    email = _emailForgetPass.getText().toString();
+                }
+            }
+        });
+
+        _changepassButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(_newpass.getText().toString().isEmpty())
+                {
+                    Toast.makeText(LoginActivity.this, "Passcode can not empty", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                if(_newpass.getText().toString().equals(_renewpass.getText().toString()))
+                    {
+                        changePass(_passcode.getText().toString(),_renewpass.getText().toString());
+                    }
+                else
+                    {
+                        Toast.makeText(LoginActivity.this, "Password does not match the confirm password", Toast.LENGTH_SHORT).show();
+
+                    }
+
+            }
+        });
 
         callbackManager = CallbackManager.Factory.create();
         _loginFacebookButton.setReadPermissions(Arrays.asList(
@@ -457,6 +593,8 @@ public class LoginActivity extends AppCompatActivity {
         View viewLoginUpdate =  this.findViewById(R.id.flipViewUpdateLogin);
         View viewRegister =  this.findViewById(R.id.flipViewRegister);
         View viewActivation =  this.findViewById(R.id.flipViewActivation);
+        View viewForgetPass =  this.findViewById(R.id.flipViewForgetPass);
+        View viewChangePass =  this.findViewById(R.id.flipViewChangePass);
 
         _loginButton = (Button)viewLogin.findViewById(R.id.btn_login);
         _loginFacebookButton = (LoginButton)viewLogin.findViewById(R.id.btn_facebook_login);
@@ -476,6 +614,14 @@ public class LoginActivity extends AppCompatActivity {
         country = (Spinner)viewLoginUpdate.findViewById(R.id.spinner_country);
         city = (Spinner)viewLoginUpdate.findViewById(R.id.spinner_city);
         _update = (Button) viewLoginUpdate.findViewById(R.id.btn_update);
+
+        _emailForgetPass = (EditText)viewForgetPass.findViewById(R.id.input_ForgetEmail);
+        _resetpassButton = (Button) viewForgetPass.findViewById(R.id.btn_resetpassword);
+
+        _passcode = (EditText)viewChangePass.findViewById(R.id.input_passcode);
+        _newpass = (EditText)viewChangePass.findViewById(R.id.input_newpass);;
+        _renewpass = (EditText)viewChangePass.findViewById(R.id.input_repass);;
+        _changepassButton = (Button) viewChangePass.findViewById(R.id.btn_changepass);;
 
         _inputactivecode = (EditText)viewActivation.findViewById(R.id.input_code);
         _submit = (Button) viewActivation.findViewById(R.id.btn_submit);
@@ -830,6 +976,7 @@ public class LoginActivity extends AppCompatActivity {
                     int statuscode = jsons.get("status").getAsInt();
                     if (statuscode == RestAPI.STATUS_SUCCESS) {
                         DBHelper.getInstance(getApplicationContext()).CreateMessageTable();
+                        DBHelper.getInstance(getApplicationContext()).CreateNotifyTable();
                        // DBHelper.getInstance(getApplicationContext()).CreateMessageTable();
                         JsonObject jsonObject = jsons.getAsJsonArray("result").get(0).getAsJsonObject();
                         Gson gson = new Gson();

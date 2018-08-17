@@ -43,8 +43,8 @@ public class NotifyAdapter extends RecyclerView.Adapter<NotifyAdapter.MyViewHold
 
         public MyViewHolder(View view) {
             super(view);
-            detail = (TextView) view.findViewById(R.id.txtcontent);
-            name = (TextView) view.findViewById(R.id.txtname);
+            detail = (TextView) view.findViewById(R.id.txtmessage);
+            name = (TextView) view.findViewById(R.id.txttitle);
             date = (TextView) view.findViewById(R.id.txtdate);
             avatar = (ImageView) view.findViewById(R.id.imageAvatar);
             view.setOnClickListener(this);
@@ -69,7 +69,7 @@ public class NotifyAdapter extends RecyclerView.Adapter<NotifyAdapter.MyViewHold
     }
 
 
-    public void setCommentList (List<NotificationModel> data) {
+    public void setNotifyList (List<NotificationModel> data) {
         this.notifylist = data;
         this.notifyDataSetChanged();
     }
@@ -78,7 +78,7 @@ public class NotifyAdapter extends RecyclerView.Adapter<NotifyAdapter.MyViewHold
     @Override
     public NotifyAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         View itemView = LayoutInflater.from(viewGroup.getContext())
-                .inflate(R.layout.comment_row, viewGroup, false);
+                .inflate(R.layout.notify_row, viewGroup, false);
 
         return new NotifyAdapter.MyViewHolder(itemView);
     }
@@ -86,11 +86,11 @@ public class NotifyAdapter extends RecyclerView.Adapter<NotifyAdapter.MyViewHold
     @Override
     public void onBindViewHolder(@NonNull NotifyAdapter.MyViewHolder myViewHolder, int i) {
         NotificationModel notify = notifylist.get(i);
-       /* myViewHolder.name.setText(commentModel.getUsername());
-        myViewHolder.detail.setText(commentModel.getContent());
-        myViewHolder.date.setText(commentModel.getCreatetime());
+        myViewHolder.name.setText(notify.getTitle());
+        myViewHolder.detail.setText(notify.getMessage());
+       // myViewHolder.date.setText(commentModel.getCreatetime());
         Drawable mDefaultBackground = myViewHolder.avatar.getContext().getResources().getDrawable(R.drawable.avata_defaul);
-        Glide.with(myViewHolder.avatar.getContext()).load(commentModel.getAvarta()).apply(RequestOptions.circleCropTransform().diskCacheStrategy(DiskCacheStrategy.ALL).error(mDefaultBackground)).into(myViewHolder.avatar);*/
+        Glide.with(myViewHolder.avatar.getContext()).load(notify.getAvarta()).apply(RequestOptions.circleCropTransform().diskCacheStrategy(DiskCacheStrategy.ALL).error(mDefaultBackground)).into(myViewHolder.avatar);
     }
 
     @Override

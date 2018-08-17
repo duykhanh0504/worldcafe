@@ -160,7 +160,7 @@ public class SocketService extends Service {
             NotificationCompat.Builder builder =
                     new NotificationCompat.Builder(SocketService.this)
                             .setLargeIcon(((BitmapDrawable) mDefaultBackground).getBitmap())
-                            .setSmallIcon(R.drawable.ic_launcher_foreground)
+                            .setSmallIcon(R.drawable.ic_launcher)
                             .setContentTitle(data.get("username"))
                             .setContentText(data.get("message"));
 

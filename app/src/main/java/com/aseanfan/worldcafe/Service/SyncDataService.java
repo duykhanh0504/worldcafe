@@ -38,6 +38,7 @@ public class SyncDataService {
         Long offset = DBHelper.getInstance(mContext).getlastMessageChat(account_id);
         String url = String.format(RestAPI.GET_MESSAGECHAT, account_id, offset);
         listmes = new ArrayList<>();
+
         RestAPI.GetDataMaster(mContext, url, new RestAPI.RestAPIListenner() {
             @Override
             public void OnComplete(int httpCode, String error, String s) {

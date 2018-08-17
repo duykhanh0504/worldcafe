@@ -4,8 +4,10 @@ import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -16,9 +18,14 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
+import com.aseanfan.worldcafe.Helper.DBHelper;
+import com.aseanfan.worldcafe.Helper.NotificationCenter;
+import com.aseanfan.worldcafe.Model.NotificationModel;
 import com.aseanfan.worldcafe.UI.MainActivity;
+import com.aseanfan.worldcafe.Utils.Constants;
 import com.aseanfan.worldcafe.Utils.Utils;
 import com.aseanfan.worldcafe.worldcafe.R;
 import com.google.firebase.iid.FirebaseInstanceId;
@@ -29,6 +36,8 @@ import com.google.gson.JsonParser;
 
 import java.io.IOException;
 import java.net.URL;
+import java.sql.Time;
+import java.sql.Timestamp;
 import java.util.Map;
 
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
@@ -36,10 +45,17 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     private static final String CHANNEL_NAME = "FCM";
     private static final String CHANNEL_DESC = "Firebase Cloud Messaging";
     private int numMessages = 0;
+    private LocalBroadcastManager mLocalBroadcastManager;
+
 
     @Override
     public void onCreate() {
-        String token = FirebaseInstanceId.getInstance().getToken();
+        //String token = FirebaseInstanceId.getInstance().getToken();
+        mLocalBroadcastManager = LocalBroadcastManager.getInstance(getApplicationContext());
+
+        IntentFilter mIntentFilter = new IntentFilter();
+        mIntentFilter.addAction(Constants.SEND_PUSH);
+
     }
 
     private void sendRegistrationToServer(String token) {
@@ -63,14 +79,14 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         Intent intent = new Intent(this, MainActivity.class);
         intent.putExtras(bundle);
 
-        JsonObject jsons = (new JsonParser()).parse(notification.getBody()).getAsJsonObject();
+        JsonObject jsons = (new JsonParser()).parse(data.get("key")).getAsJsonObject();
 
         Drawable mDefaultBackground = MyFirebaseMessagingService.this.getResources().getDrawable(R.drawable.avata_defaul);
 
         NotificationCompat.Builder builder =
                 new NotificationCompat.Builder(MyFirebaseMessagingService.this)
                         .setLargeIcon(((BitmapDrawable) mDefaultBackground).getBitmap())
-                        .setSmallIcon(R.drawable.ic_launcher_foreground)
+                        .setSmallIcon(R.drawable.ic_launcher)
                         .setContentTitle(notification.getTitle())
                         .setContentText(jsons.get("message").getAsString());
 
@@ -82,5 +98,27 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
         NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         manager.notify(0, builder.build());
+
+        if(jsons.get("type").getAsInt()!= 0)
+        {
+            updateToDB(jsons.get("message").getAsString(), jsons.get("type").getAsInt() , notification.getTitle(), "");
+        }
+    }
+    private void updateToDB(String message , int type , String Title , String urlAvatar)
+    {
+        NotificationModel notify = new NotificationModel();
+
+        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+
+
+        notify.setAvarta(urlAvatar);
+        notify.setType(type);
+        notify.setMessage(message);
+        notify.setTitle(Title);
+        notify.setStatus(0);
+        notify.setCreatetime(String.valueOf(timestamp.getTime()));
+        DBHelper.getInstance(this).InsertNotify(notify);
+        Intent i = new Intent(Constants.SEND_PUSH);
+        mLocalBroadcastManager.sendBroadcast(i);
     }
 }

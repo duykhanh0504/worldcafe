@@ -42,6 +42,7 @@
         </activity>
         <activity
             android:name="com.aseanfan.worldcafe.UI.LoginActivity"
+            android:windowSoftInputMode="stateHidden"
             android:exported="true"
             android:screenOrientation="portrait">
             <intent-filter>

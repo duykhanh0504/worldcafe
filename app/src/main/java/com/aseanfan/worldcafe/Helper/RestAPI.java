@@ -63,6 +63,8 @@ public class RestAPI {
     public static String POST_CREATEEVENT= root_url + "/api/event/createevent";
     public static String GET_LISTEVENT= root_url + "/api/event/getallevents?account_id=%d&genre=%d&index=%d";
     public static String POST_ACTIVATION= root_url + "/api/user/activation";
+    public static String POST_FORGETPASS= root_url + "/api/user/fogotPassword";
+    public static String POST_CHANGEFORGETPASS= root_url + "/api/user/createNewPassword";
     public static String GET_LISTCOUNTRY= root_url + "/api/city/getAllCountry";
     public static String GET_LISTCITY= root_url + "/api/city/getAllCityByCountry?id=%d";
     public static String GET_LISTCOUNTRYANDCITY= root_url + "/api/city/getAllCityandCountry";
@@ -76,6 +78,8 @@ public class RestAPI {
     public static String GET_CONTACT_CHAT= root_url + "/api/follow/getListChatbyid?account_id=%d";
     public static String GET_LISTTIMELINEFOLLOWED= root_url + "/api/newfeed/getfollowednewfeeds?account_id=%d&index=%d";
     public static String POST_JOINEVENT = root_url + "/api/event/joinevents";
+    public static String GET_HISTORYPUSH = root_url + "/api/user/getListPushInfor?account_id=%d&index=%d";
+
 
     public final static int STATUS_SUCCESS = 200;
     public final static int STATUS_WRONGPASSWORD = 2;

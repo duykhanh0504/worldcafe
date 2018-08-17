@@ -157,6 +157,7 @@ public class DBHelper extends SQLiteOpenHelper {
         return res;
     }
 
+
     public void CreateMessageTable() {
         SQLiteDatabase db = this.getWritableDatabase();
         db.execSQL(
@@ -178,12 +179,12 @@ public class DBHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         db.execSQL(
                 "CREATE TABLE IF NOT EXISTS " + TABLE_NOTIFICATION +
-                        "(" + NOTIFY_ID + " INTEGER, " /*INTEGER PRIMARY KEY,*/  +
+                        "(" + NOTIFY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, " /*INTEGER PRIMARY KEY,*/  +
                         NOTIFY_MESSAGE + " TEXT, " +
                         NOTIFY_TIME + " TEXT, " +
                         NOTIFY_TITLE + " TEXT, " +
                         NOTIFY_AVATAR + " INTEGER, " +
-                        NOTIFY_STATUS + " INTEGER, " +
+                        NOTIFY_FROMID + " INTEGER, " +
                         NOTIFY_TYPE + " INTEGER, " +
                         NOTIFY_STATUS + " INTEGER)"
 
@@ -230,6 +231,24 @@ public class DBHelper extends SQLiteOpenHelper {
         return res;
     }
 
+    public int checkNotify() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor mCount= db.rawQuery("Select COUNT(*) from " +  TABLE_NOTIFICATION + " where " + NOTIFY_STATUS +  " = 0", null);
+        mCount.moveToFirst();
+        int count= mCount.getInt(0);
+        mCount.close();
+        return  count;
+    }
+
+
+    public boolean  updateStatusNotify() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(NOTIFY_STATUS, 1);
+        db.update(TABLE_NOTIFICATION, contentValues, NOTIFY_STATUS + " = ? ", new String[] { Integer.toString(0) } );
+        db.close();
+        return true;
+    }
 
 
 
@@ -254,6 +273,24 @@ public class DBHelper extends SQLiteOpenHelper {
 
     }
 
+    public boolean updateMessageChat(ChatMessageModel message) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+
+        contentValues.put(MESSAGE_ID, message.getMessage_id());
+        contentValues.put(MESSAGE, message.getMessageText());
+        contentValues.put(TYPE, message.getType());
+        contentValues.put(RECEIVED_ACCOUNT, message.getReceived());
+        contentValues.put(RECEIVER_ACCOUNT, message.getReceiver());
+        contentValues.put(SEND_ACCOUNT, message.getSend_account());
+        contentValues.put(GROUP_ID, message.getGroupid());
+        contentValues.put(CREATE_TIME, message.getCreate_day());
+        contentValues.put(RECEIVER_TIME, 0);
+        db.update(TABLE_MESSAGE_CHAT, contentValues, MESSAGE_ID + " = ? ", new String[] { Long.toString(message.getMessage_id()) } );
+        db.close();
+        return true;
+    }
+
     public boolean InsertNotify(NotificationModel notify) {
 
         SQLiteDatabase db = this.getWritableDatabase();
@@ -273,6 +310,20 @@ public class DBHelper extends SQLiteOpenHelper {
 
     }
 
+    public boolean updateNotify(NotificationModel notify) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(NOTIFY_AVATAR, notify.getAvarta());
+        contentValues.put(NOTIFY_FROMID, notify.getFromid());
+        contentValues.put(NOTIFY_MESSAGE, notify.getMessage());
+        contentValues.put(NOTIFY_STATUS, notify.getStatus());
+        contentValues.put(NOTIFY_TIME, notify.getCreatetime());
+        contentValues.put(NOTIFY_TYPE, notify.getType());
+        contentValues.put(NOTIFY_TITLE, notify.getTitle());
+        db.update(TABLE_NOTIFICATION, contentValues, NOTIFY_ID + " = ? ", new String[] { Integer.toString(notify.getNotifyid()) } );
+        db.close();
+        return true;
+    }
 
 
     @Override

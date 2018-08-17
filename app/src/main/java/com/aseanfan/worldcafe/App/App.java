@@ -53,6 +53,7 @@ public class App  extends Application {
         Store.putBooleanData(this,Store.LOGGED,false);
         DBHelper.getInstance(this).deletePerson(AccountController.getInstance().getAccount().getId());
         DBHelper.getInstance(this).deleteTableChat();
+        DBHelper.getInstance(this).deleteTableNotify();
         AccountController.getInstance().SetAccount(null);
         LoginManager.getInstance().logOut();
         Intent intent = new Intent(this , IntroActivity.class);

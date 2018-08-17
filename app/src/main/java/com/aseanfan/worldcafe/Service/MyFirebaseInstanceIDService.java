@@ -18,7 +18,7 @@ public class MyFirebaseInstanceIDService extends FirebaseInstanceIdService {
             dataJson.addProperty("push_token", token);
             dataJson.addProperty("account_id", AccountController.getInstance().getAccount().getId());
 
-            RestAPI.PostDataMaster(getApplicationContext(), dataJson, RestAPI.POST_UPDATEUSER, new RestAPI.RestAPIListenner() {
+            RestAPI.PostDataMasterWithToken(getApplicationContext(), dataJson, RestAPI.POST_UPDATEUSER, new RestAPI.RestAPIListenner() {
 
                 @Override
                 public void OnComplete(int httpCode, String error, String s) {
@@ -38,12 +38,38 @@ public class MyFirebaseInstanceIDService extends FirebaseInstanceIdService {
                 }
             });
         }
-
     }
 
     @Override
     public void onTokenRefresh() {
         String token = FirebaseInstanceId.getInstance().getToken();
+
+        if(AccountController.getInstance().getAccount().getId()!=null) {
+            JsonObject dataJson = new JsonObject();
+            dataJson.addProperty("device", "android");
+            dataJson.addProperty("push_token", token);
+            dataJson.addProperty("account_id", AccountController.getInstance().getAccount().getId());
+
+            RestAPI.PostDataMasterWithToken(getApplicationContext(), dataJson, RestAPI.POST_UPDATEUSER, new RestAPI.RestAPIListenner() {
+
+                @Override
+                public void OnComplete(int httpCode, String error, String s) {
+                    try {
+                        if (!RestAPI.checkHttpCode(httpCode)) {
+                            //AppFuncs.alert(getApplicationContext(),s,true);
+
+                            return;
+                        }
+
+
+                    } catch (Exception ex) {
+
+                        ex.printStackTrace();
+                    }
+
+                }
+            });
+        }
 
     }
 }

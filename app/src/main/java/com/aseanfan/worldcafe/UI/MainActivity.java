@@ -1,8 +1,10 @@
 package com.aseanfan.worldcafe.UI;
 
 import android.app.SearchManager;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.database.Cursor;
 import android.support.annotation.NonNull;
 import android.support.design.internal.BottomNavigationItemView;
@@ -11,6 +13,7 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.SearchView;
@@ -26,8 +29,13 @@ import com.aseanfan.worldcafe.App.AccountController;
 import com.aseanfan.worldcafe.App.App;
 import com.aseanfan.worldcafe.Helper.DBHelper;
 import com.aseanfan.worldcafe.Helper.NotificationCenter;
+import com.aseanfan.worldcafe.Model.ChatMessageModel;
 import com.aseanfan.worldcafe.Model.EventModel;
+import com.aseanfan.worldcafe.Model.NotificationModel;
 import com.aseanfan.worldcafe.Model.UserModel;
+import com.aseanfan.worldcafe.Provider.Store;
+import com.aseanfan.worldcafe.Service.MyFirebaseInstanceIDService;
+import com.aseanfan.worldcafe.Service.SocketService;
 import com.aseanfan.worldcafe.Service.SyncDataService;
 import com.aseanfan.worldcafe.UI.Adapter.CommunityAdapter;
 import com.aseanfan.worldcafe.UI.Fragment.CommunityFragment;
@@ -37,6 +45,7 @@ import com.aseanfan.worldcafe.UI.Fragment.MypageFragment;
 import com.aseanfan.worldcafe.UI.Fragment.NotifyFragment;
 import com.aseanfan.worldcafe.UI.Fragment.SettingFragment;
 import com.aseanfan.worldcafe.UI.Fragment.TimelineFragment;
+import com.aseanfan.worldcafe.Utils.Constants;
 import com.aseanfan.worldcafe.worldcafe.R;
 
 import java.io.IOException;
@@ -47,7 +56,7 @@ import io.socket.client.IO;
 import io.socket.client.Socket;
 import io.socket.emitter.Emitter;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements NotificationCenter.NotificationCenterDelegate {
 
     private CommunityFragment communityFragment;
     private TimelineFragment timelineFragment;
@@ -72,6 +81,8 @@ public class MainActivity extends AppCompatActivity {
 
     private SearchView searchView;
     private  BottomNavigationView navigation;
+    private View badge ;
+    private LocalBroadcastManager mLocalBroadcastManager;
 
    /* private Emitter.Listener onConnectError = new Emitter.Listener() {
         @Override
@@ -157,7 +168,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-       // NotificationCenter.getInstance().addObserver(this, NotificationCenter.callbackEventDetail);
+      //  NotificationCenter.getInstance().addObserver(this, NotificationCenter.callbackEventDetail);
 
       /*  mToolbar = (Toolbar) findViewById(R.id.app_toolbar);
         setSupportActionBar(mToolbar);
@@ -180,7 +191,35 @@ public class MainActivity extends AppCompatActivity {
                                                   }
                                               });*/
 
-        App app = (App) getApplication();
+      if(AccountController.getInstance().getAccount().getId()==null) {
+          Cursor cursor = DBHelper.getInstance(getApplicationContext()).getAllPersons();
+          UserModel user = AccountController.getInstance().getAccount();
+          if (Store.getBooleanData(this, Store.LOGGED) == true) {
+              if (cursor != null) {
+                  cursor.moveToFirst();
+                  user.setId(cursor.getLong(cursor.getColumnIndex(DBHelper.PERSON_COLUMN_ID)));
+                  user.setUsername(cursor.getString(cursor.getColumnIndex(DBHelper.PERSON_COLUMN_NAME)));
+                  user.setEmail(cursor.getString(cursor.getColumnIndex(DBHelper.PERSON_COLUMN_EMAIL)));
+                  user.setPhonenumber(cursor.getString(cursor.getColumnIndex(DBHelper.PERSON_PHONE_NUMBER)));
+                  user.setAvarta(cursor.getString(cursor.getColumnIndex(DBHelper.PERSON_AVATAR_URL)));
+                  user.setSex(cursor.getInt(cursor.getColumnIndex(DBHelper.PERSON_SEX)));
+                  user.setBirthday(cursor.getString(cursor.getColumnIndex(DBHelper.PERSON_BIRTHDAY)));
+                  user.setAddress(cursor.getString(cursor.getColumnIndex(DBHelper.PERSON_ADDRESS)));
+                  user.setDistrict(cursor.getString(cursor.getColumnIndex(DBHelper.PERSON_DISTRICT)));
+                  user.setCity(cursor.getInt(cursor.getColumnIndex(DBHelper.PERSON_CITY)));
+                  user.setCountry(cursor.getInt(cursor.getColumnIndex(DBHelper.PERSON_COUNTRY)));
+                  user.setCompany(cursor.getString(cursor.getColumnIndex(DBHelper.PERSON_COMPANY)));
+                  user.setSchool(cursor.getString(cursor.getColumnIndex(DBHelper.PERSON_SCHOOL)));
+                  user.setIntroduction(cursor.getString(cursor.getColumnIndex(DBHelper.PERSON_INTRODUCTION)));
+                  AccountController.getInstance().SetAccount(user);
+                  cursor.moveToFirst();
+                  while (cursor.isAfterLast() == false) {
+                      Long i = cursor.getLong(cursor.getColumnIndex(DBHelper.PERSON_COLUMN_ID));
+                      cursor.moveToNext();
+                  }
+              }
+          }
+      }
        // mSocket = app.getSocket();
 
        /* mSocket.on(Socket.EVENT_CONNECT_ERROR, onConnectError);
@@ -206,10 +245,21 @@ public class MainActivity extends AppCompatActivity {
         View v = bottomNavigationMenuView.getChildAt(3);
         BottomNavigationItemView itemView = (BottomNavigationItemView) v;
 
-        View badge = LayoutInflater.from(this)
+        badge = LayoutInflater.from(this)
                 .inflate(R.layout.notification_badge, bottomNavigationMenuView, false);
-
         itemView.addView(badge);
+        if(DBHelper.getInstance(this).checkNotify() > 0) {
+           badge.setVisibility(View.VISIBLE);
+        }
+        else
+        {
+            badge.setVisibility(View.GONE);
+        }
+
+        mLocalBroadcastManager = LocalBroadcastManager.getInstance(getApplicationContext());
+        IntentFilter mIntentFilter = new IntentFilter();
+        mIntentFilter.addAction(Constants.SEND_PUSH);
+        mLocalBroadcastManager.registerReceiver(mBroadcastReceiver, mIntentFilter);
 
         showFirstFragment();
 
@@ -224,6 +274,17 @@ public class MainActivity extends AppCompatActivity {
 
         return true;
     }*/
+
+    private final BroadcastReceiver mBroadcastReceiver  = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent.getAction().equals(Constants.SEND_PUSH)) {
+                checkbadge();
+
+            }
+        }
+    };
+
 
     public void gotoMypage()
     {
@@ -312,6 +373,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void showfourFragment() {
+        DBHelper.getInstance(this).updateStatusNotify();
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.replace(R.id.content, notifyFragment, TAG_NOTIFY);
       /*  FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
@@ -360,7 +422,26 @@ public class MainActivity extends AppCompatActivity {
         ft.commit();
     }
 
+    public void checkbadge()
+    {
+        if(DBHelper.getInstance(this).checkNotify() > 0) {
+            badge.setVisibility(View.VISIBLE);
+        }
+        else
+        {
+            badge.setVisibility(View.GONE);
+        }
 
+    }
+
+    @Override
+    public void didReceivedNotification(int id, Object... args) {
+        if(id == NotificationCenter.callbacksearch)
+        {
+            String i = (String)args[0];
+        }
+
+    }
     public void callDetailEvent(EventModel eventid) {
 
           detailcomunityfragment = new DetailCommunityFragment();

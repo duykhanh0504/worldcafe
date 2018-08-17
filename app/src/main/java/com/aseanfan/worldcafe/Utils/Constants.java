@@ -11,8 +11,11 @@ public class Constants {
     public static int PAGE_UPDATE = 1;
     public static int PAGE_REGISTER = 2;
     public static int PAGE_ACTIVE = 3;
+    public static int PAGE_FORGETPASS = 4;
+    public static int PAGE_CHANGEPASS = 5;
 
-    public static int MALE = 1;
+
+ public static int MALE = 1;
     public static int FEMALE = 2;
 
     public static int CLICK_TIMELINE= 0;
@@ -24,6 +27,7 @@ public class Constants {
     public static  String SEND_ACTION = "SEND_ACTION";
     public static  String REICEVE_ACTION = "REICEVE_ACTION";
     public static  String DISCONECT_SOCKET_ACTION = "DISCONECT_SOCKET";
+    public static  String SEND_PUSH = "SEND_PUSH";
 
     public static  String FRIENDID = "FRIEND_ID";
     public static  String TYPE_MEASSAGE = "TYPE_MESSAGE";
