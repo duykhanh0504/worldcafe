@@ -37,6 +37,7 @@ import android.widget.TextView;
 import android.widget.ViewFlipper;
 
 import com.aseanfan.worldcafe.App.AccountController;
+import com.aseanfan.worldcafe.App.App;
 import com.aseanfan.worldcafe.Helper.DBHelper;
 import com.aseanfan.worldcafe.Helper.NotificationCenter;
 import com.aseanfan.worldcafe.Helper.RestAPI;
@@ -45,6 +46,8 @@ import com.aseanfan.worldcafe.Model.UserModel;
 import com.aseanfan.worldcafe.UI.Adapter.CommunityAdapter;
 import com.aseanfan.worldcafe.UI.Adapter.FragmentEventPageAdapter;
 import com.aseanfan.worldcafe.UI.Adapter.FragmentMyPagerAdapter;
+import com.aseanfan.worldcafe.UI.Adapter.SpinnerEventAdapter;
+import com.aseanfan.worldcafe.UI.Component.ViewDialog;
 import com.aseanfan.worldcafe.UI.IntroActivity;
 import com.aseanfan.worldcafe.UI.MainActivity;
 import com.aseanfan.worldcafe.Utils.Constants;
@@ -146,6 +149,18 @@ public class CommunityFragment extends Fragment implements NotificationCenter.No
 
                         return;
                     }
+                    if(RestAPI.checkExpiredtoken(s))
+                    {
+                        ViewDialog dialog = new ViewDialog();
+                        dialog.showDialogOK(getActivity(), "invalid token", new ViewDialog.DialogListenner() {
+                            @Override
+                            public void OnClickConfirm() {
+                               App.mApp.Logout();
+                            }
+                        });
+                        return;
+                    }
+
                     JsonArray jsonArray = (new JsonParser()).parse(s).getAsJsonObject().getAsJsonArray("result");
                     Gson gson = new Gson();
                     java.lang.reflect.Type type = new TypeToken<List<EventModel>>(){}.getType();
@@ -311,10 +326,11 @@ public class CommunityFragment extends Fragment implements NotificationCenter.No
        // viewpager.setDisplayedChild(0);
 
         dropdown = (Spinner)view.findViewById(R.id.spinnersort);
-        ArrayAdapter<String>adapter = new ArrayAdapter<String>(container.getContext(),
-                android.R.layout.simple_spinner_item,paths);
+       // ArrayAdapter<String>adapter = new ArrayAdapter<String>(container.getContext(),
+               // android.R.layout.simple_spinner_item,paths);
 
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+       // adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        SpinnerEventAdapter adapter = new SpinnerEventAdapter(getActivity(),paths);
         dropdown.setAdapter(adapter);
         dropdown.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override

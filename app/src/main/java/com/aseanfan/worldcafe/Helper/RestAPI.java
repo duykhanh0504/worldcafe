@@ -4,7 +4,9 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.widget.ImageView;
 
+import com.aseanfan.worldcafe.App.App;
 import com.aseanfan.worldcafe.Provider.Store;
+import com.aseanfan.worldcafe.UI.Component.ViewDialog;
 import com.aseanfan.worldcafe.worldcafe.R;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
@@ -122,8 +124,8 @@ public class RestAPI {
         JSONObject mainObject = null;
         try {
             mainObject = new JSONObject(s);
-            String  errorstatus = mainObject.getString("error");
-            if(errorstatus.equals("invalid_token")) {
+            String  errorstatus = mainObject.getString("result");
+            if(errorstatus.equals("Invalid Token!")) {
                 return true;
             }
         } catch (JSONException e) {
@@ -136,6 +138,11 @@ public class RestAPI {
     public static boolean checkHttpCode(int code) {
         return ((code == 200) || (code == 201)) ? true : false;
     }
+
+    public static boolean checkInvalidToken(int code) {
+        return ((code == 2)) ? true : false;
+    }
+
 
     public static int  checkStatusCode(int code) {
        switch (code)
@@ -240,7 +247,7 @@ public class RestAPI {
             public void onCompleted(Exception e, Response<String> result) {
                 try {
 
-                    listenner.OnComplete((result != null) ? result.getHeaders().code() : 0, (e != null) ? e.getLocalizedMessage() : null, (result != null) ? result.getResult() : null);
+                        listenner.OnComplete((result != null) ? result.getHeaders().code() : 0, (e != null) ? e.getLocalizedMessage() : null, (result != null) ? result.getResult() : null);
 
                 }catch (Exception ex) {
                     ex.printStackTrace();
@@ -257,7 +264,8 @@ public class RestAPI {
             public void onCompleted(Exception e, Response<String> result) {
                 try {
 
-                    listenner.OnComplete((result != null) ? result.getHeaders().code() : 0, (e != null) ? e.getLocalizedMessage() : null, (result != null) ? result.getResult() : null);
+                        listenner.OnComplete((result != null) ? result.getHeaders().code() : 0, (e != null) ? e.getLocalizedMessage() : null, (result != null) ? result.getResult() : null);
+
 
                 }catch (Exception ex) {
                     ex.printStackTrace();
@@ -302,7 +310,8 @@ public class RestAPI {
             @Override
             public void onCompleted(Exception e, Response<String> result) {
 
-                listenner.OnComplete((result != null && result.getHeaders() != null) ? result.getHeaders().code() : 0, (e != null) ? e.getLocalizedMessage() : null, (result != null) ? result.getResult() : null);
+                    listenner.OnComplete((result != null && result.getHeaders() != null) ? result.getHeaders().code() : 0, (e != null) ? e.getLocalizedMessage() : null, (result != null) ? result.getResult() : null);
+
 
             }
         });
