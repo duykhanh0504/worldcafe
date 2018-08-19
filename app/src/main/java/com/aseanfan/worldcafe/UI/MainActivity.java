@@ -180,7 +180,7 @@ public class MainActivity extends AppCompatActivity {
                                                   }
                                               });*/
 
-        App app = (App) getApplication();
+       // App app = (App) getApplication();
        // mSocket = app.getSocket();
 
        /* mSocket.on(Socket.EVENT_CONNECT_ERROR, onConnectError);
