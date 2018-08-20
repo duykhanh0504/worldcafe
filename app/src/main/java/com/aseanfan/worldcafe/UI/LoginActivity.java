@@ -170,7 +170,7 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
-    public void initDefaultCountry()
+   /* public void initDefaultCountry()
     {
         if(listarea ==null) {
             listarea = new ArrayList<>();
@@ -187,7 +187,7 @@ public class LoginActivity extends AppCompatActivity {
         listcity1.add(new CityModel(5,"Osaka"));
         listarea.add(new AreaModel(2,"Japan",listcity1));
 
-    }
+    }*/
 
     void getlistcountry()
     {
@@ -327,7 +327,9 @@ public class LoginActivity extends AppCompatActivity {
 
         getlocation();
 
-        initDefaultCountry();
+       // initDefaultCountry();
+        listarea = new ArrayList<>();
+        listarea = Utils.initDefaultCountry();
 
         getlistcountry();
 

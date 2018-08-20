@@ -40,6 +40,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
 
     public static final String TABLE_MESSAGE_CHAT = "message_chat";
+    public static final String LOCAL_MESSAGE_ID = "local_message_id";
     public static final String MESSAGE_ID = "message_id";
     public static final String MESSAGE = "message";
     public static final String TYPE = "type";
@@ -52,6 +53,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
     public static final String TABLE_NOTIFICATION = "notification";
     public static final String NOTIFY_ID = "notify_id";
+    public static final String SERVER_ID = "notify_server_id";
     public static final String NOTIFY_MESSAGE = "notify_message";
     public static final String NOTIFY_TITLE= "notify_title";
     public static final String NOTIFY_TIME= "notify_time";
@@ -162,7 +164,8 @@ public class DBHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         db.execSQL(
                 "CREATE TABLE IF NOT EXISTS " + TABLE_MESSAGE_CHAT +
-                        "(" + MESSAGE_ID + " INTEGER, " /*INTEGER PRIMARY KEY,*/  +
+                        "(" + LOCAL_MESSAGE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, " /*INTEGER PRIMARY KEY,*/  +
+                        MESSAGE_ID + " INTEGER, " /*INTEGER PRIMARY KEY,*/  +
                         MESSAGE + " TEXT, " +
                         TYPE + " INTEGER, " +
                         RECEIVED_ACCOUNT + " TEXT, " +
@@ -180,6 +183,7 @@ public class DBHelper extends SQLiteOpenHelper {
         db.execSQL(
                 "CREATE TABLE IF NOT EXISTS " + TABLE_NOTIFICATION +
                         "(" + NOTIFY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, " /*INTEGER PRIMARY KEY,*/  +
+                        SERVER_ID + " INTEGER, " /*INTEGER PRIMARY KEY,*/  +
                         NOTIFY_MESSAGE + " TEXT, " +
                         NOTIFY_TIME + " TEXT, " +
                         NOTIFY_TITLE + " TEXT, " +

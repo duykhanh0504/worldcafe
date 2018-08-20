@@ -19,6 +19,8 @@ public class EventModel {
     private Long account_id;
     private String start_time;
     private String city_name;
+    private int isJoin;
+    private int isOwner;
 
 
     public EventModel() {
@@ -141,6 +143,22 @@ public class EventModel {
 
     public void setAccount_id(Long account_id) {
         this.account_id = account_id;
+    }
+
+    public int getIsjoin() {
+        return isJoin;
+    }
+
+    public void setIsJoin(int isJoin) {
+        this.isJoin = isJoin;
+    }
+
+    public int getIsOwner() {
+        return isOwner;
+    }
+
+    public void setIsOwner(int isOwner) {
+        this.isOwner = isOwner;
     }
 
 }

@@ -421,6 +421,15 @@ public class MainActivity extends AppCompatActivity implements NotificationCente
           bundle.putLong("eventid",eventid.getEventid());
           bundle.putString("title",eventid.getTitle());
           bundle.putString("content",eventid.getContent());
+          bundle.putInt("isJoin",eventid.getIsjoin());
+          bundle.putInt("type",eventid.getType());
+          bundle.putString("startime",eventid.getStarttime());
+          bundle.putString("place",eventid.getCityname());
+          bundle.putInt("numberlike",eventid.getNumberLike());
+          bundle.putInt("numbercomment",eventid.getNumberComment());
+          bundle.putString("avatar",eventid.getUrlAvatar());
+          bundle.putString("username",eventid.getUsername());
+
           if(eventid.getUrlImage() !=null && eventid.getUrlImage().size() >0) {
             bundle.putString("image", eventid.getUrlImage().get(0));
           }

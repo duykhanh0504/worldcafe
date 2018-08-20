@@ -13,6 +13,8 @@ import android.view.Display;
 
 
 import com.aseanfan.worldcafe.App.App;
+import com.aseanfan.worldcafe.Model.AreaModel;
+import com.aseanfan.worldcafe.Model.CityModel;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -24,12 +26,34 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
 
 public class Utils {
 
+
+    public static List<AreaModel> initDefaultCountry()
+    {
+
+        List<AreaModel> listarea = new ArrayList<>();
+
+        listarea.clear();
+        List<CityModel> listcity = new ArrayList();
+        listcity.add(new CityModel(1,"HCM"));
+        listcity.add(new CityModel(2,"HA NOI"));
+        listcity.add(new CityModel(3,"DA NANG"));
+
+        listarea.add(new AreaModel(1,"Viet Nam",listcity));
+        List<CityModel> listcity1 = new ArrayList();
+        listcity1.add(new CityModel(4,"Tokyo"));
+        listcity1.add(new CityModel(5,"Osaka"));
+        listarea.add(new AreaModel(2,"Japan",listcity1));
+        return listarea;
+
+    }
 
     public static String ConvertDate(String s)
     {

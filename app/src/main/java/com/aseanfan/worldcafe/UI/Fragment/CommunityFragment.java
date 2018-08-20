@@ -46,6 +46,7 @@ import com.aseanfan.worldcafe.Model.UserModel;
 import com.aseanfan.worldcafe.UI.Adapter.CommunityAdapter;
 import com.aseanfan.worldcafe.UI.Adapter.FragmentEventPageAdapter;
 import com.aseanfan.worldcafe.UI.Adapter.FragmentMyPagerAdapter;
+import com.aseanfan.worldcafe.UI.Adapter.SpinnerEventAdapter;
 import com.aseanfan.worldcafe.UI.Component.ViewDialog;
 import com.aseanfan.worldcafe.UI.IntroActivity;
 import com.aseanfan.worldcafe.UI.MainActivity;
@@ -325,10 +326,11 @@ public class CommunityFragment extends Fragment implements NotificationCenter.No
        // viewpager.setDisplayedChild(0);
 
         dropdown = (Spinner)view.findViewById(R.id.spinnersort);
-        ArrayAdapter<String>adapter = new ArrayAdapter<String>(container.getContext(),
-                android.R.layout.simple_spinner_item,paths);
+       // ArrayAdapter<String>adapter = new ArrayAdapter<String>(container.getContext(),
+               // android.R.layout.simple_spinner_item,paths);
 
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+       // adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        SpinnerEventAdapter adapter = new SpinnerEventAdapter(getActivity(),paths);
         dropdown.setAdapter(adapter);
         dropdown.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
