@@ -225,7 +225,7 @@ public class PostTimeLineActivity extends AppCompatActivity {
                 try {
                     if (!RestAPI.checkHttpCode(httpCode)) {
                         //AppFuncs.alert(getApplicationContext(),s,true);
-                        Toast.makeText(getBaseContext(),"Failed to connect to server, please try again", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getBaseContext(),getResources().getString(R.string.can_not_connect_server), Toast.LENGTH_LONG).show();
                         return;
                     }
                     JsonObject jsons = (new JsonParser()).parse(s).getAsJsonObject();

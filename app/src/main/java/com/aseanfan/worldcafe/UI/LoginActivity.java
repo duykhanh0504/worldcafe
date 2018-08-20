@@ -48,6 +48,7 @@ import com.aseanfan.worldcafe.Service.MyFirebaseInstanceIDService;
 import com.aseanfan.worldcafe.Service.SocketService;
 import com.aseanfan.worldcafe.UI.Adapter.SpinnerAreaAdapter;
 import com.aseanfan.worldcafe.UI.Adapter.SpinnerCityAdapter;
+import com.aseanfan.worldcafe.UI.Component.ViewDialog;
 import com.aseanfan.worldcafe.Utils.Constants;
 import com.aseanfan.worldcafe.Utils.Utils;
 import com.aseanfan.worldcafe.worldcafe.R;
@@ -120,6 +121,7 @@ public class LoginActivity extends AppCompatActivity {
     private EditText _renewpass;
     private Button _changepassButton;
 
+    private ViewDialog dialog = new ViewDialog();
 
     CallbackManager callbackManager;
 
@@ -191,13 +193,13 @@ public class LoginActivity extends AppCompatActivity {
 
     void getlistcountry()
     {
-       RestAPI.GetDataMasterWithToken(this, RestAPI.GET_LISTCOUNTRYANDCITY, new RestAPI.RestAPIListenner() {
+       RestAPI.GetDataMaster(this, RestAPI.GET_LISTCOUNTRYANDCITY, new RestAPI.RestAPIListenner() {
            @Override
            public void OnComplete(int httpCode, String error, String s) {
                try {
                    if (!RestAPI.checkHttpCode(httpCode)) {
                        //AppFuncs.alert(getApplicationContext(),s,true);
-
+                       dialog.showDialogCancel( LoginActivity.this,getResources().getString(R.string.can_not_connect_server) );
                        return;
                    }
                    JsonArray jsonArray = (new JsonParser()).parse(s).getAsJsonObject().getAsJsonArray("list");
@@ -209,7 +211,7 @@ public class LoginActivity extends AppCompatActivity {
 
                }
                catch (Exception ex) {
-
+                   dialog.showDialogCancel( LoginActivity.this,ex.getMessage());
                    ex.printStackTrace();
                }
            }
@@ -232,7 +234,7 @@ public class LoginActivity extends AppCompatActivity {
             public void OnComplete(int httpCode, String error, String s) {
                 try {
                     if (!RestAPI.checkHttpCode(httpCode)) {
-
+                        dialog.showDialogCancel( LoginActivity.this,getResources().getString(R.string.can_not_connect_server) );
                         return;
                     }
                     JsonObject jsons = (new JsonParser()).parse(s).getAsJsonObject();
@@ -243,13 +245,14 @@ public class LoginActivity extends AppCompatActivity {
                     }
                     else if(statuscode == 2)
                     {
-                        Toast.makeText(LoginActivity.this, "Invalid Activation Code", Toast.LENGTH_SHORT).show();
+                        dialog.showDialogCancel( LoginActivity.this,"Invalid Activation Code" );
+                        //Toast.makeText(LoginActivity.this, "Invalid Activation Code", Toast.LENGTH_SHORT).show();
 
                     }
 
                 } catch (Exception ex) {
-
-                    Toast.makeText(LoginActivity.this, ex.getMessage(), Toast.LENGTH_SHORT).show();
+                    dialog.showDialogCancel( LoginActivity.this,ex.getMessage());
+                  //  Toast.makeText(LoginActivity.this, ex.getMessage(), Toast.LENGTH_SHORT).show();
                     ex.printStackTrace();
                 }
                 finally {
@@ -278,7 +281,7 @@ public class LoginActivity extends AppCompatActivity {
             public void OnComplete(int httpCode, String error, String s) {
                 try {
                     if (!RestAPI.checkHttpCode(httpCode)) {
-
+                        dialog.showDialogCancel( LoginActivity.this,getResources().getString(R.string.can_not_connect_server) );
                         return;
                     }
                     JsonObject jsons = (new JsonParser()).parse(s).getAsJsonObject();
@@ -289,12 +292,14 @@ public class LoginActivity extends AppCompatActivity {
                     }
                     else if(statuscode == 2)
                     {
-                        Toast.makeText(LoginActivity.this, "Invalid Activation Code", Toast.LENGTH_SHORT).show();
+                        dialog.showDialogCancel( LoginActivity.this,"Invalid Activation Code" );
+                        //Toast.makeText(LoginActivity.this, "Invalid Activation Code", Toast.LENGTH_SHORT).show();
 
                     }
 
                 } catch (Exception ex) {
 
+                    dialog.showDialogCancel( LoginActivity.this,ex.getMessage() );
                     Toast.makeText(LoginActivity.this, ex.getMessage(), Toast.LENGTH_SHORT).show();
                     ex.printStackTrace();
                 }
@@ -475,7 +480,8 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View view) {
                 if(_newpass.getText().toString().isEmpty())
                 {
-                    Toast.makeText(LoginActivity.this, "Passcode can not empty", Toast.LENGTH_SHORT).show();
+                    dialog.showDialogCancel( LoginActivity.this,"Passcode can not empty" );
+                //    Toast.makeText(LoginActivity.this, "Passcode can not empty", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
@@ -485,7 +491,8 @@ public class LoginActivity extends AppCompatActivity {
                     }
                 else
                     {
-                        Toast.makeText(LoginActivity.this, "Password does not match the confirm password", Toast.LENGTH_SHORT).show();
+                        dialog.showDialogCancel( LoginActivity.this,"Password does not match the confirm password" );
+                        //Toast.makeText(LoginActivity.this, "Password does not match the confirm password", Toast.LENGTH_SHORT).show();
 
                     }
 
@@ -563,7 +570,9 @@ public class LoginActivity extends AppCompatActivity {
                                             register(u.getEmail(),null);
 
                                         } catch (JSONException e) {
+                                            dialog.showDialogCancel( LoginActivity.this,e.getMessage() );
                                             e.printStackTrace();
+
                                         }
 
                                     }
@@ -701,6 +710,7 @@ public class LoginActivity extends AppCompatActivity {
                 builder.show();*/
 
         } catch (Exception e) {
+         //   dialog.showDialogCancel( LoginActivity.this,"Camera Permission error" );
             Toast.makeText(this, "Camera Permission error", Toast.LENGTH_SHORT).show();
             e.printStackTrace();
         }
@@ -720,7 +730,7 @@ public class LoginActivity extends AppCompatActivity {
             public void OnComplete(int httpCode, String error, String s) {
                 try {
                     if (!RestAPI.checkHttpCode(httpCode)) {
-
+                        dialog.showDialogCancel( LoginActivity.this,getResources().getString(R.string.can_not_connect_server) );
                         return;
                     }
                     JsonObject jsons = (new JsonParser()).parse(s).getAsJsonObject();
@@ -731,13 +741,15 @@ public class LoginActivity extends AppCompatActivity {
                     }
                     else if(statuscode == 2)
                     {
-                        Toast.makeText(LoginActivity.this, "Invalid Activation Code", Toast.LENGTH_SHORT).show();
+                        dialog.showDialogCancel( LoginActivity.this,"Invalid Activation Code" );
+                       // Toast.makeText(LoginActivity.this, "Invalid Activation Code", Toast.LENGTH_SHORT).show();
 
                     }
 
                 } catch (Exception ex) {
+                    dialog.showDialogCancel( LoginActivity.this,ex.getMessage() );
 
-                    Toast.makeText(LoginActivity.this, ex.getMessage(), Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(LoginActivity.this, ex.getMessage(), Toast.LENGTH_SHORT).show();
                     ex.printStackTrace();
                 }
                 finally {
@@ -795,7 +807,7 @@ public class LoginActivity extends AppCompatActivity {
                 try {
                     if (!RestAPI.checkHttpCode(httpCode)) {
                         //AppFuncs.alert(getApplicationContext(),s,true);
-
+                        dialog.showDialogCancel( LoginActivity.this,getResources().getString(R.string.can_not_connect_server) );
                         return;
                     }
                     JsonObject jsons = (new JsonParser()).parse(s).getAsJsonObject();
@@ -822,7 +834,8 @@ public class LoginActivity extends AppCompatActivity {
                            /* if (USING_FACEBOOK == true) {
                                 login(email, password, LOGIN_FACEBOOK);
                             } else*/ {
-                                Toast.makeText(LoginActivity.this, "Account exist!!!", Toast.LENGTH_SHORT).show();
+                                dialog.showDialogCancel( LoginActivity.this,"Account exist!!!" );
+                                //Toast.makeText(LoginActivity.this, "Account exist!!!", Toast.LENGTH_SHORT).show();
                             }
                         }
                 } catch (Exception ex) {
@@ -854,12 +867,15 @@ public class LoginActivity extends AppCompatActivity {
         }
         if(_usernameupdate.getText().toString().isEmpty())
         {
-            Toast.makeText(LoginActivity.this, "User name can not empty ", Toast.LENGTH_SHORT).show();
+            dialog.showDialogCancel( LoginActivity.this,"User name can not empty " );
+         //   Toast.makeText(LoginActivity.this, "User name can not empty ", Toast.LENGTH_SHORT).show();
             return;
         }
         if(_birthdayupdate.getText().toString().isEmpty())
         {
-            Toast.makeText(LoginActivity.this, "Birthday can not empty ", Toast.LENGTH_SHORT).show();
+
+            dialog.showDialogCancel( LoginActivity.this,"Birthday can not empty " );
+         //   Toast.makeText(LoginActivity.this, "Birthday can not empty ", Toast.LENGTH_SHORT).show();
             return;
         }
         JsonObject dataJson = new JsonObject();
@@ -889,7 +905,7 @@ public class LoginActivity extends AppCompatActivity {
                 try {
                     if (!RestAPI.checkHttpCode(httpCode)) {
                         //AppFuncs.alert(getApplicationContext(),s,true);
-
+                        dialog.showDialogCancel( LoginActivity.this,getResources().getString(R.string.can_not_connect_server) );
                         return;
                     }
 
@@ -906,6 +922,7 @@ public class LoginActivity extends AppCompatActivity {
 
                 } catch (Exception ex) {
                     progressDialog.dismiss();
+                    dialog.showDialogCancel( LoginActivity.this,ex.getMessage());
                     ex.printStackTrace();
                 }
 
@@ -938,7 +955,8 @@ public class LoginActivity extends AppCompatActivity {
       {
           if (password==null || password.isEmpty())
           {
-              Toast.makeText(LoginActivity.this, "Password can not empty", Toast.LENGTH_SHORT).show();
+             // Toast.makeText(LoginActivity.this, "Password can not empty", Toast.LENGTH_SHORT).show();
+              dialog.showDialogCancel( LoginActivity.this,"Password can not empty" );
               return;
           }
       }
@@ -971,7 +989,8 @@ public class LoginActivity extends AppCompatActivity {
                     if (!RestAPI.checkHttpCode(httpCode)) {
                         //AppFuncs.alert(getApplicationContext(),s,true);
                         progressDialog.dismiss();
-                        Toast.makeText(getBaseContext(),"Failed to connect to server, please try again", Toast.LENGTH_LONG).show();
+                        dialog.showDialogCancel( LoginActivity.this,getResources().getString(R.string.can_not_connect_server) );
+                       // Toast.makeText(getBaseContext(),"Failed to connect to server, please try again", Toast.LENGTH_LONG).show();
                         return;
                     }
                     JsonObject jsons = (new JsonParser()).parse(s).getAsJsonObject();
@@ -1036,11 +1055,13 @@ public class LoginActivity extends AppCompatActivity {
                     else
                     {
                         progressDialog.dismiss();
-                        Toast.makeText(getBaseContext(), getString(RestAPI.checkStatusCode(statuscode)), Toast.LENGTH_LONG).show();
+                        dialog.showDialogCancel( LoginActivity.this,getString(RestAPI.checkStatusCode(statuscode)));
+                        //Toast.makeText(getBaseContext(), getString(RestAPI.checkStatusCode(statuscode)), Toast.LENGTH_LONG).show();
                     }
                     } catch(Exception ex){
                         progressDialog.dismiss();
-                        Toast.makeText(getBaseContext(), ex.getMessage(), Toast.LENGTH_LONG).show();
+                        dialog.showDialogCancel( LoginActivity.this,ex.getMessage());
+                        //Toast.makeText(getBaseContext(), ex.getMessage(), Toast.LENGTH_LONG).show();
                             ex.printStackTrace();
                     }
                     finally {
@@ -1058,7 +1079,7 @@ public class LoginActivity extends AppCompatActivity {
     {
         boolean valid = true;
         if (email.isEmpty() || !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            Toast.makeText(getBaseContext(), "enter a valid email address", Toast.LENGTH_LONG).show();
+            //Toast.makeText(getBaseContext(), "enter a valid email address", Toast.LENGTH_LONG).show();
             valid = false;
         } else {
             _emailText.setError(null);
@@ -1070,7 +1091,7 @@ public class LoginActivity extends AppCompatActivity {
     {
         boolean valid = true;
         if (password.isEmpty() || password.length() < 6 || password.length() > 20) {
-            Toast.makeText(getBaseContext(), "between 6 and 20 alphanumeric characters", Toast.LENGTH_LONG).show();
+           // Toast.makeText(getBaseContext(), "between 6 and 20 alphanumeric characters", Toast.LENGTH_LONG).show();
             valid = false;
         } else {
             _passwordText.setError(null);

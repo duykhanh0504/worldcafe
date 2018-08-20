@@ -244,6 +244,19 @@ public class DBHelper extends SQLiteOpenHelper {
         return  count;
     }
 
+    public Long getlastNotify(Long accountid) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor res =  db.rawQuery( "SELECT DISTINCT "+ SERVER_ID + " FROM " + TABLE_NOTIFICATION  + " ORDER BY " +  SERVER_ID  +" DESC LIMIT 1", null );
+        if (res != null) {
+            res.moveToFirst();
+            if(res.isAfterLast()==false) {
+                return res.getLong(res.getColumnIndex(DBHelper.SERVER_ID));
+            }
+
+        }
+
+        return Long.valueOf(0);
+    }
 
     public boolean  updateStatusNotify() {
         SQLiteDatabase db = this.getWritableDatabase();
