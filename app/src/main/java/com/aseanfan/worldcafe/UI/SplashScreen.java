@@ -13,6 +13,7 @@ import com.aseanfan.worldcafe.Provider.Store;
 import com.aseanfan.worldcafe.Service.MyFirebaseInstanceIDService;
 import com.aseanfan.worldcafe.Service.SocketService;
 import com.aseanfan.worldcafe.worldcafe.R;
+import com.google.android.gms.ads.MobileAds;
 import com.yanzhenjie.album.Album;
 import com.yanzhenjie.album.AlbumConfig;
 
@@ -24,6 +25,8 @@ public class SplashScreen extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_screen);
+
+        MobileAds.initialize(this, this.getString(R.string.banner_ad_unit_id));
 
         int secondsDelayed = 1;
         new Handler().postDelayed(new Runnable() {

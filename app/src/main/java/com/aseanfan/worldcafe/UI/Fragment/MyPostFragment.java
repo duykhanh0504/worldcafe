@@ -199,7 +199,7 @@ public class MyPostFragment  extends android.support.v4.app.Fragment implements 
 
         posttimeline = new ArrayList<>();
 
-        Adapter = new PostTimelineAdapter(null);
+        Adapter = new PostTimelineAdapter(null,false);
         Adapter.setOnItemClickListener(this);
         list_mypost = (RecyclerView) view.findViewById(R.id.list_post_mypage);
         final RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(container.getContext());

@@ -37,6 +37,7 @@ import com.aseanfan.worldcafe.Helper.RestAPI;
 import com.aseanfan.worldcafe.Model.PostTimelineModel;
 import com.aseanfan.worldcafe.Provider.Store;
 import com.aseanfan.worldcafe.UI.Adapter.PostTimelineAdapter;
+import com.aseanfan.worldcafe.UI.Adapter.SpinnerEventAdapter;
 import com.aseanfan.worldcafe.UI.CommentActivity;
 import com.aseanfan.worldcafe.UI.MainActivity;
 import com.aseanfan.worldcafe.UI.PostTimeLineActivity;
@@ -46,6 +47,8 @@ import com.aseanfan.worldcafe.worldcafe.R;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -86,6 +89,8 @@ public class TimelineFragment extends android.support.v4.app.Fragment implements
     private String keyword = "";
 
     private SearchView searchView;
+
+    private AdView adView;
 
     String[] listcity = {"HCM", "Ha Noi", "Da Nang", "Tokyo", "Osaka"};
     int[] listidcity = {1, 2, 3, 4, 5};
@@ -309,7 +314,7 @@ public class TimelineFragment extends android.support.v4.app.Fragment implements
 
         current_pos = 0;
 
-        mAdapter = new PostTimelineAdapter(null);
+        mAdapter = new PostTimelineAdapter(null,false);
         list_post = (RecyclerView) view.findViewById(R.id.listtimeline);
         posttimeline = (LinearLayout) view.findViewById(R.id.posttimeline);
         final RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(container.getContext());
@@ -318,15 +323,24 @@ public class TimelineFragment extends android.support.v4.app.Fragment implements
         list_post.setAdapter(mAdapter);
         loading = (ProgressBar)view.findViewById(R.id.loading_spinner);
         imageAvatar = (ImageView)view.findViewById(R.id.imageAvatar);
+
+        adView = (AdView) view.findViewById(R.id.ad_view);
+        AdRequest adRequest = new AdRequest.Builder()
+                .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
+                .build();
+
+        // Start loading the ad in the background.
+        adView.loadAd(adRequest);
         Drawable mDefaultBackground = getContext().getResources().getDrawable(R.drawable.avata_defaul);
         Glide.with(getContext()).load(AccountController.getInstance().getAccount().getAvarta()).apply(RequestOptions.circleCropTransform().diskCacheStrategy(DiskCacheStrategy.ALL).error(mDefaultBackground)).into(imageAvatar);
 
 
         dropdown = (Spinner)view.findViewById(R.id.spinnersort);
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(container.getContext(),
-                android.R.layout.simple_spinner_item,paths);
+    //    ArrayAdapter<String> adapter = new ArrayAdapter<String>(container.getContext(),
+               // android.R.layout.simple_spinner_item,paths);
 
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+      //  adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        SpinnerEventAdapter adapter = new SpinnerEventAdapter(getActivity(),paths);
         dropdown.setAdapter(adapter);
         dropdown.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override

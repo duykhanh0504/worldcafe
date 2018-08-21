@@ -2,6 +2,7 @@ package com.aseanfan.worldcafe.UI.Adapter;
 
 import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
+import android.support.v7.view.menu.MenuView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,12 +20,15 @@ import com.bumptech.glide.request.RequestOptions;
 
 import java.util.List;
 
-public class NotifyAdapter extends RecyclerView.Adapter<NotifyAdapter.MyViewHolder> {
+public class NotifyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
 
     private List<NotificationModel> notifylist;
 
     private static NotifyAdapter.ClickListener clickListener;
+
+    private int empty = 0;
+
 
     public void setOnItemClickListener(NotifyAdapter.ClickListener clickListener) {
       //  NotifyAdapter.clickListener = clickListener;
@@ -71,33 +75,59 @@ public class NotifyAdapter extends RecyclerView.Adapter<NotifyAdapter.MyViewHold
 
     public void setNotifyList (List<NotificationModel> data) {
         this.notifylist = data;
+        if(data.size() ==0)
+        {
+            empty = 1;
+        }
         this.notifyDataSetChanged();
     }
 
     @NonNull
     @Override
-    public NotifyAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        View itemView = LayoutInflater.from(viewGroup.getContext())
-                .inflate(R.layout.notify_row, viewGroup, false);
+    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+        View itemView;
+        if(empty ==1)
+        {
+            itemView = LayoutInflater.from(viewGroup.getContext())
+                    .inflate(R.layout.emptyview, viewGroup, false);
+           // itemView = new ItemViewEmpty(itemView);
+            return new ItemViewEmpty(itemView);
+        }
+        else{
+            itemView = LayoutInflater.from(viewGroup.getContext())
+                    .inflate(R.layout.notify_row, viewGroup, false);
 
-        return new NotifyAdapter.MyViewHolder(itemView);
+            return new NotifyAdapter.MyViewHolder(itemView);
+        }
     }
 
     @Override
-    public void onBindViewHolder(@NonNull NotifyAdapter.MyViewHolder myViewHolder, int i) {
-        NotificationModel notify = notifylist.get(i);
-        myViewHolder.name.setText(notify.getTitle());
-        myViewHolder.detail.setText(notify.getMessage());
-       // myViewHolder.date.setText(commentModel.getCreatetime());
-        Drawable mDefaultBackground = myViewHolder.avatar.getContext().getResources().getDrawable(R.drawable.avata_defaul);
-        Glide.with(myViewHolder.avatar.getContext()).load(notify.getAvarta()).apply(RequestOptions.circleCropTransform().diskCacheStrategy(DiskCacheStrategy.ALL).error(mDefaultBackground)).into(myViewHolder.avatar);
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder myViewHolder, int i) {
+        if(empty ==1) {
+            ItemViewEmpty viewEmpty = ( ItemViewEmpty)myViewHolder;
+            viewEmpty.title.setText("Nothing to show");
+        }
+        else
+        {
+            NotifyAdapter.MyViewHolder viewHolder = ( NotifyAdapter.MyViewHolder)myViewHolder;
+            NotificationModel notify = notifylist.get(i);
+            viewHolder.name.setText(notify.getTitle());
+            viewHolder.detail.setText(notify.getMessage());
+            // myViewHolder.date.setText(commentModel.getCreatetime());
+            Drawable mDefaultBackground = viewHolder.avatar.getContext().getResources().getDrawable(R.drawable.avata_defaul);
+            Glide.with(viewHolder.avatar.getContext()).load(notify.getAvarta()).apply(RequestOptions.circleCropTransform().diskCacheStrategy(DiskCacheStrategy.ALL).error(mDefaultBackground)).into(viewHolder.avatar);
+        }
     }
 
     @Override
     public int getItemCount() {
         if (notifylist == null)
         {
-            return 0;
+            return empty;
+        }
+        else if(notifylist.size()== 0)
+        {
+            return empty;
         }
         return notifylist.size();
     }

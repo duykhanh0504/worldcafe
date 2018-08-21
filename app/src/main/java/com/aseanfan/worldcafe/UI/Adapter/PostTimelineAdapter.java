@@ -31,6 +31,7 @@ public class PostTimelineAdapter extends RecyclerView.Adapter<PostTimelineAdapte
     private List<PostTimelineModel> postList;
 
     private static PostTimelineAdapter.ClickListener clickListener;
+    private boolean requestads = false;
 
     public void setOnItemClickListener(PostTimelineAdapter.ClickListener clickListener) {
         PostTimelineAdapter.clickListener = clickListener;
@@ -118,7 +119,8 @@ public class PostTimelineAdapter extends RecyclerView.Adapter<PostTimelineAdapte
     }
 
 
-    public PostTimelineAdapter(List<PostTimelineModel> postList) {
+    public PostTimelineAdapter(List<PostTimelineModel> postList , boolean requestads) {
+        this.requestads = requestads;
         this.postList = postList;
     }
 
