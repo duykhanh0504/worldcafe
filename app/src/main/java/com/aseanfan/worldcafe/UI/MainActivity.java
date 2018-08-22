@@ -236,6 +236,7 @@ public class MainActivity extends AppCompatActivity implements NotificationCente
         showFirstFragment();
 
         SyncDataService.listmessage(AccountController.getInstance().getAccount().getId(),getApplicationContext());
+        SyncDataService.syncPush(AccountController.getInstance().getAccount().getId(),getApplicationContext());
 
        // new SyncDataService(getApplicationContext()).execute(AccountController.getInstance().getAccount().getId());
 
@@ -436,7 +437,7 @@ public class MainActivity extends AppCompatActivity implements NotificationCente
 
           detailcomunityfragment.setArguments(bundle);
           FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-          ft.add(R.id.content, detailcomunityfragment,TAG_COMMUNITY_DETAIL).commit();
+          ft.replace(R.id.content, detailcomunityfragment,TAG_COMMUNITY_DETAIL).commit();
         //  communityFragment.onPause();
         //  ft.show(detailcomunityfragment);
         //  ft.hide(communityFragment);

@@ -90,7 +90,7 @@ public class NotifyFragment extends android.support.v4.app.Fragment {
     }
 
 
-    public void LoadListTimeLinePost()
+    public void LoadListHistoryNotify()
     {
         if(listnotify==null)
         {
@@ -155,8 +155,8 @@ public class NotifyFragment extends android.support.v4.app.Fragment {
         rcynotify.setItemAnimator(new DefaultItemAnimator());
         rcynotify.setAdapter(mAdapter);
 
-      //  new ListHistoryNotifyAsync().execute();
-        LoadListTimeLinePost();
+       new ListHistoryNotifyAsync().execute();
+    //    LoadListHistoryNotify();
 
         ((MainActivity) getActivity()).checkbadge();
 

@@ -42,4 +42,7 @@ public class Constants {
     public static  int FOLLOW = 0;
     public static  int UNFOLLOW = 1;
 
+    public static  int EVENT_EDIT = 0;
+    public static  int EVENT_CREATE = 1;
+
 }

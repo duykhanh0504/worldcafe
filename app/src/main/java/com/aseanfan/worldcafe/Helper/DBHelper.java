@@ -53,7 +53,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
     public static final String TABLE_NOTIFICATION = "notification";
     public static final String NOTIFY_ID = "notify_id";
-    public static final String SERVER_ID = "notify_server_id";
+    public static final String NOTIFY_SERVER_ID = "notify_server_id";
     public static final String NOTIFY_MESSAGE = "notify_message";
     public static final String NOTIFY_TITLE= "notify_title";
     public static final String NOTIFY_TIME= "notify_time";
@@ -155,7 +155,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
     public Cursor getNotify() {
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor res =  db.rawQuery("SELECT * FROM " + TABLE_NOTIFICATION + " LIMIT 50" ,null);
+        Cursor res =  db.rawQuery("SELECT DISTINCT * FROM " + TABLE_NOTIFICATION + " LIMIT 50" ,null);
         return res;
     }
 
@@ -183,7 +183,7 @@ public class DBHelper extends SQLiteOpenHelper {
         db.execSQL(
                 "CREATE TABLE IF NOT EXISTS " + TABLE_NOTIFICATION +
                         "(" + NOTIFY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, " /*INTEGER PRIMARY KEY,*/  +
-                        SERVER_ID + " INTEGER, " /*INTEGER PRIMARY KEY,*/  +
+                        NOTIFY_SERVER_ID + " INTEGER, " /*INTEGER PRIMARY KEY,*/  +
                         NOTIFY_MESSAGE + " TEXT, " +
                         NOTIFY_TIME + " TEXT, " +
                         NOTIFY_TITLE + " TEXT, " +
@@ -246,11 +246,11 @@ public class DBHelper extends SQLiteOpenHelper {
 
     public Long getlastNotify(Long accountid) {
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor res =  db.rawQuery( "SELECT DISTINCT "+ SERVER_ID + " FROM " + TABLE_NOTIFICATION  + " ORDER BY " +  SERVER_ID  +" DESC LIMIT 1", null );
+        Cursor res =  db.rawQuery( "SELECT DISTINCT "+ NOTIFY_SERVER_ID + " FROM " + TABLE_NOTIFICATION  + " ORDER BY " +  NOTIFY_SERVER_ID  +" DESC LIMIT 1", null );
         if (res != null) {
             res.moveToFirst();
             if(res.isAfterLast()==false) {
-                return res.getLong(res.getColumnIndex(DBHelper.SERVER_ID));
+                return res.getLong(res.getColumnIndex(DBHelper.NOTIFY_SERVER_ID));
             }
 
         }
@@ -313,6 +313,7 @@ public class DBHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
 
+        contentValues.put(NOTIFY_SERVER_ID, notify.getNotifyid());
         contentValues.put(NOTIFY_AVATAR, notify.getAvarta());
         contentValues.put(NOTIFY_FROMID, notify.getFromid());
         contentValues.put(NOTIFY_MESSAGE, notify.getMessage());
@@ -383,6 +384,7 @@ public class DBHelper extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL(
                 "CREATE TABLE IF NOT EXISTS " + TABLE_NOTIFICATION +
                         "(" + NOTIFY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, " /*INTEGER PRIMARY KEY,*/  +
+                        NOTIFY_SERVER_ID + " INTEGER, " /*INTEGER PRIMARY KEY,*/  +
                         NOTIFY_MESSAGE + " TEXT, " +
                         NOTIFY_TIME + " TEXT, " +
                         NOTIFY_TITLE + " TEXT, " +

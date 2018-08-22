@@ -80,8 +80,9 @@ public class RestAPI {
     public static String GET_CONTACT_CHAT= root_url + "/api/follow/getListChatbyid?account_id=%d";
     public static String GET_LISTTIMELINEFOLLOWED= root_url + "/api/newfeed/getfollowednewfeeds?account_id=%d&index=%d";
     public static String POST_JOINEVENT = root_url + "/api/event/joinevents";
-    public static String GET_HISTORYPUSH = root_url + "/api/user/getListPushInfor?account_id=%d&index=%d";
+    public static String GET_HISTORYPUSH = root_url + "/api/user/getListPushInfor?account_id=%d&index=%d&offset=%d";
     public static String GET_LISTEVENTACCOUNT = root_url + "/api/event/listaccountjoinevent?account_id=%d&event_id=%d";
+    public static String GET_EVENTDETAIL = root_url + "/api/event/geteventdetail?account_id=%d&event_id=%d";
 
 
     public final static int STATUS_SUCCESS = 200;

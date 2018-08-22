@@ -94,12 +94,16 @@ public class CommunityFragment extends Fragment implements NotificationCenter.No
     private ViewPager viewPager;
     private FragmentEventPageAdapter adapter;
 
-    private static final String[]paths = {"item 1", "item 2", "item 3"};
+    private static final String[]paths = {"All", "My Event"};
 
     private List<Integer> area = new ArrayList<>();
     String[] listcity = {"HCM", "Ha Noi", "Da Nang", "Tokyo", "Osaka"};
     int[] listidcity = {1, 2, 3, 4, 5};
     boolean[] checkedItems = {false, false, false, false, false};
+
+    private int typeSort =0;
+    private String keyword = "" ;
+    private int typegenre =Constants.EVENT_FRIEND;
 
     public static CommunityFragment newInstance() {
         CommunityFragment firstFrag = new CommunityFragment();
@@ -140,17 +144,36 @@ public class CommunityFragment extends Fragment implements NotificationCenter.No
     {
         String url =  String.format(RestAPI.GET_LISTEVENT,AccountController.getInstance().getAccount().getId(),Type,0);
 
+        if(area.size()>0)
+        {
+            String city = "&city=";
+            for( int i = 0 ; i <area.size() ; i++)
+            {
+                if(i == area.size()-1)
+                    city = city + area.get(i) ;
+                else
+                    city = city + area.get(i) + ",";
+            }
+            url = url + city;
+        }
+
+        if(!keyword.isEmpty())
+        {
+            url = url + "&keyword=" + keyword;
+        }
+
+        if(typeSort ==1)
+        {
+            url = url + "&is_my_event=" + 1;
+        }
+
+
         RestAPI.GetDataMasterWithToken(getActivity().getApplicationContext(),url, new RestAPI.RestAPIListenner() {
             @Override
             public void OnComplete(int httpCode, String error, String s) {
                 try {
                     if (!RestAPI.checkHttpCode(httpCode)) {
                         //AppFuncs.alert(getApplicationContext(),s,true);
-
-                        return;
-                    }
-                    if(RestAPI.checkExpiredtoken(s))
-                    {
                         ViewDialog dialog = new ViewDialog();
                         dialog.showDialogOK(getActivity(), "invalid token", new ViewDialog.DialogListenner() {
                             @Override
@@ -158,6 +181,11 @@ public class CommunityFragment extends Fragment implements NotificationCenter.No
                                App.mApp.Logout();
                             }
                         });
+
+                        return;
+                    }
+                    if(RestAPI.checkExpiredtoken(s))
+                    {
                         return;
                     }
 
@@ -185,9 +213,24 @@ public class CommunityFragment extends Fragment implements NotificationCenter.No
 
         searchView = (SearchView) searchItem.getActionView();
 
+        searchView.setOnQueryTextFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus) {
+                    // searchView expanded
+                } else {
+                    keyword = "";
+                    LoadListEvent(typegenre);
+                    // searchView not expanded
+                }
+            }
+        });
+
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String s) {
+                keyword = s;
+                LoadListEvent(typegenre);
                 return false;
             }
 
@@ -215,14 +258,14 @@ public class CommunityFragment extends Fragment implements NotificationCenter.No
             AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
             builder.setTitle("Choose some areas");
 
-
+            builder.setCancelable(true);
             builder.setMultiChoiceItems(listcity, checkedItems, new DialogInterface.OnMultiChoiceClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which, boolean isChecked) {
                     if (isChecked) {
                         area.add(listidcity[which]);
                     } else if (area.contains(listidcity[which])) {
-                        area.remove(listidcity[which]);
+                        area.remove(area.indexOf(listidcity[which]));
                     }
                 }
             });
@@ -231,7 +274,7 @@ public class CommunityFragment extends Fragment implements NotificationCenter.No
             builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-
+                    LoadListEvent(typegenre);
                 }
             });
             builder.setNegativeButton("Cancel", null);
@@ -274,7 +317,7 @@ public class CommunityFragment extends Fragment implements NotificationCenter.No
             public void run() {
                 handler.post(new Runnable() {
                     public void run() {
-                        LoadListEvent(Constants.EVENT_FRIEND);
+                        LoadListEvent(typegenre);
                     }
                 });
             }
@@ -293,18 +336,22 @@ public class CommunityFragment extends Fragment implements NotificationCenter.No
                 if(position ==FragmentEventPageAdapter.FRIEND_PAGE)
                 {
                     LoadListEvent(Constants.EVENT_FRIEND);
+                    typegenre=Constants.EVENT_FRIEND;
                 }
                 if(position ==FragmentEventPageAdapter.BUSINESS_PAGE)
                 {
                     LoadListEvent(Constants.EVENT_BUSSINESS);
+                    typegenre=Constants.EVENT_BUSSINESS;
                 }
                 if(position ==FragmentEventPageAdapter.LOCAL_PAGE)
                 {
                     LoadListEvent(Constants.EVENT_LOCAL);
+                    typegenre=Constants.EVENT_LOCAL;
                 }
                 if(position ==FragmentEventPageAdapter.LANGUAGE_PAGE)
                 {
                     LoadListEvent(Constants.EVENT_LANGUAGE);
+                    typegenre=Constants.EVENT_LANGUAGE;
                 }
             }
 
@@ -335,7 +382,8 @@ public class CommunityFragment extends Fragment implements NotificationCenter.No
         dropdown.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-
+                typeSort = i;
+                LoadListEvent(typegenre);
             }
 
             @Override

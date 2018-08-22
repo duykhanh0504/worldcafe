@@ -15,6 +15,7 @@ import com.aseanfan.worldcafe.Helper.DBHelper;
 import com.aseanfan.worldcafe.Helper.RestAPI;
 import com.aseanfan.worldcafe.Model.ChatMessageModel;
 import com.aseanfan.worldcafe.Model.CommentModel;
+import com.aseanfan.worldcafe.Model.NotificationModel;
 import com.aseanfan.worldcafe.Model.PostTimelineModel;
 import com.aseanfan.worldcafe.Model.UserModel;
 import com.aseanfan.worldcafe.Provider.Store;
@@ -69,6 +70,53 @@ public class SyncDataService {
         });
     };
 
+    public static void syncPush( final Long account_id,final Context mContext)
+    {
 
+        Long offset = DBHelper.getInstance(mContext).getlastNotify(account_id);
+
+        String url = String.format(RestAPI.GET_HISTORYPUSH, AccountController.getInstance().getAccount().getId(), 0,offset);
+
+
+        RestAPI.GetDataMasterWithToken(mContext,url, new RestAPI.RestAPIListenner() {
+            @Override
+            public void OnComplete(int httpCode, String error, String s) {
+                try {
+                    if (!RestAPI.checkHttpCode(httpCode)) {
+                        //AppFuncs.alert(getApplicationContext(),s,true);
+
+                        return;
+                    }
+                    JsonArray jsonArray = (new JsonParser()).parse(s).getAsJsonObject().getAsJsonArray("result");
+                    // Gson gson = new Gson();
+                    //   java.lang.reflect.Type type = new TypeToken<List<PostTimelineModel>>(){}.getType();
+                    for (int i = 0; i < jsonArray.size(); i++)
+                    {
+                        NotificationModel notify = new NotificationModel();
+                        notify.setType(jsonArray.get(i).getAsJsonObject().get("typepush").getAsInt());
+                        notify.setCreatetime(jsonArray.get(i).getAsJsonObject().get("create_time").getAsString());
+                        // JsonObject jsons = (new JsonParser()).parse(jsonArray.get(i).getAsJsonObject().get("data").getAsString()).getAsJsonObject();
+                        notify.setAvarta(jsonArray.get(0).getAsJsonObject().get("avarta").toString());
+                        notify.setTitle(jsonArray.get(i).getAsJsonObject().get("username").getAsString());
+                        notify.setStatus(0);
+                        notify.setNotifyid(jsonArray.get(i).getAsJsonObject().get("id").getAsInt());
+                        JsonObject json = (new JsonParser()).parse(jsonArray.get(i).getAsJsonObject().get("data").getAsString()).getAsJsonObject();
+                        notify.setMessage(json.get("data").getAsJsonObject().get("message").getAsString());
+
+                        DBHelper.getInstance(mContext).InsertNotify(notify);
+                    }
+
+
+                }
+                catch (Exception ex) {
+
+                    ex.printStackTrace();
+
+                }
+                finally {
+                }
+            }
+        });
+    }
 
 }

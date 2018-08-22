@@ -80,6 +80,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         intent.putExtras(bundle);
 
         JsonObject jsons = (new JsonParser()).parse(data.get("key")).getAsJsonObject();
+        int push_id = Integer.parseInt(data.get("push_id"));
 
         Drawable mDefaultBackground = MyFirebaseMessagingService.this.getResources().getDrawable(R.drawable.avata_defaul);
 
@@ -101,10 +102,10 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
         if(jsons.get("type").getAsInt()!= 0)
         {
-            updateToDB(jsons.get("message").getAsString(), jsons.get("type").getAsInt() , notification.getTitle(), "");
+            updateToDB(jsons.get("message").getAsString(), jsons.get("type").getAsInt() , notification.getTitle(), "",push_id);
         }
     }
-    private void updateToDB(String message , int type , String Title , String urlAvatar)
+    private void updateToDB(String message , int type , String Title , String urlAvatar ,int push_id)
     {
         NotificationModel notify = new NotificationModel();
 
@@ -116,6 +117,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         notify.setMessage(message);
         notify.setTitle(Title);
         notify.setStatus(0);
+        notify.setNotifyid(push_id);
         notify.setCreatetime(String.valueOf(timestamp.getTime()));
         DBHelper.getInstance(this).InsertNotify(notify);
         Intent i = new Intent(Constants.SEND_PUSH);

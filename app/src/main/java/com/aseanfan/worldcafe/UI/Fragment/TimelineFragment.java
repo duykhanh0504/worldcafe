@@ -143,14 +143,14 @@ public class TimelineFragment extends android.support.v4.app.Fragment implements
                 AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                 builder.setTitle("Choose some areas");
 
-
+            builder.setCancelable(true);
             builder.setMultiChoiceItems(listcity, checkedItems, new DialogInterface.OnMultiChoiceClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which, boolean isChecked) {
                     if (isChecked) {
                         area.add(listidcity[which]);
                     } else if (area.contains(listidcity[which])) {
-                        area.remove(listidcity[which]);
+                        area.remove(area.indexOf(listidcity[which]));
                     }
                 }
             });

@@ -29,7 +29,10 @@ import com.aseanfan.worldcafe.UI.Adapter.ImageTimelineAdapter;
 import com.aseanfan.worldcafe.Utils.Constants;
 import com.aseanfan.worldcafe.Utils.Utils;
 import com.aseanfan.worldcafe.worldcafe.R;
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.yanzhenjie.album.Action;
 import com.yanzhenjie.album.Album;
 import com.yanzhenjie.album.AlbumFile;
@@ -68,7 +71,36 @@ public class CreateEventActivity extends AppCompatActivity {
     private EditText content;
     private EditText numberofparticipal;
 
+    private int typeCreate = Constants.EVENT_CREATE;
+
     private EventModel event;
+
+    public void getEventDetail(Long eventid)
+    {
+        String url =  String.format(RestAPI.GET_EVENTDETAIL,AccountController.getInstance().getAccount().getId(),eventid);
+
+        RestAPI.GetDataMasterWithToken(this,url, new RestAPI.RestAPIListenner() {
+            @Override
+            public void OnComplete(int httpCode, String error, String s) {
+                try {
+
+                    if (!RestAPI.checkHttpCode(httpCode)) {
+                        //AppFuncs.alert(getApplicationContext(),s,true);
+
+                        return;
+                    }
+                    JsonObject json = (new JsonParser()).parse(s).getAsJsonObject().get("result").getAsJsonObject();
+                    Gson gson = new Gson();
+
+
+                }
+                catch (Exception ex) {
+
+                    ex.printStackTrace();
+                }
+            }
+        });
+    }
 
     public void CreateEvent(final EventModel event)
     {
