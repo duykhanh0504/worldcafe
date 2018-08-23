@@ -24,7 +24,6 @@ public class UserModel {
     private int v_follower;
 
 
-
     public UserModel( String email, String mobile) {
         this.email = email;
         this.phonenumber = mobile;
@@ -187,6 +186,8 @@ public class UserModel {
     public void setFollower(int v_follower) {
         this.v_follower = v_follower;
     }
+
+
 
 
 

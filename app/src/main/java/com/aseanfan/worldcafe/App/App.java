@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Handler;
+import android.support.multidex.MultiDex;
 
 
 import com.aseanfan.worldcafe.Helper.DBHelper;
@@ -32,6 +33,12 @@ public class App  extends Application {
 
     public static volatile Handler applicationHandler;
     public static App mApp;
+
+    @Override
+    protected void attachBaseContext(Context context) {
+        super.attachBaseContext(context);
+        MultiDex.install(this);
+    }
 
     private boolean isAppOnForeground(Context context) {
         ActivityManager activityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);

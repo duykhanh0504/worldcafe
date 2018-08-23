@@ -45,4 +45,9 @@ public class Constants {
     public static  int EVENT_EDIT = 0;
     public static  int EVENT_CREATE = 1;
 
+    public static  int MEMBER_WAITING = 0;
+    public static  int MEMBER_ACCEPT = 1;
+    public static  int MEMBER_REJECT = 2;
+
+
 }
