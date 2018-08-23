@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.database.Cursor;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.design.internal.BottomNavigationItemView;
 import android.support.design.internal.BottomNavigationMenuView;
@@ -32,6 +33,7 @@ import com.aseanfan.worldcafe.Helper.NotificationCenter;
 import com.aseanfan.worldcafe.Model.ChatMessageModel;
 import com.aseanfan.worldcafe.Model.EventModel;
 import com.aseanfan.worldcafe.Model.NotificationModel;
+import com.aseanfan.worldcafe.Model.PostTimelineModel;
 import com.aseanfan.worldcafe.Model.UserModel;
 import com.aseanfan.worldcafe.Provider.Store;
 import com.aseanfan.worldcafe.Service.MyFirebaseInstanceIDService;
@@ -40,9 +42,12 @@ import com.aseanfan.worldcafe.Service.SyncDataService;
 import com.aseanfan.worldcafe.UI.Adapter.CommunityAdapter;
 import com.aseanfan.worldcafe.UI.Fragment.CommunityFragment;
 import com.aseanfan.worldcafe.UI.Fragment.DetailCommunityFragment;
+import com.aseanfan.worldcafe.UI.Fragment.DetailTimelineFragment;
+import com.aseanfan.worldcafe.UI.Fragment.MemberEventFragment;
 import com.aseanfan.worldcafe.UI.Fragment.MyPageDetailFragment;
 import com.aseanfan.worldcafe.UI.Fragment.MypageFragment;
 import com.aseanfan.worldcafe.UI.Fragment.NotifyFragment;
+import com.aseanfan.worldcafe.UI.Fragment.RequestMemberFragment;
 import com.aseanfan.worldcafe.UI.Fragment.SettingFragment;
 import com.aseanfan.worldcafe.UI.Fragment.TimelineFragment;
 import com.aseanfan.worldcafe.Utils.Constants;
@@ -71,8 +76,16 @@ public class MainActivity extends AppCompatActivity implements NotificationCente
 
     private String TAG_COMMUNITY_DETAIL = "community_detail";
     private String TAG_FRIENDPAGE = "friend_page";
+    private String TAG_REQUEST_MEMBER = "request_member";
+    private String TAG_MEMBEREVENT = "member_of_event";
+    private String TAG_TIMELINE_DETAIL = "timeline_detail";
 
     private DetailCommunityFragment detailcomunityfragment;
+    private RequestMemberFragment requestMemberFragment;
+    private MemberEventFragment memberEventFragment;
+    private DetailTimelineFragment detailTimelineFragment;
+
+
     private MypageFragment friendPage;
 
     private Socket mSocket ;
@@ -415,6 +428,42 @@ public class MainActivity extends AppCompatActivity implements NotificationCente
         }
 
     }
+
+    public void callMemberRequest(EventModel eventid) {
+        requestMemberFragment = new RequestMemberFragment();
+        Bundle bundle = new Bundle();
+        bundle.putLong("eventid",eventid.getEventid());
+        requestMemberFragment.setArguments(bundle);
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.replace(R.id.content, requestMemberFragment,TAG_REQUEST_MEMBER).commit();
+
+    }
+
+    public void callMemberEvent(EventModel eventid) {
+        memberEventFragment = new MemberEventFragment();
+        Bundle bundle = new Bundle();
+        bundle.putLong("eventid",eventid.getEventid());
+        memberEventFragment.setArguments(bundle);
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.replace(R.id.content, memberEventFragment,TAG_MEMBEREVENT).commit();
+
+    }
+
+    public void callDetailTimeline(PostTimelineModel timeline) {
+        detailTimelineFragment = new DetailTimelineFragment();
+        Bundle bundle = new Bundle();
+
+        ArrayList<String> listimage = new ArrayList<>(timeline.getUrlImage().size());
+        listimage.addAll(timeline.getUrlImage());
+
+        bundle.putLong("timelineid",timeline.getTimelineid());
+        bundle.putSerializable("listimage", listimage);
+        detailTimelineFragment.setArguments(bundle);
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.replace(R.id.content, detailTimelineFragment,TAG_TIMELINE_DETAIL).commit();
+
+    }
+
     public void callDetailEvent(EventModel eventid) {
 
           detailcomunityfragment = new DetailCommunityFragment();
@@ -430,6 +479,7 @@ public class MainActivity extends AppCompatActivity implements NotificationCente
           bundle.putInt("numbercomment",eventid.getNumberComment());
           bundle.putString("avatar",eventid.getUrlAvatar());
           bundle.putString("username",eventid.getUsername());
+          bundle.putLong("accountid",eventid.getAccountid());
 
           if(eventid.getUrlImage() !=null && eventid.getUrlImage().size() >0) {
             bundle.putString("image", eventid.getUrlImage().get(0));

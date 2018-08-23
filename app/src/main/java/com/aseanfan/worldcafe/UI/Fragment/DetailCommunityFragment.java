@@ -1,6 +1,7 @@
 package com.aseanfan.worldcafe.UI.Fragment;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -24,6 +25,9 @@ import com.aseanfan.worldcafe.App.AccountController;
 import com.aseanfan.worldcafe.Helper.RestAPI;
 import com.aseanfan.worldcafe.Model.AccountModel;
 import com.aseanfan.worldcafe.Model.EventModel;
+import com.aseanfan.worldcafe.UI.Adapter.RequestMemberAdapter;
+import com.aseanfan.worldcafe.UI.MainActivity;
+import com.aseanfan.worldcafe.UI.MemberRequestActivity;
 import com.aseanfan.worldcafe.Utils.Constants;
 import com.aseanfan.worldcafe.Utils.Utils;
 import com.aseanfan.worldcafe.worldcafe.R;
@@ -78,7 +82,7 @@ public class DetailCommunityFragment extends android.support.v4.app.Fragment imp
                     JsonObject jsons = (new JsonParser()).parse(s).getAsJsonObject();
                     int statuscode = jsons.get("status").getAsInt();
                     if (statuscode == RestAPI.STATUS_SUCCESS) {
-                        btnJoin.setText("Joined");
+                        btnJoin.setText("Request");
                         btnJoin.setEnabled(false);
                     }
 
@@ -153,6 +157,7 @@ public class DetailCommunityFragment extends android.support.v4.app.Fragment imp
         username = (TextView)view.findViewById(R.id.username);
 
         btnJoin.setOnClickListener(this);
+        containList.setOnClickListener(this);
     }
 
     public void initdata()
@@ -169,16 +174,31 @@ public class DetailCommunityFragment extends android.support.v4.app.Fragment imp
             event.setNumberLike(getArguments().getInt("numberlike"));
             event.setUrlAvatar(getArguments().getString("avatar"));
             event.setUsername(getArguments().getString("username"));
+            event.setAccount_id(getArguments().getLong("accountid"));
 
-            if(event.getIsjoin() == 1)
-            {
-                btnJoin.setText("Joined");
-                btnJoin.setEnabled(false);
+            if(event.getAccountid().equals(AccountController.getInstance().getAccount().getId())) {
+                setHasOptionsMenu(true);
             }
             else
             {
-                btnJoin.setText("Join");
-                btnJoin.setEnabled(true);
+                setHasOptionsMenu(false);
+            }
+            if(!event.getAccountid().equals(AccountController.getInstance().getAccount().getId())) {
+                if (event.getIsjoin() == 1) {
+                    btnJoin.setText("Request");
+                    btnJoin.setEnabled(false);
+                } else if (event.getIsjoin() == 2) {
+                    btnJoin.setText("Joined");
+                    btnJoin.setEnabled(false);
+                } else {
+                    btnJoin.setText("Join");
+                    btnJoin.setEnabled(true);
+                }
+            }
+            else
+            {
+                btnJoin.setText("Owner");
+                btnJoin.setEnabled(false);
             }
             Glide.with(getContext()).load( getArguments().getString("image")).into(new SimpleTarget<Drawable>() {
                 @Override
@@ -234,7 +254,10 @@ public class DetailCommunityFragment extends android.support.v4.app.Fragment imp
         }
         else if(id == R.id.item_listmember)
         {
-
+        //    Intent intent = new Intent(getActivity() , MemberRequestActivity.class);
+           // intent.putExtra("eventid",event.getEventid());
+           // startActivity(intent);
+            ((MainActivity)getActivity()).callMemberRequest(event);
         }
         return super.onOptionsItemSelected(item);
     }
@@ -246,7 +269,7 @@ public class DetailCommunityFragment extends android.support.v4.app.Fragment imp
 
         Toolbar toolbar = (Toolbar) view.findViewById(R.id.app_toolbar);
         ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
-        setHasOptionsMenu(true);
+
 
         initview(view);
 
@@ -265,6 +288,11 @@ public class DetailCommunityFragment extends android.support.v4.app.Fragment imp
             case R.id.btnJoin:
                 JoinEvent(event.getEventid());
                 break;
+            case  R.id.list_account:
+            {
+                ((MainActivity)getActivity()).callMemberEvent(event);
+                break;
+            }
         }
     }
 }

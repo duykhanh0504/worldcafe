@@ -415,13 +415,15 @@ public class MypageFragment extends android.support.v4.app.Fragment {
         avatar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = CropImage.activity(null)
-                        .setGuidelines(CropImageView.Guidelines.ON)
-                        .setAutoZoomEnabled(false)
-                        .setMultiTouchEnabled(false)
-                        .getIntent(getActivity());
-                intent.putExtra("type",0);
-                getActivity().startActivityForResult(intent, CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE);
+                if(!accountid.equals(AccountController.getInstance().getAccount().getId())) {
+                    Intent intent = CropImage.activity(null)
+                            .setGuidelines(CropImageView.Guidelines.ON)
+                            .setAutoZoomEnabled(false)
+                            .setMultiTouchEnabled(false)
+                            .getIntent(getActivity());
+                    intent.putExtra("type", 0);
+                    getActivity().startActivityForResult(intent, CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE);
+                }
             }
         });
 
@@ -479,8 +481,10 @@ public class MypageFragment extends android.support.v4.app.Fragment {
         editImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getActivity(), EditProfileActivity.class);
-                startActivity(intent);
+                if(!accountid.equals(AccountController.getInstance().getAccount().getId())) {
+                    Intent intent = new Intent(getActivity(), EditProfileActivity.class);
+                    startActivity(intent);
+                }
             }
         });
 
@@ -490,13 +494,15 @@ public class MypageFragment extends android.support.v4.app.Fragment {
         background.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = CropImage.activity(null)
-                        .setGuidelines(CropImageView.Guidelines.ON)
-                        .setAutoZoomEnabled(false)
-                        .setMultiTouchEnabled(false)
-                        .getIntent(getActivity());
-                intent.putExtra("type",1);
-                getActivity().startActivityForResult(intent, CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE);
+                if(!accountid.equals(AccountController.getInstance().getAccount().getId())) {
+                    Intent intent = CropImage.activity(null)
+                            .setGuidelines(CropImageView.Guidelines.ON)
+                            .setAutoZoomEnabled(false)
+                            .setMultiTouchEnabled(false)
+                            .getIntent(getActivity());
+                    intent.putExtra("type", 1);
+                    getActivity().startActivityForResult(intent, CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE);
+                }
             }
         });
 
