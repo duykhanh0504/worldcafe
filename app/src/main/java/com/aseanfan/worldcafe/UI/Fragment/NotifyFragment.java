@@ -60,15 +60,15 @@ public class NotifyFragment extends android.support.v4.app.Fragment {
 
             Cursor cursor = DBHelper.getInstance(getActivity()).getNotify();
             if (cursor != null) {
-                cursor.moveToFirst();
-                while (cursor.isAfterLast() == false) {
+                cursor.moveToLast();
+                while (cursor.isBeforeFirst() == false) {
                     NotificationModel notify = new NotificationModel();
                     notify.setTitle(cursor.getString(cursor.getColumnIndex(DBHelper.NOTIFY_TITLE)));
                     notify.setMessage(cursor.getString(cursor.getColumnIndex(DBHelper.NOTIFY_MESSAGE)));
                     notify.setType(cursor.getInt(cursor.getColumnIndex(DBHelper.NOTIFY_TYPE)));
                     notify.setAvarta(cursor.getString(cursor.getColumnIndex(DBHelper.NOTIFY_AVATAR)));
                     list.add(notify);
-                    cursor.moveToNext();
+                    cursor.moveToPrevious();
                 }
             }
             //   SystemClock.sleep(1000);

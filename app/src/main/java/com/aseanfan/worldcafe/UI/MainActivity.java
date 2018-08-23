@@ -457,7 +457,7 @@ public class MainActivity extends AppCompatActivity implements NotificationCente
         listimage.addAll(timeline.getUrlImage());
 
         bundle.putLong("timelineid",timeline.getTimelineid());
-        bundle.putSerializable("listimage", listimage);
+        bundle.putStringArrayList("listimage", listimage);
         detailTimelineFragment.setArguments(bundle);
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.replace(R.id.content, detailTimelineFragment,TAG_TIMELINE_DETAIL).commit();
