@@ -118,6 +118,7 @@ public class SocketService extends Service {
                     message.setMessageText(data.getString("message"));
                     message.setSend_account(data.getLong("from_account_id"));
                     message.setReceiver(data.getLong("to_account_ids"));
+                    message.setType(data.getInt("type"));
                     message.setGroupid(Long.valueOf(0));
                     DBHelper.getInstance(getApplicationContext()).InsertMessageChat(message);
 
@@ -130,6 +131,7 @@ public class SocketService extends Service {
                     i.putExtra(Constants.FRIENDID, message.getSend_account());
                     i.putExtra(Constants.MESSAGE, message.getMessageText());
                     i.putExtra(Constants.MESSAGEID, message.getMessage_id());
+                    i.putExtra(Constants.MESSAGETYPE, message.getType());
 
 
                     mLocalBroadcastManager.sendBroadcast(i);
@@ -142,7 +144,15 @@ public class SocketService extends Service {
                         avatar = "";
                     datamessage.put("avatar" , avatar);
                     datamessage.put("username" ,AccountController.getInstance().getAccount().getUsername());
-                    datamessage.put("message", Utils.decodeStringUrl(message.getMessageText()));
+                    if(message.getType() == 0)
+                    {
+                        datamessage.put("message", Utils.decodeStringUrl(message.getMessageText()));
+                    }
+                    else
+                    {
+                        datamessage.put("message", "Sent for you image");
+                    }
+                    //datamessage.put("type",String.valueOf(message.getType()));
                     sendNotification(datamessage);
                 }
             }

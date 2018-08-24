@@ -12,13 +12,16 @@ import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.aseanfan.worldcafe.Helper.RestAPI;
 import com.aseanfan.worldcafe.Model.CommentModel;
 import com.aseanfan.worldcafe.Model.PostTimelineModel;
+import com.aseanfan.worldcafe.UI.Adapter.CommentAdapter;
 import com.aseanfan.worldcafe.UI.Adapter.PostImageAdapter;
 import com.aseanfan.worldcafe.worldcafe.R;
 import com.bumptech.glide.Glide;
@@ -38,6 +41,16 @@ public class DetailTimelineFragment  extends android.support.v4.app.Fragment imp
     private TextView username;
     public PostImageAdapter mAdapter;
     public RecyclerView imagePost;
+    public TextView like;
+    public TextView comment;
+    public TextView detail;
+    public ImageView imagelike;
+
+    private RecyclerView rcycoment;
+
+    private CommentAdapter commentAdapter;
+
+    private List<CommentModel> listcomment;
 
     public void ListComment(Long timelineid)
     {
@@ -57,9 +70,9 @@ public class DetailTimelineFragment  extends android.support.v4.app.Fragment imp
                     JsonArray jsonArray = (new JsonParser()).parse(s).getAsJsonObject().getAsJsonArray("result");
                     Gson gson = new Gson();
                     java.lang.reflect.Type type = new TypeToken<List<CommentModel>>(){}.getType();
-                   // listcomment = gson.fromJson(jsonArray, type);
-                    //mAdapter.setCommentList(listcomment);
-                    //rcycoment.smoothScrollToPosition(listcomment.size());
+                    listcomment = gson.fromJson(jsonArray, type);
+                    commentAdapter.setCommentList(listcomment);
+                    rcycoment.smoothScrollToPosition(listcomment.size());
 
                 }
                 catch (Exception ex) {
@@ -75,7 +88,14 @@ public class DetailTimelineFragment  extends android.support.v4.app.Fragment imp
         avatar = (ImageView)view.findViewById(R.id.imageAvatar);
         username = (TextView)view.findViewById(R.id.namePost);
         imagePost = (RecyclerView) view.findViewById(R.id.list_image);
+        like = (TextView) view.findViewById(R.id.textLike);
+        comment = (TextView) view.findViewById(R.id.textComment);
+        detail = (TextView) view.findViewById(R.id.detailPost);
+        imagelike = (ImageView) view.findViewById(R.id.imageLike) ;
+
         mAdapter = new PostImageAdapter(null);
+
+        rcycoment = (RecyclerView)view.findViewById(R.id.listComment);
 
         // RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(view.getContext(),3);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(view.getContext(), LinearLayoutManager.HORIZONTAL, false);
@@ -90,10 +110,43 @@ public class DetailTimelineFragment  extends android.support.v4.app.Fragment imp
         if (getArguments() != null) {
             PostTimelineModel timeline = new PostTimelineModel();
             timeline.setUrlImage((List<String>)getArguments().getStringArrayList("listimage"));
+            timeline.setUsername(getArguments().getString("username"));
+            timeline.setNumberLike(getArguments().getInt("numberlike"));
+            timeline.setNumberComment(getArguments().getInt("numbercomment"));
+            timeline.setTimelineid(getArguments().getLong("timelineid"));
+            timeline.setDetail(getArguments().getString("detail"));
+            timeline.setIslike(getArguments().getInt("islike"));
+
+
             Drawable mDefaultBackground = getContext().getResources().getDrawable(R.drawable.avata_defaul);
             Glide.with(getContext()).load(timeline.getUrlAvatar()).apply(RequestOptions.circleCropTransform().diskCacheStrategy(DiskCacheStrategy.ALL).error(mDefaultBackground)).into(avatar);
             username.setText(timeline.getUsername());
+            detail.setText(timeline.getDetail());
+
             mAdapter.setData(timeline.getUrlImage());
+            like.setText(String.valueOf(timeline.getNumberLike()));
+            comment.setText(String.valueOf(timeline.getNumberComment()));
+
+            if(timeline.getIslike() == 0)
+            {
+                imagelike.setBackgroundResource(R.drawable.unlike);
+            }
+            else
+            {
+                imagelike.setBackgroundResource(R.drawable.like);
+            }
+
+
+            commentAdapter = new CommentAdapter(null);
+
+
+            final RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
+            rcycoment.setLayoutManager(mLayoutManager);
+            rcycoment.setItemAnimator(new DefaultItemAnimator());
+            rcycoment.setAdapter(commentAdapter);
+
+            ListComment(timeline.getTimelineid());
+
 
         }
     }

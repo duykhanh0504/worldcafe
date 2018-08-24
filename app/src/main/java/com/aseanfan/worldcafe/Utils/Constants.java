@@ -33,6 +33,7 @@ public class Constants {
     public static  String TYPE_MEASSAGE = "TYPE_MESSAGE";
     public static  String MESSAGE = "MESSAGE";
     public static  String MESSAGEID = "MESSAGEID";
+    public static  String MESSAGETYPE = "MESSAGETYPE";
 
     public static  int EVENT_FRIEND = 1;
     public static  int EVENT_BUSSINESS = 2;

@@ -49,6 +49,13 @@
                 android:id="@+id/emoji_btn"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
+                android:layout_marginRight="5dp"
+                android:src="@drawable/photo" />
+
+            <ImageView
+                android:id="@+id/image_btn"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
 
                 android:src="@drawable/photo" />
 

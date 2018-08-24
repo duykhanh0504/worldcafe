@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -56,9 +57,24 @@ public class ChatMessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     @Override
     public int getItemViewType(int position) {
         if(listmessagechat.get(position).getSend_account().equals(AccountController.getInstance().getAccount().getId()))
-            return 0;
-        else
-            return 1;
+        {
+            if(listmessagechat.get(position).getType() == 0) {
+                return 0;
+            }
+            else
+            {
+                return 2;
+            }
+        }
+        else {
+            if(listmessagechat.get(position).getType() == 0) {
+                return 1;
+            }
+            else
+            {
+                return 3;
+            }
+        }
     }
 
     static class ViewHolderLeftChat extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -97,6 +113,34 @@ public class ChatMessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
            //     clickListener.onItemClick(getAdapterPosition(), view );
         }
     }
+    static class ViewHolderRightImage extends RecyclerView.ViewHolder implements View.OnClickListener {
+
+        ImageView image;
+
+        public ViewHolderRightImage(View view) {
+            super(view);
+            image = (ImageView) view.findViewById(R.id.imagechat);
+        }
+
+        @Override
+        public void onClick(View view) {
+            //     clickListener.onItemClick(getAdapterPosition(), view );
+        }
+    }
+    static class ViewHolderLeftImage extends RecyclerView.ViewHolder implements View.OnClickListener {
+
+        ImageView image;
+
+        public ViewHolderLeftImage(View view) {
+            super(view);
+            image = (ImageView) view.findViewById(R.id.imagechat);
+        }
+
+        @Override
+        public void onClick(View view) {
+            //     clickListener.onItemClick(getAdapterPosition(), view );
+        }
+    }
     @Override
     public int getItemCount() {
         if(listmessagechat==null)
@@ -110,18 +154,27 @@ public class ChatMessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         View itemView;
-        if(i ==0 )
-        {
-            itemView = LayoutInflater.from(viewGroup.getContext())
-                    .inflate(R.layout.right_chat_row, viewGroup, false);
-            return new ViewHolderRightCHat(itemView);
-        }
-        else {
-             itemView = LayoutInflater.from(viewGroup.getContext())
-                    .inflate(R.layout.left_chat_row, viewGroup, false);
-            return new ViewHolderLeftChat(itemView);
-        }
+        switch (i) {
+            case 0:
+                itemView = LayoutInflater.from(viewGroup.getContext())
+                        .inflate(R.layout.right_chat_row, viewGroup, false);
+                return new ViewHolderRightCHat(itemView);
+            case 1:
+                itemView = LayoutInflater.from(viewGroup.getContext())
+                        .inflate(R.layout.left_chat_row, viewGroup, false);
+                return new ViewHolderLeftChat(itemView);
+            case 2:
+                itemView = LayoutInflater.from(viewGroup.getContext())
+                        .inflate(R.layout.right_chat_image, viewGroup, false);
+                return new ViewHolderRightImage(itemView);
+            case 3:
+                itemView = LayoutInflater.from(viewGroup.getContext())
+                        .inflate(R.layout.left_chat_image, viewGroup, false);
+                return new ViewHolderLeftImage(itemView);
+                default:
+                    return new ViewHolderRightCHat(null);
 
+        }
 
     }
 
@@ -150,6 +203,28 @@ public class ChatMessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
                 }
                 left.mMessage.setText(Utils.decodeStringUrl(listmessagechat.get(i).getMessageText()));
+                break;
+            case 2:
+                ViewHolderRightImage rightimage = (ViewHolderRightImage)viewHolder;
+                if(listmessagechat.get(i).getMessageText().contains("http://crosea1.g-days.net") == false)
+                {
+                    byte[] imageByteArray= Base64.decode(listmessagechat.get(i).getMessageText(), Base64.DEFAULT);
+                    Glide.with(rightimage.image.getContext()).load(imageByteArray).into(rightimage.image);
+                }
+                else {
+                    Glide.with(rightimage.image.getContext()).load(listmessagechat.get(i).getMessageText()).into(rightimage.image);
+                }
+                break;
+            case 3:
+                ViewHolderLeftImage leftimage = (ViewHolderLeftImage)viewHolder;
+                if(listmessagechat.get(i).getMessageText().contains("http://crosea1.g-days.net") == false)
+                {
+                    byte[] imageByteArray= Base64.decode(listmessagechat.get(i).getMessageText(), Base64.DEFAULT);
+                    Glide.with(leftimage.image.getContext()).load(imageByteArray).into(leftimage.image);
+                }
+                else {
+                    Glide.with(leftimage.image.getContext()).load(listmessagechat.get(i).getMessageText()).into(leftimage.image);
+                }
                 break;
         }
     }

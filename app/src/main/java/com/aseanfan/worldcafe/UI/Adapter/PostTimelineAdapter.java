@@ -114,7 +114,7 @@ public class PostTimelineAdapter extends RecyclerView.Adapter<PostTimelineAdapte
 
         @Override
         public void onItemClick(int position, View v) {
-            clickListener.onItemClick(getAdapterPosition(), v ,Constants.CLICK_TIMELINE);
+            //clickListener.onItemClick(getAdapterPosition(), v ,Constants.CLICK_TIMELINE);
         }
     }
 

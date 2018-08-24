@@ -437,7 +437,9 @@ public class TimelineFragment extends android.support.v4.app.Fragment implements
         }
         if(type == Constants.CLICK_TIMELINE)
         {
-            ((MainActivity)getActivity()).callDetailTimeline(timeline.get(position));
+            if(timeline.get(position)!=null) {
+                ((MainActivity) getActivity()).callDetailTimeline(timeline.get(position));
+            }
         }
     }
 }
