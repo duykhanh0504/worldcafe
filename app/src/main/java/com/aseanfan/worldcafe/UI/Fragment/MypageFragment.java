@@ -8,6 +8,7 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.constraint.solver.widgets.Rectangle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.TabLayout;
@@ -61,8 +62,8 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
-import com.theartofdev.edmodo.cropper.CropImage;
-import com.theartofdev.edmodo.cropper.CropImageView;
+import com.aseanfan.worldcafe.Helper.cropper.CropImage;
+import com.aseanfan.worldcafe.Helper.cropper.CropImageView;
 
 import java.util.List;
 
@@ -415,7 +416,7 @@ public class MypageFragment extends android.support.v4.app.Fragment {
         avatar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(!accountid.equals(AccountController.getInstance().getAccount().getId())) {
+                if(accountid.equals(AccountController.getInstance().getAccount().getId())) {
                     Intent intent = CropImage.activity(null)
                             .setGuidelines(CropImageView.Guidelines.ON)
                             .setAutoZoomEnabled(false)
@@ -494,11 +495,12 @@ public class MypageFragment extends android.support.v4.app.Fragment {
         background.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(!accountid.equals(AccountController.getInstance().getAccount().getId())) {
+                if(accountid.equals(AccountController.getInstance().getAccount().getId())) {
                     Intent intent = CropImage.activity(null)
                             .setGuidelines(CropImageView.Guidelines.ON)
                             .setAutoZoomEnabled(false)
                             .setMultiTouchEnabled(false)
+                            .setInitialCropWindowRectangle(new Rect(0,0,250,250))
                             .getIntent(getActivity());
                     intent.putExtra("type", 1);
                     getActivity().startActivityForResult(intent, CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE);

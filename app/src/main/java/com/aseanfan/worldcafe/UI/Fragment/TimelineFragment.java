@@ -32,6 +32,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.aseanfan.worldcafe.App.AccountController;
+import com.aseanfan.worldcafe.App.App;
 import com.aseanfan.worldcafe.Helper.NotificationCenter;
 import com.aseanfan.worldcafe.Helper.RestAPI;
 import com.aseanfan.worldcafe.Model.PostTimelineModel;
@@ -39,6 +40,7 @@ import com.aseanfan.worldcafe.Provider.Store;
 import com.aseanfan.worldcafe.UI.Adapter.PostTimelineAdapter;
 import com.aseanfan.worldcafe.UI.Adapter.SpinnerEventAdapter;
 import com.aseanfan.worldcafe.UI.CommentActivity;
+import com.aseanfan.worldcafe.UI.Component.ViewDialog;
 import com.aseanfan.worldcafe.UI.MainActivity;
 import com.aseanfan.worldcafe.UI.PostTimeLineActivity;
 import com.aseanfan.worldcafe.Utils.Constants;
@@ -212,6 +214,19 @@ public class TimelineFragment extends android.support.v4.app.Fragment implements
 
                         return;
                     }
+                    if(RestAPI.checkExpiredtoken(s))
+                    {
+                        ViewDialog dialog = new ViewDialog();
+                        dialog.showDialogOK(getActivity(), "invalid token", new ViewDialog.DialogListenner() {
+                            @Override
+                            public void OnClickConfirm() {
+                                App.mApp.Logout();
+                            }
+                        });
+
+                        return;
+                    }
+
                     JsonArray jsonArray = (new JsonParser()).parse(s).getAsJsonObject().getAsJsonArray("result");
                     Gson gson = new Gson();
                     java.lang.reflect.Type type = new TypeToken<List<PostTimelineModel>>(){}.getType();

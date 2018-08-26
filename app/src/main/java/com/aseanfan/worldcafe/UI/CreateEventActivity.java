@@ -2,7 +2,9 @@ package com.aseanfan.worldcafe.UI;
 
 import android.app.DatePickerDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
@@ -29,10 +31,14 @@ import com.aseanfan.worldcafe.UI.Adapter.ImageTimelineAdapter;
 import com.aseanfan.worldcafe.Utils.Constants;
 import com.aseanfan.worldcafe.Utils.Utils;
 import com.aseanfan.worldcafe.worldcafe.R;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.aseanfan.worldcafe.Helper.cropper.CropImage;
+import com.aseanfan.worldcafe.Helper.cropper.CropImageView;
 import com.yanzhenjie.album.Action;
 import com.yanzhenjie.album.Album;
 import com.yanzhenjie.album.AlbumFile;
@@ -120,7 +126,7 @@ public class CreateEventActivity extends AppCompatActivity {
         dataJson.addProperty("numbertime",0);
         dataJson.addProperty("pertime","");
         dataJson.addProperty("base64",listImageBase64);
-        dataJson.addProperty("image",System.currentTimeMillis() + "");
+        dataJson.addProperty("image","event" + System.currentTimeMillis());
         dataJson.addProperty("type","image/jpeg");
 
         RestAPI.PostDataMasterWithToken(this,dataJson,RestAPI.POST_CREATEEVENT, new RestAPI.RestAPIListenner() {
@@ -233,7 +239,11 @@ public class CreateEventActivity extends AppCompatActivity {
         imgbutton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                selectImage();
+               // selectImage();
+                Intent intent = CropImage.activity(null)
+                        .setGuidelines(CropImageView.Guidelines.ON)
+                        .getIntent(CreateEventActivity.this);
+                startActivityForResult(intent, CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE);
             }
         });
 
@@ -339,6 +349,25 @@ public class CreateEventActivity extends AppCompatActivity {
                     }
                 })
                 .start();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch(requestCode) {
+
+            case CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE:
+                if(resultCode == RESULT_OK){
+                    CropImage.ActivityResult result = CropImage.getActivityResult(data);
+                    Uri selectedAvatar  = result.getUri();
+                    String[] bb = Utils.compressFormat(selectedAvatar.getPath(), this);
+                    listImageBase64 = bb[0];
+                   // String imagename = System.currentTimeMillis() + "." + bb[1];
+                 //   listImageBase64
+                  //  Glide.with(this).load( selectedAvatar).apply(RequestOptions.circleCropTransform()).into( _avatarimage);
+                }
+                break;
+        }
     }
 
     private void previewImage(int position) {

@@ -21,6 +21,7 @@ import com.aseanfan.worldcafe.Helper.RestAPI;
 import com.aseanfan.worldcafe.Model.PostTimelineModel;
 import com.aseanfan.worldcafe.UI.Adapter.ImageTimelineAdapter;
 import com.aseanfan.worldcafe.UI.Adapter.PostTimelineAdapter;
+import com.aseanfan.worldcafe.UI.Component.ViewDialog;
 import com.aseanfan.worldcafe.Utils.Constants;
 import com.aseanfan.worldcafe.Utils.Utils;
 import com.aseanfan.worldcafe.worldcafe.R;
@@ -151,7 +152,15 @@ public class PostTimeLineActivity extends AppCompatActivity {
         btnshare.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                PostTimeline(listImageBase64);
+
+                if(listImageBase64.length() == 0 && edtShare.getText().toString().isEmpty() ) {
+                    ViewDialog dialog = new ViewDialog();
+                    dialog.showDialogCancel(PostTimeLineActivity.this,"no information to share");
+                }
+                else
+                {
+                    PostTimeline(listImageBase64);
+                }
             }
         });
 

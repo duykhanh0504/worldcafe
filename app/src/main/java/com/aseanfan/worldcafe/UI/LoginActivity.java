@@ -70,8 +70,8 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
-import com.theartofdev.edmodo.cropper.CropImage;
-import com.theartofdev.edmodo.cropper.CropImageView;
+import com.aseanfan.worldcafe.Helper.cropper.CropImage;
+import com.aseanfan.worldcafe.Helper.cropper.CropImageView;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -840,7 +840,9 @@ public class LoginActivity extends AppCompatActivity {
                         }
                 } catch (Exception ex) {
                     progressDialog.dismiss();
-                    Toast.makeText(LoginActivity.this, ex.getMessage(), Toast.LENGTH_SHORT).show();
+                    ViewDialog dialog = new ViewDialog();
+                    dialog.showDialogCancel(LoginActivity.this,ex.getMessage());
+                    //Toast.makeText(LoginActivity.this, ex.getMessage(), Toast.LENGTH_SHORT).show();
                     ex.printStackTrace();
                 }
 
@@ -945,7 +947,7 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
-    public void login( String email ,String password,int type) {
+    public void login(String email , String password, final int type) {
 
         /*if (!validate()) {
             onLoginFailed();
@@ -1002,14 +1004,27 @@ public class LoginActivity extends AppCompatActivity {
                         JsonObject jsonObject = jsons.getAsJsonArray("result").get(0).getAsJsonObject();
                         Gson gson = new Gson();
                         final UserModel u = gson.fromJson(jsonObject, UserModel.class);
-                        DBHelper.getInstance(getApplicationContext()).insertPerson(u);
-                        AccountController.getInstance().SetAccount(u);
+                        if(type == LOGIN_NORMAL) {
+                            DBHelper.getInstance(getApplicationContext()).insertPerson(u);
+                            AccountController.getInstance().SetAccount(u);
+                            Store.putStringData(LoginActivity.this, Store.ACCESSTOKEN, jsons.get("access_token").getAsString());
+                            if(u.getStatus() == 0)
+                            {
+                                showPage(Constants.PAGE_ACTIVE);
+                                return;
+                            }
+                            if(u.getUsername() == null ||u.getUsername().isEmpty() )
+                            {
+                                showPage(Constants.PAGE_UPDATE);
+                                return;
+                            }
+                        }
+
 
                         startService(new Intent(getApplicationContext(), SocketService.class));
                         startService(new Intent(getApplicationContext(), MyFirebaseInstanceIDService.class));
 
                         Store.putBooleanData(LoginActivity.this, Store.LOGGED, true);
-                        Store.putStringData(LoginActivity.this, Store.ACCESSTOKEN, jsons.get("access_token").getAsString());
 
                         {
                             Intent intent = new Intent(LoginActivity.this, MainActivity.class);

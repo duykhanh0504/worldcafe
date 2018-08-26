@@ -40,8 +40,8 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
-import com.theartofdev.edmodo.cropper.CropImage;
-import com.theartofdev.edmodo.cropper.CropImageView;
+import com.aseanfan.worldcafe.Helper.cropper.CropImage;
+import com.aseanfan.worldcafe.Helper.cropper.CropImageView;
 
 import java.util.ArrayList;
 import java.util.List;

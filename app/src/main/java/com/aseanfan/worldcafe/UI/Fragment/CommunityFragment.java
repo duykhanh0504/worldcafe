@@ -174,18 +174,18 @@ public class CommunityFragment extends Fragment implements NotificationCenter.No
                 try {
                     if (!RestAPI.checkHttpCode(httpCode)) {
                         //AppFuncs.alert(getApplicationContext(),s,true);
-                        ViewDialog dialog = new ViewDialog();
-                        dialog.showDialogOK(getActivity(), "invalid token", new ViewDialog.DialogListenner() {
-                            @Override
-                            public void OnClickConfirm() {
-                               App.mApp.Logout();
-                            }
-                        });
-
                         return;
                     }
                     if(RestAPI.checkExpiredtoken(s))
                     {
+                        ViewDialog dialog = new ViewDialog();
+                        dialog.showDialogOK(getActivity(), "invalid token", new ViewDialog.DialogListenner() {
+                            @Override
+                            public void OnClickConfirm() {
+                                App.mApp.Logout();
+                            }
+                        });
+
                         return;
                     }
 
