@@ -1004,10 +1004,10 @@ public class LoginActivity extends AppCompatActivity {
                         JsonObject jsonObject = jsons.getAsJsonArray("result").get(0).getAsJsonObject();
                         Gson gson = new Gson();
                         final UserModel u = gson.fromJson(jsonObject, UserModel.class);
+                        Store.putStringData(LoginActivity.this, Store.ACCESSTOKEN, jsons.get("access_token").getAsString());
                         if(type == LOGIN_NORMAL) {
                             DBHelper.getInstance(getApplicationContext()).insertPerson(u);
                             AccountController.getInstance().SetAccount(u);
-                            Store.putStringData(LoginActivity.this, Store.ACCESSTOKEN, jsons.get("access_token").getAsString());
                             if(u.getStatus() == 0)
                             {
                                 showPage(Constants.PAGE_ACTIVE);

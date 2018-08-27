@@ -14,6 +14,7 @@ public class PostTimelineModel {
     private int type;
     private int islike;
     private Long account_id;
+    private int genre;
 
     public PostTimelineModel() {
     }
@@ -100,6 +101,14 @@ public class PostTimelineModel {
 
     public void setAccount_id(Long account_id) {
         this.account_id = account_id;
+    }
+
+    public int getGenre() {
+        return genre;
+    }
+
+    public void setGenre(int genre) {
+        this.genre = genre;
     }
 
 }

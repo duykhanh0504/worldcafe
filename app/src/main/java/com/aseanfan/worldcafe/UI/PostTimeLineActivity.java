@@ -64,7 +64,6 @@ public class PostTimeLineActivity extends AppCompatActivity {
     private int typetimeline;
     private int typegenre = 0;
 
-
     private void changeGenre(RadioGroup group, int checkedId) {
         int checkedRadioId = group.getCheckedRadioButtonId();
 
@@ -110,6 +109,8 @@ public class PostTimeLineActivity extends AppCompatActivity {
 
         avatar = findViewById(R.id.imageAvatar);
         username = findViewById(R.id.txtusername);
+        imgbutton = (ImageButton)this.findViewById(R.id.btn_select);
+
 
         radgroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
@@ -141,7 +142,6 @@ public class PostTimeLineActivity extends AppCompatActivity {
         });
         listimage.setAdapter(mAdapter);
 
-        imgbutton = (ImageButton)this.findViewById(R.id.btn_select);
         imgbutton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

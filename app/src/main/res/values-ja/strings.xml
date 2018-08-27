@@ -1,38 +1,115 @@
-<resources>
-    <string name="app_name">worldcafe</string>
-    <string name="aaa">aaa</string>
-    <string name="bbb">bbb</string>
-    <string name="ccc">ccc</string>
-    <string name="ddd">ccc</string>
-    <string name="button">Button</string>
-    <string name="todo">TODO</string>
-    <string name="Login">Login</string>
 
 
-    <string name="google_maps_api_key">AIzaSyD5WulihCHENmeaCamHEPajTEUzBroqrEo</string>
+    <resources>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="app_name">Crosea</string>
 
-    <string name="title_community">Community</string>
-    <string name="title_timeline">Timeline</string>
-    <string name="title_mypage">My page</string>
-    <string name="title_setting">Setting</string>
-    <string name="title_notifications">Notify</string>
+    <string name="title_community">イベント</string>
 
-    <string name="business">Business</string>
-    <string name="local">Local</string>
-    <string name="language">Language</string>
-    <string name="friend">Friend</string>
+    <string name="title_timeline">タイムライン</string>
 
-    <string name="Signup">Sign up</string>
+    <string name="title_mypage">マイページ</string>
 
-    <string name="facebook_app_id">512038499006720</string>
-    <string name="fb_login_protocol_scheme">fb512038499006720</string>
-    <string name="back4app_server_url">https://parseapi.back4app.com/</string>
+    <string name="title_setting">設定</string>
 
-    <string name="back4app_app_id">216205465084648</string>
-    <string name="back4app_client_key">PASTE_YOUR_CLIENT_KEY</string>
+    <string name="title_notifications">通知</string>
+
+    <string name="facebook_app_id">216205465084648</string>
+
+    <string name="fb_login_protocol_scheme">fb216205465084648</string>
+
+    <string name="Friend">フレンド</string>
+
+    <string name="Business">ビジネス</string>
+
+    <string name="Local">ローカル</string>
+
+    <string name="Language">ランゲージ</string>
+
+    <string name="Login">ログイン</string>
+
+    <string name="Signup">新規登録</string>
+
+    <string name="Email">メールアドレス</string>
+
+    <string name="Password">パスワード</string>
+
+    <string name="Facebook_Login">Facebookでログイン</string>
+
+    <string name="Forget_Password">パスワードをお忘れの場合</string>
+
+    <string name="Wrong_passowrd">パスワードが違います</string>
+
+    <string name="Account_exist">すでにアカウントが存在しています</string>
+
+    <string name="My_Post">アクティビティ</string>
+
+    <string name="Detail_page">基本情報</string>
+
+    <string name="Album_page">フォト</string>
+
+    <string name="Following">フォロー: %d</string>
+
+    <string name="Followers">フォロワー: %d</string>
+
+    <string name="Rank">ランク</string>
+
+    <string name="Introduce">プロフィール</string>
+
+    <string name="Interested">関心ジャンル</string>
+
+    <string name="Rating">ユーザー評価</string>
+
+    <string name="titlenumberthanks">「ありがとう」を贈った・もらった回数</string>
+
+    <string name="givethanks">贈る: %d times</string>
+
+    <string name="receivethanks">もらう: %d times</string>
+
+    <string name="Direct_mesage">メッセージ履歴</string>
+
+    <string name="Event_exhibition">イベント作成</string>
+
+    <string name="School">学歴</string>
+
+    <string name="Company">職歴</string>
+
+    <string name="intro1">Croseaは、\n”自分にとって価値のある人とつながる"\n"自身のコミュニティの幅を超えたつながり”を、 \n海を越えたグローバルな人々と叶えるサービスです。</string>
+
+    <string name="intro2">・あなたの参加したいイベント\n・あなたの欲しい情報・知識 を、\nあなたの望む条件で発見できます。\n\nあなたの今あるコミュニティの枠を超えましょう。</string>
+
+    <string name="intro3">·あなたが企画したいイベント\n・あなたの情報・知識 を、\nあなたの望む条件で販売できます。\n\nあなたがコミュニティのインフルエンサーになり 世界中の人々とつながりましょう。</string>
+
+
+    <string name="genre">ジャンル</string>
+
+    <string name="photo">写真を追加</string>
+
+    <string name="area">地域</string>
+
+    <string name="schedule">毎週/月/年　繰り返し</string>
+
+    <string name="numberofparticipants">実施人数</string>
+
+    <string name="price">参加費</string>
+
+    <string name="title">タイトル</string>
+
+    <string name="detail">イベント内容</string>
+
+    <string name="note">参加にあたってのお願い</string>
+
+    <string name="Post">投稿</string>
+
+    <string name="Create_event">イベントを作成</string>
+
+    <string name="notification_channel_id">default</string>
+
+    <string name="activation_text">メールアドレスにアクティブコードを送信しました。\n以下に入力してください。</string>
+
+    <string name="male">男性</string>
+
+    <string name="female">女性</string>
 
 
 </resources>

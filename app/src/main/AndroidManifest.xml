@@ -74,9 +74,6 @@
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
-        <meta-data
-            android:name="com.parse.APPLICATION_ID"
-            android:value="@string/back4app_app_id" />
 
         <service android:name="com.aseanfan.worldcafe.Service.MyFirebaseMessagingService">
             <intent-filter>
@@ -144,12 +141,15 @@
             android:name="com.aseanfan.worldcafe.UI.EditProfileActivity"
             android:screenOrientation="portrait"
             android:theme="@style/ThemeWithTabBar" />
-        <activity android:name="com.aseanfan.worldcafe.UI.MemberRequestActivity"
+        <activity
+            android:name="com.aseanfan.worldcafe.UI.MemberRequestActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/ThemeWithTabBar"/>
-        <activity android:name="com.aseanfan.worldcafe.UI.MemberEventActivity"
+            android:theme="@style/ThemeWithTabBar" />
+        <activity
+            android:name="com.aseanfan.worldcafe.UI.MemberEventActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/ThemeWithTabBar"></activity>
+            android:theme="@style/ThemeWithTabBar" />
+        <activity android:name="com.aseanfan.worldcafe.UI.EditPostTimeline"></activity>
     </application>
 
 </manifest>

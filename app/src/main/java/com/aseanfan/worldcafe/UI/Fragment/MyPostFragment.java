@@ -1,5 +1,6 @@
 package com.aseanfan.worldcafe.UI.Fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -20,6 +21,7 @@ import com.aseanfan.worldcafe.Model.EventModel;
 import com.aseanfan.worldcafe.Model.PostTimelineModel;
 import com.aseanfan.worldcafe.UI.Adapter.CommunityAdapter;
 import com.aseanfan.worldcafe.UI.Adapter.PostTimelineAdapter;
+import com.aseanfan.worldcafe.UI.EditPostTimeline;
 import com.aseanfan.worldcafe.Utils.Constants;
 import com.aseanfan.worldcafe.worldcafe.R;
 import com.google.gson.Gson;
@@ -93,9 +95,18 @@ public class MyPostFragment  extends android.support.v4.app.Fragment implements 
         });
     }
 
-    public void EditPost(Long account_id)
+    public void EditPost(PostTimelineModel post)
     {
+        Intent intent = new Intent(getActivity(), EditPostTimeline.class);
+        intent.putExtra("timelineid",post.getTimelineid());
+        intent.putExtra("detail",post.getDetail());
+        ArrayList<String> listOfStrings = new ArrayList<>(post.getUrlImage().size());
+        listOfStrings.addAll(post.getUrlImage());
+        intent.putStringArrayListExtra("listimage",listOfStrings);
+        intent.putExtra("type",post.getType());
+        intent.putExtra("genre",post.getGenre());
 
+        startActivity(intent);
     }
 
     public void openOptionMenu(View v,final int position){
@@ -110,7 +121,7 @@ public class MyPostFragment  extends android.support.v4.app.Fragment implements 
                             DeletePost(position);
                             break;
                         case R.id.item_edit:
-
+                            EditPost(posttimeline.get(position));
                             break;
                     }
                 return true;

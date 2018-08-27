@@ -14,20 +14,29 @@ import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.aseanfan.worldcafe.App.AccountController;
 import com.aseanfan.worldcafe.Helper.RestAPI;
+import com.aseanfan.worldcafe.Model.CityModel;
 import com.aseanfan.worldcafe.Model.EventModel;
 import com.aseanfan.worldcafe.UI.Adapter.ChooseAreaAdapter;
 import com.aseanfan.worldcafe.UI.Adapter.ImageTimelineAdapter;
+import com.aseanfan.worldcafe.UI.Adapter.SpinnerCityAdapter;
 import com.aseanfan.worldcafe.Utils.Constants;
 import com.aseanfan.worldcafe.Utils.Utils;
 import com.aseanfan.worldcafe.worldcafe.R;
@@ -59,14 +68,13 @@ import java.util.TimeZone;
 public class CreateEventActivity extends AppCompatActivity {
 
     private ImageTimelineAdapter mAdapter;
-    private RecyclerView listimage;
+    private ImageView listimage;
     private ImageButton imgbutton;
     private ArrayList<AlbumFile> mAlbumFiles;
     private String listImageBase64 = "";
-    private TextView choosearea;
+    private Spinner choosearea;
     private RecyclerView listarea;
     private List<String> l = new ArrayList<>();
-    private ChooseAreaAdapter areaAdapter;
     private TextView scheduel;
     private int mYear, mMonth, mDay, mHour, mMinute;
     private RadioButton friend,language,local,buissines;
@@ -76,6 +84,17 @@ public class CreateEventActivity extends AppCompatActivity {
     private EditText title;
     private EditText content;
     private EditText numberofparticipal;
+    private EditText times;
+    private LinearLayout container_type;
+    private CheckBox checktype;
+    private Spinner typetime;
+    private EditText note;
+
+    private List<CityModel> listcity;
+
+    private SpinnerCityAdapter  adaptercity;
+
+    String[] arraytypetime={"week","month","year"};
 
     private int typeCreate = Constants.EVENT_CREATE;
 
@@ -120,11 +139,12 @@ public class CreateEventActivity extends AppCompatActivity {
         dataJson.addProperty("endtime","");
         dataJson.addProperty("address","");
         dataJson.addProperty("country","");
-        dataJson.addProperty("city","");
-        dataJson.addProperty("limit_persons",0);
-        dataJson.addProperty("schedueltype",0);
-        dataJson.addProperty("numbertime",0);
-        dataJson.addProperty("pertime","");
+        dataJson.addProperty("note",event.getNote());
+        dataJson.addProperty("city",event.getCityid());
+        dataJson.addProperty("limit_persons",event.getLimitpersons());
+        dataJson.addProperty("schedueltype",event.getSchedule_type());
+        dataJson.addProperty("numbertime",event.getNumber());
+        dataJson.addProperty("pertime",event.getPertime());
         dataJson.addProperty("base64",listImageBase64);
         dataJson.addProperty("image","event" + System.currentTimeMillis());
         dataJson.addProperty("type","image/jpeg");
@@ -174,9 +194,9 @@ public class CreateEventActivity extends AppCompatActivity {
         event = new EventModel();
 
         listimage= findViewById(R.id.list_image);
+        listimage.setVisibility(View.GONE);
         imgbutton= findViewById(R.id.selectimage);
         choosearea= findViewById(R.id.choosearea);
-        listarea= findViewById(R.id.area_check);
         scheduel =  findViewById(R.id.timepicker);
 
         friend =  findViewById(R.id.radfriend);
@@ -189,6 +209,48 @@ public class CreateEventActivity extends AppCompatActivity {
         title = findViewById(R.id.input_title);
         content = findViewById(R.id.input_details);
         numberofparticipal = findViewById(R.id.input_numbetofpartiicipants);
+        times = findViewById(R.id.input_times);
+        container_type = findViewById(R.id.container_type);
+        checktype  = findViewById(R.id.checktype);
+        typetime = findViewById(R.id.spinner_typetimes);
+        note = findViewById(R.id.input_note);
+
+        listcity = Utils.initDefaultCity();
+
+        ArrayAdapter<String> adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item,arraytypetime);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        typetime.setAdapter(adapter);
+
+        typetime.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                event.setPertime(i);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
+        checktype.setChecked(false);
+        container_type.setVisibility(View.GONE);
+
+        checktype.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if(b == false)
+                {
+                    container_type.setVisibility(View.GONE);
+                    event.setSchedule_type(1);
+                }
+                else
+                {
+                    container_type.setVisibility(View.VISIBLE);
+                    event.setSchedule_type(0);
+                }
+            }
+        });
 
         btncreate.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -208,6 +270,9 @@ public class CreateEventActivity extends AppCompatActivity {
                 String nowAsISO = df.format(convertedDate);
 
                 event.setStarttime(nowAsISO);
+                event.setLimit_personse(Integer.valueOf(numberofparticipal.getText().toString()));
+                event.setNumber(Integer.valueOf(times.getText().toString()));
+                event.setNote(note.getText().toString());
                 CreateEvent(event);
             }
         });
@@ -220,21 +285,26 @@ public class CreateEventActivity extends AppCompatActivity {
         });
 
 
-        listimage.setLayoutManager(new GridLayoutManager(this, 3));
-        Divider divider = new Api21ItemDivider(Color.TRANSPARENT, 10, 10);
-        listimage.addItemDecoration(divider);
 
-        areaAdapter = new ChooseAreaAdapter(null);
-        listarea.setLayoutManager(new GridLayoutManager(this, 3));
-        listarea.setAdapter(areaAdapter);
+        adaptercity = new SpinnerCityAdapter(CreateEventActivity.this,
+                android.R.layout.simple_spinner_item,listcity);
 
-        mAdapter = new ImageTimelineAdapter(this, new OnItemClickListener() {
+        adaptercity.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        choosearea.setAdapter(adaptercity);
+
+        choosearea.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onItemClick(View view, int position) {
-                previewImage(position);
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                event.setCityid(listcity.get(i).getid());
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
             }
         });
-        listimage.setAdapter(mAdapter);
+
 
         imgbutton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -269,50 +339,6 @@ public class CreateEventActivity extends AppCompatActivity {
             }
         });
 
-        choosearea.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                final AlertDialog.Builder builder = new AlertDialog.Builder(CreateEventActivity.this);
-                builder.setTitle("Choose some animals");
-
-// add a checkbox list
-                final String[] areas = {"hanoi", "hcm", "da nang"};
-                final boolean[] checkedItems = {false, false, false};
-                final int[] pos = {-1};
-                builder.setSingleChoiceItems(areas, 0, new DialogInterface.OnClickListener() {
-
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        pos[0] = i;
-                    }
-                });
-
-// add OK and Cancel buttons
-                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        l.clear();
-                        if (pos[0] != -1) {
-                            l.add(areas[pos[0]]);
-                        }
-                        // user clicked OK
-                       /* for(int i=0 ; i< checkedItems.length ; i++)
-                        {
-                            if( checkedItems[i]== true)
-                            {
-                                l.add(areas[i]);
-                            }
-                        }*/
-                        areaAdapter.updatedata(l);
-                    }
-                });
-                builder.setNegativeButton("Cancel", null);
-
-// create and show the alert dialog
-                AlertDialog dialog = builder.create();
-                dialog.show();
-            }
-        });
     }
 
 
@@ -361,10 +387,11 @@ public class CreateEventActivity extends AppCompatActivity {
                     CropImage.ActivityResult result = CropImage.getActivityResult(data);
                     Uri selectedAvatar  = result.getUri();
                     String[] bb = Utils.compressFormat(selectedAvatar.getPath(), this);
-                    listImageBase64 = bb[0];
+                    listImageBase64 = bb[0] + ",";
                    // String imagename = System.currentTimeMillis() + "." + bb[1];
                  //   listImageBase64
-                  //  Glide.with(this).load( selectedAvatar).apply(RequestOptions.circleCropTransform()).into( _avatarimage);
+                    listimage.setVisibility(View.VISIBLE);
+                    Glide.with(this).load( selectedAvatar).into(listimage);
                 }
                 break;
         }

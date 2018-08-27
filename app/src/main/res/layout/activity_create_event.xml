@@ -92,30 +92,54 @@
                 android:layout_height="50dp"
                 android:background="@drawable/camera" />
 
-            <android.support.v7.widget.RecyclerView
+            <ImageView
                 android:id="@+id/list_image"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_width="250dp"
+                android:layout_height="150dp"
+                android:scaleType="centerCrop" />
         </LinearLayout>
 
         <TextView
-            android:id="@+id/choosearea"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/margin_left_right"
             android:text="@string/area"  />
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/area_check"
+        <Spinner
+            android:id="@+id/choosearea"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/margin_left_right"/>
+            android:layout_height="wrap_content"></Spinner>
 
         <TextView
             android:id="@+id/timepicker"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/schedule" />
+
+        <CheckBox
+            android:id="@+id/checktype"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layoutDirection="rtl"
+            android:text="repeat"/>
+        <LinearLayout
+            android:id="@+id/container_type"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <EditText
+                android:id="@+id/input_times"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="times"
+                android:inputType="number"
+                android:layout_marginRight="@dimen/margin_line_mypage"/>
+            <Spinner
+                android:id="@+id/spinner_typetimes"
+                android:spinnerMode="dropdown"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"></Spinner>
+        </LinearLayout>
 
         <TextView
             android:id="@+id/textView5"

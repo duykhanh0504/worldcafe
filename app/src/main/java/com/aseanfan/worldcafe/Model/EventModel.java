@@ -19,9 +19,14 @@ public class EventModel {
     private Long account_id;
     private String start_time;
     private String city_name;
+    private int cityid;
     private int isJoin;
     private int isOwner;
-
+    private int limit_persons;
+    private int number;
+    private int schedule_type;
+    private int per_time;
+    private String note;
 
     public EventModel() {
     }
@@ -41,6 +46,14 @@ public class EventModel {
 
     public void setCityname(String city_name) {
         this.city_name = city_name;
+    }
+
+    public int getCityid() {
+        return cityid;
+    }
+
+    public void setCityid(int cityid) {
+        this.cityid = cityid;
     }
 
     public Long getEventid() {
@@ -159,6 +172,46 @@ public class EventModel {
 
     public void setIsOwner(int isOwner) {
         this.isOwner = isOwner;
+    }
+
+    public int getLimitpersons() {
+        return limit_persons;
+    }
+
+    public void setLimit_personse(int limit_persons) {
+        this.limit_persons = limit_persons;
+    }
+
+    public int getSchedule_type() {
+        return schedule_type;
+    }
+
+    public void setSchedule_type(int schedule_type) {
+        this.schedule_type = schedule_type;
+    }
+
+    public int getNumber() {
+        return number;
+    }
+
+    public void setNumber(int limit_persons) {
+        this.number = number;
+    }
+
+    public int getPertime() {
+        return per_time;
+    }
+
+    public void setPertime(int per_time) {
+        this.per_time = per_time;
+    }
+
+    public String getNote() {
+        return note;
+    }
+
+    public void setNote(String note) {
+        this.note = note;
     }
 
 }

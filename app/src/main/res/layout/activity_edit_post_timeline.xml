@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.aseanfan.worldcafe.UI.PostTimeLineActivity"
+    >
+
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/appbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/app_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:layout_scrollFlags="scroll|enterAlways|snap"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light" >
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:id="@+id/btnshare"
+                android:textSize="12sp"
+                android:background="@null"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:textColor="#FFF"
+                android:text="Share"/>
+        </android.support.v7.widget.Toolbar>
+
+
+    </android.support.design.widget.AppBarLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="@dimen/margin_left_right"
+        android:layout_marginRight="@dimen/margin_left_right"
+        android:layout_marginLeft="@dimen/margin_left_right">
+        <ImageView
+            android:id="@+id/imageAvatar"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_gravity="left|center"
+
+            android:contentDescription="TODO" />
+
+        <TextView
+            android:id="@+id/txtusername"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center|left"
+            android:layout_margin="@dimen/margin_left_right"/>
+    </LinearLayout>
+
+    <RadioGroup
+        android:id="@+id/radgroup"
+        android:layout_width="wrap_content"
+        android:layout_gravity="center"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="@dimen/margin_left_right"
+        android:layout_marginBottom="@dimen/margin_left_right">
+
+
+        <RadioButton
+            android:id="@+id/radtimeline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Timeline"
+            android:layout_marginRight="100dp"/>
+
+        <RadioButton
+            android:id="@+id/radquestion"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="question" />
+
+
+    </RadioGroup>
+    <RadioGroup
+        android:id="@+id/radgroupquestion"
+        android:layout_width="wrap_content"
+        android:layout_gravity="center"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <RadioButton
+            android:id="@+id/friend"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:text="Timeline"
+            android:background="@drawable/radiobtnbackground"
+            android:button="@android:color/transparent"
+            android:layout_marginRight="20dp"/>
+
+        <RadioButton
+            android:id="@+id/business"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/radiobtnbackground"
+            android:padding="5dp"
+            android:button="@android:color/transparent"
+            android:layout_marginRight="20dp"
+            android:text="Local" />
+
+        <RadioButton
+            android:id="@+id/local"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Timeline"
+            android:padding="5dp"
+            android:background="@drawable/radiobtnbackground"
+            android:button="@android:color/transparent"
+            android:layout_marginRight="20dp"/>
+
+        <RadioButton
+            android:id="@+id/language"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:background="@drawable/radiobtnbackground"
+            android:button="@android:color/transparent"
+            android:text="Local" />
+
+
+    </RadioGroup>
+
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_marginRight="@dimen/margin_left_right"
+        android:layout_marginLeft="@dimen/margin_left_right"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:maxHeight="300dp">
+        <EditText android:id="@+id/input_detail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="what do you think?"
+            android:maxHeight="300dp"/>
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:layout_marginRight="@dimen/margin_left_right"
+        android:layout_marginLeft="@dimen/margin_left_right"
+        android:id="@+id/list_image"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_left_right"/>
+
+</LinearLayout>

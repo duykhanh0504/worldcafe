@@ -55,6 +55,17 @@ public class Utils {
 
     }
 
+    public static List<CityModel> initDefaultCity()
+    {
+        List<CityModel> listcity = new ArrayList();
+        listcity.add(new CityModel(1,"HCM"));
+        listcity.add(new CityModel(2,"HA NOI"));
+        listcity.add(new CityModel(3,"DA NANG"));
+        listcity.add(new CityModel(4,"Tokyo"));
+        listcity.add(new CityModel(5,"Osaka"));
+        return listcity;
+    }
+
     public static String ConvertDate(String s)
     {
 
