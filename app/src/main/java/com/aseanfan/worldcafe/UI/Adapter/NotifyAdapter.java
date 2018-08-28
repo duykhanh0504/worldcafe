@@ -115,7 +115,7 @@ public class NotifyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             viewHolder.detail.setText(notify.getMessage());
             // myViewHolder.date.setText(commentModel.getCreatetime());
             Drawable mDefaultBackground = viewHolder.avatar.getContext().getResources().getDrawable(R.drawable.avata_defaul);
-            Glide.with(viewHolder.avatar.getContext()).load(notify.getAvarta()).apply(RequestOptions.circleCropTransform().diskCacheStrategy(DiskCacheStrategy.ALL).error(mDefaultBackground)).into(viewHolder.avatar);
+            Glide.with(viewHolder.avatar.getContext()).load(notify.getAvarta()).apply(RequestOptions.circleCropTransform().error(mDefaultBackground)).into(viewHolder.avatar);
         }
     }
 

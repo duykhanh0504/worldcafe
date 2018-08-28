@@ -32,7 +32,7 @@
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
                 android:textColor="#FFF"
-                android:text="Share"/>
+                android:text="Edit"/>
         </android.support.v7.widget.Toolbar>
 
 
@@ -97,7 +97,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="5dp"
-            android:text="Timeline"
+            android:text="@string/Friend"
             android:background="@drawable/radiobtnbackground"
             android:button="@android:color/transparent"
             android:layout_marginRight="20dp"/>
@@ -110,13 +110,13 @@
             android:padding="5dp"
             android:button="@android:color/transparent"
             android:layout_marginRight="20dp"
-            android:text="Local" />
+            android:text="@string/Business" />
 
         <RadioButton
             android:id="@+id/local"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Timeline"
+            android:text="@string/Local"
             android:padding="5dp"
             android:background="@drawable/radiobtnbackground"
             android:button="@android:color/transparent"
@@ -129,7 +129,7 @@
             android:padding="5dp"
             android:background="@drawable/radiobtnbackground"
             android:button="@android:color/transparent"
-            android:text="Local" />
+            android:text="@string/Language" />
 
 
     </RadioGroup>
@@ -150,11 +150,12 @@
     </android.support.design.widget.TextInputLayout>
 
     <android.support.v7.widget.RecyclerView
+        android:id="@+id/listimage"
+        android:layout_marginTop="@dimen/margin_line_mypage"
         android:layout_marginRight="@dimen/margin_left_right"
         android:layout_marginLeft="@dimen/margin_left_right"
-        android:id="@+id/list_image"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/margin_left_right"/>
+        android:layout_height="match_parent"
+        android:layout_marginBottom="@dimen/margin_line_mypage" />
 
 </LinearLayout>

@@ -3,11 +3,13 @@ package com.aseanfan.worldcafe.UI.Adapter;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.aseanfan.worldcafe.Utils.Utils;
+import com.aseanfan.worldcafe.worldcafe.R;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 
@@ -34,16 +36,11 @@ public class PostImageAdapter  extends RecyclerView.Adapter<PostImageAdapter.MyV
 
     public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public ImageView imageView;
-        public Context context;
 
 
         public MyViewHolder(View view) {
             super(view);
-            imageView = (ImageView) view;
-            context = view.getContext();
-            int padding = Utils.convertDpToPixel(1, context);
-            imageView.setPadding(padding, padding, padding, padding);
-            imageView.setScaleType(ImageView.ScaleType.FIT_XY);
+            imageView = (ImageView) view.findViewById(R.id.image);
             view.setOnClickListener(this);
 
         }
@@ -68,8 +65,8 @@ public class PostImageAdapter  extends RecyclerView.Adapter<PostImageAdapter.MyV
     @NonNull
     @Override
     public PostImageAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        View itemView = new ImageView(viewGroup.getContext());
-
+        View itemView = LayoutInflater.from(viewGroup.getContext())
+                .inflate(R.layout.image_row, viewGroup, false);
 
         return new PostImageAdapter.MyViewHolder(itemView);
     }
@@ -77,8 +74,8 @@ public class PostImageAdapter  extends RecyclerView.Adapter<PostImageAdapter.MyV
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder myViewHolder, int i) {
         String imageurl = imageListUrl.get(i);
-        Glide.with(myViewHolder.context).load(imageurl).apply(new RequestOptions()
-                .override(Utils.getwidthScreen(myViewHolder.context), Utils.getwidthScreen(myViewHolder.context)) // set exact size
+        Glide.with(myViewHolder.imageView.getContext()).load(imageurl).apply(new RequestOptions()
+                .override(Utils.getwidthScreen(myViewHolder.imageView.getContext()), Utils.getwidthScreen(myViewHolder.imageView.getContext())) // set exact size
                 .centerCrop()).into(myViewHolder.imageView);
     }
 

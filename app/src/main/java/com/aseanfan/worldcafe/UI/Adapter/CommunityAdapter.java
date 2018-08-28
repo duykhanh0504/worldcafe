@@ -63,6 +63,9 @@ public class CommunityAdapter extends RecyclerView.Adapter<CommunityAdapter.MyVi
         public TextView time;
         public TextView location;
         public LinearLayout background;
+        public ImageView imglike;
+        public ImageView imgcomment;
+
 
         public MyViewHolder(View view) {
             super(view);
@@ -73,11 +76,27 @@ public class CommunityAdapter extends RecyclerView.Adapter<CommunityAdapter.MyVi
             imageAvatar = (ImageView) view.findViewById(R.id.imageAvatar);
             numberlike = (TextView) view.findViewById(R.id.textLike);
             numbercomment = (TextView) view.findViewById(R.id.textComment);
+            imglike = (ImageView) view.findViewById(R.id.imageLike);
+            imgcomment = (ImageView) view.findViewById(R.id.imageComment);
             type = (TextView) view.findViewById(R.id.txttype);
             time = (TextView) view.findViewById(R.id.txtdate);
             location = (TextView) view.findViewById(R.id.txtlocation);
             background = (LinearLayout) view.findViewById(R.id.background_event);
             view.setOnClickListener(this);
+
+            imglike.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    clickListener.onItemClick(getAdapterPosition(), view , Constants.CLICK_IMAGE_LIKE ,eventList.get(getAdapterPosition()));
+                }
+            });
+
+            imgcomment.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    clickListener.onItemClick(getAdapterPosition(), view , Constants.CLICK_IMAGE_COMMENT ,eventList.get(getAdapterPosition()));
+                }
+            });
 
         }
 

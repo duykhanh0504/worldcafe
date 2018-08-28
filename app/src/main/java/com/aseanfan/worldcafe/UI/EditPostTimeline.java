@@ -4,7 +4,9 @@ import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
@@ -18,6 +20,7 @@ import com.aseanfan.worldcafe.App.AccountController;
 import com.aseanfan.worldcafe.Helper.RestAPI;
 import com.aseanfan.worldcafe.Model.PostTimelineModel;
 import com.aseanfan.worldcafe.UI.Adapter.ImageTimelineAdapter;
+import com.aseanfan.worldcafe.UI.Adapter.PostImageAdapter;
 import com.aseanfan.worldcafe.UI.Component.ViewDialog;
 import com.aseanfan.worldcafe.Utils.Constants;
 import com.aseanfan.worldcafe.worldcafe.R;
@@ -25,6 +28,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.yanzhenjie.album.AlbumFile;
 import com.yanzhenjie.album.impl.OnItemClickListener;
 import com.yanzhenjie.album.widget.divider.Api21ItemDivider;
@@ -35,7 +39,7 @@ import java.util.List;
 
 public class EditPostTimeline extends AppCompatActivity {
 
-    private RecyclerView listimage;
+
     private Button btnshare;
     private EditText edtShare;
     private String listImageBase64 = "";
@@ -46,21 +50,39 @@ public class EditPostTimeline extends AppCompatActivity {
     private RadioGroup radgroup;
     private RadioGroup radgroupquestion;
     private PostTimelineModel post;
+    public RecyclerView imagePost;
+    public PostImageAdapter mAdapter;
 
-    public void EditPost(final int pos)
+    public void EditPost(final PostTimelineModel pos)
     {
         JsonObject dataJson = new JsonObject();
         dataJson.addProperty("newfeed_id", post.getTimelineid());
         dataJson.addProperty("account_id", AccountController.getInstance().getAccount().getId());
+        dataJson.addProperty("description", pos.getDetail());
+        dataJson.addProperty("type", pos.getType());
+        dataJson.addProperty("genre", pos.getGenre());
 
-        RestAPI.PostDataMasterWithToken(EditPostTimeline.this.getApplicationContext(),dataJson,RestAPI.POST_DELETE_TIMELINE, new RestAPI.RestAPIListenner() {
+
+        RestAPI.PostDataMasterWithToken(EditPostTimeline.this.getApplicationContext(),dataJson,RestAPI.POST_EDIT_TIMELINE, new RestAPI.RestAPIListenner() {
             @Override
             public void OnComplete(int httpCode, String error, String s) {
                 try {
-                    if (!RestAPI.checkHttpCode(httpCode)) {
+                    ViewDialog dialog = new ViewDialog();
+                  if (!RestAPI.checkHttpCode(httpCode)) {
                         //AppFuncs.alert(getApplicationContext(),s,true);
-
+                      dialog.showDialogCancel( EditPostTimeline.this,getResources().getString(R.string.can_not_connect_server) );
                         return;
+                    }
+                    JsonObject jsons = (new JsonParser()).parse(s).getAsJsonObject();
+                    int statuscode = jsons.get("status").getAsInt();
+                    if(statuscode == RestAPI.STATUS_SUCCESS)
+                    {
+                        dialog.showDialogOK( EditPostTimeline.this,getResources().getString(R.string.edit_time_line), new ViewDialog.DialogListenner() {
+                            @Override
+                            public void OnClickConfirm() {
+                                finish();
+                            }
+                        });
                     }
                    // posttimeline.remove(pos);
                   //  Adapter.setPostList(posttimeline);
@@ -107,9 +129,9 @@ public class EditPostTimeline extends AppCompatActivity {
         setContentView(R.layout.activity_edit_post_timeline);
         post= new PostTimelineModel();
 
-        listimage= findViewById(R.id.list_image);
         btnshare= findViewById(R.id.btnshare);
         edtShare= findViewById(R.id.input_detail);
+        imagePost = (RecyclerView) findViewById(R.id.listimage);
 
         radgroup = findViewById(R.id.radgroup);
         radgroupquestion = findViewById(R.id.radgroupquestion);
@@ -119,11 +141,18 @@ public class EditPostTimeline extends AppCompatActivity {
         avatar = findViewById(R.id.imageAvatar);
         username = findViewById(R.id.txtusername);
 
-        post.setTimelineid(getIntent().getLongExtra("timelineis",-1));
+        post.setTimelineid(getIntent().getLongExtra("timelineid",-1));
         post.setUrlImage((List<String>) getIntent().getStringArrayListExtra("listimage"));
         post.setDetail(getIntent().getStringExtra("detail"));
         post.setType(getIntent().getIntExtra("type",0));
         post.setGenre(getIntent().getIntExtra("genre",-1));
+
+        mAdapter = new PostImageAdapter(post.getUrlImage());
+
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+        imagePost.setLayoutManager(mLayoutManager);
+        imagePost.setItemAnimator(new DefaultItemAnimator());
+        imagePost.setAdapter(mAdapter);
 
 
         edtShare.setText(post.getDetail());
@@ -167,11 +196,6 @@ public class EditPostTimeline extends AppCompatActivity {
         Drawable mDefaultBackground = this.getResources().getDrawable(R.drawable.avata_defaul);
         Glide.with(this).load(AccountController.getInstance().getAccount().getAvarta()).apply(RequestOptions.circleCropTransform().diskCacheStrategy(DiskCacheStrategy.ALL).error(mDefaultBackground)).into(avatar);
 
-        listimage.setLayoutManager(new GridLayoutManager(this, 3));
-        Divider divider = new Api21ItemDivider(Color.TRANSPARENT, 10, 10);
-        listimage.addItemDecoration(divider);
-
-
         btnshare.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -182,7 +206,8 @@ public class EditPostTimeline extends AppCompatActivity {
                 }
                 else
                 {
-                   // PostTimeline(listImageBase64);
+                    post.setDetail(edtShare.getText().toString());
+                    EditPost(post);
                 }
             }
         });

@@ -85,5 +85,7 @@
 
     <string name="can_not_connect_server">Failed to connect to server, please try again</string>
     <string name="banner_ad_unit_id">ca-app-pub-8507216984714483/7653944847</string>
+    <string name="edit_time_line">Edit successfully</string>
+
 
 </resources>

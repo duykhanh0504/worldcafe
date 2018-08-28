@@ -2,6 +2,7 @@ package com.aseanfan.worldcafe.Service;
 
 import android.annotation.SuppressLint;
 import android.app.ActivityManager;
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
@@ -14,6 +15,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.IBinder;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -185,22 +187,52 @@ public class SocketService extends Service {
         }
         else {
             Bitmap bitmap = getBitmapFromURL(data.get("avatar"));
+            Drawable mDefaultBackground = SocketService.this.getResources().getDrawable(R.drawable.avata_defaul);
+            NotificationCompat.Builder builder =
+                    new NotificationCompat.Builder(SocketService.this)
+                            .setLargeIcon(bitmap)
+                            .setSmallIcon(R.drawable.ic_launcher)
+                            .setContentTitle(data.get("username"))
+                            .setContentText(data.get("message"));
 
-                        NotificationCompat.Builder builder =
-                                new NotificationCompat.Builder(SocketService.this)
-                                        .setLargeIcon(bitmap)
-                                        .setSmallIcon(R.drawable.ic_launcher_foreground)
-                                        .setContentTitle(data.get("username"))
-                                        .setContentText(data.get("message"));
+            Intent notificationIntent = new Intent(SocketService.this, MainActivity.class);
+            PendingIntent contentIntent = PendingIntent.getActivity(SocketService.this, 0, notificationIntent,
+                    PendingIntent.FLAG_UPDATE_CURRENT);
+            builder.setContentIntent(contentIntent);
 
-                        /*Intent notificationIntent = new Intent(SocketService.this, MainActivity.class);
-                        PendingIntent contentIntent = PendingIntent.getActivity(SocketService.this, 0, notificationIntent,
-                                PendingIntent.FLAG_UPDATE_CURRENT);
-                        builder.setContentIntent(contentIntent);*/
+            // Add as notification
+            NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                NotificationChannel channel = new NotificationChannel("notify_001",
+                        "Channel human readable title",
+                        NotificationManager.IMPORTANCE_DEFAULT);
+                manager.createNotificationChannel(channel);
+            }
+            manager.notify(0, builder.build());
+            /*Bitmap bitmap = getBitmapFromURL(data.get("avatar"));
+
+            try {
+                NotificationCompat.Builder builder =
+                        new NotificationCompat.Builder(SocketService.this)
+                                .setLargeIcon(bitmap)
+                                .setSmallIcon(R.drawable.ic_launcher_foreground)
+                                .setContentTitle(data.get("username"))
+                                .setContentText(data.get("message"));
+
+                Intent notificationIntent = new Intent(SocketService.this, MainActivity.class);
+                PendingIntent contentIntent = PendingIntent.getActivity(SocketService.this, 0, notificationIntent,
+                        PendingIntent.FLAG_UPDATE_CURRENT);
+                builder.setContentIntent(contentIntent);
+
 
                         // Add as notification
                         NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
                         manager.notify(0, builder.build());
+            }
+            catch (Exception e)
+            {
+                e.getMessage();
+            }*/
 
 
         }

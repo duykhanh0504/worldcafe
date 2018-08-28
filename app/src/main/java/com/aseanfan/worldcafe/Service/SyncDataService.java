@@ -96,7 +96,7 @@ public class SyncDataService {
                         notify.setType(jsonArray.get(i).getAsJsonObject().get("typepush").getAsInt());
                         notify.setCreatetime(jsonArray.get(i).getAsJsonObject().get("create_time").getAsString());
                         // JsonObject jsons = (new JsonParser()).parse(jsonArray.get(i).getAsJsonObject().get("data").getAsString()).getAsJsonObject();
-                        notify.setAvarta(jsonArray.get(0).getAsJsonObject().get("avarta").toString());
+                        notify.setAvarta(jsonArray.get(0).getAsJsonObject().get("avarta").getAsString());
                         notify.setTitle(jsonArray.get(i).getAsJsonObject().get("username").getAsString());
                         notify.setStatus(0);
                         notify.setNotifyid(jsonArray.get(i).getAsJsonObject().get("id").getAsInt());

@@ -1006,8 +1006,6 @@ public class LoginActivity extends AppCompatActivity {
                         final UserModel u = gson.fromJson(jsonObject, UserModel.class);
                         Store.putStringData(LoginActivity.this, Store.ACCESSTOKEN, jsons.get("access_token").getAsString());
                         if(type == LOGIN_NORMAL) {
-                            DBHelper.getInstance(getApplicationContext()).insertPerson(u);
-                            AccountController.getInstance().SetAccount(u);
                             if(u.getStatus() == 0)
                             {
                                 showPage(Constants.PAGE_ACTIVE);
@@ -1019,8 +1017,8 @@ public class LoginActivity extends AppCompatActivity {
                                 return;
                             }
                         }
-
-
+                        AccountController.getInstance().SetAccount(u);
+                        DBHelper.getInstance(getApplicationContext()).insertPerson(u);
                         startService(new Intent(getApplicationContext(), SocketService.class));
                         startService(new Intent(getApplicationContext(), MyFirebaseInstanceIDService.class));
 

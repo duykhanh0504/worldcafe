@@ -9,11 +9,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.aseanfan.worldcafe.App.AccountController;
+import com.aseanfan.worldcafe.Helper.RestAPI;
 import com.aseanfan.worldcafe.Model.EventModel;
 import com.aseanfan.worldcafe.UI.Adapter.CommunityAdapter;
 import com.aseanfan.worldcafe.UI.MainActivity;
 import com.aseanfan.worldcafe.Utils.Constants;
 import com.aseanfan.worldcafe.worldcafe.R;
+import com.google.gson.JsonObject;
 
 import java.util.List;
 
@@ -28,6 +31,32 @@ public class FragmentEventPage extends android.support.v4.app.Fragment {
     {
         listevent =data;
         mAdapter.setData(listevent);
+    }
+
+
+    public void LikeEvent(Long Eventid)
+    {
+        JsonObject dataJson = new JsonObject();
+        dataJson.addProperty("account_id", AccountController.getInstance().getAccount().getId());
+        dataJson.addProperty("event_id",Eventid);
+
+        RestAPI.PostDataMasterWithToken(getActivity().getApplicationContext(),dataJson,RestAPI.POST_LIKEEVENT, new RestAPI.RestAPIListenner() {
+            @Override
+            public void OnComplete(int httpCode, String error, String s) {
+                try {
+                    if (!RestAPI.checkHttpCode(httpCode)) {
+                        //AppFuncs.alert(getApplicationContext(),s,true);
+
+                        return;
+                    }
+
+                }
+                catch (Exception ex) {
+
+                    ex.printStackTrace();
+                }
+            }
+        });
     }
 
     @Nullable
@@ -47,6 +76,13 @@ public class FragmentEventPage extends android.support.v4.app.Fragment {
             public void onItemClick(int position, View v,int Type,EventModel event) {
                 if(Type == Constants.CLICK_EVENT) {
                     ((MainActivity)getActivity()).callDetailEvent(event);
+                }
+                if(Type == Constants.CLICK_IMAGE_LIKE) {
+                   // ((MainActivity)getActivity()).callDetailEvent(event);
+                    LikeEvent(event.getEventid());
+                }
+                if(Type == Constants.CLICK_IMAGE_COMMENT) {
+                   // ((MainActivity)getActivity()).callDetailEvent(event);
                 }
             }
         });

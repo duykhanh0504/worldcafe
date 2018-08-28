@@ -102,10 +102,10 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
         if(jsons.get("type").getAsInt()!= 0)
         {
-            updateToDB(jsons.get("message").getAsString(), jsons.get("type").getAsInt() , notification.getTitle(), "",push_id);
+            updateToDB(jsons.get("message").getAsString(), jsons.get("type").getAsInt() , notification.getTitle(), "",push_id,"");
         }
     }
-    private void updateToDB(String message , int type , String Title , String urlAvatar ,int push_id)
+    private void updateToDB(String message , int type , String Title , String urlAvatar ,int push_id ,String time)
     {
         NotificationModel notify = new NotificationModel();
 
