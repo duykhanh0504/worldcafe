@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:fitsSystemWindows="true"
+    app:layout_scrollFlags="scroll|enterAlways"
+    tools:context="com.aseanfan.worldcafe.UI.CommentActivity"
+    android:weightSum="2">
+
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="0.19"
+        android:layout_margin="@dimen/margin_left_right">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/listComment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <ProgressBar
+            android:id="@+id/loading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top|center"
+            android:indeterminateTintMode="src_atop"
+            android:visibility="gone" />
+
+    </FrameLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:weightSum="2">
+
+
+        <EditText
+            android:privateImeOptions="nm"
+            android:id="@+id/input_comment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Your Comment"
+            android:layout_weight="1.9"
+            android:layout_marginBottom="15dp"
+            />
+
+        <ImageButton
+            android:id="@+id/btn_postcomment"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_gravity="right|top"
+            android:background="@drawable/ic_chat_send_active"
+            />
+    </LinearLayout>
+
+</LinearLayout>

@@ -1,5 +1,6 @@
 package com.aseanfan.worldcafe.UI.Fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -13,6 +14,7 @@ import com.aseanfan.worldcafe.App.AccountController;
 import com.aseanfan.worldcafe.Helper.RestAPI;
 import com.aseanfan.worldcafe.Model.EventModel;
 import com.aseanfan.worldcafe.UI.Adapter.CommunityAdapter;
+import com.aseanfan.worldcafe.UI.CommentEventActivity;
 import com.aseanfan.worldcafe.UI.MainActivity;
 import com.aseanfan.worldcafe.Utils.Constants;
 import com.aseanfan.worldcafe.worldcafe.R;
@@ -83,6 +85,10 @@ public class FragmentEventPage extends android.support.v4.app.Fragment {
                 }
                 if(Type == Constants.CLICK_IMAGE_COMMENT) {
                    // ((MainActivity)getActivity()).callDetailEvent(event);
+                    Intent intent = new Intent(getActivity(), CommentEventActivity.class);
+                    intent.putExtra("Event_id",event.getEventid());
+                    startActivity(intent);
+                  //  ((MainActivity)getActivity()).callDetailEvent(event);
                 }
             }
         });

@@ -13,7 +13,7 @@ public class EventModel {
     private Long price;
     private String content;
     private int genre;
-    private int numberComment;
+    private int comments;
     private int numberLike;
     private int islike;
     private Long account_id;
@@ -126,11 +126,11 @@ public class EventModel {
     }
 
     public int getNumberComment() {
-        return numberComment;
+        return comments;
     }
 
     public void setNumberComment(int numberComment) {
-        this.numberComment = numberComment;
+        this.comments = numberComment;
     }
 
     public int getNumberLike() {

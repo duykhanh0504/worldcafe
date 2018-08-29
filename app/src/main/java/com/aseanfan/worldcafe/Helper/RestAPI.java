@@ -86,6 +86,8 @@ public class RestAPI {
     public static String GET_LISTREQUESTMEMBER= root_url + "/api/event/listaccountjoinevent?account_id=%d&event_id=%d";
     public static String POST_ACCEPTREJECTMEMBER= root_url + "/api/event/changeStatusRequest";
     public static String POST_LIKEEVENT = root_url + "/api/event/likeevent";
+    public static String POST_EVENTCOMMENT = root_url + "/api/event/postcomment";
+    public static String GET_EVENTCOMMENT = root_url + "/api/event/getcommentevent?event_id=%d&account_id=%d";
 
     public final static int STATUS_SUCCESS = 200;
     public final static int STATUS_WRONGPASSWORD = 2;

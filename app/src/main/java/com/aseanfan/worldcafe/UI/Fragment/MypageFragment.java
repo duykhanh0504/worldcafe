@@ -500,7 +500,7 @@ public class MypageFragment extends android.support.v4.app.Fragment {
                             .setGuidelines(CropImageView.Guidelines.ON)
                             .setAutoZoomEnabled(false)
                             .setMultiTouchEnabled(false)
-                            .setInitialCropWindowRectangle(new Rect(0,0,250,250))
+                            .setInitialCropWindowRectangle(new Rect(0,0,Utils.getwidthScreen(getContext()),Utils.convertDpToPixel(190,getContext())))
                             .getIntent(getActivity());
                     intent.putExtra("type", 1);
                     getActivity().startActivityForResult(intent, CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE);

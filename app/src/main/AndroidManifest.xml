@@ -118,7 +118,7 @@
             android:name="com.aseanfan.worldcafe.UI.CreateEventActivity"
             android:screenOrientation="portrait"
             android:theme="@style/ThemeWithTabBar"
-            android:windowSoftInputMode="stateHidden"/>
+            android:windowSoftInputMode="stateHidden" />
         <activity
             android:name="com.aseanfan.worldcafe.UI.DirectMessageActivity"
             android:screenOrientation="portrait" />
@@ -150,9 +150,11 @@
             android:name="com.aseanfan.worldcafe.UI.MemberEventActivity"
             android:screenOrientation="portrait"
             android:theme="@style/ThemeWithTabBar" />
-        <activity android:name="com.aseanfan.worldcafe.UI.EditPostTimeline"
+        <activity
+            android:name="com.aseanfan.worldcafe.UI.EditPostTimeline"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden"></activity>
+            android:windowSoftInputMode="stateHidden" />
+        <activity android:name="com.aseanfan.worldcafe.UI.CommentEventActivity"></activity>
     </application>
 
 </manifest>

@@ -997,6 +997,11 @@ public class LoginActivity extends AppCompatActivity {
                     }
                     JsonObject jsons = (new JsonParser()).parse(s).getAsJsonObject();
                     int statuscode = jsons.get("status").getAsInt();
+                    if(statuscode ==2)
+                    {
+                        dialog.showDialogCancel( LoginActivity.this,jsons.get("message").getAsString() );
+                        return;
+                    }
                     if (statuscode == RestAPI.STATUS_SUCCESS) {
                         DBHelper.getInstance(getApplicationContext()).CreateMessageTable();
                         DBHelper.getInstance(getApplicationContext()).CreateNotifyTable();

@@ -4,6 +4,7 @@ import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Build;
 import android.support.annotation.NonNull;
@@ -312,6 +313,9 @@ public class CreateEventActivity extends AppCompatActivity {
                // selectImage();
                 Intent intent = CropImage.activity(null)
                         .setGuidelines(CropImageView.Guidelines.ON)
+                        .setAutoZoomEnabled(false)
+                        .setMultiTouchEnabled(false)
+                        .setInitialCropWindowRectangle(new Rect(Utils.convertDpToPixel(15,CreateEventActivity.this),0,Utils.getwidthScreen(CreateEventActivity.this) - Utils.convertDpToPixel(60,CreateEventActivity.this),Utils.convertDpToPixel(180,CreateEventActivity.this)))
                         .getIntent(CreateEventActivity.this);
                 startActivityForResult(intent, CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE);
             }
