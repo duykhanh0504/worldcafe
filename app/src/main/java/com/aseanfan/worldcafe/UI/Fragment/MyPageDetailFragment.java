@@ -35,11 +35,25 @@ public class MyPageDetailFragment extends android.support.v4.app.Fragment implem
     private TextView titleschool;
     private TextView titlecompany;
 
+    private TextView txtintroduction;
+    private TextView txtgive;
+    private TextView txtschool;
+    private TextView txtcompany;
+
     private Button directMessage;
     private Button createEvent;
 
     private Long friendid;
     private String friendavatar;
+    private String introduce;
+    private String interested;
+    private int givethanks =0;
+    private String school;
+    private String company;
+
+
+
+
 
     @Nullable
     @Override
@@ -50,15 +64,42 @@ public class MyPageDetailFragment extends android.support.v4.app.Fragment implem
         if(bundle != null){
             friendid = bundle.getLong("chat_id");
             friendavatar = bundle.getString("chat_avarta");
+            introduce = bundle.getString("introduce");
+            school = bundle.getString("school");
+            company = bundle.getString("company");
+            givethanks = bundle.getInt("numberthanks");
 
         }
         else {
             friendid = Long.valueOf(-1);
+           /* introduce = AccountController.getInstance().getAccount().getIntroduction();
+            interested = AccountController.getInstance().getAccount().getIntroduction();
+            givethanks = AccountController.getInstance().getAccount().getIntroduction();
+            school = AccountController.getInstance().getAccount().getIntroduction();
+            company = AccountController.getInstance().getAccount().getIntroduction();*/
         }
 
         initView(view);
-
+        setdata();
         return view;
+    }
+
+    void  setdata()
+    {
+
+        if(company!=null && !company.isEmpty()) {
+            txtcompany.setText(company);
+        }
+       // txtgive.setText(company);
+        if(company!=null && !company.isEmpty()) {
+            txtschool.setText(school);
+        }
+        if(company!=null && !company.isEmpty()) {
+            txtintroduction.setText(introduce);
+        }
+
+         txtgive.setText("give: " + givethanks);
+
     }
 
     void initView(View view)
@@ -98,6 +139,11 @@ public class MyPageDetailFragment extends android.support.v4.app.Fragment implem
 
         directMessage.setOnClickListener(this);
         createEvent.setOnClickListener(this);
+
+        txtcompany =(TextView) view.findViewById(R.id.txtcompany);
+        txtgive =(TextView) view.findViewById(R.id.txtgive);
+        txtschool =(TextView) view.findViewById(R.id.txtschool);
+        txtintroduction =(TextView) view.findViewById(R.id.txtintroduce);
 
 
         if(!friendid.equals(AccountController.getInstance().getAccount().getId()))

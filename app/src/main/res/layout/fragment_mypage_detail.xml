@@ -136,28 +136,17 @@
             android:drawablePadding="10dp"
             android:textStyle="bold"
             android:text="@string/titlenumberthanks" />
-        <LinearLayout
-            android:layout_marginTop="@dimen/margin_line_mypage"
-            android:layout_marginRight="@dimen/margin_left_right"
-            android:layout_marginLeft="@dimen/margin_left_right"
-            android:id="@+id/detailnumberthanks"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
+
             <TextView
                 android:id="@+id/txtgive"
+                android:layout_marginTop="@dimen/margin_line_mypage"
+                android:layout_marginRight="@dimen/margin_left_right"
+                android:layout_marginLeft="@dimen/margin_left_right"
                 android:layout_gravity="left|center"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/givethanks" />
 
-            <TextView
-                android:id="@+id/txtreceive"
-                android:layout_gravity="left|center"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/receivethanks" />
-        </LinearLayout>
 
         <LinearLayout
             android:layout_marginTop="@dimen/margin_line_mypage"

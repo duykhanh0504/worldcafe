@@ -46,11 +46,8 @@ public class AlbumAdapter  extends RecyclerView.Adapter<AlbumAdapter.MyViewHolde
 
         public MyViewHolder(View view) {
             super(view);
-            imageView = (ImageView) view;
+            imageView = (ImageView) view.findViewById(R.id.image);
             context = view.getContext();
-            int padding = Utils.convertDpToPixel(1,context);
-            imageView.setPadding(padding,padding,padding,padding);
-            imageView.setScaleType(ImageView.ScaleType.FIT_XY);
             view.setOnClickListener(this);
 
         }
@@ -75,8 +72,8 @@ public class AlbumAdapter  extends RecyclerView.Adapter<AlbumAdapter.MyViewHolde
     @NonNull
     @Override
     public AlbumAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        View itemView =new ImageView(viewGroup.getContext());
-
+        View itemView = LayoutInflater.from(viewGroup.getContext())
+                .inflate(R.layout.image_row, viewGroup, false);
 
         return new AlbumAdapter.MyViewHolder(itemView);
     }

@@ -101,6 +101,7 @@ public class SyncDataService {
                         notify.setStatus(0);
                         notify.setNotifyid(jsonArray.get(i).getAsJsonObject().get("id").getAsInt());
                         JsonObject json = (new JsonParser()).parse(jsonArray.get(i).getAsJsonObject().get("data").getAsString()).getAsJsonObject();
+                        notify.setAvarta(json.get("data").getAsJsonObject().get("avarta").getAsString());
                         notify.setMessage(json.get("data").getAsJsonObject().get("message").getAsString());
 
                         DBHelper.getInstance(mContext).InsertNotify(notify);

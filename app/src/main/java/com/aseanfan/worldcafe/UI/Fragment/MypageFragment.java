@@ -213,6 +213,7 @@ public class MypageFragment extends android.support.v4.app.Fragment {
 
                         followed.setText(getString(R.string.Following) + user.getFollowed());
                         follower.setText(getString(R.string.Followers) + user.getFollower());
+                        adapter.setdata(user);
 
                     }
 
@@ -482,7 +483,7 @@ public class MypageFragment extends android.support.v4.app.Fragment {
         editImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(!accountid.equals(AccountController.getInstance().getAccount().getId())) {
+                if(accountid.equals(AccountController.getInstance().getAccount().getId())) {
                     Intent intent = new Intent(getActivity(), EditProfileActivity.class);
                     startActivity(intent);
                 }
@@ -553,7 +554,7 @@ public class MypageFragment extends android.support.v4.app.Fragment {
 
         viewPager = (ViewPager)view.findViewById(R.id.view_mypage);
 
-        adapter = new FragmentMyPagerAdapter(accountid, getActivity(),getChildFragmentManager(),user.getAvarta());
+        adapter = new FragmentMyPagerAdapter(accountid, getActivity(),getChildFragmentManager(),user);
 
         viewPager.setAdapter(adapter);
 

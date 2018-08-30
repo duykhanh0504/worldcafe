@@ -26,6 +26,7 @@ public class PostImageAdapter  extends RecyclerView.Adapter<PostImageAdapter.MyV
     }
 
     public void setData(List<String> data) {
+        data.remove("");
         imageListUrl = data;
         notifyDataSetChanged();
     }

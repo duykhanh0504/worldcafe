@@ -50,5 +50,12 @@ public class Constants {
     public static  int MEMBER_ACCEPT = 1;
     public static  int MEMBER_REJECT = 2;
 
+    public static  int SETTING_TITLE_ROW = 0;
+    public static  int SETTING_CONTACT_ROW = 1;
+    public static  int SETTING_CHANGEPASS_ROW = 2;
+    public static  int SETTING_CONTRACT_ROW = 3;
+    public static  int SETTING_VERSION_ROW = 4;
+    public static  int SETTING_LOGOUT_ROW = 5;
+
 
 }

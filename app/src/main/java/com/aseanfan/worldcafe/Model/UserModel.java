@@ -22,6 +22,7 @@ public class UserModel {
     private String facebook_id;
     private int v_followed;
     private int v_follower;
+    private int v_total_like;
 
 
     public UserModel( String email, String mobile) {
@@ -187,7 +188,13 @@ public class UserModel {
         this.v_follower = v_follower;
     }
 
+    public int getTotalLike() {
+        return v_total_like;
+    }
 
+    public void setTotalLike(int v_total_like) {
+        this.v_total_like = v_total_like;
+    }
 
 
 

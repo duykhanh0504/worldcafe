@@ -7,6 +7,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
 import com.aseanfan.worldcafe.Model.PostTimelineModel;
+import com.aseanfan.worldcafe.Model.UserModel;
 import com.aseanfan.worldcafe.UI.Fragment.AlbumFragment;
 import com.aseanfan.worldcafe.UI.Fragment.MyPageDetailFragment;
 import com.aseanfan.worldcafe.UI.Fragment.MyPostFragment;
@@ -22,7 +23,7 @@ public class FragmentMyPagerAdapter  extends FragmentPagerAdapter {
     private MyPostFragment mypostFragment;
     private MyPageDetailFragment myPageDetailFragment;
     private Long friendid;
-    private String friendavarta="";
+    private UserModel user;
 
 
     public final static int MYPPOST_PAGE = 0;
@@ -36,23 +37,34 @@ public class FragmentMyPagerAdapter  extends FragmentPagerAdapter {
         friendid = id;
     }
 
-    public FragmentMyPagerAdapter(Long id ,Context context, FragmentManager fm,String avatar) {
+    public FragmentMyPagerAdapter(Long id ,Context context, FragmentManager fm,UserModel user) {
         super(fm);
         mContext = context;
         friendid = id;
-        friendavarta =avatar;
+        this.user =user;
     }
 
+    public void setdata (UserModel user)
+    {
+        this.user = user;
+        notifyDataSetChanged();
+    }
     @Override
     public Fragment getItem(int position) {
         Bundle bundle = new Bundle();
         bundle.putLong("chat_id",friendid);
-        bundle.putString("chat_avarta",friendavarta);
+        bundle.putString("chat_avarta",user.getAvarta());
         if (position == MYPPOST_PAGE) {
             mypostFragment = new MyPostFragment();
             mypostFragment.setArguments(bundle);
             return mypostFragment;
         } else if(position ==DETAIL_PAGE){
+            bundle.putString("introduce",user.getIntroduction());
+           // bundle.putString("interested",user.get);
+            bundle.putInt("numberthanks",user.getTotalLike());
+            bundle.putString("school",user.getSchool());
+            bundle.putString("company",user.getCompany());
+
             myPageDetailFragment = new MyPageDetailFragment();
             myPageDetailFragment.setArguments(bundle);
             return myPageDetailFragment;
