@@ -478,10 +478,16 @@ public class LoginActivity extends AppCompatActivity {
         _changepassButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(_newpass.getText().toString().isEmpty())
+                if(_passcode.getText().toString().isEmpty())
                 {
                     dialog.showDialogCancel( LoginActivity.this,"Passcode can not empty" );
                 //    Toast.makeText(LoginActivity.this, "Passcode can not empty", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if(_newpass.getText().toString().isEmpty())
+                {
+                    dialog.showDialogCancel( LoginActivity.this,"Password can not empty" );
+                    //    Toast.makeText(LoginActivity.this, "Passcode can not empty", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
@@ -1031,6 +1037,7 @@ public class LoginActivity extends AppCompatActivity {
 
                         {
                             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                            intent.putExtra("fromlogin", 1);
                             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | intent.FLAG_ACTIVITY_CLEAR_TASK);
                             startActivity(intent);
                             finish();

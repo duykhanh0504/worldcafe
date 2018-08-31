@@ -70,7 +70,7 @@ public class SyncDataService {
         });
     };
 
-    public static void syncPush( final Long account_id,final Context mContext)
+    public static void syncPush(final Long account_id, final Context mContext, final int fromlogin)
     {
 
         Long offset = DBHelper.getInstance(mContext).getlastNotify(account_id);
@@ -98,7 +98,7 @@ public class SyncDataService {
                         // JsonObject jsons = (new JsonParser()).parse(jsonArray.get(i).getAsJsonObject().get("data").getAsString()).getAsJsonObject();
                         notify.setAvarta(jsonArray.get(0).getAsJsonObject().get("avarta").getAsString());
                         notify.setTitle(jsonArray.get(i).getAsJsonObject().get("username").getAsString());
-                        notify.setStatus(0);
+                        notify.setStatus(fromlogin);
                         notify.setNotifyid(jsonArray.get(i).getAsJsonObject().get("id").getAsInt());
                         JsonObject json = (new JsonParser()).parse(jsonArray.get(i).getAsJsonObject().get("data").getAsString()).getAsJsonObject();
                         notify.setAvarta(json.get("data").getAsJsonObject().get("avarta").getAsString());

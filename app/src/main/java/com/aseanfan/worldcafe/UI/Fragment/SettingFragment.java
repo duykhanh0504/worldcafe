@@ -21,6 +21,7 @@ import com.aseanfan.worldcafe.Helper.DBHelper;
 import com.aseanfan.worldcafe.Provider.Store;
 import com.aseanfan.worldcafe.UI.Adapter.PostTimelineAdapter;
 import com.aseanfan.worldcafe.UI.Adapter.SettingAdapter;
+import com.aseanfan.worldcafe.UI.ChangePassActivity;
 import com.aseanfan.worldcafe.UI.IntroActivity;
 import com.aseanfan.worldcafe.UI.LoginActivity;
 import com.aseanfan.worldcafe.UI.MainActivity;
@@ -28,10 +29,9 @@ import com.aseanfan.worldcafe.Utils.Constants;
 import com.aseanfan.worldcafe.worldcafe.R;
 import com.facebook.login.LoginManager;
 
-public class SettingFragment extends android.support.v4.app.Fragment {
+public class SettingFragment extends android.support.v4.app.Fragment implements SettingAdapter.ClickListener {
 
 
-    Button _logout;
     private LocalBroadcastManager mLocalBroadcastManager;
 
     private int applicationrow =0;
@@ -45,6 +45,7 @@ public class SettingFragment extends android.support.v4.app.Fragment {
     private RecyclerView recyclerView;
 
     private SettingAdapter mAdapter;
+    App app;
 
     public static SettingFragment newInstance() {
         SettingFragment firstFrag = new SettingFragment();
@@ -56,8 +57,7 @@ public class SettingFragment extends android.support.v4.app.Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_setting, container, false);
 
-        _logout = (Button)view.findViewById(R.id.Logout);
-        final App app = (App)getActivity().getApplication();
+         app = (App)getActivity().getApplication();
 
         recyclerView = (RecyclerView) view.findViewById(R.id.listsetting);
         mAdapter = new SettingAdapter(count);
@@ -66,19 +66,23 @@ public class SettingFragment extends android.support.v4.app.Fragment {
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(mAdapter);
-
-
-        _logout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                app.Logout();
-            }
-        });
+        mAdapter.setOnItemClickListener(this);
 
         mLocalBroadcastManager = LocalBroadcastManager.getInstance(getContext());
 
         return view;
     }
 
+    @Override
+    public void onItemClick(int position, View v) {
+        if(position == Constants.SETTING_LOGOUT_ROW)
+        {
+            app.Logout();
+        }
+        if(position == Constants.SETTING_CHANGEPASS_ROW)
+        {
+           Intent intent = new Intent(getActivity() , ChangePassActivity.class);
+           startActivity(intent);
+        }
+    }
 }

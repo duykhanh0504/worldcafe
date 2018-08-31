@@ -214,7 +214,7 @@ public class MainActivity extends AppCompatActivity implements NotificationCente
         mSocket.on(Socket.EVENT_RECONNECT_ERROR, onConnectError);
         mSocket.on(Socket.EVENT_RECONNECT_FAILED, onConnectError);*/
 
-
+        int fromlogin = getIntent().getIntExtra("fromlogin" , 0);
 
         communityFragment = new CommunityFragment();
         timelineFragment = new TimelineFragment();
@@ -249,7 +249,7 @@ public class MainActivity extends AppCompatActivity implements NotificationCente
         showFirstFragment();
 
         SyncDataService.listmessage(AccountController.getInstance().getAccount().getId(),getApplicationContext());
-        SyncDataService.syncPush(AccountController.getInstance().getAccount().getId(),getApplicationContext());
+        SyncDataService.syncPush(AccountController.getInstance().getAccount().getId(),getApplicationContext(), fromlogin);
 
        // new SyncDataService(getApplicationContext()).execute(AccountController.getInstance().getAccount().getId());
 

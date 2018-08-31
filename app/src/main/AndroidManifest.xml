@@ -154,7 +154,12 @@
             android:name="com.aseanfan.worldcafe.UI.EditPostTimeline"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
-        <activity android:name="com.aseanfan.worldcafe.UI.CommentEventActivity"></activity>
+        <activity android:name="com.aseanfan.worldcafe.UI.CommentEventActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden"/>
+        <activity android:name="com.aseanfan.worldcafe.UI.ChangePassActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden"></activity>
     </application>
 
 </manifest>

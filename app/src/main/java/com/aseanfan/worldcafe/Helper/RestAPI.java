@@ -67,6 +67,7 @@ public class RestAPI {
     public static String POST_ACTIVATION= root_url + "/api/user/activation";
     public static String POST_FORGETPASS= root_url + "/api/user/fogotPassword";
     public static String POST_CHANGEFORGETPASS= root_url + "/api/user/createNewPassword";
+    public static String POST_CHANGEPASS= root_url + "/api/user/changePassword";
     public static String GET_LISTCOUNTRY= root_url + "/api/city/getAllCountry";
     public static String GET_LISTCITY= root_url + "/api/city/getAllCityByCountry?id=%d";
     public static String GET_LISTCOUNTRYANDCITY= root_url + "/api/city/getAllCityandCountry";

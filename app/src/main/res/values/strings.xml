@@ -80,6 +80,7 @@
     <string name="forgetpassword_text">We just need your registered Email to send \n you password reset instructions </string>
     <string name="ResetPassword">Reset Password</string>
     <string name="Passcode">Passcode</string>
+    <string name="Old_pass">Old Password</string>
     <string name="New_pass">New Password</string>
     <string name="Re_pass">Reenter Password</string>
 

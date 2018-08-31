@@ -84,7 +84,7 @@ public class SettingAdapter  extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
         @Override
         public void onClick(View view) {
-            //  clickListener.onItemClick(getAdapterPosition(), view );
+              clickListener.onItemClick(getAdapterPosition(), view );
 
         }
     }
@@ -102,7 +102,7 @@ public class SettingAdapter  extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
         @Override
         public void onClick(View view) {
-            //  clickListener.onItemClick(getAdapterPosition(), view );
+              clickListener.onItemClick(getAdapterPosition(), view );
 
         }
     }
@@ -117,12 +117,13 @@ public class SettingAdapter  extends RecyclerView.Adapter<RecyclerView.ViewHolde
             super(view);
             title =  view.findViewById(R.id.txttitle);
             image =  view.findViewById(R.id.image);
+            view.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View view) {
 
-            //  clickListener.onItemClick(getAdapterPosition(), view );
+              clickListener.onItemClick(getAdapterPosition(), view );
 
         }
     }
