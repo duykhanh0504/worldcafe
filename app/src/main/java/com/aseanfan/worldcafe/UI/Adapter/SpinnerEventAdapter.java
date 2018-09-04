@@ -49,7 +49,7 @@ public class SpinnerEventAdapter extends ArrayAdapter<String> {
     @Override
     public View getDropDownView(int position, @Nullable View convertView,
                                 @NonNull ViewGroup parent) {
-        return createItemView(position, convertView, parent);
+        return createdropdownView(position, convertView, parent);
     }
 
     @Override
@@ -65,5 +65,15 @@ public class SpinnerEventAdapter extends ArrayAdapter<String> {
 
         return view;
     }
+
+    private View createdropdownView(int position, View convertView, ViewGroup parent){
+        final View view = mInflater.inflate(R.layout.dropdown, parent, false);
+
+        TextView text = (TextView) view.findViewById(R.id.txttext);
+        text.setText(items[position]);
+
+        return view;
+    }
+
 
 }

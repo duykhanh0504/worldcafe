@@ -151,8 +151,8 @@ public class DetailCommunityFragment extends android.support.v4.app.Fragment imp
         type = (TextView) view.findViewById(R.id.txttype);
         starttime = (TextView) view.findViewById(R.id.txtdate);
         place = (TextView) view.findViewById(R.id.txtplace);
-        numberlike = (TextView) view.findViewById(R.id.txtlike);
-        numbercomment = (TextView) view.findViewById(R.id.txtcomment);
+        numberlike = (TextView) view.findViewById(R.id.textLike);
+        numbercomment = (TextView) view.findViewById(R.id.textComment);
         avatar = (ImageView)view.findViewById(R.id.imageAvatar);
         username = (TextView)view.findViewById(R.id.username);
 

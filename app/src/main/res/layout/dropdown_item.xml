@@ -1,18 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:padding="3dip"
-    android:background="@color/albumColorPrimary"
+    android:orientation="horizontal"
+    android:padding="3dp"
+    android:background="@color/colorPrimary"
+    android:gravity="center|right"
+    app:elevation="0dp"
     >
+
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|right"
+        android:layout_marginTop="3dp"
+        android:layout_marginBottom="3dp"
+        >
+        <ImageView
+            android:id="@+id/imageView3"
+            android:layout_width="wrap_content"
+            android:layout_gravity="center|right"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/com_facebook_tooltip_black_bottomnub" />
+    </FrameLayout>
+
+
     <TextView
-        android:padding="3dip"
-        android:layout_marginTop="2dip"
+        android:layout_marginTop="3dp"
+        android:layout_marginBottom="3dp"
         android:textStyle="bold"
         android:id="@+id/txttext"
-        android:text="CoderzHeaven"
-        android:layout_marginLeft="5dip"
-        android:layout_width="match_parent"
+        android:textColor="#fff"
+        android:textAlignment="center"
+        android:gravity="center|right"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="15dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
-</RelativeLayout>
+</LinearLayout>
