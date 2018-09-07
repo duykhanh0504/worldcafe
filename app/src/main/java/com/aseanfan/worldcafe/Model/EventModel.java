@@ -27,8 +27,17 @@ public class EventModel {
     private int schedule_type;
     private int per_time;
     private String note;
+    private String create_time;
 
     public EventModel() {
+    }
+
+    public String getUpdatetime() {
+        return create_time;
+    }
+
+    public void setUpdatetime(String createtime) {
+        this.create_time = createtime;
     }
 
     public String getStarttime() {

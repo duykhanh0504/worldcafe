@@ -91,6 +91,8 @@ public class CreateEventActivity extends AppCompatActivity {
     private Spinner typetime;
     private EditText note;
 
+    private int isedit = 0;
+
     private List<CityModel> listcity;
 
     private SpinnerCityAdapter  adaptercity;
@@ -187,11 +189,8 @@ public class CreateEventActivity extends AppCompatActivity {
         }
     }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_create_event);
-
+    public void initView()
+    {
         event = new EventModel();
 
         listimage= findViewById(R.id.list_image);
@@ -221,6 +220,24 @@ public class CreateEventActivity extends AppCompatActivity {
         ArrayAdapter<String> adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item,arraytypetime);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         typetime.setAdapter(adapter);
+    }
+
+    public void setdata()
+    {
+        isedit = getIntent().getIntExtra("isedit",0);
+        if(isedit == 1 )
+        {
+
+        }
+
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_create_event);
+
+        initView();
 
         typetime.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override

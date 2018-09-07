@@ -40,6 +40,7 @@ import com.aseanfan.worldcafe.Service.MyFirebaseInstanceIDService;
 import com.aseanfan.worldcafe.Service.SocketService;
 import com.aseanfan.worldcafe.Service.SyncDataService;
 import com.aseanfan.worldcafe.UI.Adapter.CommunityAdapter;
+import com.aseanfan.worldcafe.UI.Component.ViewDialog;
 import com.aseanfan.worldcafe.UI.Fragment.CommunityFragment;
 import com.aseanfan.worldcafe.UI.Fragment.DetailCommunityFragment;
 import com.aseanfan.worldcafe.UI.Fragment.DetailTimelineFragment;
@@ -479,12 +480,17 @@ public class MainActivity extends AppCompatActivity implements NotificationCente
           bundle.putInt("isJoin",eventid.getIsjoin());
           bundle.putInt("type",eventid.getType());
           bundle.putString("startime",eventid.getStarttime());
+          bundle.putString("updatetime", eventid.getUpdatetime());
           bundle.putString("place",eventid.getCityname());
           bundle.putInt("numberlike",eventid.getNumberLike());
           bundle.putInt("numbercomment",eventid.getNumberComment());
           bundle.putString("avatar",eventid.getUrlAvatar());
           bundle.putString("username",eventid.getUsername());
           bundle.putLong("accountid",eventid.getAccountid());
+          bundle.putInt("number",eventid.getNumber());
+          bundle.putInt("pertime",eventid.getPertime());
+          bundle.putInt("limitperson",eventid.getLimitpersons());
+          bundle.putString("note",eventid.getNote());
 
           if(eventid.getUrlImage() !=null && eventid.getUrlImage().size() >0) {
             bundle.putString("image", eventid.getUrlImage().get(0));
@@ -497,6 +503,59 @@ public class MainActivity extends AppCompatActivity implements NotificationCente
         //  ft.show(detailcomunityfragment);
         //  ft.hide(communityFragment);
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        Fragment f = getSupportFragmentManager().findFragmentById(R.id.content);
+        if (f instanceof MypageFragment)
+        {
+            int i=0;
+        }
+    }
+
+    public void BackKey()
+    {
+        ViewDialog dialog = new ViewDialog();
+        dialog.showDialog(MainActivity.this, "Are you sure exit", new ViewDialog.DialogListenner() {
+            @Override
+            public void OnClickConfirm() {
+                finish();
+                System.exit(0);
+            }
+        });
+    }
+    public void GoToTimeline()
+    {
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.replace(R.id.content, timelineFragment,TAG_TIMELINE).commit();
+    }
+
+    @Override
+    public void onBackPressed() {
+       // super.onBackPressed();
+        Fragment f = getSupportFragmentManager().findFragmentById(R.id.content);
+        if ( f instanceof CommunityFragment||
+             f instanceof TimelineFragment|| f instanceof NotifyFragment|| f instanceof SettingFragment)
+        {
+            BackKey();
+        }
+        else if(f instanceof MypageFragment)
+        {
+            NotificationCenter.getInstance().postNotificationName(NotificationCenter.mypagebackpress);
+        }
+        //Execute your code here
+      /*  if( _viewfliper.getDisplayedChild () == Constants.PAGE_LOGIN ||
+                _viewfliper.getDisplayedChild () == Constants.PAGE_REGISTER)
+        {
+            Intent intent = new Intent(this , IntroActivity.class);
+            startActivity(intent);
+        }
+        finish();*/
+
+    }
+
 
     public void callFriendPage(Long id) {
 

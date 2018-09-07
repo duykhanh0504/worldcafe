@@ -184,6 +184,7 @@ public class MyPageDetailFragment extends android.support.v4.app.Fragment implem
             }
             case R.id.btn_createevent: {
                 Intent intent = new Intent(getContext(), CreateEventActivity.class);
+                intent.putExtra("isedit",0);
                 startActivity(intent);
                 break;
             }

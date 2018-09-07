@@ -6,6 +6,9 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.Point;
 import android.util.Base64;
 import android.util.DisplayMetrics;
@@ -34,6 +37,21 @@ import java.util.TimeZone;
 
 public class Utils {
 
+
+    public static Bitmap createImage(int width, int height, int color, String name , Context context) {
+        Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        Paint paint2 = new Paint();
+        paint2.setColor(color);
+        canvas.drawCircle(width / 2, height / 2, 100, paint2);
+       // canvas.drawRect(0F, 0F, (float) width, (float) height, paint2);
+        Paint paint = new Paint();
+        paint.setColor(Color.WHITE);
+        paint.setTextSize(50);
+        paint.setTextScaleX(1);
+        canvas.drawText("+"+name, width - convertDpToPixel(30,context), height - convertDpToPixel(15,context), paint);
+        return bitmap;
+    }
 
     public static List<AreaModel> initDefaultCountry()
     {

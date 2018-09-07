@@ -138,6 +138,11 @@ public class TimelineFragment extends android.support.v4.app.Fragment implements
     }
 
     @Override
+    public void onPause() {
+
+        super.onPause();
+    }
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 

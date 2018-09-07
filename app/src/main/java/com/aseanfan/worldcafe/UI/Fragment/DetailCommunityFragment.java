@@ -2,12 +2,15 @@ package com.aseanfan.worldcafe.UI.Fragment;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -26,6 +29,7 @@ import com.aseanfan.worldcafe.Helper.RestAPI;
 import com.aseanfan.worldcafe.Model.AccountModel;
 import com.aseanfan.worldcafe.Model.EventModel;
 import com.aseanfan.worldcafe.UI.Adapter.RequestMemberAdapter;
+import com.aseanfan.worldcafe.UI.CreateEventActivity;
 import com.aseanfan.worldcafe.UI.MainActivity;
 import com.aseanfan.worldcafe.UI.MemberRequestActivity;
 import com.aseanfan.worldcafe.Utils.Constants;
@@ -54,6 +58,7 @@ public class DetailCommunityFragment extends android.support.v4.app.Fragment imp
     private Button btnJoin;
     private FrameLayout containList;
     private List<AccountModel> listaccount = new ArrayList<>();
+    private TextView updatetime;
     private TextView title;
     private TextView content;
     private TextView type;
@@ -63,6 +68,11 @@ public class DetailCommunityFragment extends android.support.v4.app.Fragment imp
     private TextView numbercomment;
     private ImageView avatar;
     private TextView username;
+    private TextView scheduel;
+    private TextView number_attendess;
+    private TextView note;
+    private ImageView imagemenu;
+
 
     public void JoinEvent(Long eventid)
     {
@@ -115,18 +125,27 @@ public class DetailCommunityFragment extends android.support.v4.app.Fragment imp
                     listaccount = gson.fromJson(jsonArray, type);
                     if(listaccount!=null && listaccount.size()>0)
                     {
-
-                        for( int i = 0 ; i < 7 ; i++) {
+                        int number = listaccount.size()>1?2:listaccount.size();
+                        for( int i = 0 ; i < number ; i++) {
                             ImageView avatarImage = new ImageView(getContext());
-                            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(Utils.convertDpToPixel(40,getContext()),Utils.convertDpToPixel(40,getContext()));
-                            layoutParams.height = Utils.convertDpToPixel(40,getContext());
-                            layoutParams.width = Utils.convertDpToPixel(40,getContext());
-                            layoutParams.setMargins( i * Utils.convertDpToPixel(30 , getContext()) , 0, 0, 0);
+                            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(Utils.convertDpToPixel(40, getContext()), Utils.convertDpToPixel(40, getContext()));
+                            layoutParams.height = Utils.convertDpToPixel(40, getContext());
+                            layoutParams.width = Utils.convertDpToPixel(40, getContext());
+                            layoutParams.setMargins(i * Utils.convertDpToPixel(30, getContext()), 0, 0, 0);
                             avatarImage.setLayoutParams(layoutParams);
                             avatarImage.setScaleType(ImageView.ScaleType.FIT_XY);
-                            Drawable mDefaultBackground = getContext().getResources().getDrawable(R.drawable.avata_defaul);
-                            Glide.with(getContext()).load(listaccount.get(i).getAvarta()).apply(RequestOptions.circleCropTransform().diskCacheStrategy(DiskCacheStrategy.ALL).error(mDefaultBackground)).into(avatarImage);
+                            if(i==1)
+                            {
+                                Bitmap image = Utils.createImage(Utils.convertDpToPixel(40, getContext()),
+                                        Utils.convertDpToPixel(40, getContext()),getResources().getColor(R.color.colorPrimary),
+                                        String.valueOf(listaccount.size()),getContext());
+                                Glide.with(getContext()).load(image).apply(RequestOptions.circleCropTransform()).into(avatarImage);
+                            }
+                            else {
+                                Drawable mDefaultBackground = getContext().getResources().getDrawable(R.drawable.avata_defaul);
+                                Glide.with(getContext()).load(listaccount.get(i).getAvarta()).apply(RequestOptions.circleCropTransform().diskCacheStrategy(DiskCacheStrategy.ALL).error(mDefaultBackground)).into(avatarImage);
 
+                            }
                             containList.addView(avatarImage);
                         }
 
@@ -155,9 +174,15 @@ public class DetailCommunityFragment extends android.support.v4.app.Fragment imp
         numbercomment = (TextView) view.findViewById(R.id.textComment);
         avatar = (ImageView)view.findViewById(R.id.imageAvatar);
         username = (TextView)view.findViewById(R.id.username);
+        updatetime = (TextView) view.findViewById(R.id.txtcreatetime);
+        scheduel = (TextView) view.findViewById(R.id.txtscheduel);
+        number_attendess = (TextView) view.findViewById(R.id.txtquatity);
+        note = (TextView) view.findViewById(R.id.Attention);
+        imagemenu = (ImageView) view.findViewById(R.id.imagemenu);
 
         btnJoin.setOnClickListener(this);
         containList.setOnClickListener(this);
+        imagemenu.setOnClickListener(this);
     }
 
     public void initdata()
@@ -169,19 +194,26 @@ public class DetailCommunityFragment extends android.support.v4.app.Fragment imp
             event.setContent(getArguments().getString("content"));
             event.setType(getArguments().getInt("type"));
             event.setStarttime(getArguments().getString("startime"));
+            event.setUpdatetime(getArguments().getString("updatetime"));
             event.setCityname(getArguments().getString("place"));
             event.setNumberComment(getArguments().getInt("numbercomment"));
             event.setNumberLike(getArguments().getInt("numberlike"));
             event.setUrlAvatar(getArguments().getString("avatar"));
             event.setUsername(getArguments().getString("username"));
             event.setAccount_id(getArguments().getLong("accountid"));
+            event.setNumber(getArguments().getInt("number"));
+            event.setPertime(getArguments().getInt("pertime"));
+            event.setLimit_personse(getArguments().getInt("limitperson"));
+            event.setNote(getArguments().getString("note"));
 
             if(event.getAccountid().equals(AccountController.getInstance().getAccount().getId())) {
                 setHasOptionsMenu(true);
+                imagemenu.setVisibility(View.VISIBLE);
             }
             else
             {
                 setHasOptionsMenu(false);
+                imagemenu.setVisibility(View.GONE);
             }
             if(!event.getAccountid().equals(AccountController.getInstance().getAccount().getId())) {
                 if (event.getIsjoin() == 1) {
@@ -228,7 +260,31 @@ public class DetailCommunityFragment extends android.support.v4.app.Fragment imp
             }
 
             starttime.setText(Utils.ConvertDate(event.getStarttime()));
+            updatetime.setText(event.getUpdatetime());
             place.setText(event.getCityname());
+            String timetype= "";
+            if(event.getPertime() ==0)
+            {
+                timetype = "Week";
+            }
+            else if(event.getPertime() ==1)
+            {
+                timetype = "Month";
+            }
+            else if(event.getPertime() ==2)
+            {
+                timetype = "Year";
+            }
+            scheduel.setText(event.getNumber() + " / " + timetype);
+            number_attendess.setText(event.getLimitpersons()+"");
+            if(event.getNote() != null && !event.getNote().isEmpty())
+            {
+                note.setText(event.getNote());
+            }
+            else
+            {
+                note.setText("Nothing to show");
+            }
             numberlike.setText(String.valueOf(event.getNumberLike()));
             numbercomment.setText(String.valueOf(event.getNumberComment()));
             Drawable mDefaultBackground = getContext().getResources().getDrawable(R.drawable.avata_defaul);
@@ -262,6 +318,40 @@ public class DetailCommunityFragment extends android.support.v4.app.Fragment imp
         return super.onOptionsItemSelected(item);
     }
 
+    public void openOptionMenu(View v){
+        PopupMenu popup = new PopupMenu(v.getContext(), v);
+        popup.getMenuInflater().inflate(R.menu.toolbar_event, popup.getMenu());
+        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+
+                switch (item.getItemId()) {
+                    case R.id.item_listmember:
+                       // DeletePost(position);
+                        ((MainActivity)getActivity()).callMemberRequest(event);
+                        break;
+                    case R.id.item_edit:
+                        Intent intent = new Intent(getContext(), CreateEventActivity.class);
+
+                        intent.putExtra("isedit",1);
+                        intent.putExtra("type",event.getType());
+                        intent.putExtra("place",event.getCityid());
+                        intent.putExtra("price",event.getPrice());
+                        intent.putExtra("limitperson",event.getLimitpersons());
+                        intent.putExtra("title",event.getTitle());
+                        intent.putExtra("detail",event.getContent());
+                        intent.putExtra("note",event.getNote());
+
+
+                        startActivity(intent);
+                        break;
+                }
+                return true;
+            }
+        });
+        popup.show();
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -285,6 +375,9 @@ public class DetailCommunityFragment extends android.support.v4.app.Fragment imp
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
+            case R.id.imagemenu:
+                openOptionMenu(view);
+                break;
             case R.id.btnJoin:
                 JoinEvent(event.getEventid());
                 break;

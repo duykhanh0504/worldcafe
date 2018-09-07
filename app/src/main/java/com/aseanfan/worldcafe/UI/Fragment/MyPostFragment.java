@@ -16,12 +16,14 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.aseanfan.worldcafe.App.AccountController;
+import com.aseanfan.worldcafe.Helper.NotificationCenter;
 import com.aseanfan.worldcafe.Helper.RestAPI;
 import com.aseanfan.worldcafe.Model.EventModel;
 import com.aseanfan.worldcafe.Model.PostTimelineModel;
 import com.aseanfan.worldcafe.UI.Adapter.CommunityAdapter;
 import com.aseanfan.worldcafe.UI.Adapter.PostTimelineAdapter;
 import com.aseanfan.worldcafe.UI.EditPostTimeline;
+import com.aseanfan.worldcafe.UI.MainActivity;
 import com.aseanfan.worldcafe.Utils.Constants;
 import com.aseanfan.worldcafe.worldcafe.R;
 import com.google.gson.Gson;
@@ -210,6 +212,7 @@ public class MyPostFragment  extends android.support.v4.app.Fragment implements 
 
         posttimeline = new ArrayList<>();
 
+
         Adapter = new PostTimelineAdapter(null,false);
         Adapter.setOnItemClickListener(this);
         list_mypost = (RecyclerView) view.findViewById(R.id.list_post_mypage);
@@ -276,6 +279,7 @@ public class MyPostFragment  extends android.support.v4.app.Fragment implements 
         });
     }
 
+
     @Override
     public void onItemClick(int position, View v, int type) {
         if(type == Constants.CLICK_IMAGE_LIKE)
@@ -302,4 +306,5 @@ public class MyPostFragment  extends android.support.v4.app.Fragment implements 
         }
 
     }
+
 }

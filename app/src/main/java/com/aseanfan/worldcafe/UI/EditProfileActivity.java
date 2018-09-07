@@ -1,5 +1,6 @@
 package com.aseanfan.worldcafe.UI;
 
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
@@ -27,6 +28,7 @@ import com.aseanfan.worldcafe.Model.CityModel;
 import com.aseanfan.worldcafe.Model.UserModel;
 import com.aseanfan.worldcafe.UI.Adapter.SpinnerAreaAdapter;
 import com.aseanfan.worldcafe.UI.Adapter.SpinnerCityAdapter;
+import com.aseanfan.worldcafe.UI.Component.ViewDialog;
 import com.aseanfan.worldcafe.Utils.Constants;
 import com.aseanfan.worldcafe.Utils.Utils;
 import com.aseanfan.worldcafe.worldcafe.R;
@@ -407,9 +409,15 @@ public class EditProfileActivity extends AppCompatActivity {
 
                         return;
                     }
-                AccountController.getInstance().SetAccount(u);
-
-
+                    AccountController .getInstance().SetAccount(u);
+                    DBHelper.getInstance(EditProfileActivity.this).updatePerson(AccountController.getInstance().getAccount());
+                    ViewDialog dialog = new ViewDialog();
+                    dialog.showDialogOK(EditProfileActivity.this, "Update Successful", new ViewDialog.DialogListenner() {
+                        @Override
+                        public void OnClickConfirm() {
+                            finish();
+                        }
+                    });
 
                 } catch (Exception ex) {
 

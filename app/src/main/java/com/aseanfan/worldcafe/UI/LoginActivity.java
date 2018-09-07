@@ -781,6 +781,7 @@ public class LoginActivity extends AppCompatActivity {
              dataJson = (JsonObject) jsonParser.parse(gson.toJson(AccountController.getInstance().getAccount()));
             dataJson.remove("v_followed");
             dataJson.remove("v_follower");
+            dataJson.remove("v_total_like");
              url = RestAPI.POST_SIGNUPBYFACEBOOK;
         }
         else

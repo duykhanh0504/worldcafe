@@ -13,6 +13,7 @@ public class NotificationCenter {
     public static  int callbackEventDetail = totalEvents++;
     public static  int callbacksearch = callbackEventDetail++;
     public static  int checknotify = callbacksearch++;
+    public static  int mypagebackpress = checknotify++;
 
     private SparseArray<ArrayList<Object>> observers = new SparseArray<>();
     private SparseArray<ArrayList<Object>> removeAfterBroadcast = new SparseArray<>();

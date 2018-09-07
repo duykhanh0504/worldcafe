@@ -22,12 +22,14 @@ import android.view.ViewGroup;
 
 import com.aseanfan.worldcafe.App.AccountController;
 import com.aseanfan.worldcafe.Helper.DBHelper;
+import com.aseanfan.worldcafe.Helper.NotificationCenter;
 import com.aseanfan.worldcafe.Helper.RestAPI;
 import com.aseanfan.worldcafe.Model.PostTimelineModel;
 import com.aseanfan.worldcafe.Model.UserModel;
 import com.aseanfan.worldcafe.Provider.Store;
 import com.aseanfan.worldcafe.UI.Adapter.FragmentMyPagerAdapter;
 import com.aseanfan.worldcafe.UI.EditProfileActivity;
+import com.aseanfan.worldcafe.UI.MainActivity;
 import com.aseanfan.worldcafe.Utils.Constants;
 import com.aseanfan.worldcafe.Utils.Utils;
 import com.aseanfan.worldcafe.worldcafe.R;
@@ -70,7 +72,7 @@ import java.util.List;
 import static android.app.Activity.RESULT_OK;
 
 
-public class MypageFragment extends android.support.v4.app.Fragment {
+public class MypageFragment extends android.support.v4.app.Fragment implements NotificationCenter.NotificationCenterDelegate {
 
     private ViewPager viewPager;
     private ImageView avatar;
@@ -108,6 +110,7 @@ public class MypageFragment extends android.support.v4.app.Fragment {
     public void onResume() {
         super.onResume();
         LoadListMyPost(accountid);
+        LoadAccount(accountid);
     }
 
     @Override
@@ -382,6 +385,7 @@ public class MypageFragment extends android.support.v4.app.Fragment {
         });
     }
 
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -554,6 +558,8 @@ public class MypageFragment extends android.support.v4.app.Fragment {
 
         viewPager = (ViewPager)view.findViewById(R.id.view_mypage);
 
+        NotificationCenter.getInstance().addObserver(this, NotificationCenter.mypagebackpress);
+
         adapter = new FragmentMyPagerAdapter(accountid, getActivity(),getChildFragmentManager(),user);
 
         viewPager.setAdapter(adapter);
@@ -701,4 +707,18 @@ public class MypageFragment extends android.support.v4.app.Fragment {
         }
     }
 
+    @Override
+    public void didReceivedNotification(int id, Object... args) {
+        if(id == NotificationCenter.mypagebackpress)
+        {
+            if(accountid == AccountController.getInstance().getAccount().getId())
+            {
+                ((MainActivity)getActivity()).BackKey();
+            }
+            else
+            {
+                ((MainActivity)getActivity()).showSecondFragment();
+            }
+        }
+    }
 }
