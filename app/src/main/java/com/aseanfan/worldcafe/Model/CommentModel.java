@@ -7,11 +7,19 @@ public class CommentModel {
     private String _username;
     private String _content;
     private String _createtime;
+    private String time_diff;
 
 
     public CommentModel() {
     }
 
+    public String getTimeDiff() {
+        return time_diff;
+    }
+
+    public void setTimeDiff(String time_diff) {
+        this.time_diff = time_diff;
+    }
 
     public Long getAccount_id() {
         return _account_id;

@@ -10,22 +10,34 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
+import android.text.Html;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
+import android.text.method.LinkMovementMethod;
+import android.text.style.ClickableSpan;
 import android.util.Base64;
 import android.util.DisplayMetrics;
 import android.view.Display;
+import android.view.View;
+import android.view.ViewTreeObserver;
+import android.widget.TextView;
 
 
 import com.aseanfan.worldcafe.App.App;
 import com.aseanfan.worldcafe.Model.AreaModel;
 import com.aseanfan.worldcafe.Model.CityModel;
+import com.aseanfan.worldcafe.UI.Component.MySpannable;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.UnsupportedEncodingException;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -37,6 +49,10 @@ import java.util.TimeZone;
 
 public class Utils {
 
+
+    public static String prefix = "VND ";
+    public static final int MAX_LENGTH = 20;
+    public static final int MAX_DECIMAL = 3;
 
     public static Bitmap createImage(int width, int height, int color, String name , Context context) {
         Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
@@ -86,7 +102,8 @@ public class Utils {
 
     public static String ConvertDate(String s)
     {
-
+        if(s==null)
+            return "";
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MMM-dd HH:mm",Locale.US);
         DateFormat targetFormat = new SimpleDateFormat("dd MMM", Locale.getDefault());
         String formattedDate = null;
@@ -100,7 +117,105 @@ public class Utils {
         }
         return formattedDate;
     }
+    public static String ConvertCurrency(String number) {
+        String prezzo;
+        try {
 
+            DecimalFormatSymbols symbols = new DecimalFormatSymbols();
+            symbols.setDecimalSeparator(',');
+            DecimalFormat decimalFormat = new DecimalFormat("Rls ###,###,###,###", symbols);
+             prezzo = decimalFormat.format(Integer.parseInt(number));
+        }
+        catch (Exception e)
+        {
+            prezzo = "0";
+        }
+        return prezzo ;
+    }
+
+    public static String formatInteger(String str) {
+        BigDecimal parsed = new BigDecimal(str);
+        DecimalFormat formatter =
+                new DecimalFormat(prefix + "#,###", new DecimalFormatSymbols(Locale.US));
+        return formatter.format(parsed);
+    }
+
+    public static String formatDecimal(String str) {
+        if (str.equals(".")) {
+            return prefix + ".";
+        }
+        BigDecimal parsed = new BigDecimal(str);
+        // example pattern VND #,###.00
+        DecimalFormat formatter = new DecimalFormat(prefix + "#,###." + getDecimalPattern(str),
+                new DecimalFormatSymbols(Locale.US));
+        formatter.setRoundingMode(RoundingMode.DOWN);
+        return formatter.format(parsed);
+    }
+
+    /**
+     * It will return suitable pattern for format decimal
+     * For example: 10.2 -> return 0 | 10.23 -> return 00, | 10.235 -> return 000
+     */
+    public static String getDecimalPattern(String str) {
+        int decimalCount = str.length() - str.indexOf(".") - 1;
+        StringBuilder decimalPattern = new StringBuilder();
+        for (int i = 0; i < decimalCount && i < MAX_DECIMAL; i++) {
+            decimalPattern.append("0");
+        }
+        return decimalPattern.toString();
+    }
+
+    public static String ConvertDiffTime(String diff)
+    {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm:ss");
+        Date date1;
+        try {
+             date1 = simpleDateFormat.parse(diff);
+             long difference = date1.getTime();
+             int days = (int) (difference / (1000*60*60*24));
+             int hours = (int) ((difference - (1000*60*60*24*days)) / (1000*60*60));
+             int mins = (int) (difference - (1000*60*60*24*days) - (1000*60*60*hours)) / (1000*60);
+             if(days > 0)
+             {
+                 return days + " days ago";
+             }
+            else if(hours > 0)
+            {
+                return hours + " hours ago";
+            }
+            else if(mins > 0)
+            {
+                return mins + " minutes ago";
+            }
+
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        return "a moment ago";
+
+    }
+/*
+    public String CaculaterTime(String starttime , String endtime)
+    {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MMM-dd HH:mm",Locale.US);
+        Date startDate = simpleDateFormat.parse(starttime);
+        Date endDate = simpleDateFormat.parse(endtime);
+
+        long difference = endDate.getTime() - startDate.getTime();
+        if(difference<0)
+        {
+            Date dateMax = simpleDateFormat.parse("24:00");
+            Date dateMin = simpleDateFormat.parse("00:00");
+            difference=(dateMax.getTime() -startDate.getTime() )+(endDate.getTime()-dateMin.getTime());
+        }
+        int days = (int) (difference / (1000*60*60*24));
+        int hours = (int) ((difference - (1000*60*60*24*days)) / (1000*60*60));
+        int min = (int) (difference - (1000*60*60*24*days) - (1000*60*60*hours)) / (1000*60);
+        Log.i("log_tag","Hours: "+hours+", Mins: "+min);
+    }
+*/
     public static String currencyFormat(Long amount) {
         NumberFormat formatter = new DecimalFormat("#,###");
         Long myNumber = amount;

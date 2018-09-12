@@ -152,7 +152,7 @@
             android:textStyle="bold"
             android:textSize="20sp"
             android:layout_marginLeft="30dp"
-            android:text="@string/schedule" />
+            android:hint="@string/schedule" />
 
         <CheckBox
             android:id="@+id/checktype"

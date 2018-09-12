@@ -14,6 +14,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -38,6 +40,7 @@ import com.aseanfan.worldcafe.Model.EventModel;
 import com.aseanfan.worldcafe.UI.Adapter.ChooseAreaAdapter;
 import com.aseanfan.worldcafe.UI.Adapter.ImageTimelineAdapter;
 import com.aseanfan.worldcafe.UI.Adapter.SpinnerCityAdapter;
+import com.aseanfan.worldcafe.UI.Component.ViewDialog;
 import com.aseanfan.worldcafe.Utils.Constants;
 import com.aseanfan.worldcafe.Utils.Utils;
 import com.aseanfan.worldcafe.worldcafe.R;
@@ -65,6 +68,9 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
+
+import static com.aseanfan.worldcafe.Utils.Utils.MAX_LENGTH;
+import static com.aseanfan.worldcafe.Utils.Utils.prefix;
 
 public class CreateEventActivity extends AppCompatActivity {
 
@@ -102,6 +108,7 @@ public class CreateEventActivity extends AppCompatActivity {
     private int typeCreate = Constants.EVENT_CREATE;
 
     private EventModel event;
+    private String previousCleanString;
 
     public void getEventDetail(Long eventid)
     {
@@ -172,6 +179,15 @@ public class CreateEventActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+
+    private  void handleSelection() {
+        if (price.getText().length() <= MAX_LENGTH) {
+            price.setSelection(price.getText().length());
+        } else {
+            price.setSelection(MAX_LENGTH);
+        }
     }
 
     private void changeGenre(RadioGroup group, int checkedId) {
@@ -270,30 +286,81 @@ public class CreateEventActivity extends AppCompatActivity {
             }
         });
 
+        price.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                String str = editable.toString();
+                if (str.length() < prefix.length()) {
+                    price.setText(prefix);
+                    price.setSelection(prefix.length());
+                    return;
+                }
+                if (str.equals(prefix)) {
+                    return;
+                }
+                // cleanString this the string which not contain prefix and ,
+                String cleanString = str.replace(prefix, "").replaceAll("[,]", "");
+                // for prevent afterTextChanged recursive call
+                if (cleanString.equals(previousCleanString) || cleanString.isEmpty()) {
+                    return;
+                }
+                previousCleanString = cleanString;
+
+                String formattedString;
+                if (cleanString.contains(".")) {
+                    formattedString =Utils.formatDecimal(cleanString);
+                } else {
+                    formattedString = Utils.formatInteger(cleanString);
+                }
+                price.removeTextChangedListener(this); // Remove listener
+                price.setText(formattedString);
+                handleSelection();
+                price.addTextChangedListener(this); // Add back the listener
+            }
+        });
+
         btncreate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                event.setTitle(title.getText().toString());
-                event.setPrice(Long.valueOf(price.getText().toString()));
-                event.setContent(content.getText().toString());
-                TimeZone tz = TimeZone.getTimeZone("UTC");
-                DateFormat df = new SimpleDateFormat("yyy-MM-dd HH:mm:ss");
-                df.setTimeZone(tz);
-                Date convertedDate = new Date();
-                try {
-                    convertedDate = df.parse(scheduel.getText().toString());
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
-                String nowAsISO = df.format(convertedDate);
+                if(validateInput()== true) {
+                    event.setTitle(title.getText().toString());
+                    event.setPrice(Long.valueOf(price.getText().toString()));
+                    event.setContent(content.getText().toString());
+                    TimeZone tz = TimeZone.getTimeZone("UTC");
+                    DateFormat df = new SimpleDateFormat("yyy-MM-dd HH:mm:ss");
+                    df.setTimeZone(tz);
+                    Date convertedDate = new Date();
+                    try {
+                        convertedDate = df.parse(scheduel.getText().toString());
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                    String nowAsISO = df.format(convertedDate);
 
-                event.setStarttime(nowAsISO);
-                event.setLimit_personse(Integer.valueOf(numberofparticipal.getText().toString()));
-                event.setNumber(Integer.valueOf(times.getText().toString()));
-                event.setNote(note.getText().toString());
-                CreateEvent(event);
+                    event.setStarttime(nowAsISO);
+                    event.setLimit_personse(Integer.valueOf(numberofparticipal.getText().toString()));
+                    if(event.getSchedule_type() == 1) {
+                        event.setNumber(Integer.valueOf(times.getText().toString()));
+                    }
+                    event.setNote(note.getText().toString());
+                    CreateEvent(event);
+                }
             }
         });
+
+        radgroup.check(R.id.radfriend);
+
+        event.setType(Constants.EVENT_FRIEND);
 
         radgroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
@@ -362,6 +429,31 @@ public class CreateEventActivity extends AppCompatActivity {
 
     }
 
+    private boolean validateInput()
+    {
+        ViewDialog dialog = new ViewDialog();
+        if(title.getText().toString().isEmpty())
+        {
+            dialog.showDialogCancel(CreateEventActivity.this,"please input title");
+            return false;
+        }
+        else if (price.getText().toString().isEmpty())
+        {
+            dialog.showDialogCancel(CreateEventActivity.this,"please input price");
+            return false;
+        }
+        else if(scheduel.getText().toString().isEmpty())
+        {
+            dialog.showDialogCancel(CreateEventActivity.this,"please input start date");
+            return false;
+        }
+        else if(numberofparticipal.getText().toString().isEmpty())
+        {
+            dialog.showDialogCancel(CreateEventActivity.this,"please input limit persons");
+            return false;
+        }
+        return true;
+    }
 
     private void selectImage() {
         Album.image(this)

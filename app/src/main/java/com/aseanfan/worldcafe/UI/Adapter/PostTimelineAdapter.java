@@ -7,20 +7,31 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
+import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.aseanfan.worldcafe.App.AccountController;
 import com.aseanfan.worldcafe.Model.EventModel;
 import com.aseanfan.worldcafe.Model.PostTimelineModel;
+import com.aseanfan.worldcafe.UI.Component.MySpannable;
 import com.aseanfan.worldcafe.Utils.Constants;
+import com.aseanfan.worldcafe.Utils.Utils;
 import com.aseanfan.worldcafe.worldcafe.R;
+
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
+import com.google.android.gms.common.GooglePlayServicesRepairableException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,6 +40,7 @@ public class PostTimelineAdapter extends RecyclerView.Adapter<PostTimelineAdapte
 
 
     private List<PostTimelineModel> postList;
+    private List<Boolean> viewmore;
 
     private static PostTimelineAdapter.ClickListener clickListener;
     private boolean requestads = false;
@@ -42,17 +54,18 @@ public class PostTimelineAdapter extends RecyclerView.Adapter<PostTimelineAdapte
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener,PostImageAdapter.ClickListener {
-        public TextView username;
-        public TextView detail;
-        public TextView like;
-        public TextView comment;
-        public RecyclerView imagePost;
-        public Context context;
-        public ImageView avatar;
-        public ImageView imagelike;
-        public ImageView imageComment;
-        public ImageView image_menu;
-        public PostImageAdapter mAdapter;
+        private TextView username;
+        private TextView detail;
+        private TextView like;
+        private TextView comment;
+        private FrameLayout imagePost;
+        private Context context;
+        private ImageView avatar;
+        private ImageView imagelike;
+        private ImageView imageComment;
+        private ImageView image_menu;
+      //  private PostImageAdapter mAdapter;
+
 
 
         public MyViewHolder(View view) {
@@ -61,11 +74,13 @@ public class PostTimelineAdapter extends RecyclerView.Adapter<PostTimelineAdapte
             detail = (TextView) view.findViewById(R.id.detailPost);
             like = (TextView) view.findViewById(R.id.textLike);
             comment = (TextView) view.findViewById(R.id.textComment);
-            imagePost = (RecyclerView) view.findViewById(R.id.list_image);
+            imagePost = (FrameLayout) view.findViewById(R.id.list_image);
             avatar = (ImageView) view.findViewById(R.id.imageAvatar);
             imagelike = (ImageView) view.findViewById(R.id.imageLike) ;
             image_menu = (ImageView) view.findViewById(R.id.image_menu) ;
             imageComment = (ImageView)view.findViewById(R.id.imageComment) ;
+
+          //  makeTextViewResizable(detail, 3, "View More", true);
             view.setOnClickListener(this);
             imagelike.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -95,14 +110,29 @@ public class PostTimelineAdapter extends RecyclerView.Adapter<PostTimelineAdapte
                 }
             });
 
-            mAdapter = new PostImageAdapter(null);
+            detail.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if(viewmore.get(getAdapterPosition()) == true)
+                    {
+                        viewmore.set(getAdapterPosition(), false);
+                    }
+                    else
+                    {
+                        viewmore.set(getAdapterPosition(), true);
+                    }
+                    notifyDataSetChanged();
+                }
+            });
+
+         //   mAdapter = new PostImageAdapter(null);
 
            // RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(view.getContext(),3);
-             RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(view.getContext(), LinearLayoutManager.HORIZONTAL, false);
+           /*  RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(view.getContext(), LinearLayoutManager.HORIZONTAL, false);
             imagePost.setLayoutManager(mLayoutManager);
             imagePost.setItemAnimator(new DefaultItemAnimator());
             imagePost.setAdapter(mAdapter);
-            mAdapter.setOnItemClickListener(this);
+            mAdapter.setOnItemClickListener(this);*/
 
 
         }
@@ -122,11 +152,37 @@ public class PostTimelineAdapter extends RecyclerView.Adapter<PostTimelineAdapte
     public PostTimelineAdapter(List<PostTimelineModel> postList , boolean requestads) {
         this.requestads = requestads;
         this.postList = postList;
+        if (viewmore==null)
+        {
+            viewmore = new ArrayList<>();
+        }
+        if (postList==null)
+        {
+            postList = new ArrayList<>();
+        }
+        viewmore.clear();
+        for (PostTimelineModel i : postList)
+        {
+            viewmore.add(true);
+        }
     }
 
     public void setPostList (List<PostTimelineModel> postList) {
         this.postList = postList;
         this.notifyDataSetChanged();
+        if (viewmore==null)
+        {
+            viewmore = new ArrayList<>();
+        }
+        if (postList==null)
+        {
+            postList = new ArrayList<>();
+        }
+        viewmore.clear();
+        for (PostTimelineModel i : postList)
+        {
+            viewmore.add(true);
+        }
     }
 
     @NonNull
@@ -139,9 +195,9 @@ public class PostTimelineAdapter extends RecyclerView.Adapter<PostTimelineAdapte
     }
 
     @Override
-    public void onBindViewHolder(@NonNull MyViewHolder myViewHolder, int i) {
+    public void onBindViewHolder(@NonNull final MyViewHolder myViewHolder, int i) {
         PostTimelineModel post = postList.get(i);
-        String urlimg = null;
+
         myViewHolder.username.setText(post.getUsername());
         myViewHolder.like.setText(String.valueOf(post.getNumberLike()));
         myViewHolder.comment.setText(String.valueOf(post.getNumberComment()));
@@ -164,12 +220,27 @@ public class PostTimelineAdapter extends RecyclerView.Adapter<PostTimelineAdapte
         Drawable mDefaultBackground = myViewHolder.avatar.getContext().getResources().getDrawable(R.drawable.avata_defaul);
         Glide.with(myViewHolder.avatar.getContext()).load(post.getUrlAvatar()).apply(RequestOptions.circleCropTransform().diskCacheStrategy(DiskCacheStrategy.ALL).error(mDefaultBackground)).into(myViewHolder.avatar);
 
-        if(post.getDetail()!=null) {
-            myViewHolder.detail.setText(post.getDetail());
+        if(post.getDetail()!=null && !post.getDetail().isEmpty()) {
+            myViewHolder.detail.setVisibility(View.VISIBLE);
+            if(viewmore.get(i) == true) {
+                myViewHolder.detail.setText(Html.fromHtml((makeTextViewResizable(post.getDetail(), "View more", viewmore.get(i)))));
+            }
+            else
+            {
+                myViewHolder.detail.setText(post.getDetail());
+            }
+            //makeTextViewResizable(post.getDetail(),myViewHolder.detail,3 , "View more" ,myViewHolder.viewMore);
+        }
+        else
+        {
+            myViewHolder.detail.setVisibility(View.GONE);
         }
 
-            if(post.getUrlImage()!=null) {
-                myViewHolder.mAdapter.setData(post.getUrlImage());
+
+            if(post.getUrlImage()!=null && post.getUrlImage().size() > 0) {
+                myViewHolder.imagePost.setVisibility(View.VISIBLE);
+                UpdateLayoutImage(myViewHolder.imagePost,post.getUrlImage());
+               // myViewHolder.mAdapter.setData(post.getUrlImage());
                /* for (String url : post.getUrlImage()) {
                     //listImage.add(url);
                     urlimg = url;
@@ -177,11 +248,259 @@ public class PostTimelineAdapter extends RecyclerView.Adapter<PostTimelineAdapte
                 if(urlimg!=null) {
                     Glide.with(myViewHolder.context).load(post.getUrlImage().get(0)).into(myViewHolder.imagePost);
                 }*/
-        }
+            }
+            else
+            {
+                myViewHolder.imagePost.setVisibility(View.GONE);
+            }
 
 
     }
 
+    public  String makeTextViewResizable(final String s ,String expandText,  boolean viewMore) {
+
+        String text = s;
+        if (s == null && s.isEmpty()) {
+            return text;
+        }
+        if (s.length() > 100 && viewMore == true ) {
+
+            text = s.subSequence(0, 101  ) + "... " + "<font color='red'>" + expandText + "</font>";
+        }
+        else
+        {
+            text = s;
+        }
+        return text;
+    }
+
+    public  void makeTextViewResizable(final String s , final TextView tv, final int maxLine, final String expandText, final boolean viewMore) {
+
+        if (tv.getTag() == null) {
+            tv.setTag(tv.getText());
+        }
+        ViewTreeObserver vto = tv.getViewTreeObserver();
+        vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+
+            @SuppressWarnings("deprecation")
+            @Override
+            public void onGlobalLayout() {
+                String text  = s;
+                tv.setText(s);
+                int lineEndIndex = tv.getLayout().getLineEnd(0);
+                ViewTreeObserver obs = tv.getViewTreeObserver();
+                obs.removeGlobalOnLayoutListener(this);
+                if (maxLine == 0) {
+                    lineEndIndex = tv.getLayout().getLineEnd(0);
+                    text = tv.getText().subSequence(0, lineEndIndex - expandText.length() + 1) + " " + "<font color='red'>" + expandText + "</font>";
+                } else if (maxLine > 0 && tv.getLineCount() >= maxLine) {
+                    lineEndIndex = tv.getLayout().getLineEnd(maxLine - 1);
+                    text = tv.getText().subSequence(0, lineEndIndex - expandText.length() + 1) + "..." + "<font color='red'>" + expandText + "</font>";
+                    tv.setText(text);
+                    tv.setMovementMethod(LinkMovementMethod.getInstance());
+                    tv.setText(
+                            addClickablePartTextViewResizable(s,Html.fromHtml(text), tv, lineEndIndex, expandText,
+                                    viewMore), TextView.BufferType.SPANNABLE);
+                } else if(maxLine == - 1) {
+                   // lineEndIndex = tv.getLayout().getLineEnd(tv.getLayout().getLineCount() - 1);
+                   // text = tv.getText().subSequence(0, lineEndIndex) + " " + "<font color='red'>" + expandText + "</font>";
+                }
+                else {
+                    tv.setText(s);
+                }
+
+            }
+        });
+
+    }
+
+    private  SpannableStringBuilder addClickablePartTextViewResizable(final String s, final Spanned strSpanned, final TextView tv,
+                                                                      final int maxLine, final String spanableText, final boolean viewMore) {
+        String str = strSpanned.toString();
+        SpannableStringBuilder ssb = new SpannableStringBuilder(strSpanned);
+
+        if (str.contains(spanableText)) {
+            ssb.setSpan(new MySpannable(false) {
+
+                @Override
+                public void onClick(View widget) {
+                    tv.setLayoutParams(tv.getLayoutParams());
+                    tv.setText(tv.getTag().toString(), TextView.BufferType.SPANNABLE);
+                    tv.invalidate();
+                    if (viewMore) {
+                      //  makeTextViewResizable(s , tv, -1, " View Less", false);
+                    } else {
+                      //  makeTextViewResizable(tv, 3, "View More", true);
+                    }
+                    notifyDataSetChanged();
+
+                }
+            }, str.indexOf(spanableText), str.indexOf(spanableText) + spanableText.length(), 0);
+
+        }
+        if (!viewMore) {
+            return  new SpannableStringBuilder(s);
+        } else {
+            return ssb;
+            //  makeTextViewResizable(tv, 3, "View More", true);
+        }
+
+      //  return ssb;
+
+    }
+
+    void UpdateLayoutImage(FrameLayout contain ,List<String> url)
+    {
+        contain.removeAllViews();
+        if(url.size()==1) {
+            ImageView image = new ImageView(contain.getContext());
+            image.setScaleType(ImageView.ScaleType.CENTER_CROP);
+            Glide.with(contain.getContext()).load(url.get(0)).into(image);
+            contain.addView(image);
+
+        }
+        else if (url.size() ==2)
+        {
+            LinearLayout contentimage = new LinearLayout(contain.getContext());
+            contentimage.setOrientation(LinearLayout.HORIZONTAL);
+
+            ImageView image = new ImageView(contain.getContext());
+            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams((Utils.getwidthScreen(contain.getContext())/2) - Utils.convertDpToPixel(1,contain.getContext()), Utils.convertDpToPixel(240,contain.getContext()));
+            image.setLayoutParams(layoutParams);
+            image.setScaleType(ImageView.ScaleType.CENTER_CROP);
+            Glide.with(contain.getContext()).load(url.get(0)).into(image);
+
+            FrameLayout line = new FrameLayout(contain.getContext());
+            LinearLayout.LayoutParams layoutParamsline = new LinearLayout.LayoutParams( Utils.convertDpToPixel(2,contain.getContext()), Utils.convertDpToPixel(240,contain.getContext()));
+            line.setLayoutParams(layoutParamsline);
+            line.setBackgroundColor(contain.getContext().getResources().getColor(R.color.white));
+
+            ImageView image1 = new ImageView(contain.getContext());
+            LinearLayout.LayoutParams layoutParams1 = new LinearLayout.LayoutParams((Utils.getwidthScreen(contain.getContext())/2 - Utils.convertDpToPixel(1,contain.getContext())), Utils.convertDpToPixel(240,contain.getContext()));
+            image1.setLayoutParams(layoutParams1);
+            image1.setScaleType(ImageView.ScaleType.CENTER_CROP);
+            Glide.with(contain.getContext()).load(url.get(1)).into(image1);
+
+            contentimage.addView(image);
+            contentimage.addView(line);
+            contentimage.addView(image1);
+            contain.addView(contentimage);
+
+
+        }
+        else if (url.size() ==3)
+        {
+            LinearLayout contentimage = new LinearLayout(contain.getContext());
+            contentimage.setOrientation(LinearLayout.HORIZONTAL);
+
+            ImageView image = new ImageView(contain.getContext());
+            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(Utils.getwidthScreen(contain.getContext())/2, Utils.convertDpToPixel(240,contain.getContext()));
+            image.setLayoutParams(layoutParams);
+            image.setScaleType(ImageView.ScaleType.CENTER_CROP);
+            Glide.with(contain.getContext()).load(url.get(0)).into(image);
+
+            LinearLayout contentimage1 = new LinearLayout(contain.getContext());
+            contentimage1.setOrientation(LinearLayout.VERTICAL);
+            ImageView image1 = new ImageView(contain.getContext());
+            LinearLayout.LayoutParams layoutParams1 = new LinearLayout.LayoutParams(Utils.getwidthScreen(contain.getContext())/2, Utils.convertDpToPixel(119,contain.getContext()));
+            layoutParams.setMargins( 0,0,0,Utils.convertDpToPixel(5,contain.getContext()));
+            image1.setLayoutParams(layoutParams1);
+            image1.setScaleType(ImageView.ScaleType.CENTER_CROP);
+            Glide.with(contain.getContext()).load(url.get(1)).into(image1);
+
+            ImageView image2 = new ImageView(contain.getContext());
+            LinearLayout.LayoutParams layoutParams2 = new LinearLayout.LayoutParams(Utils.getwidthScreen(contain.getContext())/2, Utils.convertDpToPixel(120,contain.getContext()));
+            image2.setLayoutParams(layoutParams2);
+            image2.setScaleType(ImageView.ScaleType.CENTER_CROP);
+            Glide.with(contain.getContext()).load(url.get(2)).into(image2);
+
+            FrameLayout line = new FrameLayout(contain.getContext());
+            LinearLayout.LayoutParams layoutParamsline = new LinearLayout.LayoutParams( Utils.convertDpToPixel(2,contain.getContext()), Utils.convertDpToPixel(240,contain.getContext()));
+            line.setLayoutParams(layoutParamsline);
+            line.setBackgroundColor(contain.getContext().getResources().getColor(R.color.white));
+
+            FrameLayout line1 = new FrameLayout(contain.getContext());
+            LinearLayout.LayoutParams layoutParamsline1 = new LinearLayout.LayoutParams( Utils.convertDpToPixel(Utils.convertDpToPixel(120,contain.getContext()),contain.getContext()), Utils.convertDpToPixel(2,contain.getContext()));
+            line1.setLayoutParams(layoutParamsline1);
+            line1.setBackgroundColor(contain.getContext().getResources().getColor(R.color.white));
+
+            contentimage1.addView(image1);
+            contentimage1.addView(line1);
+            contentimage1.addView(image2);
+
+            contentimage.addView(image);
+            contentimage.addView(line);
+            contentimage.addView(contentimage1);
+            contain.addView(contentimage);
+
+
+        }
+        else if (url.size() >=4)
+        {
+            LinearLayout contentimage = new LinearLayout(contain.getContext());
+            contentimage.setOrientation(LinearLayout.HORIZONTAL);
+
+            LinearLayout contentimage1 = new LinearLayout(contain.getContext());
+            contentimage1.setOrientation(LinearLayout.VERTICAL);
+
+            ImageView image = new ImageView(contain.getContext());
+            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(Utils.getwidthScreen(contain.getContext())/2, Utils.convertDpToPixel(119,contain.getContext()));
+            image.setLayoutParams(layoutParams);
+            image.setScaleType(ImageView.ScaleType.CENTER_CROP);
+            Glide.with(contain.getContext()).load(url.get(0)).into(image);
+
+            ImageView image1 = new ImageView(contain.getContext());
+            LinearLayout.LayoutParams layoutParams1 = new LinearLayout.LayoutParams(Utils.getwidthScreen(contain.getContext())/2, Utils.convertDpToPixel(120,contain.getContext()));
+            image1.setLayoutParams(layoutParams1);
+            image1.setScaleType(ImageView.ScaleType.CENTER_CROP);
+            Glide.with(contain.getContext()).load(url.get(1)).into(image1);
+
+            LinearLayout contentimage2 = new LinearLayout(contain.getContext());
+            contentimage2.setOrientation(LinearLayout.VERTICAL);
+
+            ImageView image2 = new ImageView(contain.getContext());
+            LinearLayout.LayoutParams layoutParams2 = new LinearLayout.LayoutParams(Utils.getwidthScreen(contain.getContext())/2, Utils.convertDpToPixel(119,contain.getContext()));
+            image2.setLayoutParams(layoutParams2);
+            image2.setScaleType(ImageView.ScaleType.CENTER_CROP);
+            Glide.with(contain.getContext()).load(url.get(2)).into(image2);
+
+            ImageView image3 = new ImageView(contain.getContext());
+            LinearLayout.LayoutParams layoutParams3 = new LinearLayout.LayoutParams(Utils.getwidthScreen(contain.getContext())/2, Utils.convertDpToPixel(120,contain.getContext()));
+            image3.setLayoutParams(layoutParams2);
+            image3.setScaleType(ImageView.ScaleType.CENTER_CROP);
+            Glide.with(contain.getContext()).load(url.get(3)).into(image3);
+
+            FrameLayout line = new FrameLayout(contain.getContext());
+            LinearLayout.LayoutParams layoutParamsline = new LinearLayout.LayoutParams( Utils.convertDpToPixel(2,contain.getContext()), Utils.convertDpToPixel(240,contain.getContext()));
+            line.setLayoutParams(layoutParamsline);
+            line.setBackgroundColor(contain.getContext().getResources().getColor(R.color.white));
+
+            FrameLayout line1 = new FrameLayout(contain.getContext());
+            LinearLayout.LayoutParams layoutParamsline1 = new LinearLayout.LayoutParams( Utils.getwidthScreen(contain.getContext())/2, Utils.convertDpToPixel(2,contain.getContext()));
+            line1.setLayoutParams(layoutParamsline1);
+            line1.setBackgroundColor(contain.getContext().getResources().getColor(R.color.white));
+
+            FrameLayout line2 = new FrameLayout(contain.getContext());
+            LinearLayout.LayoutParams layoutParamsline2= new LinearLayout.LayoutParams( Utils.getwidthScreen(contain.getContext())/2, Utils.convertDpToPixel(2,contain.getContext()));
+            line2.setLayoutParams(layoutParamsline2);
+            line2.setBackgroundColor(contain.getContext().getResources().getColor(R.color.white));
+
+            contentimage1.addView(image);
+            contentimage1.addView(line1);
+            contentimage1.addView(image1);
+
+            contentimage2.addView(image2);
+            contentimage2.addView(line2);
+            contentimage2.addView(image3);
+
+            contentimage.addView(contentimage1);
+            contentimage.addView(line);
+            contentimage.addView(contentimage2);
+            contain.addView(contentimage);
+
+
+        }
+    }
 
 
     @Override

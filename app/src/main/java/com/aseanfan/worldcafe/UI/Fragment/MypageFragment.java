@@ -1,5 +1,6 @@
 package com.aseanfan.worldcafe.UI.Fragment;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Rect;
@@ -104,6 +105,7 @@ public class MypageFragment extends android.support.v4.app.Fragment implements N
     private boolean mIsTheVisible          = true;
     private boolean mIsTheinVisible          = true;
     Uri selectedAvatar = null;
+    private Activity activity;
 
 
     @Override
@@ -111,6 +113,12 @@ public class MypageFragment extends android.support.v4.app.Fragment implements N
         super.onResume();
         LoadListMyPost(accountid);
         LoadAccount(accountid);
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        activity = (MainActivity)context;
     }
 
     @Override
@@ -707,17 +715,19 @@ public class MypageFragment extends android.support.v4.app.Fragment implements N
         }
     }
 
+
+
     @Override
     public void didReceivedNotification(int id, Object... args) {
         if(id == NotificationCenter.mypagebackpress)
         {
-            if(accountid == AccountController.getInstance().getAccount().getId())
+            if(accountid.equals(AccountController.getInstance().getAccount().getId()))
             {
-                ((MainActivity)getActivity()).BackKey();
+                ((MainActivity)activity).BackKey();
             }
             else
             {
-                ((MainActivity)getActivity()).showSecondFragment();
+                ((MainActivity)activity).showSecondFragment();
             }
         }
     }

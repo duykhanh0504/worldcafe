@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.aseanfan.worldcafe.Model.CommentModel;
 import com.aseanfan.worldcafe.Utils.Constants;
+import com.aseanfan.worldcafe.Utils.Utils;
 import com.aseanfan.worldcafe.worldcafe.R;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -88,7 +89,7 @@ public class CommentAdapter  extends RecyclerView.Adapter<CommentAdapter.MyViewH
         CommentModel commentModel = commentlist.get(i);
         myViewHolder.name.setText(commentModel.getUsername());
         myViewHolder.detail.setText(commentModel.getContent());
-        myViewHolder.date.setText(commentModel.getCreatetime());
+        myViewHolder.date.setText(   Utils.ConvertDiffTime(commentModel.getTimeDiff()));
         Drawable mDefaultBackground = myViewHolder.avatar.getContext().getResources().getDrawable(R.drawable.avata_defaul);
         Glide.with(myViewHolder.avatar.getContext()).load(commentModel.getAvarta()).apply(RequestOptions.circleCropTransform().diskCacheStrategy(DiskCacheStrategy.ALL).error(mDefaultBackground)).into(myViewHolder.avatar);
     }

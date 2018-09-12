@@ -10,6 +10,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -62,7 +63,7 @@ public class CommunityAdapter extends RecyclerView.Adapter<CommunityAdapter.MyVi
         public TextView type;
         public TextView time;
         public TextView location;
-        public LinearLayout background;
+        public FrameLayout background;
         public ImageView imglike;
         public ImageView imgcomment;
 
@@ -81,7 +82,7 @@ public class CommunityAdapter extends RecyclerView.Adapter<CommunityAdapter.MyVi
             type = (TextView) view.findViewById(R.id.txttype);
             time = (TextView) view.findViewById(R.id.txtdate);
             location = (TextView) view.findViewById(R.id.txtlocation);
-            background = (LinearLayout) view.findViewById(R.id.background_event);
+            background = (FrameLayout) view.findViewById(R.id.timelinebackground);
             view.setOnClickListener(this);
 
             imglike.setOnClickListener(new View.OnClickListener() {
@@ -156,14 +157,16 @@ public class CommunityAdapter extends RecyclerView.Adapter<CommunityAdapter.MyVi
         {
             holder.imglike.setBackgroundResource(R.drawable.like);
         }
-        holder.time.setText(Utils.ConvertDate(event.getStarttime()));
+        if(event.getStarttime() != null) {
+            holder.time.setText(Utils.ConvertDate(event.getStarttime()));
+        }
         holder.location.setText(event.getCityname());
 
         holder.numberlike.setText(String.valueOf(event.getNumberLike()));
         holder.numbercomment.setText(String.valueOf(event.getNumberComment()));
         Drawable mDefaultBackground = holder.imageAvatar.getContext().getResources().getDrawable(R.drawable.avata_defaul);
         Glide.with(holder.imageAvatar.getContext()).load(event.getUrlAvatar()).apply(RequestOptions.circleCropTransform().diskCacheStrategy(DiskCacheStrategy.ALL).error(mDefaultBackground)).into(holder.imageAvatar);
-        if(event.getUrlImage().get(0)!=null) {
+        if(event.getUrlImage().size() > 0) {
             Glide.with(holder.background.getContext()).load(event.getUrlImage().get(0)).into(new SimpleTarget<Drawable>() {
                 @Override
                 public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {

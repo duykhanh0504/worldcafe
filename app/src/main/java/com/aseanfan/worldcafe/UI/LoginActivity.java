@@ -995,7 +995,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void OnComplete(int httpCode, String error, String s) {
                 try {
-                    if (!RestAPI.checkHttpCode(httpCode)) {
+                     if (!RestAPI.checkHttpCode(httpCode)) {
                         //AppFuncs.alert(getApplicationContext(),s,true);
                         progressDialog.dismiss();
                         dialog.showDialogCancel( LoginActivity.this,getResources().getString(R.string.can_not_connect_server) );
@@ -1017,6 +1017,7 @@ public class LoginActivity extends AppCompatActivity {
                         Gson gson = new Gson();
                         final UserModel u = gson.fromJson(jsonObject, UserModel.class);
                         Store.putStringData(LoginActivity.this, Store.ACCESSTOKEN, jsons.get("access_token").getAsString());
+                        AccountController.getInstance().SetAccount(u);
                         if(type == LOGIN_NORMAL) {
                             if(u.getStatus() == 0)
                             {
@@ -1029,7 +1030,7 @@ public class LoginActivity extends AppCompatActivity {
                                 return;
                             }
                         }
-                        AccountController.getInstance().SetAccount(u);
+
                         DBHelper.getInstance(getApplicationContext()).insertPerson(u);
                         startService(new Intent(getApplicationContext(), SocketService.class));
                         startService(new Intent(getApplicationContext(), MyFirebaseInstanceIDService.class));

@@ -92,7 +92,6 @@ public class TimelineFragment extends android.support.v4.app.Fragment implements
 
     private SearchView searchView;
 
-    private AdView adView;
 
     String[] listcity = {"HCM", "Ha Noi", "Da Nang", "Tokyo", "Osaka"};
     int[] listidcity = {1, 2, 3, 4, 5};
@@ -344,13 +343,8 @@ public class TimelineFragment extends android.support.v4.app.Fragment implements
         loading = (ProgressBar)view.findViewById(R.id.loading_spinner);
         imageAvatar = (ImageView)view.findViewById(R.id.imageAvatar);
 
-        adView = (AdView) view.findViewById(R.id.ad_view);
-        AdRequest adRequest = new AdRequest.Builder()
-                .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
-                .build();
-
         // Start loading the ad in the background.
-        adView.loadAd(adRequest);
+
         Drawable mDefaultBackground = getContext().getResources().getDrawable(R.drawable.avata_defaul);
         Glide.with(getContext()).load(AccountController.getInstance().getAccount().getAvarta()).apply(RequestOptions.circleCropTransform().diskCacheStrategy(DiskCacheStrategy.ALL).error(mDefaultBackground)).into(imageAvatar);
 

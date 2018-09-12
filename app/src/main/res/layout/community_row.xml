@@ -6,6 +6,7 @@
     android:clickable="true"
     android:focusable="true"
     android:background="@drawable/timelinebackground"
+    android:id="@+id/timelinebackground"
 
     android:layout_marginTop="@dimen/margin_line_mypage"
     android:orientation="vertical"

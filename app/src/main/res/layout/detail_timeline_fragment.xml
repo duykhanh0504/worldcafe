@@ -126,14 +126,11 @@
                 android:layout_height="wrap_content"
                 android:text="TextView" />
 
-
-            <android.support.v7.widget.RecyclerView
+            <FrameLayout
                 android:layout_marginTop="@dimen/margin_line_mypage"
-                android:layout_marginRight="@dimen/margin_left_right"
-                android:layout_marginLeft="@dimen/margin_left_right"
                 android:id ="@+id/list_image"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="240dp"
                 android:layout_marginBottom="@dimen/margin_line_mypage"
                 />
         </LinearLayout>
