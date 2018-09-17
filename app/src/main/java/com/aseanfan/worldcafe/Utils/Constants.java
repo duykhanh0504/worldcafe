@@ -23,6 +23,7 @@ public class Constants {
     public static int CLICK_IMAGE_COMMENT = 2;
     public static int CLICK_AVATAR = 3;
     public static int CLICK_IMAGE_MENU = 4;
+    public static int CLICK_IMAGE_PREVIEW = 5;
 
     public static  String SEND_ACTION = "SEND_ACTION";
     public static  String REICEVE_ACTION = "REICEVE_ACTION";

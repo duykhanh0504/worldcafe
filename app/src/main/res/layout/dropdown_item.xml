@@ -19,10 +19,10 @@
         >
         <ImageView
             android:id="@+id/imageView3"
-            android:layout_width="wrap_content"
+            android:layout_width="20dp"
             android:layout_gravity="center|right"
-            android:layout_height="wrap_content"
-            app:srcCompat="@drawable/com_facebook_tooltip_black_bottomnub" />
+            android:layout_height="20dp"
+            app:srcCompat="@drawable/arrow_bottom" />
     </FrameLayout>
 
 
@@ -34,7 +34,7 @@
         android:textColor="#fff"
         android:textAlignment="center"
         android:gravity="center|right"
-        android:layout_marginLeft="5dp"
+        android:layout_marginLeft="10dp"
         android:layout_marginRight="15dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>

@@ -94,7 +94,7 @@ public class CommunityFragment extends Fragment implements NotificationCenter.No
     private ViewPager viewPager;
     private FragmentEventPageAdapter adapter;
 
-    private static final String[]paths = {"All", "My Event"};
+    private static final String[]paths = {"Order by latest", "Order by thanks" ,"Order by date","Order by price"};
 
     private List<Integer> area = new ArrayList<>();
     String[] listcity = {"HCM", "Ha Noi", "Da Nang", "Tokyo", "Osaka"};
@@ -162,10 +162,9 @@ public class CommunityFragment extends Fragment implements NotificationCenter.No
             url = url + "&keyword=" + keyword;
         }
 
-        if(typeSort ==1)
-        {
-            url = url + "&is_my_event=" + 1;
-        }
+
+        url = url + "&sort_type=" + typeSort;
+
 
 
         RestAPI.GetDataMasterWithToken(getActivity().getApplicationContext(),url, new RestAPI.RestAPIListenner() {
@@ -209,7 +208,7 @@ public class CommunityFragment extends Fragment implements NotificationCenter.No
         inflater.inflate(R.menu.main_tool_bar, menu);
         super.onCreateOptionsMenu(menu, inflater);
 
-        MenuItem searchItem = menu.findItem(R.id.action_search);
+      /*  MenuItem searchItem = menu.findItem(R.id.action_search);
 
         searchView = (SearchView) searchItem.getActionView();
 
@@ -239,7 +238,7 @@ public class CommunityFragment extends Fragment implements NotificationCenter.No
                 NotificationCenter.getInstance().postNotificationName(NotificationCenter.callbacksearch,s);
                 return false;
             }
-        });
+        });*/
         super.onCreateOptionsMenu(menu, inflater);
     }
 
@@ -292,6 +291,37 @@ public class CommunityFragment extends Fragment implements NotificationCenter.No
 
         Toolbar toolbar = (Toolbar) view.findViewById(R.id.app_toolbar);
         ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
+        ((AppCompatActivity)getActivity()).setTitle(null);
+
+        searchView = (SearchView) view.findViewById(R.id.searchview);
+
+        searchView.setOnQueryTextFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus) {
+                    // searchView expanded
+                } else {
+                    keyword = "";
+                    LoadListEvent(typegenre);
+                    // searchView not expanded
+                }
+            }
+        });
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+                keyword = s;
+                LoadListEvent(typegenre);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String s) {
+                NotificationCenter.getInstance().postNotificationName(NotificationCenter.callbacksearch,s);
+                return false;
+            }
+        });
 
         listEvent = new ArrayList<>();
        // listEventBusiness = new ArrayList<>();

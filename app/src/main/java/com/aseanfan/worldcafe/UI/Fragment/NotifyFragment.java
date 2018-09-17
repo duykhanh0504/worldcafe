@@ -97,7 +97,7 @@ public class NotifyFragment extends android.support.v4.app.Fragment {
             listnotify = new ArrayList<>();
         }
         listnotify.clear();
-        String url = String.format(RestAPI.GET_HISTORYPUSH, AccountController.getInstance().getAccount().getId(), 0);
+        String url = String.format(RestAPI.GET_HISTORYPUSH, AccountController.getInstance().getAccount().getId(), 0,0);
 
 
         RestAPI.GetDataMasterWithToken(getActivity().getApplicationContext(),url, new RestAPI.RestAPIListenner() {
@@ -114,14 +114,22 @@ public class NotifyFragment extends android.support.v4.app.Fragment {
                  //   java.lang.reflect.Type type = new TypeToken<List<PostTimelineModel>>(){}.getType();
                     for (int i = 0; i < jsonArray.size(); i++)
                     {
-                        NotificationModel nofity = new NotificationModel();
-                        nofity.setType(jsonArray.get(i).getAsJsonObject().get("typepush").getAsInt());
-                        nofity.setCreatetime(jsonArray.get(i).getAsJsonObject().get("create_time").getAsString());
-                       // JsonObject jsons = (new JsonParser()).parse(jsonArray.get(i).getAsJsonObject().get("data").getAsString()).getAsJsonObject();
-                        nofity.setAvarta(jsonArray.get(0).getAsJsonObject().get("avarta").toString());
-                        nofity.setTitle(jsonArray.get(i).getAsJsonObject().get("username").getAsString());
-                        nofity.setMessage(jsonArray.get(i).getAsJsonObject().get("username").getAsString());
-                        listnotify.add(nofity);
+                        NotificationModel notify = new NotificationModel();
+                        notify.setType(jsonArray.get(i).getAsJsonObject().get("typepush").getAsInt());
+                        notify.setCreatetime(jsonArray.get(i).getAsJsonObject().get("create_time").getAsString());
+                        // JsonObject jsons = (new JsonParser()).parse(jsonArray.get(i).getAsJsonObject().get("data").getAsString()).getAsJsonObject();
+                        if(!jsonArray.get(i).getAsJsonObject().get("avarta").isJsonNull()) {
+                            notify.setAvarta(jsonArray.get(i).getAsJsonObject().get("avarta").getAsString());
+                        }
+                        if(!jsonArray.get(i).getAsJsonObject().get("username").isJsonNull()) {
+                            notify.setTitle(jsonArray.get(i).getAsJsonObject().get("username").getAsString());
+                        }
+
+                        notify.setNotifyid(jsonArray.get(i).getAsJsonObject().get("id").getAsInt());
+                        JsonObject json = (new JsonParser()).parse(jsonArray.get(i).getAsJsonObject().get("data").getAsString()).getAsJsonObject();
+                     //   notify.setAvarta(json.get("data").getAsJsonObject().get("avarta").getAsString());
+                        notify.setMessage(json.get("data").getAsJsonObject().get("message").getAsString());
+                        listnotify.add(notify);
                     }
 
                     mAdapter.setNotifyList(listnotify);
@@ -155,8 +163,8 @@ public class NotifyFragment extends android.support.v4.app.Fragment {
         rcynotify.setItemAnimator(new DefaultItemAnimator());
         rcynotify.setAdapter(mAdapter);
 
-       new ListHistoryNotifyAsync().execute();
-    //    LoadListHistoryNotify();
+       // ListHistoryNotifyAsync().execute();
+       LoadListHistoryNotify();
 
         ((MainActivity) getActivity()).checkbadge();
 

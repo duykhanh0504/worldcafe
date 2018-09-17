@@ -171,10 +171,10 @@
                 app:tabPaddingEnd="0dp"
                 app:tabMode="fixed"
                 app:tabGravity="fill"
-                app:tabTextColor="#000"
-                app:tabSelectedTextColor="#fff"
-                app:tabBackground="@drawable/tab_color_selector"
-                android:background="@android:color/white">
+                app:tabTextColor="@color/colorPrimary"
+                app:tabSelectedTextColor="@color/white"
+                android:background="@color/white"
+                app:tabBackground="@drawable/tabcolor">
 
             </android.support.design.widget.TabLayout>
 

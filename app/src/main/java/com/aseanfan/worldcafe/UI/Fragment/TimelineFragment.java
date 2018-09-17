@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -40,6 +41,7 @@ import com.aseanfan.worldcafe.Provider.Store;
 import com.aseanfan.worldcafe.UI.Adapter.PostTimelineAdapter;
 import com.aseanfan.worldcafe.UI.Adapter.SpinnerEventAdapter;
 import com.aseanfan.worldcafe.UI.CommentActivity;
+import com.aseanfan.worldcafe.UI.Component.DIalogImagePreview;
 import com.aseanfan.worldcafe.UI.Component.ViewDialog;
 import com.aseanfan.worldcafe.UI.MainActivity;
 import com.aseanfan.worldcafe.UI.PostTimeLineActivity;
@@ -102,8 +104,7 @@ public class TimelineFragment extends android.support.v4.app.Fragment implements
         inflater.inflate(R.menu.main_tool_bar, menu);
         super.onCreateOptionsMenu(menu, inflater);
 
-        MenuItem searchItem = menu.findItem(R.id.action_search);
-
+/*
         searchView = (SearchView) searchItem.getActionView();
 
         searchView.setOnQueryTextFocusChangeListener(new View.OnFocusChangeListener() {
@@ -132,7 +133,7 @@ public class TimelineFragment extends android.support.v4.app.Fragment implements
                 NotificationCenter.getInstance().postNotificationName(NotificationCenter.callbacksearch,s);
                 return false;
             }
-        });
+        });*/
         super.onCreateOptionsMenu(menu, inflater);
     }
 
@@ -329,6 +330,38 @@ public class TimelineFragment extends android.support.v4.app.Fragment implements
         Toolbar toolbar = (Toolbar) view.findViewById(R.id.app_toolbar);
         ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
 
+        ((AppCompatActivity)getActivity()).setTitle(null);
+
+        searchView = (SearchView) view.findViewById(R.id.searchview);
+
+        searchView.setOnQueryTextFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus) {
+                    // searchView expanded
+                } else {
+                    keyword = "";
+                    LoadListTimeLinePost();
+                    // searchView not expanded
+                }
+            }
+        });
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+                keyword = s;
+                LoadListTimeLinePost();
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String s) {
+                NotificationCenter.getInstance().postNotificationName(NotificationCenter.callbacksearch,s);
+                return false;
+            }
+        });
+
         timeline = new ArrayList<>();
 
         current_pos = 0;
@@ -454,6 +487,11 @@ public class TimelineFragment extends android.support.v4.app.Fragment implements
             if(timeline.get(position)!=null) {
                 ((MainActivity) getActivity()).callDetailTimeline(timeline.get(position));
             }
+        }
+        if(type == Constants.CLICK_IMAGE_PREVIEW) {
+            DialogFragment fragment =  DIalogImagePreview.newInstance(timeline.get(position).getUrlImage());
+            fragment.show(getFragmentManager(), "image preciew");
+           // fragment.setData
         }
     }
 }

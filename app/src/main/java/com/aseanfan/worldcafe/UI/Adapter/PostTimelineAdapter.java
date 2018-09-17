@@ -59,11 +59,11 @@ public class PostTimelineAdapter extends RecyclerView.Adapter<PostTimelineAdapte
         private TextView like;
         private TextView comment;
         private FrameLayout imagePost;
-        private Context context;
         private ImageView avatar;
         private ImageView imagelike;
         private ImageView imageComment;
         private ImageView image_menu;
+        private TextView create_time;
       //  private PostImageAdapter mAdapter;
 
 
@@ -79,6 +79,7 @@ public class PostTimelineAdapter extends RecyclerView.Adapter<PostTimelineAdapte
             imagelike = (ImageView) view.findViewById(R.id.imageLike) ;
             image_menu = (ImageView) view.findViewById(R.id.image_menu) ;
             imageComment = (ImageView)view.findViewById(R.id.imageComment) ;
+            create_time =(TextView) view.findViewById(R.id.time);
 
           //  makeTextViewResizable(detail, 3, "View More", true);
             view.setOnClickListener(this);
@@ -122,6 +123,13 @@ public class PostTimelineAdapter extends RecyclerView.Adapter<PostTimelineAdapte
                         viewmore.set(getAdapterPosition(), true);
                     }
                     notifyDataSetChanged();
+                }
+            });
+
+            imagePost.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    clickListener.onItemClick(getAdapterPosition(), view , Constants.CLICK_IMAGE_PREVIEW);
                 }
             });
 
@@ -201,14 +209,14 @@ public class PostTimelineAdapter extends RecyclerView.Adapter<PostTimelineAdapte
         myViewHolder.username.setText(post.getUsername());
         myViewHolder.like.setText(String.valueOf(post.getNumberLike()));
         myViewHolder.comment.setText(String.valueOf(post.getNumberComment()));
-        if(post.getAccountid().equals(AccountController.getInstance().getAccount().getId()))
+       /* if(post.getAccountid().equals(AccountController.getInstance().getAccount().getId()))
         {
             myViewHolder.image_menu.setVisibility(View.VISIBLE);
         }
         else
         {
             myViewHolder.image_menu.setVisibility(View.GONE);
-        }
+        }*/
         if(post.getIslike() == 0)
         {
             myViewHolder.imagelike.setBackgroundResource(R.drawable.unlike);
@@ -217,6 +225,8 @@ public class PostTimelineAdapter extends RecyclerView.Adapter<PostTimelineAdapte
         {
             myViewHolder.imagelike.setBackgroundResource(R.drawable.like);
         }
+
+        myViewHolder.create_time.setText(Utils.ConvertDiffTime(post.getTimeDiff()));
         Drawable mDefaultBackground = myViewHolder.avatar.getContext().getResources().getDrawable(R.drawable.avata_defaul);
         Glide.with(myViewHolder.avatar.getContext()).load(post.getUrlAvatar()).apply(RequestOptions.circleCropTransform().diskCacheStrategy(DiskCacheStrategy.ALL).error(mDefaultBackground)).into(myViewHolder.avatar);
 

@@ -132,7 +132,7 @@ public class CommunityAdapter extends RecyclerView.Adapter<CommunityAdapter.MyVi
         EventModel event = eventList.get(position);
         holder.title.setText(event.getTitle());
         holder.name.setText(event.getUsername());
-        holder.price.setText(Utils.currencyFormat(event.getPrice()) + " $");
+        holder.price.setText(Utils.currencyFormat(event.getPrice()) + " VND");
         if(event.getType() == Constants.EVENT_FRIEND)
         {
             holder.type.setText(holder.type.getContext().getText(R.string.Friend));

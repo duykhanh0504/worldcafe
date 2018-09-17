@@ -7,34 +7,46 @@
     xmlns:ads="http://schemas.android.com/apk/res-auto"
     tools:context="com.aseanfan.worldcafe.UI.Fragment.TimelineFragment">
 
-    <android.support.design.widget.AppBarLayout
-        android:id="@+id/appbar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
 
         <android.support.v7.widget.Toolbar
+            app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
             android:id="@+id/app_toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
+            android:minHeight="?attr/actionBarSize"
             android:background="?attr/colorPrimary"
             app:layout_scrollFlags="scroll|enterAlways|snap"
-            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
+            app:elevation="0dp" >
+            <android.support.v7.widget.SearchView
+                android:id="@+id/searchview"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_margin="5dp"
+                android:ems="10"
+                android:gravity="center" >
+            </android.support.v7.widget.SearchView>
+        </android.support.v7.widget.Toolbar>
 
-    </android.support.design.widget.AppBarLayout>
+
 
     <Spinner
         android:id="@+id/spinnersort"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@android:drawable/btn_dropdown"
-        android:spinnerMode="dropdown" />
+        android:background="@color/colorPrimary"
+        android:spinnerMode="dropdown"
+        android:overlapAnchor="false"
+        android:elevation="0dp"/>
 
     <FrameLayout
         android:id="@+id/framelayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/white"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
         android:orientation="vertical"
         >
 
@@ -42,7 +54,8 @@
             android:id="@+id/posttimeline"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:layout_marginLeft="45dp">
             <ImageView
                 android:id="@+id/imageAvatar"
                 android:layout_width="35dp"
@@ -63,11 +76,6 @@
 
     </FrameLayout>
 
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="1px"
-        android:background="@color/aqua">
-    </FrameLayout>
 
 <FrameLayout
     android:layout_width="match_parent"

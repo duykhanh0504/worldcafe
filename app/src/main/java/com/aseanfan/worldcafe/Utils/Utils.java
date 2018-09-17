@@ -43,6 +43,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Formattable;
 import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
@@ -50,7 +51,7 @@ import java.util.TimeZone;
 public class Utils {
 
 
-    public static String prefix = "VND ";
+    public static String prefix = " VND ";
     public static final int MAX_LENGTH = 20;
     public static final int MAX_DECIMAL = 3;
 
@@ -134,19 +135,29 @@ public class Utils {
     }
 
     public static String formatInteger(String str) {
-        BigDecimal parsed = new BigDecimal(str);
-        DecimalFormat formatter =
-                new DecimalFormat(prefix + "#,###", new DecimalFormatSymbols(Locale.US));
-        return formatter.format(parsed);
+
+        try {
+
+
+             BigDecimal parsed = new BigDecimal(str);
+             DecimalFormat formatter =
+                    new DecimalFormat("#,###", new DecimalFormatSymbols(Locale.US));
+
+            return formatter.format(parsed);
+        }catch (Exception e)
+        {
+
+        }
+        return "0";
     }
 
     public static String formatDecimal(String str) {
         if (str.equals(".")) {
-            return prefix + ".";
+            return   ".";
         }
         BigDecimal parsed = new BigDecimal(str);
         // example pattern VND #,###.00
-        DecimalFormat formatter = new DecimalFormat(prefix + "#,###." + getDecimalPattern(str),
+        DecimalFormat formatter = new DecimalFormat(  "#,###." + getDecimalPattern(str),
                 new DecimalFormatSymbols(Locale.US));
         formatter.setRoundingMode(RoundingMode.DOWN);
         return formatter.format(parsed);
@@ -337,6 +348,13 @@ public class Utils {
         DisplayMetrics metrics = resources.getDisplayMetrics();
         int dp = (int)(px / ((float)metrics.densityDpi / DisplayMetrics.DENSITY_DEFAULT));
         return dp;
+    }
+    public static BigDecimal parse(final String amount, final Locale locale) throws ParseException {
+        final NumberFormat format = NumberFormat.getNumberInstance(locale);
+        if (format instanceof DecimalFormat) {
+            ((DecimalFormat) format).setParseBigDecimal(true);
+        }
+        return (BigDecimal) format.parse(amount.replaceAll("[^\\d.,]",""));
     }
 
     public static String stringConvertDateString(String date) {

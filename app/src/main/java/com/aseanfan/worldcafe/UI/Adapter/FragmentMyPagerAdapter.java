@@ -9,6 +9,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import com.aseanfan.worldcafe.Model.PostTimelineModel;
 import com.aseanfan.worldcafe.Model.UserModel;
 import com.aseanfan.worldcafe.UI.Fragment.AlbumFragment;
+import com.aseanfan.worldcafe.UI.Fragment.MyEventFragment;
 import com.aseanfan.worldcafe.UI.Fragment.MyPageDetailFragment;
 import com.aseanfan.worldcafe.UI.Fragment.MyPostFragment;
 import com.aseanfan.worldcafe.worldcafe.R;
@@ -22,13 +23,15 @@ public class FragmentMyPagerAdapter  extends FragmentPagerAdapter {
     private AlbumFragment albumFragment;
     private MyPostFragment mypostFragment;
     private MyPageDetailFragment myPageDetailFragment;
+    private MyEventFragment myEventFragment;
     private Long friendid;
     private UserModel user;
 
 
-    public final static int MYPPOST_PAGE = 0;
-    public final static int DETAIL_PAGE = 2;
-    public final static int ALBUM_PAGE = 1;
+    public final static int MYPPOST_PAGE = 1;
+    public final static int DETAIL_PAGE = 3;
+    public final static int ALBUM_PAGE = 2;
+    public final static int MYEVENT_PAGE = 0;
 
 
     public FragmentMyPagerAdapter(Long id ,Context context, FragmentManager fm) {
@@ -73,6 +76,11 @@ public class FragmentMyPagerAdapter  extends FragmentPagerAdapter {
             albumFragment =  new AlbumFragment();
             return albumFragment;
         }
+        else if(position == MYEVENT_PAGE)
+        {
+            myEventFragment = new MyEventFragment();
+            return  myEventFragment;
+        }
         return new MyPostFragment();
     }
 
@@ -100,7 +108,7 @@ public class FragmentMyPagerAdapter  extends FragmentPagerAdapter {
 
     @Override
     public int getCount() {
-        return 3;
+        return 4;
     }
 
     @Override
@@ -113,6 +121,8 @@ public class FragmentMyPagerAdapter  extends FragmentPagerAdapter {
                 return mContext.getString(R.string.Album_page);
             case DETAIL_PAGE:
                 return mContext.getString(R.string.Detail_page);
+            case MYEVENT_PAGE:
+                return mContext.getString(R.string.My_Event);
             default:
                 return null;
         }

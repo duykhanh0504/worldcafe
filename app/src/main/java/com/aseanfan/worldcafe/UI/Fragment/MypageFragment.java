@@ -429,7 +429,7 @@ public class MypageFragment extends android.support.v4.app.Fragment implements N
         avatar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(accountid.equals(AccountController.getInstance().getAccount().getId())) {
+              /*  if(accountid.equals(AccountController.getInstance().getAccount().getId())) {
                     Intent intent = CropImage.activity(null)
                             .setGuidelines(CropImageView.Guidelines.ON)
                             .setAutoZoomEnabled(false)
@@ -437,7 +437,7 @@ public class MypageFragment extends android.support.v4.app.Fragment implements N
                             .getIntent(getActivity());
                     intent.putExtra("type", 0);
                     getActivity().startActivityForResult(intent, CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE);
-                }
+                }*/
             }
         });
 
@@ -508,7 +508,7 @@ public class MypageFragment extends android.support.v4.app.Fragment implements N
         background.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(accountid.equals(AccountController.getInstance().getAccount().getId())) {
+               /* if(accountid.equals(AccountController.getInstance().getAccount().getId())) {
                     Intent intent = CropImage.activity(null)
                             .setGuidelines(CropImageView.Guidelines.ON)
                             .setAutoZoomEnabled(false)
@@ -517,7 +517,7 @@ public class MypageFragment extends android.support.v4.app.Fragment implements N
                             .getIntent(getActivity());
                     intent.putExtra("type", 1);
                     getActivity().startActivityForResult(intent, CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE);
-                }
+                }*/
             }
         });
 

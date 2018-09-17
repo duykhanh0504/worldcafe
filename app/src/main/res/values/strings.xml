@@ -36,6 +36,7 @@
     <string name="My_Post">My post</string>
     <string name="Detail_page">Detail</string>
     <string name="Album_page">Album</string>
+    <string name="My_Event">My event</string>
 
     <string name="Following">Following: </string>
     <string name="Followers">Followers: </string>

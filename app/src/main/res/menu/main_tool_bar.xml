@@ -3,15 +3,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".HomeActivity">
 
-    <item
-        android:id="@+id/action_search"
-        android:icon="@android:drawable/ic_menu_search"
-        android:title="Search"
-        app:actionViewClass="android.support.v7.widget.SearchView"
-        app:showAsAction="collapseActionView|always" />
-    <item
-        android:id="@+id/buttonarea"
-        android:icon="@drawable/place"
-        android:title="Area"
-        app:showAsAction="always" />
-</menu>
+    <!--  <item
+           android:id="@+id/action_search"
+           android:icon="@android:drawable/ic_menu_search"
+           android:title="Search"
+           app:actionViewClass="android.support.v7.widget.SearchView"
+           app:showAsAction="collapseActionView|always" /> -->
+       <item
+           android:id="@+id/buttonarea"
+           android:icon="@drawable/place"
+           android:title="Area"
+           app:showAsAction="always" />
+   </menu>

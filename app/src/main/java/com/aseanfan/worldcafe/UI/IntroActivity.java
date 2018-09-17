@@ -210,9 +210,11 @@ public class IntroActivity extends AppCompatActivity {
     }
 
     private class IntroAdapter extends PagerAdapter {
+
+        private  int count1 = 4;
         @Override
         public int getCount() {
-            return 4;
+            return count1;
         }
 
         @Override
@@ -248,6 +250,10 @@ public class IntroActivity extends AppCompatActivity {
         public void setPrimaryItem(ViewGroup container, int position, Object object) {
             super.setPrimaryItem(container, position, object);
             int count = bottomPages.getChildCount();
+            if(position==3) {
+             //   count1 = 1;
+               // notifyDataSetChanged();
+            }
             for (int a = 0; a < count; a++) {
                 View child = bottomPages.getChildAt(a);
                 if (a == position) {
@@ -256,6 +262,7 @@ public class IntroActivity extends AppCompatActivity {
                     child.setBackgroundResource(R.drawable.circle);
                 }
             }
+
         }
 
         @Override

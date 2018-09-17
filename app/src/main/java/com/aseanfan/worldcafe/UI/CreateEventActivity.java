@@ -67,6 +67,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.TimeZone;
 
 import static com.aseanfan.worldcafe.Utils.Utils.MAX_LENGTH;
@@ -300,15 +301,15 @@ public class CreateEventActivity extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable editable) {
                 String str = editable.toString();
-                if (str.length() < prefix.length()) {
+             /*   if (str.length() < prefix.length()) {
                     price.setText(prefix);
                     price.setSelection(prefix.length());
                     return;
                 }
                 if (str.equals(prefix)) {
                     return;
-                }
-                // cleanString this the string which not contain prefix and ,
+                }*/
+                // cleanString this the string which not contain prefix and 100
                 String cleanString = str.replace(prefix, "").replaceAll("[,]", "");
                 // for prevent afterTextChanged recursive call
                 if (cleanString.equals(previousCleanString) || cleanString.isEmpty()) {
@@ -322,6 +323,7 @@ public class CreateEventActivity extends AppCompatActivity {
                 } else {
                     formattedString = Utils.formatInteger(cleanString);
                 }
+                formattedString = formattedString +   prefix;
                 price.removeTextChangedListener(this); // Remove listener
                 price.setText(formattedString);
                 handleSelection();
@@ -334,7 +336,11 @@ public class CreateEventActivity extends AppCompatActivity {
             public void onClick(View view) {
                 if(validateInput()== true) {
                     event.setTitle(title.getText().toString());
-                    event.setPrice(Long.valueOf(price.getText().toString()));
+                    try {
+                        event.setPrice(Utils.parse(price.getText().toString(), Locale.US).longValue());
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
                     event.setContent(content.getText().toString());
                     TimeZone tz = TimeZone.getTimeZone("UTC");
                     DateFormat df = new SimpleDateFormat("yyy-MM-dd HH:mm:ss");
@@ -398,8 +404,9 @@ public class CreateEventActivity extends AppCompatActivity {
                 Intent intent = CropImage.activity(null)
                         .setGuidelines(CropImageView.Guidelines.ON)
                         .setAutoZoomEnabled(false)
-                        .setMultiTouchEnabled(false)
-                        .setInitialCropWindowRectangle(new Rect(Utils.convertDpToPixel(15,CreateEventActivity.this),0,Utils.getwidthScreen(CreateEventActivity.this) - Utils.convertDpToPixel(60,CreateEventActivity.this),Utils.convertDpToPixel(180,CreateEventActivity.this)))
+                        .setMultiTouchEnabled(true)
+                        .setFixAspectRatio(true)
+                       // .setInitialCropWindowRectangle(new Rect(0,0,Utils.getwidthScreen(CreateEventActivity.this),Utils.convertDpToPixel(240,CreateEventActivity.this)))
                         .getIntent(CreateEventActivity.this);
                 startActivityForResult(intent, CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE);
             }

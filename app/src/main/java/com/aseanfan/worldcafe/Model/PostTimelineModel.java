@@ -15,6 +15,7 @@ public class PostTimelineModel {
     private int islike;
     private Long account_id;
     private int genre;
+    private String  time_diff;
 
     public PostTimelineModel() {
     }
@@ -25,6 +26,14 @@ public class PostTimelineModel {
 
     public void setTimelineid(Long event_id) {
         this.timeline_id = event_id;
+    }
+
+    public String getTimeDiff() {
+        return time_diff;
+    }
+
+    public void setTimeDiff(String time_diff) {
+        this.time_diff = time_diff;
     }
 
 

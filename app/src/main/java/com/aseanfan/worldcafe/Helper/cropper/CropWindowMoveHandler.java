@@ -112,14 +112,14 @@ final class CropWindowMoveHandler {
 
     if (mType == Type.CENTER) {
       moveCenter(rect, adjX, adjY, bounds, viewWidth, viewHeight, snapMargin);
-    }/* else {
+    } else {
       if (fixedAspectRatio) {
         moveSizeWithFixedAspectRatio(
             rect, adjX, adjY, bounds, viewWidth, viewHeight, snapMargin, aspectRatio);
       } else {
         moveSizeWithFreeAspectRatio(rect, adjX, adjY, bounds, viewWidth, viewHeight, snapMargin);
       }
-    }*/
+    }
   }
 
   // region: Private methods

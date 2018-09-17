@@ -64,6 +64,7 @@ public class RestAPI {
     public static String GET_ACCOUNT_INFO = root_url + "/api/user/accountbyid?account_id=%d&id=%d";
     public static String POST_CREATEEVENT= root_url + "/api/event/createevent";
     public static String GET_LISTEVENT= root_url + "/api/event/getallevents?account_id=%d&genre=%d&index=%d";
+    public static String GET_LISTMYEVENT= root_url + "/api/event/getallevents?account_id=%d&index=%d";
     public static String POST_ACTIVATION= root_url + "/api/user/activation";
     public static String POST_FORGETPASS= root_url + "/api/user/forgotPassword";
     public static String POST_CHANGEFORGETPASS= root_url + "/api/user/createNewPassword";
@@ -89,6 +90,8 @@ public class RestAPI {
     public static String POST_LIKEEVENT = root_url + "/api/event/likeevent";
     public static String POST_EVENTCOMMENT = root_url + "/api/event/postcomment";
     public static String GET_EVENTCOMMENT = root_url + "/api/event/getcommentevent?event_id=%d&account_id=%d";
+    public static String POST_REPORT = root_url + "/api/report/report";
+    public static String GET_LIST_REPORT = root_url + "/api/report/list-report-reason?type=%d";
 
     public final static int STATUS_SUCCESS = 200;
     public final static int STATUS_WRONGPASSWORD = 2;
