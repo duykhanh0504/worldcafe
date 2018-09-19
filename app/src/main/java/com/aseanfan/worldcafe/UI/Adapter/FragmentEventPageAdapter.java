@@ -11,6 +11,7 @@ import com.aseanfan.worldcafe.UI.Fragment.AlbumFragment;
 import com.aseanfan.worldcafe.UI.Fragment.FragmentEventPage;
 import com.aseanfan.worldcafe.UI.Fragment.MyPageDetailFragment;
 import com.aseanfan.worldcafe.UI.Fragment.MyPostFragment;
+import com.aseanfan.worldcafe.Utils.Constants;
 import com.aseanfan.worldcafe.worldcafe.R;
 
 import java.util.List;
@@ -46,15 +47,39 @@ public class FragmentEventPageAdapter  extends FragmentPagerAdapter {
     {
         if (type == FRIEND_PAGE) {
             fragmentFriendPage.setData(data);
+            fragmentFriendPage.setOnItemClickListener(new FragmentEventPage.ClickListener() {
+                @Override
+                public void onItemClick(List<EventModel> list) {
+                    updateFragmentEvent( list, FRIEND_PAGE);
+                }
+            });
         }
         else if (type == BUSINESS_PAGE) {
             fragmentBusinessPage.setData(data);
+            fragmentBusinessPage.setOnItemClickListener(new FragmentEventPage.ClickListener() {
+                @Override
+                public void onItemClick(List<EventModel> list) {
+                    updateFragmentEvent( list, BUSINESS_PAGE);
+                }
+            });
         }
         else if (type == LOCAL_PAGE) {
             fragmentLocalPage.setData(data);
+            fragmentLocalPage.setOnItemClickListener(new FragmentEventPage.ClickListener() {
+                @Override
+                public void onItemClick(List<EventModel> list) {
+                    updateFragmentEvent( list, LOCAL_PAGE);
+                }
+            });
         }
         else if (type == LANGUAGE_PAGE) {
             fragmentLanguagePage.setData(data);
+            fragmentLanguagePage.setOnItemClickListener(new FragmentEventPage.ClickListener() {
+                @Override
+                public void onItemClick(List<EventModel> list) {
+                    updateFragmentEvent( list, LANGUAGE_PAGE);
+                }
+            });
         }
     }
     @Override

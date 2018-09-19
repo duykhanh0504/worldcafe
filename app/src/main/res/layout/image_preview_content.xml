@@ -6,13 +6,13 @@
     android:layout_gravity="center"
     android:foregroundGravity="center">
     <ImageView
-        android:layout_marginTop="100dp"
+
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/iv_album_content_image"
         android:layout_gravity="center"
         android:foregroundGravity="center"
-        android:scaleType="centerInside" >
+        android:scaleType="fitCenter" >
 
     </ImageView>
 

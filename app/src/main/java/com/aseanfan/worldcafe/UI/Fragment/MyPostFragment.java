@@ -1,5 +1,6 @@
 package com.aseanfan.worldcafe.UI.Fragment;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -22,6 +23,8 @@ import com.aseanfan.worldcafe.Model.EventModel;
 import com.aseanfan.worldcafe.Model.PostTimelineModel;
 import com.aseanfan.worldcafe.UI.Adapter.CommunityAdapter;
 import com.aseanfan.worldcafe.UI.Adapter.PostTimelineAdapter;
+import com.aseanfan.worldcafe.UI.CommentActivity;
+import com.aseanfan.worldcafe.UI.CommentEventActivity;
 import com.aseanfan.worldcafe.UI.EditPostTimeline;
 import com.aseanfan.worldcafe.UI.MainActivity;
 import com.aseanfan.worldcafe.Utils.Constants;
@@ -71,6 +74,13 @@ public class MyPostFragment  extends android.support.v4.app.Fragment implements 
 
         Adapter.notifyDataSetChanged();
     }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+       // Adapter.setOnItemClickListener(null);
+    }
+
 
     public void DeletePost(final int pos)
     {
@@ -303,6 +313,12 @@ public class MyPostFragment  extends android.support.v4.app.Fragment implements 
         else if(type == Constants.CLICK_IMAGE_MENU)
         {
             openOptionMenu(v,position);
+        }
+        else if(type == Constants.CLICK_IMAGE_COMMENT)
+        {
+            Intent intent = new Intent(getActivity(), CommentActivity.class);
+            intent.putExtra("Event_id",posttimeline.get(position).getTimelineid());
+            startActivity(intent);
         }
 
     }

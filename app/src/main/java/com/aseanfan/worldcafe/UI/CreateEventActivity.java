@@ -169,7 +169,14 @@ public class CreateEventActivity extends AppCompatActivity {
 
                         return;
                     }
-                    finish();
+                    ViewDialog dialog = new ViewDialog();
+                    dialog.showDialogOK(CreateEventActivity.this,"Create Event Successfully", new ViewDialog.DialogListenner() {
+                        @Override
+                        public void OnClickConfirm() {
+                            finish();
+                        }
+                    });
+
 
                //     ListComment(timelineid);
 

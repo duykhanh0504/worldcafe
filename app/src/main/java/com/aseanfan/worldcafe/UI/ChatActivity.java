@@ -10,6 +10,7 @@ import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.SystemClock;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
@@ -37,6 +38,7 @@ import com.aseanfan.worldcafe.Provider.Store;
 import com.aseanfan.worldcafe.Service.SyncDataService;
 import com.aseanfan.worldcafe.UI.Adapter.ChatMessageAdapter;
 import com.aseanfan.worldcafe.UI.Adapter.CommentAdapter;
+import com.aseanfan.worldcafe.UI.Component.DIalogImagePreview;
 import com.aseanfan.worldcafe.Utils.Constants;
 import com.aseanfan.worldcafe.Utils.Utils;
 import com.aseanfan.worldcafe.worldcafe.R;
@@ -155,6 +157,13 @@ public class ChatActivity extends AppCompatActivity {
         rcychat = (RecyclerView)this.findViewById(R.id.listChat);
 
         mAdapter = new ChatMessageAdapter(null,chatavatar);
+        mAdapter.setOnItemClickListener(new ChatMessageAdapter.ClickListener() {
+            @Override
+            public void onItemClick(int position, View v) {
+                DialogFragment fragment =  DIalogImagePreview.newInstancestring(listmessage.get(position).getMessageText());
+                fragment.show(getSupportFragmentManager(), "image preview");
+            }
+        });
 
 
          LinearLayoutManager mLayoutManager = new LinearLayoutManager(this, LinearLayout.VERTICAL,true);
@@ -187,8 +196,12 @@ public class ChatActivity extends AppCompatActivity {
         btnSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String messageText = Utils.encodeStringUrl(edtChat.getText().toString());
-                sendMessage(0,messageText);
+                if (!edtChat.getText().toString().trim().isEmpty())
+                {
+
+                    String messageText = Utils.encodeStringUrl(edtChat.getText().toString());
+                    sendMessage(0, messageText);
+                }
             }
         });
         imagechat.setOnClickListener(new View.OnClickListener() {
@@ -266,9 +279,6 @@ public class ChatActivity extends AppCompatActivity {
 
         switch (typeMessage) {
             case 0: {
-                if (message.trim().length() == 0)
-                    return;
-
 
                 Intent i = new Intent(Constants.SEND_ACTION);
                 i.putExtra(Constants.FRIENDID,chatid);

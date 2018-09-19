@@ -138,6 +138,19 @@ public class TimelineFragment extends android.support.v4.app.Fragment implements
     }
 
     @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        int i =0;
+       // activity = (MainActivity)context;
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        int i =0;
+
+    }
+    @Override
     public void onPause() {
 
         super.onPause();
@@ -277,6 +290,12 @@ public class TimelineFragment extends android.support.v4.app.Fragment implements
                 }
             }
         });
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mAdapter.setOnItemClickListener(this);
     }
 
     public void loadmore()

@@ -718,16 +718,23 @@ public class MypageFragment extends android.support.v4.app.Fragment implements N
 
 
     @Override
+    public void onPause() {
+       // Log.e("DEBUG", "OnPause of HomeFragment");
+        super.onPause();
+    }
+
+    @Override
     public void didReceivedNotification(int id, Object... args) {
         if(id == NotificationCenter.mypagebackpress)
         {
-            if(accountid.equals(AccountController.getInstance().getAccount().getId()))
+
+            if(this.accountid.equals(AccountController.getInstance().getAccount().getId()))
             {
                 ((MainActivity)activity).BackKey();
             }
             else
             {
-                ((MainActivity)activity).showSecondFragment();
+                ((MainActivity)activity).GoToback();
             }
         }
     }

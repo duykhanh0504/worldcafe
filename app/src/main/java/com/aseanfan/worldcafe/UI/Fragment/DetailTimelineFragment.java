@@ -6,6 +6,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -35,6 +36,9 @@ import com.aseanfan.worldcafe.Model.EventModel;
 import com.aseanfan.worldcafe.Model.PostTimelineModel;
 import com.aseanfan.worldcafe.UI.Adapter.CommentAdapter;
 import com.aseanfan.worldcafe.UI.Adapter.PostImageAdapter;
+import com.aseanfan.worldcafe.UI.CommentActivity;
+import com.aseanfan.worldcafe.UI.CommentEventActivity;
+import com.aseanfan.worldcafe.UI.Component.DIalogImagePreview;
 import com.aseanfan.worldcafe.UI.Component.ViewDialog;
 import com.aseanfan.worldcafe.UI.EditPostTimeline;
 import com.aseanfan.worldcafe.UI.MainActivity;
@@ -64,6 +68,7 @@ public class DetailTimelineFragment  extends android.support.v4.app.Fragment imp
     private TextView detail;
     private ImageView imagelike;
     private ImageButton toolbar_button;
+    private ImageView imageComment;
 
     private RecyclerView rcycoment;
 
@@ -71,6 +76,33 @@ public class DetailTimelineFragment  extends android.support.v4.app.Fragment imp
 
     private List<CommentModel> listcomment;
     PostTimelineModel timeline;
+
+
+    public void LikePost(Long Postid)
+    {
+        JsonObject dataJson = new JsonObject();
+        dataJson.addProperty("account_id", AccountController.getInstance().getAccount().getId());
+        dataJson.addProperty("newfeed_id",Postid);
+
+        RestAPI.PostDataMasterWithToken(getActivity().getApplicationContext(),dataJson,RestAPI.POST_LIKEPOST, new RestAPI.RestAPIListenner() {
+            @Override
+            public void OnComplete(int httpCode, String error, String s) {
+                try {
+                    if (!RestAPI.checkHttpCode(httpCode)) {
+                        //AppFuncs.alert(getApplicationContext(),s,true);
+
+                        return;
+                    }
+
+                }
+                catch (Exception ex) {
+
+                    ex.printStackTrace();
+                }
+            }
+        });
+    }
+
 
     public void ListComment(Long timelineid)
     {
@@ -112,9 +144,13 @@ public class DetailTimelineFragment  extends android.support.v4.app.Fragment imp
         comment = (TextView) view.findViewById(R.id.textComment);
         detail = (TextView) view.findViewById(R.id.detailPost);
         imagelike = (ImageView) view.findViewById(R.id.imageLike) ;
+        imageComment = (ImageView) view.findViewById(R.id.imageComment) ;
         toolbar_button = (ImageButton) view.findViewById(R.id.toolbar_button) ;
 
         toolbar_button.setOnClickListener(this);
+        imagePost.setOnClickListener(this);
+        imagelike.setOnClickListener(this);
+        imageComment.setOnClickListener(this);
 
         mAdapter = new PostImageAdapter(null);
 
@@ -507,8 +543,8 @@ public class DetailTimelineFragment  extends android.support.v4.app.Fragment imp
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.detail_timeline_fragment, container, false);
 
-        Toolbar toolbar = (Toolbar) view.findViewById(R.id.app_toolbar_post);
-        ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
+       // Toolbar toolbar = (Toolbar) view.findViewById(R.id.app_toolbar_post);
+      //  ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
 
 
         initview(view);
@@ -530,6 +566,40 @@ public class DetailTimelineFragment  extends android.support.v4.app.Fragment imp
                 {
                     LoadReport();
                 }
+                break;
+            }
+            case R.id.list_image:
+            {
+                DialogFragment fragment =  DIalogImagePreview.newInstance(timeline.getUrlImage());
+                fragment.show(getFragmentManager(), "image preview");
+                break;
+            }
+            case R.id.imageComment:
+            {
+                Intent intent = new Intent(getActivity(), CommentActivity.class);
+                intent.putExtra("Timeline_id", timeline.getTimelineid());
+                intent.putExtra("Account_id", timeline.getAccountid());
+                startActivity(intent);
+                break;
+            }
+            case R.id.imageLike:
+            {
+                if(timeline.getIslike() == 0)
+                {
+                    timeline.setIslike(1);
+                    imagelike.setBackgroundResource(R.drawable.like);
+                    timeline.setNumberLike(timeline.getNumberLike() + 1);
+                }
+                else
+                {
+
+                    timeline.setIslike(0);
+                    imagelike.setBackgroundResource(R.drawable.unlike);
+                    timeline.setNumberLike(timeline.getNumberLike() -1);
+
+                }
+                like.setText(String.valueOf(timeline.getNumberLike()));
+                LikePost( timeline.getTimelineid());
                 break;
             }
 

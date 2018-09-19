@@ -467,7 +467,7 @@ public class MainActivity extends AppCompatActivity implements NotificationCente
         bundle.putStringArrayList("listimage", listimage);
         detailTimelineFragment.setArguments(bundle);
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.replace(R.id.content, detailTimelineFragment,TAG_TIMELINE_DETAIL).commit();
+        ft.add(R.id.content, detailTimelineFragment,TAG_TIMELINE_DETAIL).commit();
 
     }
 
@@ -492,6 +492,7 @@ public class MainActivity extends AppCompatActivity implements NotificationCente
           bundle.putInt("pertime",eventid.getPertime());
           bundle.putInt("limitperson",eventid.getLimitpersons());
           bundle.putString("note",eventid.getNote());
+          bundle.putInt("islike",eventid.getIslike());
 
           if(eventid.getUrlImage() !=null && eventid.getUrlImage().size() >0) {
             bundle.putString("image", eventid.getUrlImage().get(0));
@@ -499,7 +500,7 @@ public class MainActivity extends AppCompatActivity implements NotificationCente
 
           detailcomunityfragment.setArguments(bundle);
           FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-          ft.replace(R.id.content, detailcomunityfragment,TAG_COMMUNITY_DETAIL).commit();
+          ft.add(R.id.content, detailcomunityfragment,TAG_COMMUNITY_DETAIL).commit();
         //  communityFragment.onPause();
         //  ft.show(detailcomunityfragment);
         //  ft.hide(communityFragment);
@@ -527,10 +528,9 @@ public class MainActivity extends AppCompatActivity implements NotificationCente
             }
         });
     }
-    public void GoToTimeline()
-    {
-        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.replace(R.id.content, timelineFragment,TAG_TIMELINE).commit();
+    public void GoToback()
+    {   Fragment f = getSupportFragmentManager().findFragmentById(R.id.content);
+        getSupportFragmentManager().beginTransaction().remove(f).commit();
     }
 
     @Override
@@ -544,7 +544,21 @@ public class MainActivity extends AppCompatActivity implements NotificationCente
         }
         else if(f instanceof MypageFragment)
         {
-            NotificationCenter.getInstance().postNotificationName(NotificationCenter.mypagebackpress);
+           /// NotificationCenter.getInstance().postNotificationName(NotificationCenter.mypagebackpress);
+            if(getSupportFragmentManager().getFragments().size() <=2)
+            {
+                BackKey();
+            }
+            else
+            {
+                getSupportFragmentManager().beginTransaction().remove(f).commit();
+                getSupportFragmentManager().getFragments().get(getSupportFragmentManager().getFragments().size()-2).onResume();
+            }
+        }
+        else if(f instanceof DetailTimelineFragment ||f instanceof DetailCommunityFragment  ){
+
+            getSupportFragmentManager().beginTransaction().remove(f).commit();
+
         }
         //Execute your code here
       /*  if( _viewfliper.getDisplayedChild () == Constants.PAGE_LOGIN ||
@@ -566,7 +580,7 @@ public class MainActivity extends AppCompatActivity implements NotificationCente
         friendPage = new MypageFragment();
         friendPage.setArguments(bundle);
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.replace(R.id.content, friendPage,TAG_FRIENDPAGE).commit();
+        ft.add(R.id.content, friendPage,TAG_FRIENDPAGE).commit();
       //  ft.show(friendPage);
        // ft.hide(timelineFragment);
     }

@@ -22,11 +22,14 @@ public class ImagePrevewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     private LayoutInflater mInflater;
 
+    private OnItemClickListener mItemClickListener;
+
     private List<String> imageFile;
 
-    public ImagePrevewAdapter(Context context,List<String> imagePathList) {
+    public ImagePrevewAdapter(Context context,List<String> imagePathList, OnItemClickListener itemClickListener) {
         this.mInflater = LayoutInflater.from(context);
         this.imageFile = imagePathList;
+        this.mItemClickListener = itemClickListener;
     }
 
     public void setdata(List<String> imagePathList) {
@@ -42,7 +45,7 @@ public class ImagePrevewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
-        return new ImageViewHolder(mInflater.inflate(R.layout.image_preview_content, parent, false));
+        return new ImageViewHolder(mInflater.inflate(R.layout.image_preview_content, parent, false),mItemClickListener);
 
     }
 
@@ -63,13 +66,13 @@ public class ImagePrevewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     private static class ImageViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        //private final OnItemClickListener mItemClickListener;
+        private final OnItemClickListener mItemClickListener;
         public ImageView mIvImage;
 
-        ImageViewHolder(View itemView) {
+        ImageViewHolder(View itemView, OnItemClickListener itemClickListener) {
             super(itemView);
-      //      this.mItemClickListener = itemClickListener;
-            this.mIvImage = itemView.findViewById(R.id.iv_image);
+            this.mItemClickListener = itemClickListener;
+            this.mIvImage = itemView.findViewById(R.id.iv_album_content_image);
             itemView.setOnClickListener(this);
         }
 
@@ -82,7 +85,9 @@ public class ImagePrevewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
         @Override
         public void onClick(View v) {
-
+            if (mItemClickListener != null) {
+                mItemClickListener.onItemClick(v, getAdapterPosition());
+            }
         }
     }
 

@@ -288,6 +288,7 @@ public class LoginActivity extends AppCompatActivity {
                     int statuscode = jsons.get("status").getAsInt();
                     if(statuscode == RestAPI.STATUS_SUCCESS)
                     {
+                        dialog.showDialogCancel( LoginActivity.this,"Change pass sucessfully" );
                         showPage(Constants.PAGE_LOGIN);
                     }
                     else if(statuscode == 2)
@@ -872,11 +873,14 @@ public class LoginActivity extends AppCompatActivity {
 
         if(validatePhonenumber(mobilephone) == false)
         {
+            dialog.showDialogCancel( LoginActivity.this,"Mobile can not empty " );
+            progressDialog.dismiss();
             return;
         }
         if(_usernameupdate.getText().toString().isEmpty())
         {
             dialog.showDialogCancel( LoginActivity.this,"User name can not empty " );
+            progressDialog.dismiss();
          //   Toast.makeText(LoginActivity.this, "User name can not empty ", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -884,6 +888,7 @@ public class LoginActivity extends AppCompatActivity {
         {
 
             dialog.showDialogCancel( LoginActivity.this,"Birthday can not empty " );
+            progressDialog.dismiss();
          //   Toast.makeText(LoginActivity.this, "Birthday can not empty ", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -933,6 +938,9 @@ public class LoginActivity extends AppCompatActivity {
                     progressDialog.dismiss();
                     dialog.showDialogCancel( LoginActivity.this,ex.getMessage());
                     ex.printStackTrace();
+                }
+                finally {
+                    progressDialog.dismiss();
                 }
 
             }

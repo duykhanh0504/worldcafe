@@ -13,6 +13,7 @@ import com.aseanfan.worldcafe.App.AccountController;
 import com.aseanfan.worldcafe.Helper.RestAPI;
 import com.aseanfan.worldcafe.Model.CommentModel;
 import com.aseanfan.worldcafe.UI.Adapter.CommentAdapter;
+import com.aseanfan.worldcafe.Utils.Utils;
 import com.aseanfan.worldcafe.worldcafe.R;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
@@ -118,7 +119,9 @@ public class CommentEventActivity extends AppCompatActivity {
         btnPost.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                PostEventComment(eventid);
+                if (!edtComent.getText().toString().trim().isEmpty()) {
+                    PostEventComment(eventid);
+                }
             }
         });
 

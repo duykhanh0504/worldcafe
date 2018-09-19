@@ -29,6 +29,7 @@ import com.aseanfan.worldcafe.Helper.RestAPI;
 import com.aseanfan.worldcafe.Model.AccountModel;
 import com.aseanfan.worldcafe.Model.EventModel;
 import com.aseanfan.worldcafe.UI.Adapter.RequestMemberAdapter;
+import com.aseanfan.worldcafe.UI.CommentEventActivity;
 import com.aseanfan.worldcafe.UI.CreateEventActivity;
 import com.aseanfan.worldcafe.UI.MainActivity;
 import com.aseanfan.worldcafe.UI.MemberRequestActivity;
@@ -72,7 +73,50 @@ public class DetailCommunityFragment extends android.support.v4.app.Fragment imp
     private TextView number_attendess;
     private TextView note;
     private ImageView imagemenu;
+    private ImageView imagelike;
+    private ImageView imagecomment;
+    private LinearLayout content_info;
 
+
+    public void LikeEvent(final Long  eventid)
+    {
+        JsonObject dataJson = new JsonObject();
+        dataJson.addProperty("account_id", AccountController.getInstance().getAccount().getId());
+        dataJson.addProperty("event_id",eventid);
+
+        RestAPI.PostDataMasterWithToken(getActivity().getApplicationContext(),dataJson,RestAPI.POST_LIKEEVENT, new RestAPI.RestAPIListenner() {
+            @Override
+            public void OnComplete(int httpCode, String error, String s) {
+                try {
+                    if (!RestAPI.checkHttpCode(httpCode)) {
+                        //AppFuncs.alert(getApplicationContext(),s,true);
+
+                        return;
+                    }
+
+                    if(event.getIslike() ==0) {
+                        event.setNumberLike(event.getNumberLike()+1);
+                        numberlike.setText(String.valueOf(event.getNumberLike()));
+                        event.setIslike(1);
+                        imagelike.setBackgroundResource(R.drawable.like);
+
+                    }
+                    else
+                    {
+                        event.setNumberLike(event.getNumberLike()-1);
+                        numberlike.setText(String.valueOf(event.getNumberLike()));
+                        event.setIslike(0);
+                        imagelike.setBackgroundResource(R.drawable.unlike);
+                    }
+
+                }
+                catch (Exception ex) {
+
+                    ex.printStackTrace();
+                }
+            }
+        });
+    }
 
     public void JoinEvent(Long eventid)
     {
@@ -179,17 +223,24 @@ public class DetailCommunityFragment extends android.support.v4.app.Fragment imp
         number_attendess = (TextView) view.findViewById(R.id.txtquatity);
         note = (TextView) view.findViewById(R.id.Attention);
         imagemenu = (ImageView) view.findViewById(R.id.imagemenu);
+        imagelike = (ImageView) view.findViewById(R.id.imageLike);
+        imagecomment = (ImageView) view.findViewById(R.id.imageComment);
+        content_info = (LinearLayout)  view.findViewById(R.id.content_info);
 
         btnJoin.setOnClickListener(this);
         containList.setOnClickListener(this);
         imagemenu.setOnClickListener(this);
+        imagelike.setOnClickListener(this);
+        imagecomment.setOnClickListener(this);
+        content_info.setOnClickListener(this);
+
     }
 
     public void initdata()
     {
         if (getArguments() != null) {
-            event.setEventid(getArguments().getLong("eventid"));
             event.setIsJoin(getArguments().getInt("isJoin"));
+            event.setEventid(getArguments().getLong("eventid"));
             event.setTitle(getArguments().getString("title"));
             event.setContent(getArguments().getString("content"));
             event.setType(getArguments().getInt("type"));
@@ -205,6 +256,18 @@ public class DetailCommunityFragment extends android.support.v4.app.Fragment imp
             event.setPertime(getArguments().getInt("pertime"));
             event.setLimit_personse(getArguments().getInt("limitperson"));
             event.setNote(getArguments().getString("note"));
+            event.setIslike(getArguments().getInt("islike"));
+
+            if(event.getIslike()==0)
+            {
+                imagelike.setBackgroundResource(R.drawable.unlike);
+            }
+            else
+            {
+                imagelike.setBackgroundResource(R.drawable.like);
+            }
+
+
 
             if(event.getAccountid().equals(AccountController.getInstance().getAccount().getId())) {
                 setHasOptionsMenu(true);
@@ -384,6 +447,23 @@ public class DetailCommunityFragment extends android.support.v4.app.Fragment imp
             case  R.id.list_account:
             {
                 ((MainActivity)getActivity()).callMemberEvent(event);
+                break;
+            }
+            case R.id.imageComment:
+            {
+                Intent intent = new Intent(getActivity(), CommentEventActivity.class);
+                intent.putExtra("Event_id",event.getEventid());
+                startActivity(intent);
+                break;
+            }
+            case R.id.imageLike:
+            {
+                LikeEvent(event.getEventid());
+                break;
+            }
+            case R.id.content_info:
+            {
+                ((MainActivity)getActivity()).callFriendPage(event.getAccountid());
                 break;
             }
         }

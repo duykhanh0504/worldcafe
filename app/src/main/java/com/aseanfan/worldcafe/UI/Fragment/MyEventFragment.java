@@ -1,5 +1,7 @@
 package com.aseanfan.worldcafe.UI.Fragment;
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -53,9 +55,21 @@ public class MyEventFragment  extends Fragment implements NotificationCenter.Not
     List<EventModel> listEvent;
     RecyclerView recycleviewevent;
     private CommunityAdapter mAdapter;
+    private Activity activity;
 
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        activity = (MainActivity)context;
+    }
 
-    public void LikeEvent(Long Eventid)
+    @Override
+    public void onDetach() {
+        super.onDetach();
+
+    }
+
+    public void LikeEvent(Long Eventid, final int pos)
     {
         JsonObject dataJson = new JsonObject();
         dataJson.addProperty("account_id", AccountController.getInstance().getAccount().getId());
@@ -70,6 +84,17 @@ public class MyEventFragment  extends Fragment implements NotificationCenter.Not
 
                         return;
                     }
+                    if(listEvent.get(pos).getIslike() ==0) {
+                        listEvent.get(pos).setNumberLike(listEvent.get(pos).getNumberLike()+1);
+                        listEvent.get(pos).setIslike(1);
+
+                    }
+                    else
+                    {
+                        listEvent.get(pos).setNumberLike(listEvent.get(pos).getNumberLike()-1);
+                        listEvent.get(pos).setIslike(0);
+                    }
+                    mAdapter.setData(listEvent);
 
                 }
                 catch (Exception ex) {
@@ -173,19 +198,21 @@ public class MyEventFragment  extends Fragment implements NotificationCenter.Not
         recycleviewevent.setAdapter(mAdapter);
 
         mAdapter.setOnItemClickListener(new CommunityAdapter.ClickListener() {
+
+
             @Override
-            public void onItemClick(int position, View v,int Type,EventModel event) {
+            public void onItemClick(int position, View v,int Type, List<EventModel> event, int pos) {
                 if(Type == Constants.CLICK_EVENT) {
-                    ((MainActivity)getActivity()).callDetailEvent(event);
+                    ((MainActivity)activity).callDetailEvent(event.get(pos));
                 }
                 if(Type == Constants.CLICK_IMAGE_LIKE) {
                     // ((MainActivity)getActivity()).callDetailEvent(event);
-                    LikeEvent(event.getEventid());
+                    LikeEvent(event.get(pos).getEventid(), position);
                 }
                 if(Type == Constants.CLICK_IMAGE_COMMENT) {
                     // ((MainActivity)getActivity()).callDetailEvent(event);
                     Intent intent = new Intent(getActivity(), CommentEventActivity.class);
-                    intent.putExtra("Event_id",event.getEventid());
+                    intent.putExtra("Event_id",event.get(pos).getEventid());
                     startActivity(intent);
                     //  ((MainActivity)getActivity()).callDetailEvent(event);
                 }

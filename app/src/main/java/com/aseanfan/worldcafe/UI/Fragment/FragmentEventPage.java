@@ -14,12 +14,14 @@ import com.aseanfan.worldcafe.App.AccountController;
 import com.aseanfan.worldcafe.Helper.RestAPI;
 import com.aseanfan.worldcafe.Model.EventModel;
 import com.aseanfan.worldcafe.UI.Adapter.CommunityAdapter;
+import com.aseanfan.worldcafe.UI.Adapter.FragmentEventPageAdapter;
 import com.aseanfan.worldcafe.UI.CommentEventActivity;
 import com.aseanfan.worldcafe.UI.MainActivity;
 import com.aseanfan.worldcafe.Utils.Constants;
 import com.aseanfan.worldcafe.worldcafe.R;
 import com.google.gson.JsonObject;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class FragmentEventPage extends android.support.v4.app.Fragment {
@@ -27,7 +29,8 @@ public class FragmentEventPage extends android.support.v4.app.Fragment {
     RecyclerView list_community;
 
     private CommunityAdapter mAdapter;
-    List<EventModel> listevent;
+    List<EventModel> listevent = new ArrayList<>();
+
 
     public void setData(List<EventModel> data)
     {
@@ -35,12 +38,23 @@ public class FragmentEventPage extends android.support.v4.app.Fragment {
         mAdapter.setData(listevent);
     }
 
+    private static FragmentEventPage.ClickListener clickListener;
 
-    public void LikeEvent(Long Eventid)
+    public void setOnItemClickListener(FragmentEventPage.ClickListener clickListener) {
+        FragmentEventPage.clickListener = clickListener;
+    }
+
+    public interface ClickListener {
+        void onItemClick(List<EventModel> list);
+    }
+
+
+
+    public void LikeEvent(final List<EventModel> event, final int pos)
     {
         JsonObject dataJson = new JsonObject();
         dataJson.addProperty("account_id", AccountController.getInstance().getAccount().getId());
-        dataJson.addProperty("event_id",Eventid);
+        dataJson.addProperty("event_id",event.get(pos).getEventid());
 
         RestAPI.PostDataMasterWithToken(getActivity().getApplicationContext(),dataJson,RestAPI.POST_LIKEEVENT, new RestAPI.RestAPIListenner() {
             @Override
@@ -51,6 +65,20 @@ public class FragmentEventPage extends android.support.v4.app.Fragment {
 
                         return;
                     }
+                    listevent = event;
+                    if(listevent.get(pos).getIslike() ==0) {
+
+                        listevent.get(pos).setNumberLike(listevent.get(pos).getNumberLike()+1);
+                        listevent.get(pos).setIslike(1);
+                    }
+                    else
+                    {
+                        listevent.get(pos).setNumberLike(listevent.get(pos).getNumberLike()-1);
+                        listevent.get(pos).setIslike(0);
+                    }
+                    mAdapter.setData(listevent);
+                    clickListener.onItemClick(listevent);
+
 
                 }
                 catch (Exception ex) {
@@ -75,18 +103,18 @@ public class FragmentEventPage extends android.support.v4.app.Fragment {
 
         mAdapter.setOnItemClickListener(new CommunityAdapter.ClickListener() {
             @Override
-            public void onItemClick(int position, View v,int Type,EventModel event) {
+            public void onItemClick(int position, View v,int Type,List<EventModel> event, int pos) {
                 if(Type == Constants.CLICK_EVENT) {
-                    ((MainActivity)getActivity()).callDetailEvent(event);
+                    ((MainActivity)getActivity()).callDetailEvent(event.get(pos));
                 }
                 if(Type == Constants.CLICK_IMAGE_LIKE) {
                    // ((MainActivity)getActivity()).callDetailEvent(event);
-                    LikeEvent(event.getEventid());
+                    LikeEvent(event , pos);
                 }
                 if(Type == Constants.CLICK_IMAGE_COMMENT) {
                    // ((MainActivity)getActivity()).callDetailEvent(event);
                     Intent intent = new Intent(getActivity(), CommentEventActivity.class);
-                    intent.putExtra("Event_id",event.getEventid());
+                    intent.putExtra("Event_id",event.get(pos).getEventid());
                     startActivity(intent);
                   //  ((MainActivity)getActivity()).callDetailEvent(event);
                 }

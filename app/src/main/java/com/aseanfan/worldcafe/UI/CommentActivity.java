@@ -121,8 +121,9 @@ public class CommentActivity extends AppCompatActivity {
         btnPost.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                PostComment(timelineId);
-            }
+                if (!edtComent.getText().toString().trim().isEmpty()) {
+                       PostComment(timelineId);
+                } }
         });
 
         mAdapter = new CommentAdapter(null);

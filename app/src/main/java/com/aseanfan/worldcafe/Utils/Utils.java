@@ -47,6 +47,7 @@ import java.util.Formattable;
 import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
+import java.util.regex.Pattern;
 
 public class Utils {
 
@@ -174,6 +175,14 @@ public class Utils {
             decimalPattern.append("0");
         }
         return decimalPattern.toString();
+    }
+
+    public static boolean isStringNullOrWhiteSpace(String value) {
+        final Pattern pattern = Pattern.compile("^\\w*$");    //pattern for 0 or more whitespace characters
+        if (value == null || pattern.matcher(value).find()) {
+            return true;
+        }
+        return false;
     }
 
     public static String ConvertDiffTime(String diff)

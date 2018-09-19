@@ -120,11 +120,12 @@ public class ChatMessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         public ViewHolderRightImage(View view) {
             super(view);
             image = (ImageView) view.findViewById(R.id.imagechat);
+            image.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View view) {
-            //     clickListener.onItemClick(getAdapterPosition(), view );
+                 clickListener.onItemClick(getAdapterPosition(), view );
         }
     }
     static class ViewHolderLeftImage extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -134,11 +135,12 @@ public class ChatMessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         public ViewHolderLeftImage(View view) {
             super(view);
             image = (ImageView) view.findViewById(R.id.imagechat);
+            image.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View view) {
-            //     clickListener.onItemClick(getAdapterPosition(), view );
+                 clickListener.onItemClick(getAdapterPosition(), view );
         }
     }
     @Override

@@ -25,12 +25,13 @@ import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class CommunityAdapter extends RecyclerView.Adapter<CommunityAdapter.MyViewHolder> {
 
 
-    private List<EventModel> eventList;
+    private List<EventModel> eventList = new ArrayList<>();
 
     private static ClickListener clickListener;
 
@@ -40,7 +41,7 @@ public class CommunityAdapter extends RecyclerView.Adapter<CommunityAdapter.MyVi
 
     public void setData(List<EventModel> data) {
         eventList = data;
-        notifyDataSetChanged();
+        this.notifyDataSetChanged();
     }
 
     public List<EventModel> getEvent() {
@@ -49,7 +50,7 @@ public class CommunityAdapter extends RecyclerView.Adapter<CommunityAdapter.MyVi
 
 
     public interface ClickListener {
-        void onItemClick(int position, View v,int Type,EventModel event);
+        void onItemClick(int position, View v,int Type,List<EventModel> event, int pos);
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -88,14 +89,14 @@ public class CommunityAdapter extends RecyclerView.Adapter<CommunityAdapter.MyVi
             imglike.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    clickListener.onItemClick(getAdapterPosition(), view , Constants.CLICK_IMAGE_LIKE ,eventList.get(getAdapterPosition()));
+                    clickListener.onItemClick(getAdapterPosition(), view , Constants.CLICK_IMAGE_LIKE ,eventList,getAdapterPosition());
                 }
             });
 
             imgcomment.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    clickListener.onItemClick(getAdapterPosition(), view , Constants.CLICK_IMAGE_COMMENT ,eventList.get(getAdapterPosition()));
+                    clickListener.onItemClick(getAdapterPosition(), view , Constants.CLICK_IMAGE_COMMENT ,eventList,getAdapterPosition());
                 }
             });
 
@@ -103,7 +104,7 @@ public class CommunityAdapter extends RecyclerView.Adapter<CommunityAdapter.MyVi
 
         @Override
         public void onClick(View view) {
-            clickListener.onItemClick(getAdapterPosition(), view , Constants.CLICK_EVENT ,eventList.get(getAdapterPosition()));
+            clickListener.onItemClick(getAdapterPosition(), view , Constants.CLICK_EVENT ,eventList,getAdapterPosition());
         }
     }
 
@@ -173,6 +174,10 @@ public class CommunityAdapter extends RecyclerView.Adapter<CommunityAdapter.MyVi
                     holder.background.setBackgroundDrawable(resource);
                 }
             });
+        }
+        else
+        {
+            holder.background.setBackgroundDrawable(null);
         }
 
     }

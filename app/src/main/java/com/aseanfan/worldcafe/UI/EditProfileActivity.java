@@ -23,6 +23,7 @@ import android.widget.Toast;
 import com.aseanfan.worldcafe.App.AccountController;
 import com.aseanfan.worldcafe.Helper.DBHelper;
 import com.aseanfan.worldcafe.Helper.RestAPI;
+import com.aseanfan.worldcafe.Model.AccountModel;
 import com.aseanfan.worldcafe.Model.AreaModel;
 import com.aseanfan.worldcafe.Model.CityModel;
 import com.aseanfan.worldcafe.Model.UserModel;
@@ -86,6 +87,33 @@ public class EditProfileActivity extends AppCompatActivity {
         listarea.add(new AreaModel(2,"Japan",listcity1));
 
     }
+
+    public int getIndexCountry(int id )
+    {
+        //int pos =0;
+        for( int i=0 ; i<listarea.size();i++)
+        {
+            if(listarea.get(i).getid() == user.getCountry())
+            {
+                return i;
+            }
+        }
+        return 0;
+    }
+
+    public int getIndexCity(int id ,AreaModel country )
+    {
+        //int pos =0;
+
+            for( int j=0 ; j<country.getListCity().size();j++) {
+                if (country.getListCity().get(j).getid() == user.getCity()) {
+                    return j;
+                }
+            }
+
+        return 0;
+    }
+
 
     public void UpdateImage(Uri image, final int type)
     {
@@ -227,6 +255,7 @@ public class EditProfileActivity extends AppCompatActivity {
 
         user = AccountController.getInstance().getAccount();
 
+
         if(user.getCover()==null)
         {
             Glide.with(this).load( "https://png.pngtree.com/thumb_back/fh260/back_pic/00/15/30/4656e81f6dc57c5.jpg").into(new SimpleTarget<Drawable>() {
@@ -307,6 +336,11 @@ public class EditProfileActivity extends AppCompatActivity {
 
             }
         });
+
+        int countrypos = getIndexCountry(user.getCountry());
+        country.setSelection(countrypos);
+        city.setSelection(getIndexCity(user.getCity(),listarea.get(countrypos)));
+
         if(user.getSex() == Constants.MALE)
           radgroup.check(R.id.rad_male);
         else
