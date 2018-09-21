@@ -14,13 +14,18 @@
             android:id="@+id/intro_view_pager"
             android:layout_width="match_parent"
             android:layout_height="match_parent"></android.support.v4.view.ViewPager>
+        <ImageButton
+            android:id="@+id/nextpage"
+            android:layout_width="60dp"
+            android:layout_height="110dp"
+            android:background="@drawable/intro_nextpage"
+            android:layout_gravity="right|center"/>
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:orientation="vertical"
-            android:layout_gravity="top"
-            android:layout_marginTop="455dp"
+            android:gravity="bottom"
             >
 
             <LinearLayout
@@ -29,9 +34,9 @@
                 android:id="@+id/bottom_pages"
                 android:orientation="horizontal"
                 android:layout_marginTop="@dimen/margin_line_mypage"
-                android:layout_marginBottom="@dimen/margin_line_mypage"
-                android:layout_gravity="center_horizontal"
-               >
+                android:layout_marginBottom="25dp"
+                android:layout_gravity="center|bottom"
+                >
 
                 <FrameLayout
                     android:layout_width="8dp"
@@ -44,59 +49,18 @@
                     android:layout_height="8dp"
                     android:shape="ring"
                     android:background="@drawable/circle"
-                    android:layout_marginLeft="7dp"
-                    android:layout_marginStart="7dp" />
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginStart="15dp" />
 
                 <FrameLayout
                     android:layout_width="8dp"
                     android:layout_height="8dp"
                     android:shape="ring"
                     android:background="@drawable/circle"
-                    android:layout_marginLeft="7dp"
-                    android:layout_marginStart="7dp" />
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginStart="15dp" />
 
-                <FrameLayout
-                    android:layout_width="8dp"
-                    android:layout_height="8dp"
-                    android:shape="ring"
-                    android:background="@drawable/circle"
-                    android:layout_marginLeft="7dp"
-                    android:layout_marginStart="7dp" />
 
-            </LinearLayout>
-
-            <ImageView
-                android:id="@+id/icon_introtext"
-                android:layout_width="wrap_content"
-                android:layout_height="0dp"
-                android:layout_gravity="center"
-                android:layout_marginTop="2dp" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/margin_line_mypage"
-                android:layout_marginLeft="24dp"
-                android:layout_marginRight="24dp"
-                android:orientation="vertical">
-
-                <Button
-                    android:id="@+id/Signup"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginBottom="@dimen/margin_line_mypage"
-                    android:text="@string/Signup"
-                    android:textColor="@color/white"
-                    android:background="@drawable/background_button" />
-
-                <Button
-                    android:id="@+id/Login"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:text="@string/Login"
-                    android:background="@drawable/background_button_gray" />
             </LinearLayout>
         </LinearLayout>
 

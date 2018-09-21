@@ -79,6 +79,7 @@ public class FragmentMyPagerAdapter  extends FragmentPagerAdapter {
         else if(position == MYEVENT_PAGE)
         {
             myEventFragment = new MyEventFragment();
+            myEventFragment.setArguments(bundle);
             return  myEventFragment;
         }
         return new MyPostFragment();

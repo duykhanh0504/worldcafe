@@ -204,10 +204,10 @@ public class MypageFragment extends android.support.v4.app.Fragment implements N
                         user = gson.fromJson(jsonObject, UserModel.class);
                         name.setText(user.getUsername());
                         final Drawable mDefaultBackground = getContext().getResources().getDrawable(R.drawable.avata_defaul);
-                        Glide.with(getContext()).load( user.getAvarta()).apply(RequestOptions.circleCropTransform().diskCacheStrategy(DiskCacheStrategy.ALL).error(mDefaultBackground)).into(avatar);
+                        Glide.with(getContext()).load( user.getAvarta()).apply(RequestOptions.circleCropTransform().diskCacheStrategy(DiskCacheStrategy.NONE).error(mDefaultBackground)).into(avatar);
                         final Drawable mDefaultBackground1 = getContext().getResources().getDrawable(R.drawable.avata_defaul);
                         nametoolbar.setText(user.getUsername());
-                        Glide.with(getContext()).load( user.getAvarta()).apply(RequestOptions.circleCropTransform().diskCacheStrategy(DiskCacheStrategy.ALL).error(mDefaultBackground1)).into(avatartoolbar);
+                        Glide.with(getContext()).load( user.getAvarta()).apply(RequestOptions.circleCropTransform().diskCacheStrategy(DiskCacheStrategy.NONE).error(mDefaultBackground1)).into(avatartoolbar);
 
                         if(user.getCover()!=null)
                         {
@@ -451,10 +451,10 @@ public class MypageFragment extends android.support.v4.app.Fragment implements N
             accountid = AccountController.getInstance().getAccount().getId();
             name.setText(AccountController.getInstance().getAccount().getUsername());
             Drawable mDefaultBackground = getContext().getResources().getDrawable(R.drawable.avata_defaul);
-            Glide.with(getContext()).load( AccountController.getInstance().getAccount().getAvarta()).apply(RequestOptions.circleCropTransform().diskCacheStrategy(DiskCacheStrategy.ALL).error(mDefaultBackground)).into(avatar);
+            Glide.with(getContext()).load( AccountController.getInstance().getAccount().getAvarta()).apply(RequestOptions.circleCropTransform().diskCacheStrategy(DiskCacheStrategy.NONE).error(mDefaultBackground)).into(avatar);
             nametoolbar.setText(AccountController.getInstance().getAccount().getUsername());
             Drawable mDefaultBackground1 = getContext().getResources().getDrawable(R.drawable.avata_defaul);
-            Glide.with(getContext()).load( AccountController.getInstance().getAccount().getAvarta()).apply(RequestOptions.circleCropTransform().diskCacheStrategy(DiskCacheStrategy.ALL).error(mDefaultBackground1)).into(avatartoolbar);
+            Glide.with(getContext()).load( AccountController.getInstance().getAccount().getAvarta()).apply(RequestOptions.circleCropTransform().diskCacheStrategy(DiskCacheStrategy.NONE).error(mDefaultBackground1)).into(avatartoolbar);
 
         }
 

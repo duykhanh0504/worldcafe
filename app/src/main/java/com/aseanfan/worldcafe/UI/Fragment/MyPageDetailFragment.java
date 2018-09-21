@@ -30,7 +30,7 @@ public class MyPageDetailFragment extends android.support.v4.app.Fragment implem
 
     private TextView titleintroduce;
     private TextView titleinterested;
-    private TextView titlerating;
+   // private TextView titlerating;
     private TextView titlenumberthanks;
     private TextView titleschool;
     private TextView titlecompany;
@@ -105,34 +105,34 @@ public class MyPageDetailFragment extends android.support.v4.app.Fragment implem
     void initView(View view)
     {
         titleintroduce =(TextView) view.findViewById(R.id.titleIntroduce);
-        Drawable iconProfile = getResources().getDrawable( R.drawable.icon_profile );
-        iconProfile.setBounds(0,0, Utils.convertDpToPixel(20,getContext()),Utils.convertDpToPixel(20,getContext()));
-        titleintroduce.setCompoundDrawables(iconProfile, null, null, null);
+       // Drawable iconProfile = getResources().getDrawable( R.drawable.icon_profile );
+     //   iconProfile.setBounds(0,0, Utils.convertDpToPixel(20,getContext()),Utils.convertDpToPixel(20,getContext()));
+     //   titleintroduce.setCompoundDrawables(iconProfile, null, null, null);
 
         titleinterested =(TextView) view.findViewById(R.id.titleInterested);
-        Drawable iconInterested = getResources().getDrawable( R.drawable.icon_profile_intered );
-        iconInterested.setBounds(0,0, Utils.convertDpToPixel(20,getContext()),Utils.convertDpToPixel(20,getContext()));
-        titleinterested.setCompoundDrawables(iconInterested, null, null, null);
+       // Drawable iconInterested = getResources().getDrawable( R.drawable.icon_profile_intered );
+       // iconInterested.setBounds(0,0, Utils.convertDpToPixel(20,getContext()),Utils.convertDpToPixel(20,getContext()));
+       // titleinterested.setCompoundDrawables(iconInterested, null, null, null);
 
-        titlerating =(TextView) view.findViewById(R.id.titleRating);
-        Drawable iconRating = getResources().getDrawable( R.drawable.icon_profile_rating );
-        iconRating.setBounds(0,0, Utils.convertDpToPixel(20,getContext()),Utils.convertDpToPixel(20,getContext()));
-        titlerating.setCompoundDrawables(iconRating, null, null, null);
+        //titlerating =(TextView) view.findViewById(R.id.titleRating);
+       // Drawable iconRating = getResources().getDrawable( R.drawable.icon_profile_rating );
+       // iconRating.setBounds(0,0, Utils.convertDpToPixel(20,getContext()),Utils.convertDpToPixel(20,getContext()));
+        //titlerating.setCompoundDrawables(iconRating, null, null, null);
 
         titlenumberthanks =(TextView) view.findViewById(R.id.titlenumberthanks);
-        Drawable iconNumber = getResources().getDrawable( R.drawable.icon_profile_like );
-        iconNumber.setBounds(0,0, Utils.convertDpToPixel(20,getContext()),Utils.convertDpToPixel(20,getContext()));
-        titlenumberthanks.setCompoundDrawables(iconNumber, null, null, null);
+       // Drawable iconNumber = getResources().getDrawable( R.drawable.icon_profile_like );
+       // iconNumber.setBounds(0,0, Utils.convertDpToPixel(20,getContext()),Utils.convertDpToPixel(20,getContext()));
+       // titlenumberthanks.setCompoundDrawables(iconNumber, null, null, null);
 
         titleschool =(TextView) view.findViewById(R.id.titleschool);
-        Drawable iconSchool = getResources().getDrawable( R.drawable.icon_profile_school );
-        iconSchool.setBounds(0,0, Utils.convertDpToPixel(20,getContext()),Utils.convertDpToPixel(20,getContext()));
-        titleschool.setCompoundDrawables(iconSchool, null, null, null);
+       // Drawable iconSchool = getResources().getDrawable( R.drawable.icon_profile_school );
+       // iconSchool.setBounds(0,0, Utils.convertDpToPixel(20,getContext()),Utils.convertDpToPixel(20,getContext()));
+        //titleschool.setCompoundDrawables(iconSchool, null, null, null);
 
         titlecompany =(TextView) view.findViewById(R.id.titlecompany);
-        Drawable iconCompany = getResources().getDrawable( R.drawable.icon_profile_company );
-        iconCompany.setBounds(0,0, Utils.convertDpToPixel(20,getContext()),Utils.convertDpToPixel(20,getContext()));
-        titlecompany.setCompoundDrawables(iconCompany, null, null, null);
+      //  Drawable iconCompany = getResources().getDrawable( R.drawable.icon_profile_company );
+       // iconCompany.setBounds(0,0, Utils.convertDpToPixel(20,getContext()),Utils.convertDpToPixel(20,getContext()));
+       // titlecompany.setCompoundDrawables(iconCompany, null, null, null);
 
         directMessage =(Button) view.findViewById(R.id.btn_directmessage);
         createEvent =(Button) view.findViewById(R.id.btn_createevent);

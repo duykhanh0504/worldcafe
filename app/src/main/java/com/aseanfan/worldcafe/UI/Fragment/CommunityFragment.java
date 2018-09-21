@@ -7,6 +7,7 @@ import android.media.Image;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -104,6 +105,7 @@ public class CommunityFragment extends Fragment implements NotificationCenter.No
     private int typeSort =0;
     private String keyword = "" ;
     private int typegenre =Constants.EVENT_FRIEND;
+    private int current_pos;
 
     public static CommunityFragment newInstance() {
         CommunityFragment firstFrag = new CommunityFragment();
@@ -140,9 +142,10 @@ public class CommunityFragment extends Fragment implements NotificationCenter.No
         int i =0;
     }
 
+
     public void LoadListEvent(final int Type)
     {
-        String url =  String.format(RestAPI.GET_LISTEVENT,AccountController.getInstance().getAccount().getId(),Type,0);
+        String url =  String.format(RestAPI.GET_LISTEVENT,AccountController.getInstance().getAccount().getId(),Type,current_pos);
 
         if(area.size()>0)
         {
@@ -208,44 +211,13 @@ public class CommunityFragment extends Fragment implements NotificationCenter.No
         inflater.inflate(R.menu.main_tool_bar, menu);
         super.onCreateOptionsMenu(menu, inflater);
 
-      /*  MenuItem searchItem = menu.findItem(R.id.action_search);
-
-        searchView = (SearchView) searchItem.getActionView();
-
-        searchView.setOnQueryTextFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (hasFocus) {
-                    // searchView expanded
-                } else {
-                    keyword = "";
-                    LoadListEvent(typegenre);
-                    // searchView not expanded
-                }
-            }
-        });
-
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String s) {
-                keyword = s;
-                LoadListEvent(typegenre);
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String s) {
-                NotificationCenter.getInstance().postNotificationName(NotificationCenter.callbacksearch,s);
-                return false;
-            }
-        });*/
-        super.onCreateOptionsMenu(menu, inflater);
     }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+        current_pos = 0;
 
     }
 
@@ -273,7 +245,8 @@ public class CommunityFragment extends Fragment implements NotificationCenter.No
             builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    LoadListEvent(typegenre);
+                   // LoadListEvent(typegenre);
+                    adapter.loadfragmentevent(typegenre-1,area,keyword,typeSort);
                 }
             });
             builder.setNegativeButton("Cancel", null);
@@ -302,7 +275,8 @@ public class CommunityFragment extends Fragment implements NotificationCenter.No
                     // searchView expanded
                 } else {
                     keyword = "";
-                    LoadListEvent(typegenre);
+                   // LoadListEvent(typegenre);
+                    adapter.loadfragmentevent(typegenre-1,area,keyword,typeSort);
                     // searchView not expanded
                 }
             }
@@ -312,7 +286,8 @@ public class CommunityFragment extends Fragment implements NotificationCenter.No
             @Override
             public boolean onQueryTextSubmit(String s) {
                 keyword = s;
-                LoadListEvent(typegenre);
+             //   LoadListEvent(typegenre);
+                adapter.loadfragmentevent(typegenre-1,area,keyword,typeSort);
                 return false;
             }
 
@@ -342,18 +317,19 @@ public class CommunityFragment extends Fragment implements NotificationCenter.No
 
         final Handler handler = new Handler();
         viewPager.setCurrentItem(0);
-        Timer t = new Timer();
+     /*   Timer t = new Timer();
         t.schedule(new TimerTask() {
             public void run() {
                 handler.post(new Runnable() {
                     public void run() {
-                        LoadListEvent(typegenre);
+                       // LoadListEvent(typegenre);
+                        adapter.loadfragmentevent(typegenre,area,keyword,typeSort);
                     }
                 });
             }
-        }, 10);
-
-        LoadListEvent(Constants.EVENT_FRIEND);
+        }, 10);*/
+        adapter.loadfragmentevent(typegenre,area,keyword,typeSort);
+      //  LoadListEvent(Constants.EVENT_FRIEND);
 
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
 
@@ -365,24 +341,29 @@ public class CommunityFragment extends Fragment implements NotificationCenter.No
             public void onPageSelected(int position) {
                 if(position ==FragmentEventPageAdapter.FRIEND_PAGE)
                 {
-                    LoadListEvent(Constants.EVENT_FRIEND);
+                  //  LoadListEvent(Constants.EVENT_FRIEND);
                     typegenre=Constants.EVENT_FRIEND;
+                   // adapter.loadfragmentevent(typegenre-1,area,keyword,typeSort);
                 }
                 if(position ==FragmentEventPageAdapter.BUSINESS_PAGE)
                 {
-                    LoadListEvent(Constants.EVENT_BUSSINESS);
+                  //  LoadListEvent(Constants.EVENT_BUSSINESS);
                     typegenre=Constants.EVENT_BUSSINESS;
+                  //  adapter.loadfragmentevent(typegenre-1,area,keyword,typeSort);
                 }
                 if(position ==FragmentEventPageAdapter.LOCAL_PAGE)
                 {
-                    LoadListEvent(Constants.EVENT_LOCAL);
+                   // LoadListEvent(Constants.EVENT_LOCAL);
                     typegenre=Constants.EVENT_LOCAL;
+                  //  adapter.loadfragmentevent(typegenre-1,area,keyword,typeSort);
                 }
                 if(position ==FragmentEventPageAdapter.LANGUAGE_PAGE)
                 {
-                    LoadListEvent(Constants.EVENT_LANGUAGE);
+                   // LoadListEvent(Constants.EVENT_LANGUAGE);
                     typegenre=Constants.EVENT_LANGUAGE;
+                  //  adapter.loadfragmentevent(typegenre-1,area,keyword,typeSort);
                 }
+                adapter.loadfragmentevent(typegenre,area,keyword,typeSort);
             }
 
             @Override
@@ -407,13 +388,14 @@ public class CommunityFragment extends Fragment implements NotificationCenter.No
                // android.R.layout.simple_spinner_item,paths);
 
        // adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        SpinnerEventAdapter adapter = new SpinnerEventAdapter(getActivity(),paths);
-        dropdown.setAdapter(adapter);
+        SpinnerEventAdapter adapterspinner = new SpinnerEventAdapter(getActivity(),paths);
+        dropdown.setAdapter(adapterspinner);
         dropdown.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 typeSort = i;
-                LoadListEvent(typegenre);
+              //  LoadListEvent(typegenre);
+                adapter.loadfragmentevent(typegenre,area,keyword,typeSort);
             }
 
             @Override
@@ -421,57 +403,6 @@ public class CommunityFragment extends Fragment implements NotificationCenter.No
 
             }
         });
-
-
-      /*  tabcommunity.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-                                                  @Override
-                                                  public void onTabSelected(TabLayout.Tab tab) {
-                                                      switch(tab.getPosition()) {
-                                                          case TAB_FRIEND:
-                                                              mAdapter.setEventList(listEventFriend);
-                                                              LoadListEvent(TAB_FRIEND);
-                                                              break;
-                                                          case TAB_BUSINESS:
-                                                              mAdapter.setEventList(listEventBusiness);
-                                                              LoadListEvent(TAB_BUSINESS);
-                                                              break;
-                                                          case TAB_LOCAL:
-                                                              mAdapter.setEventList(listEventLocal);
-                                                              LoadListEvent(TAB_LOCAL);
-                                                              break;
-                                                          case TAB_LANGUAGE:
-                                                              mAdapter.setEventList(listEventLanguage);
-                                                              LoadListEvent(TAB_LANGUAGE);
-                                                              break;
-
-                                                      }
-                                                  }
-
-                                                  @Override
-                                                  public void onTabUnselected(TabLayout.Tab tab) {
-
-                                                  }
-
-                                                  @Override
-                                                  public void onTabReselected(TabLayout.Tab tab) {
-
-                                                  }
-                                              });*/
-
-                //  ButterKnife.bind(this, view);
-
-      /*  viewpager.setAdapter(new CommunityFragment.PageCommunityAdapter());
-        viewpager.setPageMargin(0);
-        viewpager.setOffscreenPageLimit(1);*/
-
-     /*   tabcommunity.setupWithViewPager(viewpager);
-
-        for (int i = 0; i < 4; i++) {
-            TabLayout.Tab tab = tabcommunity.getTabAt(i);
-            View tabView = ((ViewGroup) tabcommunity.getChildAt(0)).getChildAt(i);
-            tabView.requestLayout();
-            tab.setText(i + " tab ");
-        }*/
 
         return view;
     }

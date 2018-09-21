@@ -194,7 +194,7 @@ public class EditPostTimeline extends AppCompatActivity {
 
         username.setText(AccountController.getInstance().getAccount().getUsername());
         Drawable mDefaultBackground = this.getResources().getDrawable(R.drawable.avata_defaul);
-        Glide.with(this).load(AccountController.getInstance().getAccount().getAvarta()).apply(RequestOptions.circleCropTransform().diskCacheStrategy(DiskCacheStrategy.ALL).error(mDefaultBackground)).into(avatar);
+        Glide.with(this).load(AccountController.getInstance().getAccount().getAvarta()).apply(RequestOptions.circleCropTransform().diskCacheStrategy(DiskCacheStrategy.NONE).error(mDefaultBackground)).into(avatar);
 
         btnshare.setOnClickListener(new View.OnClickListener() {
             @Override

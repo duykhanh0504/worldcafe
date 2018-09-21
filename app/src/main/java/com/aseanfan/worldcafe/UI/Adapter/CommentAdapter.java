@@ -91,7 +91,7 @@ public class CommentAdapter  extends RecyclerView.Adapter<CommentAdapter.MyViewH
         myViewHolder.detail.setText(commentModel.getContent());
         myViewHolder.date.setText(   Utils.ConvertDiffTime(commentModel.getTimeDiff()));
         Drawable mDefaultBackground = myViewHolder.avatar.getContext().getResources().getDrawable(R.drawable.avata_defaul);
-        Glide.with(myViewHolder.avatar.getContext()).load(commentModel.getAvarta()).apply(RequestOptions.circleCropTransform().diskCacheStrategy(DiskCacheStrategy.ALL).error(mDefaultBackground)).into(myViewHolder.avatar);
+        Glide.with(myViewHolder.avatar.getContext()).load(commentModel.getAvarta()).apply(RequestOptions.circleCropTransform().diskCacheStrategy(DiskCacheStrategy.NONE).error(mDefaultBackground)).into(myViewHolder.avatar);
     }
 
     @Override

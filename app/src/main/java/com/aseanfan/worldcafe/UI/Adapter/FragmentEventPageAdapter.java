@@ -19,7 +19,7 @@ import java.util.List;
 public class FragmentEventPageAdapter  extends FragmentPagerAdapter {
 
     private Context mContext;
-
+    private int currentpos;
 
     public final static int FRIEND_PAGE = 0;
     public final static int BUSINESS_PAGE = 1;
@@ -33,7 +33,12 @@ public class FragmentEventPageAdapter  extends FragmentPagerAdapter {
 
     public FragmentEventPageAdapter(Context context, FragmentManager fm) {
         super(fm);
+
         mContext = context;
+        fragmentFriendPage = new FragmentEventPage();
+        fragmentBusinessPage = new FragmentEventPage();
+        fragmentLocalPage = new FragmentEventPage();
+        fragmentLanguagePage = new FragmentEventPage();
     }
 
 
@@ -43,61 +48,166 @@ public class FragmentEventPageAdapter  extends FragmentPagerAdapter {
         super(fm);
     }
 
+    public void loadfragmentevent(final int type , final List<Integer> listarea , final String keyword, final int typesort )
+    {
+       /* type;
+        keyword;
+        typesort;
+        listarea;*/
+        if (type == FRIEND_PAGE) {
+            currentpos=0;
+            fragmentFriendPage.LoadListEvent(mContext,type +1,listarea,keyword,typesort,currentpos);
+            fragmentFriendPage.setOnItemClickListener(new FragmentEventPage.ClickListener() {
+                @Override
+                public void onItemClick(List<EventModel> list) {
+                   // updateFragmentEvent( list, FRIEND_PAGE);
+                    currentpos =0;
+                    fragmentFriendPage.LoadListEvent(mContext,type +1,listarea,keyword,typesort,currentpos);
+                }
+
+                @Override
+                public void loadmore(List<EventModel> list) {
+                    currentpos++;
+                    fragmentFriendPage.LoadListEvent(mContext,type +1,listarea,keyword,typesort,currentpos);
+                }
+
+                @Override
+                public void updatePos() {
+                    currentpos--;
+                }
+            });
+        }
+        else if (type == BUSINESS_PAGE) {
+            currentpos=0;
+            fragmentBusinessPage.LoadListEvent(mContext,type +1,listarea,keyword,typesort,currentpos);
+            fragmentBusinessPage.setOnItemClickListener(new FragmentEventPage.ClickListener() {
+                @Override
+                public void onItemClick(List<EventModel> list) {
+                    // updateFragmentEvent( list, FRIEND_PAGE);
+                    currentpos =0;
+                    fragmentBusinessPage.LoadListEvent(mContext,type +1,listarea,keyword,typesort,currentpos);
+                }
+
+                @Override
+                public void loadmore(List<EventModel> list) {
+                    currentpos++;
+                    fragmentBusinessPage.LoadListEvent(mContext,type +1,listarea,keyword,typesort,currentpos);
+                }
+
+                @Override
+                public void updatePos() {
+                    currentpos--;
+                }
+            });
+         //   fragmentBusinessPage.LoadListEvent(mContext,type+1 ,listarea,keyword,typesort);
+        }
+        else if (type == LOCAL_PAGE) {
+            currentpos=0;
+            fragmentLocalPage.LoadListEvent(mContext,type +1,listarea,keyword,typesort,currentpos);
+            fragmentLocalPage.setOnItemClickListener(new FragmentEventPage.ClickListener() {
+                @Override
+                public void onItemClick(List<EventModel> list) {
+                    // updateFragmentEvent( list, FRIEND_PAGE);
+                    currentpos =0;
+                    fragmentLocalPage.LoadListEvent(mContext,type +1,listarea,keyword,typesort,currentpos);
+                }
+
+                @Override
+                public void loadmore(List<EventModel> list) {
+                    currentpos++;
+                    fragmentLocalPage.LoadListEvent(mContext,type +1,listarea,keyword,typesort,currentpos);
+                }
+
+                @Override
+                public void updatePos() {
+                    currentpos--;
+                }
+            });
+            //fragmentLocalPage.LoadListEvent(mContext,type+1 ,listarea,keyword,typesort);
+        }
+        else if (type == LANGUAGE_PAGE) {
+            currentpos=0;
+            fragmentLanguagePage.LoadListEvent(mContext,type +1,listarea,keyword,typesort,currentpos);
+            fragmentLanguagePage.setOnItemClickListener(new FragmentEventPage.ClickListener() {
+                @Override
+                public void onItemClick(List<EventModel> list) {
+                    // updateFragmentEvent( list, FRIEND_PAGE);
+                    currentpos =0;
+                    fragmentLanguagePage.LoadListEvent(mContext,type +1,listarea,keyword,typesort,currentpos);
+                }
+
+                @Override
+                public void loadmore(List<EventModel> list) {
+                    currentpos++;
+                    fragmentLanguagePage.LoadListEvent(mContext,type +1,listarea,keyword,typesort,currentpos);
+                }
+
+                @Override
+                public void updatePos() {
+                    currentpos--;
+                }
+            });
+           // fragmentLanguagePage.LoadListEvent(mContext,type+1 ,listarea,keyword,typesort);
+        }
+
+    }
+
     public void updateFragmentEvent(List<EventModel> data,int type)
     {
         if (type == FRIEND_PAGE) {
-            fragmentFriendPage.setData(data);
+
+          /*  fragmentFriendPage.setData(data);
             fragmentFriendPage.setOnItemClickListener(new FragmentEventPage.ClickListener() {
                 @Override
                 public void onItemClick(List<EventModel> list) {
                     updateFragmentEvent( list, FRIEND_PAGE);
                 }
-            });
+            });*/
         }
         else if (type == BUSINESS_PAGE) {
-            fragmentBusinessPage.setData(data);
+           /* fragmentBusinessPage.setData(data);
             fragmentBusinessPage.setOnItemClickListener(new FragmentEventPage.ClickListener() {
                 @Override
                 public void onItemClick(List<EventModel> list) {
                     updateFragmentEvent( list, BUSINESS_PAGE);
                 }
-            });
+            });*/
         }
         else if (type == LOCAL_PAGE) {
-            fragmentLocalPage.setData(data);
+            /*fragmentLocalPage.setData(data);
             fragmentLocalPage.setOnItemClickListener(new FragmentEventPage.ClickListener() {
                 @Override
                 public void onItemClick(List<EventModel> list) {
                     updateFragmentEvent( list, LOCAL_PAGE);
                 }
-            });
+            });*/
         }
         else if (type == LANGUAGE_PAGE) {
-            fragmentLanguagePage.setData(data);
+           /* fragmentLanguagePage.setData(data);
             fragmentLanguagePage.setOnItemClickListener(new FragmentEventPage.ClickListener() {
                 @Override
                 public void onItemClick(List<EventModel> list) {
                     updateFragmentEvent( list, LANGUAGE_PAGE);
                 }
-            });
+            });*/
         }
     }
     @Override
     public Fragment getItem(int i) {
        if (i == BUSINESS_PAGE) {
-            fragmentBusinessPage = new FragmentEventPage();
+        //    fragmentBusinessPage = new FragmentEventPage();
             return fragmentBusinessPage;
         }
         else if (i == LOCAL_PAGE) {
-            fragmentLocalPage = new FragmentEventPage();
+        //    fragmentLocalPage = new FragmentEventPage();
             return fragmentLocalPage;
         }
         else if (i == LANGUAGE_PAGE) {
-            fragmentLanguagePage = new FragmentEventPage();
+          //  fragmentLanguagePage = new FragmentEventPage();
             return fragmentLanguagePage;
         }
         else  {
-            fragmentFriendPage = new FragmentEventPage();
+           // fragmentFriendPage = new FragmentEventPage();
             return fragmentFriendPage;
         }
 

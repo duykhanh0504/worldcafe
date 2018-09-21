@@ -103,51 +103,18 @@ public class TimelineFragment extends android.support.v4.app.Fragment implements
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.main_tool_bar, menu);
         super.onCreateOptionsMenu(menu, inflater);
-
-/*
-        searchView = (SearchView) searchItem.getActionView();
-
-        searchView.setOnQueryTextFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (hasFocus) {
-                    // searchView expanded
-                } else {
-                    keyword = "";
-                    LoadListTimeLinePost();
-                    // searchView not expanded
-                }
-            }
-        });
-
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String s) {
-                keyword = s;
-                LoadListTimeLinePost();
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String s) {
-                NotificationCenter.getInstance().postNotificationName(NotificationCenter.callbacksearch,s);
-                return false;
-            }
-        });*/
-        super.onCreateOptionsMenu(menu, inflater);
     }
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        int i =0;
-       // activity = (MainActivity)context;
+
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
-        int i =0;
+
 
     }
     @Override
@@ -295,7 +262,9 @@ public class TimelineFragment extends android.support.v4.app.Fragment implements
     @Override
     public void onResume() {
         super.onResume();
-        mAdapter.setOnItemClickListener(this);
+        if(mAdapter!=null) {
+            mAdapter.setOnItemClickListener(this);
+        }
     }
 
     public void loadmore()
@@ -398,7 +367,7 @@ public class TimelineFragment extends android.support.v4.app.Fragment implements
         // Start loading the ad in the background.
 
         Drawable mDefaultBackground = getContext().getResources().getDrawable(R.drawable.avata_defaul);
-        Glide.with(getContext()).load(AccountController.getInstance().getAccount().getAvarta()).apply(RequestOptions.circleCropTransform().diskCacheStrategy(DiskCacheStrategy.ALL).error(mDefaultBackground)).into(imageAvatar);
+        Glide.with(getContext()).load(AccountController.getInstance().getAccount().getAvarta()).apply(RequestOptions.circleCropTransform().diskCacheStrategy(DiskCacheStrategy.NONE).error(mDefaultBackground)).into(imageAvatar);
 
 
         dropdown = (Spinner)view.findViewById(R.id.spinnersort);

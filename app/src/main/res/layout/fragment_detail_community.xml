@@ -26,14 +26,20 @@
             <FrameLayout
                 android:id="@+id/imageEvent"
                 android:layout_width="match_parent"
+                android:background="@color/colorPrimary"
                 android:layout_height="240dp"></FrameLayout>
 
             <ImageView
                 android:id="@+id/imagemenu"
                 android:layout_width="45dp"
                 android:layout_height="45dp"
+                android:padding="10dp"
+                android:scaleType="centerInside"
                 android:layout_gravity="right"
-                android:background="@drawable/background_button"/>
+                android:layout_marginTop="5dp"
+                android:layout_marginRight="5dp"
+                android:src="@drawable/event_header_right"
+                />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -107,7 +113,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_alignParentTop="true"
-                            android:drawableLeft="@drawable/location_event"
+                            android:drawableLeft="@drawable/ic_place_blue"
                             android:layout_gravity="center"
                             android:layout_marginTop="10dp"
                             android:textSize="20dp" />
@@ -186,6 +192,9 @@
                     android:layout_marginRight="35dp"
                     android:layout_marginLeft="35dp"
                     android:layout_marginTop="10dp"
+                    android:gravity="center|left"
+                    android:drawableLeft="@drawable/ic_event_date"
+                    android:drawablePadding="5dp"
                     android:text="text"
                     android:textSize="20dp" />
 
@@ -196,7 +205,8 @@
                     android:layout_gravity="left"
                     android:layout_marginRight="35dp"
                     android:layout_marginLeft="35dp"
-                    android:layout_marginTop="10dp"
+                    android:gravity="center|left"
+                    android:drawableLeft="@drawable/ic_event_detail"
                     android:text="Detail"
                     android:textSize="20dp" />
                 <TextView
@@ -216,12 +226,15 @@
                     android:layout_marginRight="35dp"
                     android:layout_marginLeft="35dp"
                     android:text="Week/Month/Year"
+                    android:drawableLeft="@drawable/ic_event_time"
+                    android:gravity="center|left"
                     android:textSize="20dp" />
                 <TextView
                     android:id="@+id/txtscheduel"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_alignParentTop="true"
+                    android:gravity="center|left"
                     android:layout_gravity="left"
                     android:layout_marginRight="35dp"
                     android:layout_marginLeft="35dp"
@@ -234,6 +247,8 @@
                     android:layout_gravity="left"
                     android:layout_marginRight="35dp"
                     android:layout_marginLeft="35dp"
+                    android:drawableLeft="@drawable/ic_event_howpersons"
+                    android:gravity="center|left"
                     android:text="How many attendees"
                     android:textSize="20dp" />
                 <TextView
@@ -253,6 +268,8 @@
                     android:layout_marginRight="35dp"
                     android:layout_marginLeft="35dp"
                     android:text="Attention"
+                    android:drawableLeft="@drawable/ic_event_attention"
+                    android:gravity="center|left"
                     android:textSize="20dp" />
                 <TextView
                     android:id="@+id/Attention"
@@ -271,6 +288,8 @@
                     android:layout_marginRight="35dp"
                     android:layout_marginLeft="35dp"
                     android:text="Attendees"
+                    android:drawableLeft="@drawable/ic_event_attendees"
+                    android:gravity="center|left"
                     android:textSize="20dp" />
                 <FrameLayout
                     android:id="@+id/list_account"
@@ -305,7 +324,7 @@
                         />
                     <LinearLayout
                  android:layout_width="match_parent"
-                 android:layout_height="wrap_content"
+                 android:layout_height="match_parent"
                         android:orientation="vertical">
                     <TextView
                         android:id="@+id/username"
@@ -314,7 +333,7 @@
                         android:textSize="20sp"
                         android:text="username"
                         android:textAlignment="center"/>
-                        <LinearLayout
+                      <!--  <LinearLayout
                             android:layout_marginTop="@dimen/margin_line_mypage"
                             android:layout_marginRight="@dimen/margin_left_right"
                             android:layout_marginLeft="@dimen/margin_left_right"
@@ -352,7 +371,7 @@
                                 android:layout_gravity="left"
                                 android:background="@drawable/starnull"
                                 android:layout_marginRight="@dimen/rating_space"/>
-                        </LinearLayout>
+                        </LinearLayout> -->
                     </LinearLayout>
                 </LinearLayout>
 

@@ -77,6 +77,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -90,15 +91,21 @@ public class LoginActivity extends AppCompatActivity {
 
     private ViewFlipper _viewfliper;
     private Button _loginButton;
-    private LoginButton _loginFacebookButton;
+    private Button _loginFacebookButton;
     private EditText _passwordText;
     private EditText _emailText;
     private TextView _forgotLink;
+    private ImageView background_image;
 
     private Button _signupButton;
-    private LoginButton _signupFacebookButton;
+   // private LoginButton _signupFacebookButton;
     private EditText _passwordTextSignup;
     private EditText _emailTextSignup;
+    private EditText _usernameSignup;
+    private EditText _birthdaySignup;
+    private RadioGroup radgroupSignup;
+    private Spinner countrySignup;
+    private Spinner citySignup;
 
     private ImageView _avatarimage;
 
@@ -136,6 +143,12 @@ public class LoginActivity extends AppCompatActivity {
 
     private String email;
     private String password;
+    private String username ;
+    private String birth;
+    private int  sex;
+    private int cityid;
+
+
 
     LocationManager locationManager;
     Location mCurrentLocation = null;
@@ -325,50 +338,93 @@ public class LoginActivity extends AppCompatActivity {
         return null;
     }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
-
-
-        getlocation();
-
-       // initDefaultCountry();
-        listarea = new ArrayList<>();
-        listarea = Utils.initDefaultCountry();
-
-        getlistcountry();
-
-        LoginManager.getInstance().logOut();
-
-
-        InitView();
-
-
-        _forgotLink.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                /*Intent intent = new Intent(getApplicationContext(), RegisterActivity.class);
-                startActivityForResult(intent, REQUEST_SIGNUP);
-                finish();*/
-                showPage(Constants.PAGE_FORGETPASS);
-
-            }
-        });
-        int typePage = getIntent().getIntExtra("type",0);
-        showPage(typePage);
-
+    public void Signupevent()
+    {
         _signupButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 email = _emailTextSignup.getText().toString();
                 password = _passwordTextSignup.getText().toString();
-                register(email,password);
+                username =   _usernameSignup.getText().toString();
+             //   birth =   _birthdaySignup.getText().toString();
+
+                registerwithemail(email,password,username,birth,sex,countryid,cityid);
+               // register(email,password);
             }
         });
 
+        radgroupSignup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                changeSex(group, checkedId);
+            }
+        });
 
+        _birthdaySignup.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.N)
+            @Override
+            public void onClick(View view) {
+                final Calendar c = Calendar.getInstance();
+                mYear = c.get(Calendar.YEAR);
+                mMonth = c.get(Calendar.MONTH);
+                mDay = c.get(Calendar.DAY_OF_MONTH);
+                DatePickerDialog datePickerDialog = new DatePickerDialog(LoginActivity.this,
+                        new DatePickerDialog.OnDateSetListener() {
+
+                            @Override
+                            public void onDateSet(DatePicker view, int year,
+                                                  int monthOfYear, int dayOfMonth) {
+
+                                _birthdaySignup.setText(dayOfMonth + "-" + (monthOfYear + 1) + "-" + year);
+                                AccountController.getInstance().getAccount().setBirthday(dayOfMonth + "-" + (monthOfYear + 1) + "-" + year);
+                                birth = year + "-" + (monthOfYear + 1) + "-" + dayOfMonth;
+
+                            }
+                        }, mYear, mMonth, mDay);
+                datePickerDialog.show();
+            }
+        });
+
+        adaptercountry = new SpinnerAreaAdapter(LoginActivity.this,
+                android.R.layout.simple_spinner_item,listarea);
+
+        adaptercountry.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        countrySignup.setAdapter(adaptercountry);
+        countrySignup.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                countryid = listarea.get(i).getid();
+                getlistcity(countryid);
+                adaptercity.setdata( getlistcity(countryid));
+                AccountController.getInstance().getAccount().setCountry(countryid);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
+        adaptercity = new SpinnerCityAdapter(LoginActivity.this,
+                android.R.layout.simple_spinner_item,getlistcity(countryid));
+
+        adaptercity.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        citySignup.setAdapter(adaptercity);
+        citySignup.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                AccountController.getInstance().getAccount().setCity(getlistcity(countryid).get(i).getid());
+                cityid = getlistcity(countryid).get(i).getid();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+    }
+    public void Loginevent()
+    {
         _loginButton.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -378,19 +434,15 @@ public class LoginActivity extends AppCompatActivity {
                 login(email,password,LOGIN_NORMAL);
             }
         });
+    }
 
+    public void Updatevent()
+    {
         _update.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 String mobilephone = _mobileupdate.getText().toString();
                 update(mobilephone);
-            }
-        });
-
-        _submit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                activation(AccountController.getInstance().getAccount().getEmail(),_inputactivecode.getText().toString());
             }
         });
 
@@ -425,7 +477,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-         adaptercountry = new SpinnerAreaAdapter(LoginActivity.this,
+        adaptercountry = new SpinnerAreaAdapter(LoginActivity.this,
                 android.R.layout.simple_spinner_item,listarea);
 
         adaptercountry.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -445,7 +497,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-         adaptercity = new SpinnerCityAdapter(LoginActivity.this,
+        adaptercity = new SpinnerCityAdapter(LoginActivity.this,
                 android.R.layout.simple_spinner_item,getlistcity(countryid));
 
         adaptercity.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -461,6 +513,71 @@ public class LoginActivity extends AppCompatActivity {
 
             }
         });
+
+    }
+
+    public void Activeevent()
+    {
+        _submit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                activation(AccountController.getInstance().getAccount().getEmail(),_inputactivecode.getText().toString());
+            }
+        });
+    }
+
+    public void ForgetPassEvent()
+    {
+        try {
+            Glide.with(LoginActivity.this).load(Utils.getAssetImage(LoginActivity.this,"intro4")).into(background_image);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        _forgotLink.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+
+                showPage(Constants.PAGE_FORGETPASS);
+
+            }
+        });
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_login);
+
+
+        getlocation();
+
+       // initDefaultCountry();
+        listarea = new ArrayList<>();
+        listarea = Utils.initDefaultCountry();
+
+        getlistcountry();
+
+        LoginManager.getInstance().logOut();
+
+
+        InitView();
+
+        Loginevent();
+
+        ForgetPassEvent();
+
+        Signupevent();
+
+        Updatevent();
+
+        Activeevent();
+
+        int typePage = getIntent().getIntExtra("type",0);
+        showPage(typePage);
+
+
 
         _resetpassButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -507,8 +624,16 @@ public class LoginActivity extends AppCompatActivity {
         });
 
         callbackManager = CallbackManager.Factory.create();
-        _loginFacebookButton.setReadPermissions(Arrays.asList(
-                "public_profile", "email", "user_birthday"));
+        /*loginFacebookButton.setReadPermissions(Arrays.asList(
+                "public_profile", "email", "user_birthday"));*/
+
+        _loginFacebookButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                        LoginManager.getInstance().logInWithReadPermissions(LoginActivity.this, Arrays.asList("public_profile", "email", "user_birthday"));
+
+            }
+        });
 
         _avatarimage.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -537,8 +662,10 @@ public class LoginActivity extends AppCompatActivity {
 
         if(checkedRadioId== R.id.rad_male) {
             AccountController.getInstance().getAccount().setSex(Constants.MALE);
+            sex = Constants.MALE;
         } else if(checkedRadioId== R.id.rad_female ) {
             AccountController.getInstance().getAccount().setSex(Constants.FEMALE);
+            sex = Constants.FEMALE;
         }
     }
 
@@ -615,15 +742,23 @@ public class LoginActivity extends AppCompatActivity {
         View viewChangePass =  this.findViewById(R.id.flipViewChangePass);
 
         _loginButton = (Button)viewLogin.findViewById(R.id.btn_login);
-        _loginFacebookButton = (LoginButton)viewLogin.findViewById(R.id.btn_facebook_login);
+        _loginFacebookButton = (Button) viewLogin.findViewById(R.id.btn_facebook_login);
         _passwordText = (EditText)viewLogin.findViewById(R.id.input_password);
         _emailText = (EditText)viewLogin.findViewById(R.id.input_email);
         _forgotLink = (TextView)viewLogin.findViewById(R.id.link_forgotpass);
+        background_image = (ImageView)viewLogin.findViewById(R.id.background_image);
 
         _signupButton = (Button)viewRegister.findViewById(R.id.btn_Signup);
-        _signupFacebookButton = (LoginButton)viewRegister.findViewById(R.id.btn_facebook_login);
+       // _signupFacebookButton = (LoginButton)viewRegister.findViewById(R.id.btn_facebook_login);
         _passwordTextSignup = (EditText)viewRegister.findViewById(R.id.input_password);
         _emailTextSignup = (EditText)viewRegister.findViewById(R.id.input_email);
+        _usernameSignup = (EditText)viewRegister.findViewById(R.id.input_username_update);
+        _birthdaySignup = (EditText)viewRegister.findViewById(R.id.input_birthday);
+        radgroupSignup = (RadioGroup) viewRegister.findViewById(R.id.rad_sex);
+        countrySignup = (Spinner)viewRegister.findViewById(R.id.spinner_country);
+        citySignup = (Spinner)viewRegister.findViewById(R.id.spinner_city);
+
+
 
         _mobileupdate = (EditText)viewLoginUpdate.findViewById(R.id.input_mobile_update);
         _usernameupdate = (EditText)viewLoginUpdate.findViewById(R.id.input_username_update);
@@ -660,7 +795,7 @@ public class LoginActivity extends AppCompatActivity {
             UserModel u = AccountController.getInstance().getAccount();
             if (u.getAvarta() != null) {
                 RequestOptions requestOptions = new RequestOptions()
-                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                        .diskCacheStrategy(DiskCacheStrategy.NONE)
                         .circleCropTransform();
 
                 Glide.with(this)
@@ -744,7 +879,8 @@ public class LoginActivity extends AppCompatActivity {
                     int statuscode = jsons.get("status").getAsInt();
                     if(statuscode == RestAPI.STATUS_SUCCESS)
                     {
-                        showPage(Constants.PAGE_UPDATE);
+                      //  showPage(Constants.PAGE_UPDATE);
+                        login(email, password,LOGIN_NORMAL);
                     }
                     else if(statuscode == 2)
                     {
@@ -766,6 +902,92 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
     }
+
+    public void registerwithemail(final String email , final String password ,final String username,
+                                  final String birth , int sex, int country , int city) {
+
+        final ProgressDialog progressDialog = new ProgressDialog(LoginActivity.this);
+        progressDialog.setIndeterminate(true);
+        progressDialog.setMessage("Create account...");
+        progressDialog.show();
+        JsonObject dataJson = new JsonObject();
+        String url;
+
+        if(validateEmail(email)==false)
+        {
+            dialog.showDialogCancel( LoginActivity.this,"Wrong format email " );
+            progressDialog.dismiss();
+            return;
+        }
+
+        if(validatePassword(password)==false)
+        {
+            dialog.showDialogCancel( LoginActivity.this,"password can not ecpty" );
+            progressDialog.dismiss();
+            return;
+        }
+        if(_usernameSignup.getText().toString().isEmpty())
+        {
+            dialog.showDialogCancel( LoginActivity.this,"User name can not empty " );
+            progressDialog.dismiss();
+            //   Toast.makeText(LoginActivity.this, "User name can not empty ", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if(_birthdaySignup.getText().toString().isEmpty())
+        {
+
+            dialog.showDialogCancel( LoginActivity.this,"Birthday can not empty " );
+            progressDialog.dismiss();
+            //   Toast.makeText(LoginActivity.this, "Birthday can not empty ", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        url = RestAPI.POST_SIGNUP;
+        dataJson.addProperty("password", password);
+        dataJson.addProperty("email",email);
+        dataJson.addProperty("sex",sex);
+        dataJson.addProperty("birthday",birth);
+        dataJson.addProperty("username",username);
+        dataJson.addProperty("city",city);
+        dataJson.addProperty("country",country);
+
+
+        RestAPI.PostDataMaster(getApplicationContext(), dataJson, url, new RestAPI.RestAPIListenner() {
+
+            @Override
+            public void OnComplete(int httpCode, String error, String s) {
+                try {
+                    if (!RestAPI.checkHttpCode(httpCode)) {
+                        //AppFuncs.alert(getApplicationContext(),s,true);
+                        dialog.showDialogCancel( LoginActivity.this,getResources().getString(R.string.can_not_connect_server) );
+                        return;
+                    }
+                    JsonObject jsons = (new JsonParser()).parse(s).getAsJsonObject();
+                    int statuscode = jsons.get("status").getAsInt();
+                    progressDialog.dismiss();
+                    if (statuscode == RestAPI.STATUS_SUCCESS) {
+
+                            AccountController.getInstance().getAccount().setId(jsons.get("result").getAsJsonObject().get("account_id").getAsLong());
+                            AccountController.getInstance().getAccount().setEmail(jsons.get("result").getAsJsonObject().get("email").getAsString());
+                            showActive();
+
+                    } else if (statuscode == RestAPI.STATUS_ACCOUNTESIXT) {
+                           {
+                            dialog.showDialogCancel( LoginActivity.this,"Account exist!!!" );
+                            //Toast.makeText(LoginActivity.this, "Account exist!!!", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                } catch (Exception ex) {
+                    progressDialog.dismiss();
+                    ViewDialog dialog = new ViewDialog();
+                    dialog.showDialogCancel(LoginActivity.this,ex.getMessage());
+                    //Toast.makeText(LoginActivity.this, ex.getMessage(), Toast.LENGTH_SHORT).show();
+                    ex.printStackTrace();
+                }
+
+            }
+        });
+    }
+
 
     public void register(final String email , final String password) {
 

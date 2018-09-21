@@ -11,7 +11,7 @@
            app:showAsAction="collapseActionView|always" /> -->
        <item
            android:id="@+id/buttonarea"
-           android:icon="@drawable/place"
+           android:icon="@drawable/ic_place"
            android:title="Area"
            app:showAsAction="always" />
    </menu>

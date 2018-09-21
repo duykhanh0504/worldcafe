@@ -83,7 +83,7 @@ public class MemberEventAdapter  extends RecyclerView.Adapter<RecyclerView.ViewH
 
         viewHolder.name.setText(user.getUsername());
         Drawable mDefaultBackground = viewHolder.avatar.getContext().getResources().getDrawable(R.drawable.avata_defaul);
-        Glide.with(viewHolder.avatar.getContext()).load(user.getAvarta()).apply(RequestOptions.circleCropTransform().diskCacheStrategy(DiskCacheStrategy.ALL).error(mDefaultBackground)).into(viewHolder.avatar);
+        Glide.with(viewHolder.avatar.getContext()).load(user.getAvarta()).apply(RequestOptions.circleCropTransform().diskCacheStrategy(DiskCacheStrategy.NONE).error(mDefaultBackground)).into(viewHolder.avatar);
     }
 
     @Override

@@ -36,10 +36,10 @@ public class Constants {
     public static  String MESSAGEID = "MESSAGEID";
     public static  String MESSAGETYPE = "MESSAGETYPE";
 
-    public static  int EVENT_FRIEND = 1;
-    public static  int EVENT_BUSSINESS = 2;
-    public static  int EVENT_LOCAL = 3;
-    public static  int EVENT_LANGUAGE = 4;
+    public static  int EVENT_FRIEND = 0;
+    public static  int EVENT_BUSSINESS = 1;
+    public static  int EVENT_LOCAL = 2;
+    public static  int EVENT_LANGUAGE = 3;
 
     public static  int FOLLOW = 0;
     public static  int UNFOLLOW = 1;

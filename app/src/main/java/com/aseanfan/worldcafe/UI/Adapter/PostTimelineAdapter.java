@@ -228,7 +228,7 @@ public class PostTimelineAdapter extends RecyclerView.Adapter<PostTimelineAdapte
 
         myViewHolder.create_time.setText(Utils.ConvertDiffTime(post.getTimeDiff()));
         Drawable mDefaultBackground = myViewHolder.avatar.getContext().getResources().getDrawable(R.drawable.avata_defaul);
-        Glide.with(myViewHolder.avatar.getContext()).load(post.getUrlAvatar()).apply(RequestOptions.circleCropTransform().diskCacheStrategy(DiskCacheStrategy.ALL).error(mDefaultBackground)).into(myViewHolder.avatar);
+        Glide.with(myViewHolder.avatar.getContext()).load(post.getUrlAvatar()).apply(RequestOptions.circleCropTransform().diskCacheStrategy(DiskCacheStrategy.NONE).error(mDefaultBackground)).into(myViewHolder.avatar);
 
         if(post.getDetail()!=null && !post.getDetail().isEmpty()) {
             myViewHolder.detail.setVisibility(View.VISIBLE);

@@ -188,7 +188,7 @@ public class ChatMessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                 ViewHolderRightCHat right = (ViewHolderRightCHat)viewHolder;
                 right.mAvatar.setVisibility(View.GONE);
                // Drawable mDefaultBackground = right.mAvatar.getContext().getResources().getDrawable(R.drawable.avata_defaul);
-               // Glide.with(right.mAvatar.getContext()).load(AccountController.getInstance().getAccount().getAvarta()).apply(RequestOptions.circleCropTransform().diskCacheStrategy(DiskCacheStrategy.ALL).error(mDefaultBackground)).into(right.mAvatar);
+               // Glide.with(right.mAvatar.getContext()).load(AccountController.getInstance().getAccount().getAvarta()).apply(RequestOptions.circleCropTransform().diskCacheStrategy(DiskCacheStrategy.NONE).error(mDefaultBackground)).into(right.mAvatar);
                 right.mMessage.setText(Utils.decodeStringUrl(listmessagechat.get(i).getMessageText()));
                 break;
 
@@ -201,7 +201,7 @@ public class ChatMessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                 {
                     left.mAvatar.setVisibility(View.VISIBLE);
                     Drawable mDefaultBackground = left.mAvatar.getContext().getResources().getDrawable(R.drawable.avata_defaul);
-                    Glide.with(left.mAvatar.getContext()).load(friendAvatar).apply(RequestOptions.circleCropTransform().diskCacheStrategy(DiskCacheStrategy.ALL).error(mDefaultBackground)).into(left.mAvatar);
+                    Glide.with(left.mAvatar.getContext()).load(friendAvatar).apply(RequestOptions.circleCropTransform().diskCacheStrategy(DiskCacheStrategy.NONE).error(mDefaultBackground)).into(left.mAvatar);
 
                 }
                 left.mMessage.setText(Utils.decodeStringUrl(listmessagechat.get(i).getMessageText()));

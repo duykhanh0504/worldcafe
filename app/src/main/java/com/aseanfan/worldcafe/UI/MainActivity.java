@@ -334,6 +334,7 @@ public class MainActivity extends AppCompatActivity implements NotificationCente
             ft.hide(settingFragment);
         }*/
         ft.commit();
+        timelineFragment.onResume();
     }
 
     public void showThirdFragment() {

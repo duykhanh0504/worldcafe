@@ -15,6 +15,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.aseanfan.worldcafe.App.AccountController;
+import com.aseanfan.worldcafe.Helper.RestAPI;
 import com.aseanfan.worldcafe.Model.EventModel;
 import com.aseanfan.worldcafe.Utils.Constants;
 import com.aseanfan.worldcafe.Utils.Utils;
@@ -24,6 +26,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
+import com.google.gson.JsonObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,7 +34,7 @@ import java.util.List;
 public class CommunityAdapter extends RecyclerView.Adapter<CommunityAdapter.MyViewHolder> {
 
 
-    private List<EventModel> eventList = new ArrayList<>();
+    private List<EventModel> eventList ;
 
     private static ClickListener clickListener;
 
@@ -89,7 +92,8 @@ public class CommunityAdapter extends RecyclerView.Adapter<CommunityAdapter.MyVi
             imglike.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    clickListener.onItemClick(getAdapterPosition(), view , Constants.CLICK_IMAGE_LIKE ,eventList,getAdapterPosition());
+                    LikeEvent(view.getContext(),eventList,getAdapterPosition());
+                   // clickListener.onItemClick(getAdapterPosition(), view , Constants.CLICK_IMAGE_LIKE ,eventList,getAdapterPosition());
                 }
             });
 
@@ -108,6 +112,45 @@ public class CommunityAdapter extends RecyclerView.Adapter<CommunityAdapter.MyVi
         }
     }
 
+    public void LikeEvent(Context context, final List<EventModel> event, final int pos)
+    {
+        JsonObject dataJson = new JsonObject();
+        dataJson.addProperty("account_id", AccountController.getInstance().getAccount().getId());
+        dataJson.addProperty("event_id",event.get(pos).getEventid());
+
+        RestAPI.PostDataMasterWithToken(context,dataJson,RestAPI.POST_LIKEEVENT, new RestAPI.RestAPIListenner() {
+            @Override
+            public void OnComplete(int httpCode, String error, String s) {
+                try {
+                    if (!RestAPI.checkHttpCode(httpCode)) {
+                        //AppFuncs.alert(getApplicationContext(),s,true);
+
+                        return;
+                    }
+                    //  listevent = event;
+                    if(eventList.get(pos).getIslike() ==0) {
+
+                        eventList.get(pos).setNumberLike(eventList.get(pos).getNumberLike()+1);
+                        eventList.get(pos).setIslike(1);
+                    }
+                    else
+                    {
+                        eventList.get(pos).setNumberLike(eventList.get(pos).getNumberLike()-1);
+                        eventList.get(pos).setIslike(0);
+                    }
+                    notifyDataSetChanged();
+                  //  mAdapter.setData(mlistevent);
+                    // clickListener.onItemClick(listevent);
+
+
+                }
+                catch (Exception ex) {
+
+                    ex.printStackTrace();
+                }
+            }
+        });
+    }
 
     public CommunityAdapter(List<EventModel> eventList) {
         this.eventList = eventList;
@@ -134,19 +177,19 @@ public class CommunityAdapter extends RecyclerView.Adapter<CommunityAdapter.MyVi
         holder.title.setText(event.getTitle());
         holder.name.setText(event.getUsername());
         holder.price.setText(Utils.currencyFormat(event.getPrice()) + " VND");
-        if(event.getType() == Constants.EVENT_FRIEND)
+        if(event.getType() == Constants.EVENT_FRIEND +1)
         {
             holder.type.setText(holder.type.getContext().getText(R.string.Friend));
         }
-        else if (event.getType() == Constants.EVENT_BUSSINESS)
+        else if (event.getType() == Constants.EVENT_BUSSINESS +1)
         {
             holder.type.setText(holder.type.getContext().getText(R.string.Business));
         }
-        else if (event.getType() == Constants.EVENT_LOCAL)
+        else if (event.getType() == Constants.EVENT_LOCAL +1)
         {
             holder.type.setText(holder.type.getContext().getText(R.string.Local));
         }
-        else
+        else if (event.getType() == Constants.EVENT_LANGUAGE +1)
         {
             holder.type.setText(holder.type.getContext().getText(R.string.Language));
         }
@@ -166,7 +209,7 @@ public class CommunityAdapter extends RecyclerView.Adapter<CommunityAdapter.MyVi
         holder.numberlike.setText(String.valueOf(event.getNumberLike()));
         holder.numbercomment.setText(String.valueOf(event.getNumberComment()));
         Drawable mDefaultBackground = holder.imageAvatar.getContext().getResources().getDrawable(R.drawable.avata_defaul);
-        Glide.with(holder.imageAvatar.getContext()).load(event.getUrlAvatar()).apply(RequestOptions.circleCropTransform().diskCacheStrategy(DiskCacheStrategy.ALL).error(mDefaultBackground)).into(holder.imageAvatar);
+        Glide.with(holder.imageAvatar.getContext()).load(event.getUrlAvatar()).apply(RequestOptions.circleCropTransform().diskCacheStrategy(DiskCacheStrategy.NONE).error(mDefaultBackground)).into(holder.imageAvatar);
         if(event.getUrlImage().size() > 0) {
             Glide.with(holder.background.getContext()).load(event.getUrlImage().get(0)).into(new SimpleTarget<Drawable>() {
                 @Override
@@ -177,7 +220,7 @@ public class CommunityAdapter extends RecyclerView.Adapter<CommunityAdapter.MyVi
         }
         else
         {
-            holder.background.setBackgroundDrawable(null);
+            holder.background.setBackgroundColor(holder.background.getContext().getResources().getColor(R.color.colorPrimary));
         }
 
     }

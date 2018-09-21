@@ -82,7 +82,7 @@ public class ConctactChatAdapter  extends RecyclerView.Adapter<ConctactChatAdapt
         ChatModel contact = contactlist.get(i);
         myViewHolder.name.setText(contact.getUsername());
          Drawable mDefaultBackground = myViewHolder.avatar.getContext().getResources().getDrawable(R.drawable.avata_defaul);
-        Glide.with(myViewHolder.avatar.getContext()).load(contact.getAvarta()).apply(RequestOptions.circleCropTransform().diskCacheStrategy(DiskCacheStrategy.ALL).error(mDefaultBackground)).into(myViewHolder.avatar);
+        Glide.with(myViewHolder.avatar.getContext()).load(contact.getAvarta()).apply(RequestOptions.circleCropTransform().diskCacheStrategy(DiskCacheStrategy.NONE).error(mDefaultBackground)).into(myViewHolder.avatar);
     }
 
     @Override

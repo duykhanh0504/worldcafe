@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -56,6 +57,9 @@ public class MyEventFragment  extends Fragment implements NotificationCenter.Not
     RecyclerView recycleviewevent;
     private CommunityAdapter mAdapter;
     private Activity activity;
+    private int currentpos;
+    private Long accountid;
+    private boolean isloading = false;
 
     @Override
     public void onAttach(Context context) {
@@ -118,6 +122,7 @@ public class MyEventFragment  extends Fragment implements NotificationCenter.Not
     @Override
     public void onResume() {
         super.onResume();
+        currentpos=0;
     }
 
     @Override
@@ -131,9 +136,16 @@ public class MyEventFragment  extends Fragment implements NotificationCenter.Not
     }
 
 
-    public void LoadListEvent()
+    public void LoadListEvent(Long accountid)
     {
-        String url =  String.format(RestAPI.GET_LISTMYEVENT, AccountController.getInstance().getAccount().getId(),0);
+        String url;
+        if(accountid ==  AccountController.getInstance().getAccount().getId()) {
+          url= String.format(RestAPI.GET_LISTMYEVENT, AccountController.getInstance().getAccount().getId(), currentpos);
+        }
+        else
+        {
+            url= String.format(RestAPI.GET_LISTEVENTBYID,accountid, AccountController.getInstance().getAccount().getId(), 0);
+        }
 
         url = url + "&is_my_event=" + 1;
 
@@ -157,12 +169,33 @@ public class MyEventFragment  extends Fragment implements NotificationCenter.Not
 
                         return;
                     }
-
                     JsonArray jsonArray = (new JsonParser()).parse(s).getAsJsonObject().getAsJsonArray("result");
                     Gson gson = new Gson();
                     java.lang.reflect.Type type = new TypeToken<List<EventModel>>(){}.getType();
-                    listEvent = gson.fromJson(jsonArray, type);
-                    mAdapter.setData(listEvent);
+                    if(currentpos == 0) {
+                        listEvent = gson.fromJson(jsonArray, type);
+                        mAdapter.setData(listEvent);
+                        new Timer().schedule(new TimerTask() {
+                            @Override
+                            public void run() {
+                                isloading = false;
+                            }
+                        }, 3000);
+                    }
+                    else
+                    {
+                        List<EventModel> temp  = new ArrayList<>();
+                        temp = gson.fromJson(jsonArray, type);
+                        if(temp.size()>0) {
+                            listEvent.addAll(temp);
+                            mAdapter.setData(listEvent);
+                        }
+                        else
+                        {
+                            currentpos--;
+
+                        }
+                    }
 
                 }
                 catch (Exception ex) {
@@ -173,11 +206,16 @@ public class MyEventFragment  extends Fragment implements NotificationCenter.Not
         });
     }
 
+    public void loadmore()
+    {
+        currentpos++;
+        LoadListEvent(accountid);
+    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        currentpos=0;
     }
 
     @Nullable
@@ -187,12 +225,12 @@ public class MyEventFragment  extends Fragment implements NotificationCenter.Not
 
 
         listEvent = new ArrayList<>();
-
-        LoadListEvent();
+         accountid = getArguments().getLong("chat_id",AccountController.getInstance().getAccount().getId());
+        LoadListEvent(accountid);
 
         mAdapter = new CommunityAdapter(null);
         recycleviewevent = (RecyclerView) view.findViewById(R.id.list_event);;
-        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(container.getContext());
+        final RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(container.getContext());
         recycleviewevent.setLayoutManager(mLayoutManager);
         recycleviewevent.setItemAnimator(new DefaultItemAnimator());
         recycleviewevent.setAdapter(mAdapter);
@@ -219,6 +257,34 @@ public class MyEventFragment  extends Fragment implements NotificationCenter.Not
             }
         });
 
+        recycleviewevent.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                int visibleItemCount = mLayoutManager.getChildCount();
+                int totalItemCount = mLayoutManager.getItemCount();
+                int pastVisibleItems = ((LinearLayoutManager)recyclerView.getLayoutManager()).findFirstVisibleItemPosition();
+                if (pastVisibleItems + visibleItemCount >= totalItemCount) {
+                    if(!recyclerView.canScrollVertically(1)) {
+                        //   Toast.makeText(getContext(), "LAst", Toast.LENGTH_LONG).show();
+                        loadmore();
+                        isloading = true;
+                    }
+                }
+
+                if (((LinearLayoutManager)recyclerView.getLayoutManager()).findFirstVisibleItemPosition() == 0) {
+                    if(isloading==false) {
+                        //  Toast.makeText(getContext(), "Top", Toast.LENGTH_LONG).show();
+                        currentpos = 0;
+                        LoadListEvent(accountid);
+                        isloading = true;
+                    }
+
+                }
+
+
+            }
+        });
 
         return view;
     }

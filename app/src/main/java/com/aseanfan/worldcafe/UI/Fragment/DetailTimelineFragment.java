@@ -178,7 +178,7 @@ public class DetailTimelineFragment  extends android.support.v4.app.Fragment imp
             timeline.setAccount_id(getArguments().getLong("accountid"));
 
             Drawable mDefaultBackground = getContext().getResources().getDrawable(R.drawable.avata_defaul);
-            Glide.with(getContext()).load(timeline.getUrlAvatar()).apply(RequestOptions.circleCropTransform().diskCacheStrategy(DiskCacheStrategy.ALL).error(mDefaultBackground)).into(avatar);
+            Glide.with(getContext()).load(timeline.getUrlAvatar()).apply(RequestOptions.circleCropTransform().diskCacheStrategy(DiskCacheStrategy.NONE).error(mDefaultBackground)).into(avatar);
             username.setText(timeline.getUsername());
             detail.setText(timeline.getDetail());
 

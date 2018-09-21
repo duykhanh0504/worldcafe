@@ -276,7 +276,7 @@ public class EditProfileActivity extends AppCompatActivity {
         }
 
         final Drawable mDefaultBackground1 = this.getResources().getDrawable(R.drawable.avata_defaul);
-        Glide.with(this).load( user.getAvarta()).apply(RequestOptions.circleCropTransform().diskCacheStrategy(DiskCacheStrategy.ALL).error(mDefaultBackground1)).into(avatar);
+        Glide.with(this).load( user.getAvarta()).apply(RequestOptions.circleCropTransform().diskCacheStrategy(DiskCacheStrategy.NONE).error(mDefaultBackground1)).into(avatar);
 
     if(user.getUsername()!=null) {
         username.setText(user.getUsername());

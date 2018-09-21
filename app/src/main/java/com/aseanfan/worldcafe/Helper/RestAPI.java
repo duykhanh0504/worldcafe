@@ -65,6 +65,7 @@ public class RestAPI {
     public static String POST_CREATEEVENT= root_url + "/api/event/createevent";
     public static String GET_LISTEVENT= root_url + "/api/event/getallevents?account_id=%d&genre=%d&index=%d";
     public static String GET_LISTMYEVENT= root_url + "/api/event/getallevents?account_id=%d&index=%d";
+    public static String GET_LISTEVENTBYID= root_url + "/api/event/geteventbyaccountid?id=%d&account_id=%d&index=%d";
     public static String POST_ACTIVATION= root_url + "/api/user/activation";
     public static String POST_FORGETPASS= root_url + "/api/user/forgotPassword";
     public static String POST_CHANGEFORGETPASS= root_url + "/api/user/createNewPassword";

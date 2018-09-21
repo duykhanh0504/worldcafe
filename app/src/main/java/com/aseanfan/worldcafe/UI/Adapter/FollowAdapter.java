@@ -83,7 +83,7 @@ public class FollowAdapter  extends RecyclerView.Adapter<FollowAdapter.MyViewHol
         FollowModel follow = followlist.get(i);
         myViewHolder.name.setText(follow.getUsername());
         Drawable mDefaultBackground = myViewHolder.avatar.getContext().getResources().getDrawable(R.drawable.avata_defaul);
-        Glide.with(myViewHolder.avatar.getContext()).load(follow.getAvarta()).apply(RequestOptions.circleCropTransform().diskCacheStrategy(DiskCacheStrategy.ALL).error(mDefaultBackground)).into(myViewHolder.avatar);
+        Glide.with(myViewHolder.avatar.getContext()).load(follow.getAvarta()).apply(RequestOptions.circleCropTransform().diskCacheStrategy(DiskCacheStrategy.NONE).error(mDefaultBackground)).into(myViewHolder.avatar);
     }
 
     @Override
