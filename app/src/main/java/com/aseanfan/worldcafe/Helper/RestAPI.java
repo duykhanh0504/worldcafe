@@ -96,7 +96,7 @@ public class RestAPI {
 
     public final static int STATUS_SUCCESS = 200;
     public final static int STATUS_WRONGPASSWORD = 2;
-    public final static int STATUS_ACCOUNTESIXT = 3;
+    public final static int STATUS_ACCOUNTESIXT = 2;
 
 
     //public static int NUMBER_REQUEST_TOKEN =3;
@@ -162,8 +162,8 @@ public class RestAPI {
                return 2;
            case STATUS_WRONGPASSWORD:
                return R.string.Wrong_passowrd;
-           case STATUS_ACCOUNTESIXT:
-               return R.string.Account_exist;
+        /*   case STATUS_ACCOUNTESIXT:
+               return R.string.Account_exist;*/
        }
        return 2;
     }

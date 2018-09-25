@@ -14,6 +14,7 @@ import com.aseanfan.worldcafe.Model.UserModel;
 import com.aseanfan.worldcafe.Provider.Store;
 import com.aseanfan.worldcafe.Service.MyFirebaseInstanceIDService;
 import com.aseanfan.worldcafe.Service.SocketService;
+import com.aseanfan.worldcafe.UI.Component.FontsOverride;
 import com.aseanfan.worldcafe.UI.IntroActivity;
 import com.aseanfan.worldcafe.UI.MainActivity;
 import com.aseanfan.worldcafe.UI.MediaLoader;
@@ -72,6 +73,10 @@ public class App  extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        FontsOverride.setDefaultFont(this, "DEFAULT", "Roboto-Medium.ttf");
+        FontsOverride.setDefaultFont(this, "MONOSPACE", "Roboto-Medium.ttf");
+        FontsOverride.setDefaultFont(this, "SERIF", "Roboto-Light.ttf");
+        FontsOverride.setDefaultFont(this, "SANS_SERIF", "Roboto-Bold.ttf");
         applicationHandler = new Handler(getApplicationContext().getMainLooper());
         mApp =this;
     }

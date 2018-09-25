@@ -4,7 +4,6 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
-    android:padding="3dp"
     android:background="@color/colorPrimary"
     android:gravity="center|right"
     app:elevation="0dp"
@@ -19,9 +18,9 @@
         >
         <ImageView
             android:id="@+id/imageView3"
-            android:layout_width="20dp"
+            android:layout_width="15dp"
             android:layout_gravity="center|right"
-            android:layout_height="20dp"
+            android:layout_height="15dp"
             app:srcCompat="@drawable/arrow_bottom" />
     </FrameLayout>
 
@@ -29,9 +28,9 @@
     <TextView
         android:layout_marginTop="3dp"
         android:layout_marginBottom="3dp"
-        android:textStyle="bold"
         android:id="@+id/txttext"
         android:textColor="#fff"
+
         android:textAlignment="center"
         android:gravity="center|right"
         android:layout_marginLeft="10dp"

@@ -24,11 +24,20 @@ public class DIalogImagePreview extends DialogFragment {
     private RecyclerView mRecyclerView;
     private ImagePrevewAdapter adapter;
     private static List<String> listimage;
+    private static  int pos =0;
 
     public static DIalogImagePreview newInstance(List<String> data) {
         listimage = data;
         return new DIalogImagePreview();
     }
+
+
+    public static DIalogImagePreview newInstance(List<String> data, int Pos) {
+        listimage = data;
+        pos = Pos;
+        return new DIalogImagePreview();
+    }
+
 
     public static DIalogImagePreview newInstancestring(String data) {
         listimage = new ArrayList<>();
@@ -59,6 +68,7 @@ public class DIalogImagePreview extends DialogFragment {
         // you can use LayoutInflater.from(getContext()).inflate(...) if you have xml layout
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.HORIZONTAL, false));
         mRecyclerView.setAdapter(adapter);
+        mRecyclerView.smoothScrollToPosition(pos);
 //        AlertDialog.Builder alertDialog = new AlertDialog.Builder(getContext(),android.R.style.Theme_Black_NoTitleBar_Fullscreen);
 
         return new AlertDialog.Builder(getActivity(),android.R.style.Theme_Black_NoTitleBar_Fullscreen)

@@ -11,6 +11,7 @@ import android.text.Html;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.method.LinkMovementMethod;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -275,7 +276,7 @@ public class PostTimelineAdapter extends RecyclerView.Adapter<PostTimelineAdapte
         }
         if (s.length() > 100 && viewMore == true ) {
 
-            text = s.subSequence(0, 101  ) + "... " + "<font color='red'>" + expandText + "</font>";
+            text = s.subSequence(0, 101  ) + "... " + "<b style='color:black;'>" + expandText + "</b>";
         }
         else
         {
@@ -474,12 +475,36 @@ public class PostTimelineAdapter extends RecyclerView.Adapter<PostTimelineAdapte
             image2.setScaleType(ImageView.ScaleType.CENTER_CROP);
             Glide.with(contain.getContext()).load(url.get(2)).into(image2);
 
-            ImageView image3 = new ImageView(contain.getContext());
-            LinearLayout.LayoutParams layoutParams3 = new LinearLayout.LayoutParams(Utils.getwidthScreen(contain.getContext())/2, Utils.convertDpToPixel(120,contain.getContext()));
-            image3.setLayoutParams(layoutParams2);
-            image3.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            Glide.with(contain.getContext()).load(url.get(3)).into(image3);
+            LinearLayout.LayoutParams layoutParams3 = new LinearLayout.LayoutParams(Utils.getwidthScreen(contain.getContext()) / 2, Utils.convertDpToPixel(120, contain.getContext()));
+            FrameLayout containplus = new FrameLayout(contain.getContext());
+            ImageView image3;
+            if(url.size() == 4) {
+                image3 = new ImageView(contain.getContext());
+                image3.setLayoutParams(layoutParams3);
+                image3.setScaleType(ImageView.ScaleType.CENTER_CROP);
+                Glide.with(contain.getContext()).load(url.get(3)).into(image3);
+            }else
+            {
 
+                image3 = new ImageView(contain.getContext());
+                image3.setLayoutParams(layoutParams3);
+                image3.setScaleType(ImageView.ScaleType.CENTER_CROP);
+                Glide.with(contain.getContext()).load(url.get(3)).into(image3);
+
+                containplus.addView(image3);
+
+                FrameLayout overlayout = new FrameLayout(contain.getContext());
+                overlayout.setLayoutParams(layoutParams3);
+                overlayout.setBackgroundColor(contain.getContext().getResources().getColor(R.color.blacktransparent));
+                containplus.addView(overlayout);
+
+                TextView textplus = new TextView(contain.getContext());
+                textplus.setTextColor(contain.getContext().getResources().getColor(R.color.white));
+                textplus.setGravity(Gravity.CENTER);
+                textplus.setTextSize(Utils.convertDpToPixel(30,contain.getContext()));
+                textplus.setText(String.valueOf(url.size() -4) + "+");
+                containplus.addView(textplus);
+            }
             FrameLayout line = new FrameLayout(contain.getContext());
             LinearLayout.LayoutParams layoutParamsline = new LinearLayout.LayoutParams( Utils.convertDpToPixel(2,contain.getContext()), Utils.convertDpToPixel(240,contain.getContext()));
             line.setLayoutParams(layoutParamsline);
@@ -501,7 +526,13 @@ public class PostTimelineAdapter extends RecyclerView.Adapter<PostTimelineAdapte
 
             contentimage2.addView(image2);
             contentimage2.addView(line2);
-            contentimage2.addView(image3);
+            if(url.size() == 4) {
+                contentimage2.addView(image3);
+            }
+            else
+            {
+                contentimage2.addView(containplus);
+            }
 
             contentimage.addView(contentimage1);
             contentimage.addView(line);

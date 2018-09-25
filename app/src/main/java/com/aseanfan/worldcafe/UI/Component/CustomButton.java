@@ -13,19 +13,19 @@ public class CustomButton extends Button {
 
     public CustomButton(Context context) {
         super(context);
-        Typeface face=Typeface.createFromAsset(context.getAssets(), "Helvetica_Neue.ttf");
+        Typeface face=Typeface.createFromAsset(context.getAssets(), "Roboto-Light.ttf");
         this.setTypeface(face);
     }
 
     public CustomButton(Context context, AttributeSet attrs) {
         super(context, attrs);
-        Typeface face=Typeface.createFromAsset(context.getAssets(), "Helvetica_Neue.ttf");
+        Typeface face=Typeface.createFromAsset(context.getAssets(), "Roboto-Light.ttf");
         this.setTypeface(face);
     }
 
     public CustomButton(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
-        Typeface face=Typeface.createFromAsset(context.getAssets(), "Helvetica_Neue.ttf");
+        Typeface face=Typeface.createFromAsset(context.getAssets(), "Roboto-Light.ttf");
         this.setTypeface(face);
     }
 

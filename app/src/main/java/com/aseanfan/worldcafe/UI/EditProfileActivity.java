@@ -258,12 +258,12 @@ public class EditProfileActivity extends AppCompatActivity {
 
         if(user.getCover()==null)
         {
-            Glide.with(this).load( "https://png.pngtree.com/thumb_back/fh260/back_pic/00/15/30/4656e81f6dc57c5.jpg").into(new SimpleTarget<Drawable>() {
+         /*   Glide.with(this).load( "https://png.pngtree.com/thumb_back/fh260/back_pic/00/15/30/4656e81f6dc57c5.jpg").into(new SimpleTarget<Drawable>() {
                 @Override
                 public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
                     cover.setBackgroundDrawable(resource);
                 }
-            });
+            });*/
         }
         else
         {

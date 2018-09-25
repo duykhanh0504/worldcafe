@@ -67,7 +67,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class IntroActivity extends AppCompatActivity {
+public class IntroActivity extends BaseActivity {
 
     @BindView(R.id.intro_view_pager)
     ViewPager viewPager;
@@ -188,6 +188,7 @@ public class IntroActivity extends AppCompatActivity {
             dataJson.remove("v_followed");
             dataJson.remove("v_follower");
             dataJson.remove("v_total_like");
+            dataJson.remove("rank");
             url = RestAPI.POST_SIGNUPBYFACEBOOK;
 
 

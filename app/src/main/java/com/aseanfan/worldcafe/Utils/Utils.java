@@ -50,6 +50,7 @@ import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Formattable;
 import java.util.List;
@@ -108,6 +109,74 @@ public class Utils {
         listcity.add(new CityModel(4,"Tokyo"));
         listcity.add(new CityModel(5,"Osaka"));
         return listcity;
+    }
+
+    public static int getAge(String dobString){
+
+        Date date = null;
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd",Locale.US);
+        try {
+            date = sdf.parse(dobString);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        if(date == null) return 0;
+
+        Calendar dob = Calendar.getInstance();
+        Calendar today = Calendar.getInstance();
+
+        dob.setTime(date);
+
+        int year = dob.get(Calendar.YEAR);
+        int month = dob.get(Calendar.MONTH);
+        int day = dob.get(Calendar.DAY_OF_MONTH);
+
+        dob.set(year, month+1, day);
+
+        int age = today.get(Calendar.YEAR) - dob.get(Calendar.YEAR);
+
+        if (today.get(Calendar.DAY_OF_YEAR) < dob.get(Calendar.DAY_OF_YEAR)){
+            age--;
+        }
+
+        return age;
+    }
+
+    public static String ConvertDateEventNonDetail(String s)
+    {
+        if(s==null)
+            return "";
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MMM-dd",Locale.US);
+        DateFormat targetFormat = new SimpleDateFormat("yyyy/MM/dd", Locale.getDefault());
+        String formattedDate = null;
+        Date convertedDate = new Date();
+        try {
+            convertedDate = dateFormat.parse(s);
+            formattedDate = targetFormat.format(convertedDate);
+        } catch (ParseException e) {
+// TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return formattedDate;
+    }
+
+    public static String ConvertDateEvent(String s)
+    {
+        if(s==null)
+            return "";
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MMM-dd HH:mm",Locale.US);
+        DateFormat targetFormat = new SimpleDateFormat("yyyy/MM/dd", Locale.getDefault());
+        String formattedDate = null;
+        Date convertedDate = new Date();
+        try {
+            convertedDate = dateFormat.parse(s);
+            formattedDate = targetFormat.format(convertedDate);
+        } catch (ParseException e) {
+// TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return formattedDate;
     }
 
     public static String ConvertDate(String s)

@@ -33,7 +33,7 @@
     <android.support.design.widget.TabLayout
         android:id="@+id/tab_community"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
+        android:layout_height="23dp"
         app:tabIndicatorHeight="0dp"
         app:tabPaddingStart="0dp"
         app:tabPaddingEnd="0dp"
@@ -41,6 +41,7 @@
         app:tabGravity="fill"
         app:tabTextColor="@color/white"
         app:tabSelectedTextColor="@color/colorPrimary"
+        app:tabTextAppearance="@style/TabLayoutStyle"
         app:layout_behavior=""
         app:tabBackground="@drawable/tab_color_selector"
         android:background="@color/colorPrimary">

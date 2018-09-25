@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -19,6 +20,7 @@ import android.widget.ImageView;
 import com.aseanfan.worldcafe.UI.Adapter.AlbumAdapter;
 import com.aseanfan.worldcafe.UI.Adapter.CommunityAdapter;
 import com.aseanfan.worldcafe.UI.Adapter.FragmentMyPagerAdapter;
+import com.aseanfan.worldcafe.UI.Component.DIalogImagePreview;
 import com.aseanfan.worldcafe.UI.MainActivity;
 import com.aseanfan.worldcafe.Utils.Constants;
 import com.aseanfan.worldcafe.worldcafe.R;
@@ -30,6 +32,7 @@ public class AlbumFragment  extends android.support.v4.app.Fragment {
     private ViewPager viewPager;
     private RecyclerView listalbum;
     private AlbumAdapter mAdapter ;
+    private List<String> imagelist;
 
     public static AlbumFragment newInstance() {
         AlbumFragment albumFrag = new AlbumFragment();
@@ -39,6 +42,7 @@ public class AlbumFragment  extends android.support.v4.app.Fragment {
     public void setAlbumData(List<String> data)
     {
         mAdapter.setData(data);
+        imagelist = data;
     }
 
     @Nullable
@@ -59,7 +63,8 @@ public class AlbumFragment  extends android.support.v4.app.Fragment {
         mAdapter.setOnItemClickListener(new AlbumAdapter.ClickListener() {
             @Override
             public void onItemClick(int position, View v) {
-
+                DialogFragment fragment =  DIalogImagePreview.newInstance(imagelist,position);
+                fragment.show(getFragmentManager(), "image preview");
             }
         });
 

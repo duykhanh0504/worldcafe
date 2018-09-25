@@ -85,7 +85,7 @@ import java.util.List;
 
 import io.socket.client.Socket;
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends BaseActivity {
 
     private static final int REQUEST_SIGNUP = 0;
 
@@ -106,6 +106,7 @@ public class LoginActivity extends AppCompatActivity {
     private RadioGroup radgroupSignup;
     private Spinner countrySignup;
     private Spinner citySignup;
+    private ImageView signupAvatar;
 
     private ImageView _avatarimage;
 
@@ -145,7 +146,7 @@ public class LoginActivity extends AppCompatActivity {
     private String password;
     private String username ;
     private String birth;
-    private int  sex;
+    private int  sex =-1;
     private int cityid;
 
 
@@ -635,6 +636,13 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
+        signupAvatar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                selectImage();
+            }
+        });
+
         _avatarimage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -757,7 +765,7 @@ public class LoginActivity extends AppCompatActivity {
         radgroupSignup = (RadioGroup) viewRegister.findViewById(R.id.rad_sex);
         countrySignup = (Spinner)viewRegister.findViewById(R.id.spinner_country);
         citySignup = (Spinner)viewRegister.findViewById(R.id.spinner_city);
-
+        signupAvatar = (ImageView)viewRegister.findViewById(R.id.imageAvatar);
 
 
         _mobileupdate = (EditText)viewLoginUpdate.findViewById(R.id.input_mobile_update);
@@ -922,7 +930,13 @@ public class LoginActivity extends AppCompatActivity {
 
         if(validatePassword(password)==false)
         {
-            dialog.showDialogCancel( LoginActivity.this,"password can not ecpty" );
+            dialog.showDialogCancel( LoginActivity.this,"password can not empty" );
+            progressDialog.dismiss();
+            return;
+        }
+        if(sex ==-1)
+        {
+            dialog.showDialogCancel( LoginActivity.this,"Please input sex ");
             progressDialog.dismiss();
             return;
         }
@@ -950,6 +964,15 @@ public class LoginActivity extends AppCompatActivity {
         dataJson.addProperty("city",city);
         dataJson.addProperty("country",country);
 
+        if(selectedAvatar!=null)
+        {
+            String[] bb = Utils.compressFormat(selectedAvatar.getPath(), this);
+            String base64 = bb[0];
+            String imagename = System.currentTimeMillis() + "." + bb[1];
+            dataJson.addProperty("base64",base64);
+            dataJson.addProperty("image",imagename);
+        }
+
 
         RestAPI.PostDataMaster(getApplicationContext(), dataJson, url, new RestAPI.RestAPIListenner() {
 
@@ -957,6 +980,7 @@ public class LoginActivity extends AppCompatActivity {
             public void OnComplete(int httpCode, String error, String s) {
                 try {
                     if (!RestAPI.checkHttpCode(httpCode)) {
+                        progressDialog.dismiss();
                         //AppFuncs.alert(getApplicationContext(),s,true);
                         dialog.showDialogCancel( LoginActivity.this,getResources().getString(R.string.can_not_connect_server) );
                         return;
@@ -1005,6 +1029,7 @@ public class LoginActivity extends AppCompatActivity {
             dataJson.remove("v_followed");
             dataJson.remove("v_follower");
             dataJson.remove("v_total_like");
+            dataJson.remove("rank");
              url = RestAPI.POST_SIGNUPBYFACEBOOK;
         }
         else
@@ -1179,8 +1204,13 @@ public class LoginActivity extends AppCompatActivity {
         {
              Intent intent = new Intent(this , IntroActivity.class);
              startActivity(intent);
+             finish();
         }
-        finish();
+        if(_viewfliper.getDisplayedChild () == Constants.PAGE_FORGETPASS)
+        {
+            showPage(Constants.PAGE_LOGIN);
+        }
+
 
     }
 
@@ -1411,8 +1441,6 @@ public class LoginActivity extends AppCompatActivity {
         ok.show();
     }
 
-
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -1426,7 +1454,13 @@ public class LoginActivity extends AppCompatActivity {
                 if(resultCode == RESULT_OK){
                     CropImage.ActivityResult result = CropImage.getActivityResult(data);
                     selectedAvatar = result.getUri();
-                    Glide.with(this).load( selectedAvatar).apply(RequestOptions.circleCropTransform()).into( _avatarimage);
+                    if(_viewfliper.getDisplayedChild() == Constants.PAGE_REGISTER)
+                    {
+                        Glide.with(this).load(selectedAvatar).apply(RequestOptions.circleCropTransform()).into(signupAvatar);
+                    }
+                    else {
+                        Glide.with(this).load(selectedAvatar).apply(RequestOptions.circleCropTransform()).into(_avatarimage);
+                    }
                 }
                 break;
         }

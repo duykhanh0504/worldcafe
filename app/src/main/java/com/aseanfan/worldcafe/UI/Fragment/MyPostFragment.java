@@ -310,6 +310,12 @@ public class MyPostFragment  extends android.support.v4.app.Fragment implements 
             Adapter.setPostList(posttimeline);
 
         }
+        else if(type == Constants.CLICK_TIMELINE)
+        {
+            if(posttimeline.get(position)!=null) {
+                ((MainActivity) getActivity()).callDetailTimeline(posttimeline.get(position));
+            }
+        }
         else if(type == Constants.CLICK_IMAGE_MENU)
         {
             openOptionMenu(v,position);
@@ -317,7 +323,8 @@ public class MyPostFragment  extends android.support.v4.app.Fragment implements 
         else if(type == Constants.CLICK_IMAGE_COMMENT)
         {
             Intent intent = new Intent(getActivity(), CommentActivity.class);
-            intent.putExtra("Event_id",posttimeline.get(position).getTimelineid());
+            intent.putExtra("Timeline_id",posttimeline.get(position).getTimelineid());
+            intent.putExtra("Account_id", posttimeline.get(position).getAccountid());
             startActivity(intent);
         }
 

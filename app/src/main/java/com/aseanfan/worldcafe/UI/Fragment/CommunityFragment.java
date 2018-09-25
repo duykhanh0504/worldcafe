@@ -85,10 +85,6 @@ public class CommunityFragment extends Fragment implements NotificationCenter.No
    // List<EventModel> listEventLocal;
    // List<EventModel> listEventLanguage;
 
-    final int TAB_FRIEND = 0;
-    final int TAB_BUSINESS=1;
-    final int TAB_LOCAL=2;
-    final int TAB_LANGUAGE=3;
 
     private SearchView searchView;
 
@@ -135,75 +131,6 @@ public class CommunityFragment extends Fragment implements NotificationCenter.No
         } else {
             //do when show
         }
-    }
-
-    public void SearchEvent(String search_text)
-    {
-        int i =0;
-    }
-
-
-    public void LoadListEvent(final int Type)
-    {
-        String url =  String.format(RestAPI.GET_LISTEVENT,AccountController.getInstance().getAccount().getId(),Type,current_pos);
-
-        if(area.size()>0)
-        {
-            String city = "&city=";
-            for( int i = 0 ; i <area.size() ; i++)
-            {
-                if(i == area.size()-1)
-                    city = city + area.get(i) ;
-                else
-                    city = city + area.get(i) + ",";
-            }
-            url = url + city;
-        }
-
-        if(!keyword.isEmpty())
-        {
-            url = url + "&keyword=" + keyword;
-        }
-
-
-        url = url + "&sort_type=" + typeSort;
-
-
-
-        RestAPI.GetDataMasterWithToken(getActivity().getApplicationContext(),url, new RestAPI.RestAPIListenner() {
-            @Override
-            public void OnComplete(int httpCode, String error, String s) {
-                try {
-                    if (!RestAPI.checkHttpCode(httpCode)) {
-                        //AppFuncs.alert(getApplicationContext(),s,true);
-                        return;
-                    }
-                    if(RestAPI.checkExpiredtoken(s))
-                    {
-                        ViewDialog dialog = new ViewDialog();
-                        dialog.showDialogOK(getActivity(), "invalid token", new ViewDialog.DialogListenner() {
-                            @Override
-                            public void OnClickConfirm() {
-                                App.mApp.Logout();
-                            }
-                        });
-
-                        return;
-                    }
-
-                    JsonArray jsonArray = (new JsonParser()).parse(s).getAsJsonObject().getAsJsonArray("result");
-                    Gson gson = new Gson();
-                    java.lang.reflect.Type type = new TypeToken<List<EventModel>>(){}.getType();
-                    listEvent = gson.fromJson(jsonArray, type);
-                    adapter.updateFragmentEvent(listEvent,Type-1);
-
-                }
-                catch (Exception ex) {
-
-                    ex.printStackTrace();
-                }
-            }
-        });
     }
 
     @Override

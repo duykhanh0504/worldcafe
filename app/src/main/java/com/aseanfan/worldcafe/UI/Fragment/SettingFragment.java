@@ -22,6 +22,7 @@ import com.aseanfan.worldcafe.Provider.Store;
 import com.aseanfan.worldcafe.UI.Adapter.PostTimelineAdapter;
 import com.aseanfan.worldcafe.UI.Adapter.SettingAdapter;
 import com.aseanfan.worldcafe.UI.ChangePassActivity;
+import com.aseanfan.worldcafe.UI.Component.ViewDialog;
 import com.aseanfan.worldcafe.UI.IntroActivity;
 import com.aseanfan.worldcafe.UI.LoginActivity;
 import com.aseanfan.worldcafe.UI.MainActivity;
@@ -77,7 +78,14 @@ public class SettingFragment extends android.support.v4.app.Fragment implements 
     public void onItemClick(int position, View v) {
         if(position == Constants.SETTING_LOGOUT_ROW)
         {
-            app.Logout();
+            ViewDialog dialog = new ViewDialog();
+            dialog.showDialog(getActivity(), "Are you sure?", new ViewDialog.DialogListenner() {
+                @Override
+                public void OnClickConfirm() {
+                    app.Logout();
+                }
+            });
+
         }
         if(position == Constants.SETTING_CHANGEPASS_ROW)
         {

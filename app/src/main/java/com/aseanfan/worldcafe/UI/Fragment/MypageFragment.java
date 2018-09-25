@@ -13,6 +13,7 @@ import android.support.constraint.solver.widgets.Rectangle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
@@ -29,6 +30,7 @@ import com.aseanfan.worldcafe.Model.PostTimelineModel;
 import com.aseanfan.worldcafe.Model.UserModel;
 import com.aseanfan.worldcafe.Provider.Store;
 import com.aseanfan.worldcafe.UI.Adapter.FragmentMyPagerAdapter;
+import com.aseanfan.worldcafe.UI.Component.DIalogImagePreview;
 import com.aseanfan.worldcafe.UI.EditProfileActivity;
 import com.aseanfan.worldcafe.UI.MainActivity;
 import com.aseanfan.worldcafe.Utils.Constants;
@@ -79,6 +81,7 @@ public class MypageFragment extends android.support.v4.app.Fragment implements N
     private ImageView avatar;
     private CardView background;
     private TextView name;
+    private TextView age;
     private ProgressBar loading;
     private List<PostTimelineModel> posttimeline;
     private ImageView rankImage;
@@ -98,6 +101,7 @@ public class MypageFragment extends android.support.v4.app.Fragment implements N
 
     private ImageView avatartoolbar;
     private TextView nametoolbar;
+
 
     private static final float PERCENTAGE_TO_SHOW  = 0.9f;
     private static final float PERCENTAGE_TO_HIDE  = 0.3f;
@@ -203,6 +207,21 @@ public class MypageFragment extends android.support.v4.app.Fragment implements N
                         Gson gson = new Gson();
                         user = gson.fromJson(jsonObject, UserModel.class);
                         name.setText(user.getUsername());
+                        age.setText( String.valueOf(Utils.getAge(user.getBirthday())));
+                        if(user.getSex() == 1)
+                        {
+                             age.setTextColor(getResources().getColor(R.color.colorPrimary));
+                             Drawable iconRating = getResources().getDrawable( R.drawable.ic_male );
+                             iconRating.setBounds(0,0, Utils.convertDpToPixel(20,getContext()),Utils.convertDpToPixel(20,getContext()));
+                             age.setCompoundDrawables(iconRating, null, null, null);
+                        }
+                        else
+                        {
+                            age.setTextColor(getResources().getColor(R.color.purple));
+                            Drawable iconRating = getResources().getDrawable( R.drawable.ic_female );
+                            iconRating.setBounds(0,0, Utils.convertDpToPixel(20,getContext()),Utils.convertDpToPixel(20,getContext()));
+                            age.setCompoundDrawables(iconRating, null, null, null);
+                        }
                         final Drawable mDefaultBackground = getContext().getResources().getDrawable(R.drawable.avata_defaul);
                         Glide.with(getContext()).load( user.getAvarta()).apply(RequestOptions.circleCropTransform().diskCacheStrategy(DiskCacheStrategy.NONE).error(mDefaultBackground)).into(avatar);
                         final Drawable mDefaultBackground1 = getContext().getResources().getDrawable(R.drawable.avata_defaul);
@@ -419,16 +438,20 @@ public class MypageFragment extends android.support.v4.app.Fragment implements N
 
 
         toolbar = (Toolbar) view.findViewById(R.id.toolbar);
-        ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
-        ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle(null);
+     //   ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
+      //  ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle(null);
       //  ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 
         name = view.findViewById(R.id.Name);
+        age = view.findViewById(R.id.Age);
 
         avatar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                DialogFragment fragment =  DIalogImagePreview.newInstancestring(user.getAvarta());
+                fragment.show(getFragmentManager(), "image preview");
+
               /*  if(accountid.equals(AccountController.getInstance().getAccount().getId())) {
                     Intent intent = CropImage.activity(null)
                             .setGuidelines(CropImageView.Guidelines.ON)
@@ -508,6 +531,12 @@ public class MypageFragment extends android.support.v4.app.Fragment implements N
         background.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if(user.getCover()!=null && !user.getCover().isEmpty()) {
+
+                    DialogFragment fragment = DIalogImagePreview.newInstancestring(user.getCover());
+                    fragment.show(getFragmentManager(), "image preview");
+                }
+
                /* if(accountid.equals(AccountController.getInstance().getAccount().getId())) {
                     Intent intent = CropImage.activity(null)
                             .setGuidelines(CropImageView.Guidelines.ON)
@@ -524,12 +553,12 @@ public class MypageFragment extends android.support.v4.app.Fragment implements N
 
         loading = view.findViewById(R.id.loading_spinner);
 
-        Glide.with(getContext()).load( "https://png.pngtree.com/thumb_back/fh260/back_pic/00/15/30/4656e81f6dc57c5.jpg").into(new SimpleTarget<Drawable>() {
+      /*  Glide.with(getContext()).load( "https://png.pngtree.com/thumb_back/fh260/back_pic/00/15/30/4656e81f6dc57c5.jpg").into(new SimpleTarget<Drawable>() {
             @Override
             public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
                 background.setBackgroundDrawable(resource);
             }
-        });
+        });*/
         AppBarLayout appBarLayout = view.findViewById(R.id.appBar);
 
         appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {

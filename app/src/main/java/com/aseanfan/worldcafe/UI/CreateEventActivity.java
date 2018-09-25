@@ -202,14 +202,14 @@ public class CreateEventActivity extends AppCompatActivity {
         int checkedRadioId = group.getCheckedRadioButtonId();
 
         if(checkedRadioId== R.id.radfriend) {
-            event.setType(Constants.EVENT_FRIEND);
+            event.setType(Constants.EVENT_FRIEND +1);
         } else if(checkedRadioId== R.id.radbusiness ) {
-            event.setType(Constants.EVENT_BUSSINESS);
+            event.setType(Constants.EVENT_BUSSINESS +1);
         } else if(checkedRadioId== R.id.radlanguage) {
-            event.setType(Constants.EVENT_LANGUAGE);
+            event.setType(Constants.EVENT_LANGUAGE +1);
         }
         else if(checkedRadioId== R.id.radlocal) {
-            event.setType(Constants.EVENT_LOCAL);
+            event.setType(Constants.EVENT_LOCAL +1);
         }
     }
 
@@ -266,7 +266,7 @@ public class CreateEventActivity extends AppCompatActivity {
         typetime.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                event.setPertime(i);
+               event.setPertime(i);
             }
 
             @Override
@@ -284,12 +284,14 @@ public class CreateEventActivity extends AppCompatActivity {
                 if(b == false)
                 {
                     container_type.setVisibility(View.GONE);
-                    event.setSchedule_type(1);
+                    event.setSchedule_type(0);
+
                 }
                 else
                 {
                     container_type.setVisibility(View.VISIBLE);
-                    event.setSchedule_type(0);
+                    event.setSchedule_type(1);
+                    event.setPertime(0);
                 }
             }
         });
@@ -373,7 +375,7 @@ public class CreateEventActivity extends AppCompatActivity {
 
         radgroup.check(R.id.radfriend);
 
-        event.setType(Constants.EVENT_FRIEND);
+        event.setType(Constants.EVENT_FRIEND +1);
 
         radgroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override

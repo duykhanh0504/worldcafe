@@ -104,7 +104,8 @@
 
         <activity
             android:name="com.aseanfan.worldcafe.UI.ChatActivity"
-            android:theme="@style/ThemeWithTabBar" />
+            android:theme="@style/ThemeWithTabBar"
+            android:screenOrientation="portrait"/>
         <activity
             android:name="com.aseanfan.worldcafe.UI.RegisterActivity"
             android:screenOrientation="portrait" />

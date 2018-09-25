@@ -9,7 +9,7 @@
         <item name="windowActionBar">false</item>
         <item name="windowActionBarOverlay">true</item>
         <item name="windowNoTitle">true</item>
-        <item name="fontFamily">sans-serif</item>
+        <item name="android:typeface">serif</item>
     </style>
 
     <style name="ThemeWithTabBar" parent="Base.Theme.AppCompat.Light.DarkActionBar">
@@ -20,6 +20,7 @@
         <item name="android:windowActionBarOverlay">true</item>
         <item name="android:windowSoftInputMode">stateUnspecified|adjustResize</item>
         <item name="android:fitsSystemWindows">true</item>
+        <item name="android:typeface">serif</item>
     </style>
 
 
@@ -40,6 +41,11 @@
         <!-- Error message appearance here -->
         <item name="android:textColor">#ff0000</item>
         <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="TabLayoutStyle" parent="Base.Widget.Design.TabLayout">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textAllCaps">true</item>
     </style>
 
 

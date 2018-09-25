@@ -202,7 +202,7 @@ public class CommunityAdapter extends RecyclerView.Adapter<CommunityAdapter.MyVi
             holder.imglike.setBackgroundResource(R.drawable.like);
         }
         if(event.getStarttime() != null) {
-            holder.time.setText(Utils.ConvertDate(event.getStarttime()));
+            holder.time.setText(Utils.ConvertDateEvent(event.getStarttime()));
         }
         holder.location.setText(event.getCityname());
 

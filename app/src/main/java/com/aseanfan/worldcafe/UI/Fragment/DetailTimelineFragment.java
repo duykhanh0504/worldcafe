@@ -13,6 +13,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -67,7 +68,7 @@ public class DetailTimelineFragment  extends android.support.v4.app.Fragment imp
     private TextView comment;
     private TextView detail;
     private ImageView imagelike;
-    private ImageButton toolbar_button;
+    private ImageView toolbar_button;
     private ImageView imageComment;
 
     private RecyclerView rcycoment;
@@ -145,7 +146,7 @@ public class DetailTimelineFragment  extends android.support.v4.app.Fragment imp
         detail = (TextView) view.findViewById(R.id.detailPost);
         imagelike = (ImageView) view.findViewById(R.id.imageLike) ;
         imageComment = (ImageView) view.findViewById(R.id.imageComment) ;
-        toolbar_button = (ImageButton) view.findViewById(R.id.toolbar_button) ;
+        toolbar_button = (ImageView) view.findViewById(R.id.toolbar_button) ;
 
         toolbar_button.setOnClickListener(this);
         imagePost.setOnClickListener(this);
@@ -181,6 +182,14 @@ public class DetailTimelineFragment  extends android.support.v4.app.Fragment imp
             Glide.with(getContext()).load(timeline.getUrlAvatar()).apply(RequestOptions.circleCropTransform().diskCacheStrategy(DiskCacheStrategy.NONE).error(mDefaultBackground)).into(avatar);
             username.setText(timeline.getUsername());
             detail.setText(timeline.getDetail());
+
+            if(timeline.getAccountid().equals(AccountController.getInstance().getAccount().getId())) {
+                toolbar_button.setImageResource((R.drawable.event_header_right));
+            }
+            else
+            {
+                toolbar_button.setImageResource((R.drawable.ic_report_header));
+            }
 
            // mAdapter.setData(timeline.getUrlImage());
             if(timeline.getUrlImage()!=null && timeline.getUrlImage().size() > 0) {
@@ -334,11 +343,37 @@ public class DetailTimelineFragment  extends android.support.v4.app.Fragment imp
             image2.setScaleType(ImageView.ScaleType.CENTER_CROP);
             Glide.with(contain.getContext()).load(url.get(2)).into(image2);
 
-            ImageView image3 = new ImageView(contain.getContext());
-            LinearLayout.LayoutParams layoutParams3 = new LinearLayout.LayoutParams(Utils.getwidthScreen(contain.getContext())/2, Utils.convertDpToPixel(120,contain.getContext()));
-            image3.setLayoutParams(layoutParams2);
-            image3.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            Glide.with(contain.getContext()).load(url.get(3)).into(image3);
+            LinearLayout.LayoutParams layoutParams3 = new LinearLayout.LayoutParams(Utils.getwidthScreen(contain.getContext()) / 2, Utils.convertDpToPixel(120, contain.getContext()));
+
+            FrameLayout containplus = new FrameLayout(contain.getContext());
+            ImageView image3;
+            if(url.size() == 4) {
+                image3 = new ImageView(contain.getContext());
+                image3.setLayoutParams(layoutParams3);
+                image3.setScaleType(ImageView.ScaleType.CENTER_CROP);
+                Glide.with(contain.getContext()).load(url.get(3)).into(image3);
+            }else
+            {
+
+                 image3 = new ImageView(contain.getContext());
+                image3.setLayoutParams(layoutParams3);
+                image3.setScaleType(ImageView.ScaleType.CENTER_CROP);
+                Glide.with(contain.getContext()).load(url.get(3)).into(image3);
+
+                containplus.addView(image3);
+
+                FrameLayout overlayout = new FrameLayout(contain.getContext());
+                overlayout.setLayoutParams(layoutParams3);
+                overlayout.setBackgroundColor(getResources().getColor(R.color.blacktransparent));
+                containplus.addView(overlayout);
+
+                TextView textplus = new TextView(contain.getContext());
+                textplus.setTextColor(contain.getContext().getResources().getColor(R.color.white));
+                textplus.setGravity(Gravity.CENTER);
+                textplus.setTextSize(Utils.convertDpToPixel(30,contain.getContext()));
+                textplus.setText(String.valueOf(url.size() -4) + "+");
+                containplus.addView(textplus);
+            }
 
             FrameLayout line = new FrameLayout(contain.getContext());
             LinearLayout.LayoutParams layoutParamsline = new LinearLayout.LayoutParams( Utils.convertDpToPixel(2,contain.getContext()), Utils.convertDpToPixel(240,contain.getContext()));
@@ -361,7 +396,13 @@ public class DetailTimelineFragment  extends android.support.v4.app.Fragment imp
 
             contentimage2.addView(image2);
             contentimage2.addView(line2);
-            contentimage2.addView(image3);
+            if(url.size() == 4) {
+                contentimage2.addView(image3);
+            }
+            else
+            {
+                contentimage2.addView(containplus);
+            }
 
             contentimage.addView(contentimage1);
             contentimage.addView(line);

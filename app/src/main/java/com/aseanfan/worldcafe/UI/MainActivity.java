@@ -62,7 +62,7 @@ import io.socket.client.IO;
 import io.socket.client.Socket;
 import io.socket.emitter.Emitter;
 
-public class MainActivity extends AppCompatActivity implements NotificationCenter.NotificationCenterDelegate {
+public class MainActivity extends BaseActivity implements NotificationCenter.NotificationCenterDelegate {
 
     private CommunityFragment communityFragment;
     private TimelineFragment timelineFragment;
@@ -494,6 +494,8 @@ public class MainActivity extends AppCompatActivity implements NotificationCente
           bundle.putInt("limitperson",eventid.getLimitpersons());
           bundle.putString("note",eventid.getNote());
           bundle.putInt("islike",eventid.getIslike());
+          bundle.putInt("schedule_type",eventid.getSchedule_type());
+
 
           if(eventid.getUrlImage() !=null && eventid.getUrlImage().size() >0) {
             bundle.putString("image", eventid.getUrlImage().get(0));

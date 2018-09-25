@@ -7,4 +7,6 @@
     <dimen name="rating_space">5dp</dimen>
     <dimen name="album_space">1dp</dimen>
     <dimen name="header_space">30dp</dimen>
+
+
 </resources>

@@ -1,5 +1,6 @@
 package com.aseanfan.worldcafe.UI.Fragment;
 
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -18,10 +19,15 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.aseanfan.worldcafe.App.AccountController;
@@ -30,6 +36,7 @@ import com.aseanfan.worldcafe.Model.AccountModel;
 import com.aseanfan.worldcafe.Model.EventModel;
 import com.aseanfan.worldcafe.UI.Adapter.RequestMemberAdapter;
 import com.aseanfan.worldcafe.UI.CommentEventActivity;
+import com.aseanfan.worldcafe.UI.Component.ViewDialog;
 import com.aseanfan.worldcafe.UI.CreateEventActivity;
 import com.aseanfan.worldcafe.UI.MainActivity;
 import com.aseanfan.worldcafe.UI.MemberRequestActivity;
@@ -77,6 +84,113 @@ public class DetailCommunityFragment extends android.support.v4.app.Fragment imp
     private ImageView imagecomment;
     private LinearLayout content_info;
 
+    String[] listreport ;
+
+
+    public void LoadReport()
+    {
+        String url;
+        url = String.format(RestAPI.GET_LIST_REPORT, 0);
+
+        RestAPI.GetDataMaster(getActivity().getApplicationContext(),url, new RestAPI.RestAPIListenner() {
+            @Override
+            public void OnComplete(int httpCode, String error, String s) {
+                try {
+                    if (!RestAPI.checkHttpCode(httpCode)) {
+                        //AppFuncs.alert(getApplicationContext(),s,true);
+
+                        return;
+                    }
+
+                    JsonArray jsonArray = (new JsonParser()).parse(s).getAsJsonObject().getAsJsonArray("result");
+                    Gson gson = new Gson();
+                    java.lang.reflect.Type type = new TypeToken<List<String>>(){}.getType();
+                    List<String> listEvent = gson.fromJson(jsonArray, type);
+                    dialogReport(listEvent);
+
+
+                }
+                catch (Exception ex) {
+                }
+            }
+        });
+    }
+
+    public void dialogReport(final List<String> list)
+    {
+        final String[] spinner_item = new String[1];
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(),
+                android.R.layout.simple_spinner_item, list);
+
+        final Dialog dialog = new Dialog(getActivity());
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.dialog_report);
+        dialog.setCancelable(true);
+
+        // set the custom dialog components - text, image and button
+        final Spinner spinner = (Spinner) dialog.findViewById(R.id.spinner1);
+        final EditText edittext = (EditText) dialog.findViewById(R.id.editText1);
+        Button button = (Button) dialog.findViewById(R.id.report);
+        spinner.setAdapter(adapter);
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                // TODO Auto-generated method stub
+                spinner_item[0] = list.get(position);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                // TODO Auto-generated method stub
+
+            }
+        });
+
+        button.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                // TODO Auto-generated method stub
+                dialog.dismiss();
+                Report(spinner_item[0]);
+
+                //   Toast.makeText(getApplicationContext(), spinner_item + " - " + edittext.getText().toString().trim(), Toast.LENGTH_LONG).show();
+            }
+        });
+        dialog.show();
+    }
+
+
+    public void Report(String reporttext)
+    {
+        JsonObject dataJson = new JsonObject();
+        dataJson.addProperty("type", 1);
+        dataJson.addProperty("account_id", AccountController.getInstance().getAccount().getId());
+        dataJson.addProperty("object_id", event.getAccountid());
+        dataJson.addProperty("content", reporttext);
+
+        RestAPI.PostDataMasterWithToken(getActivity().getApplicationContext(),dataJson,RestAPI.POST_REPORT, new RestAPI.RestAPIListenner() {
+            @Override
+            public void OnComplete(int httpCode, String error, String s) {
+                try {
+                    if (!RestAPI.checkHttpCode(httpCode)) {
+                        //AppFuncs.alert(getApplicationContext(),s,true);
+
+                        return;
+                    }
+                    ViewDialog dialog = new ViewDialog();
+                    dialog.showDialogCancel(getActivity(),"Report Successful");
+                    //   posttimeline.remove(pos);
+                    //  Adapter.setPostList(posttimeline);
+
+                }
+                catch (Exception ex) {
+                }
+            }
+        });
+    }
 
     public void LikeEvent(final Long  eventid)
     {
@@ -257,6 +371,7 @@ public class DetailCommunityFragment extends android.support.v4.app.Fragment imp
             event.setLimit_personse(getArguments().getInt("limitperson"));
             event.setNote(getArguments().getString("note"));
             event.setIslike(getArguments().getInt("islike"));
+            event.setSchedule_type(getArguments().getInt("schedule_type"));
 
             if(event.getIslike()==0)
             {
@@ -271,12 +386,14 @@ public class DetailCommunityFragment extends android.support.v4.app.Fragment imp
 
             if(event.getAccountid().equals(AccountController.getInstance().getAccount().getId())) {
                 setHasOptionsMenu(true);
-                imagemenu.setVisibility(View.VISIBLE);
+               // imagemenu.setVisibility(View.VISIBLE);
+                imagemenu.setImageResource(R.drawable.event_header_right);
             }
             else
             {
                 setHasOptionsMenu(false);
-                imagemenu.setVisibility(View.GONE);
+                imagemenu.setImageResource(R.drawable.ic_report_header);
+               // imagemenu.setVisibility(View.GONE);
             }
             if(!event.getAccountid().equals(AccountController.getInstance().getAccount().getId())) {
                 if (event.getIsjoin() == 1) {
@@ -322,8 +439,8 @@ public class DetailCommunityFragment extends android.support.v4.app.Fragment imp
                type.setText(getContext().getText(R.string.Language));
             }
 
-            starttime.setText(Utils.ConvertDate(event.getStarttime()));
-            updatetime.setText(event.getUpdatetime());
+            starttime.setText(Utils.ConvertDateEvent(event.getStarttime()));
+            updatetime.setText(Utils.ConvertDateEventNonDetail(event.getUpdatetime()));
             place.setText(event.getCityname());
             String timetype= "";
             if(event.getPertime() ==0)
@@ -338,7 +455,14 @@ public class DetailCommunityFragment extends android.support.v4.app.Fragment imp
             {
                 timetype = "Year";
             }
-            scheduel.setText(event.getNumber() + " / " + timetype);
+            if( event.getNumber()==0 ) {
+                //scheduel.setText(event.getNumber() + " / " + timetype);
+                scheduel.setText("No repeat");
+            }
+            else
+            {
+                scheduel.setText(event.getNumber() + " / " + timetype);
+            }
             number_attendess.setText(event.getLimitpersons()+"");
             if(event.getNote() != null && !event.getNote().isEmpty())
             {
@@ -439,7 +563,13 @@ public class DetailCommunityFragment extends android.support.v4.app.Fragment imp
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.imagemenu:
-                openOptionMenu(view);
+                if(event.getAccountid().equals(AccountController.getInstance().getAccount().getId())) {
+                    openOptionMenu(view);
+                }
+                else
+                {
+                    LoadReport();
+                }
                 break;
             case R.id.btnJoin:
                 JoinEvent(event.getEventid());

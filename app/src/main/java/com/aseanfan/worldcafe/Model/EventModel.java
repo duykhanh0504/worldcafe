@@ -203,7 +203,7 @@ public class EventModel {
         return number;
     }
 
-    public void setNumber(int limit_persons) {
+    public void setNumber(int number) {
         this.number = number;
     }
 

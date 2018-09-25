@@ -23,6 +23,7 @@ public class UserModel {
     private int v_followed;
     private int v_follower;
     private int v_total_like;
+    private int rank;
 
 
     public UserModel( String email, String mobile) {
@@ -39,6 +40,14 @@ public class UserModel {
 
     public void setFacebookid(String facebookid) {
         this.facebook_id = facebookid;
+    }
+
+    public int getRank() {
+        return rank;
+    }
+
+    public void setRank(int status) {
+        this.rank = rank;
     }
 
     public int getStatus() {

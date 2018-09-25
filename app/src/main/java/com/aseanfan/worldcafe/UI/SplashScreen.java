@@ -26,7 +26,7 @@ public class SplashScreen extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_screen);
 
-        MobileAds.initialize(this, this.getString(R.string.banner_ad_unit_id));
+       // MobileAds.initialize(this, this.getString(R.string.banner_ad_unit_id));
 
         int secondsDelayed = 1;
         new Handler().postDelayed(new Runnable() {
