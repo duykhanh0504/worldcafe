@@ -300,6 +300,23 @@ public class EditEventActivity extends AppCompatActivity {
     public void setdata()
     {
 
+        String formattedString;
+        formattedString = Utils.formatInteger(event.getPrice().toString());
+
+        formattedString = formattedString +   prefix;
+
+        price.setText(formattedString);
+        numberofparticipal.setText(String.valueOf(event.getLimitpersons()));
+        times.setText(Utils.ConvertDateEvent(event.getStarttime()));
+        title.setText(event.getTitle());
+        if(event.getContent()!=null)
+        {
+            content.setText(event.getContent());
+        }
+        if(event.getNote()!=null)
+        {
+            note.setText(event.getNote());
+        }
 
     }
 
@@ -362,6 +379,7 @@ public class EditEventActivity extends AppCompatActivity {
             event.setIslike(bundle.getInt("islike"));
             event.setSchedule_type(bundle.getInt("schedule_type"));
             event.setPrivate(bundle.getInt("is_private"));
+            event.setPrice(bundle.getLong("price"));
         }
     }
 }

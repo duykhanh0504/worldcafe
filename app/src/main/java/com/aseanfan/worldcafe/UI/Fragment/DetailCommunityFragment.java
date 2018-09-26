@@ -85,6 +85,7 @@ public class DetailCommunityFragment extends android.support.v4.app.Fragment imp
     private ImageView imagecomment;
     private LinearLayout content_info;
     private TextView txtprivate;
+    private TextView txtprice;
 
     String[] listreport ;
 
@@ -376,6 +377,8 @@ public class DetailCommunityFragment extends android.support.v4.app.Fragment imp
         imagecomment = (ImageView) view.findViewById(R.id.imageComment);
         content_info = (LinearLayout)  view.findViewById(R.id.content_info);
         txtprivate = (TextView)  view.findViewById(R.id.txtprivate);
+        txtprice = (TextView)  view.findViewById(R.id.txtprice);
+
 
         btnJoin.setOnClickListener(this);
         containList.setOnClickListener(this);
@@ -409,7 +412,10 @@ public class DetailCommunityFragment extends android.support.v4.app.Fragment imp
             event.setIslike(getArguments().getInt("islike"));
             event.setSchedule_type(getArguments().getInt("schedule_type"));
             event.setPrivate(getArguments().getInt("is_private"));
+            event.setPrice(getArguments().getLong("price"));
 
+
+            txtprice.setText(event.getPrice().toString() + " VND");
 
             if(event.getIslike()==0)
             {
@@ -587,6 +593,7 @@ public class DetailCommunityFragment extends android.support.v4.app.Fragment imp
                         intent.putExtra("islike",event.getIslike());
                         intent.putExtra("schedule_type",event.getSchedule_type());
                         intent.putExtra("is_private",event.getPrivate());
+                        intent.putExtra("price",event.getPrice());
 
                         startActivity(intent);
                         break;

@@ -496,6 +496,7 @@ public class MainActivity extends BaseActivity implements NotificationCenter.Not
           bundle.putInt("islike",eventid.getIslike());
           bundle.putInt("schedule_type",eventid.getSchedule_type());
           bundle.putInt("is_private",eventid.getPrivate());
+          bundle.putLong("price",eventid.getPrice());
 
 
           if(eventid.getUrlImage() !=null && eventid.getUrlImage().size() >0) {
