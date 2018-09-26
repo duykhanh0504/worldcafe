@@ -28,6 +28,8 @@ public class EventModel {
     private int per_time;
     private String note;
     private String create_time;
+    private int is_private;
+
 
     public EventModel() {
     }
@@ -221,6 +223,14 @@ public class EventModel {
 
     public void setNote(String note) {
         this.note = note;
+    }
+
+    public int getPrivate() {
+        return is_private;
+    }
+
+    public void setPrivate(int is_private) {
+        this.is_private = is_private;
     }
 
 }

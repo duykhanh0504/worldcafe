@@ -1,12 +1,14 @@
 package com.aseanfan.worldcafe.UI.Fragment;
 
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -77,6 +79,7 @@ public class DetailTimelineFragment  extends android.support.v4.app.Fragment imp
 
     private List<CommentModel> listcomment;
     PostTimelineModel timeline;
+    private String[] listreport;
 
 
     public void LikePost(Long Postid)
@@ -535,6 +538,38 @@ public class DetailTimelineFragment  extends android.support.v4.app.Fragment imp
 
     public void dialogReport(final List<String> list)
     {
+        listreport = new String[list.size()];
+        listreport = list.toArray(listreport);
+        final int[] mpos = {-1};
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setTitle("Choose some areas");
+
+        builder.setCancelable(true);
+        builder.setSingleChoiceItems(listreport, 0, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                mpos[0] = i;
+            }
+        });
+
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // LoadListEvent(typegenre);
+                dialog.dismiss();
+                if(mpos[0]!=-1) {
+                    Report(listreport[mpos[0]]);
+                }
+            }
+        });
+        builder.setNegativeButton("Cancel", null);
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+   /* public void dialogReport(final List<String> list)
+    {
         final String[] spinner_item = new String[1];
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(),
@@ -577,7 +612,7 @@ public class DetailTimelineFragment  extends android.support.v4.app.Fragment imp
             }
         });
         dialog.show();
-    }
+    }*/
 
     @Nullable
     @Override

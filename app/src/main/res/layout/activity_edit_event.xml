@@ -66,10 +66,10 @@
 
     </android.support.v7.widget.Toolbar>
 
-<ScrollView
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_marginTop="30dp">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="30dp">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -96,76 +96,76 @@
             android:layout_marginBottom="@dimen/margin_left_right">
 
 
-                <RadioButton
-                    android:id="@+id/radfriend"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="friend"
-                    android:textAlignment="center"
-                    android:textColor="@color/white"
-                    android:paddingTop="5dp"
-                    android:paddingBottom="5dp"
-                    android:paddingLeft="5dp"
-                    android:paddingRight="5dp"
-                    android:minWidth="75dp"
-                    android:minHeight="25dp"
-                    android:background="@drawable/radiobtnbackground"
-                    android:button="@android:color/transparent"
-                    android:layout_marginRight="20dp"/>
+            <RadioButton
+                android:id="@+id/radfriend"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="friend"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:minWidth="75dp"
+                android:minHeight="25dp"
+                android:background="@drawable/radiobtnbackground"
+                android:button="@android:color/transparent"
+                android:layout_marginRight="20dp"/>
 
-                <RadioButton
-                    android:id="@+id/radlanguage"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textAlignment="center"
-                    android:textColor="@color/white"
-                    android:text="language"
-                    android:paddingTop="5dp"
-                    android:paddingBottom="5dp"
-                    android:paddingLeft="5dp"
-                    android:paddingRight="5dp"
-                    android:minWidth="75dp"
-                    android:minHeight="25dp"
-                    android:background="@drawable/radiobtnbackground"
-                    android:button="@android:color/transparent"
-                    android:layout_marginRight="20dp"/>
+            <RadioButton
+                android:id="@+id/radlanguage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:text="language"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:minWidth="75dp"
+                android:minHeight="25dp"
+                android:background="@drawable/radiobtnbackground"
+                android:button="@android:color/transparent"
+                android:layout_marginRight="20dp"/>
 
 
 
-                <RadioButton
-                    android:id="@+id/radlocal"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="local"
-                    android:textAlignment="center"
+            <RadioButton
+                android:id="@+id/radlocal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="local"
+                android:textAlignment="center"
 
-                    android:textColor="@color/white"
-                    android:paddingTop="5dp"
-                    android:paddingBottom="5dp"
-                    android:paddingLeft="5dp"
-                    android:paddingRight="5dp"
-                    android:minWidth="75dp"
-                    android:minHeight="25dp"
-                    android:background="@drawable/radiobtnbackground"
-                    android:button="@android:color/transparent"
-                    android:layout_marginRight="20dp"/>
+                android:textColor="@color/white"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:minWidth="75dp"
+                android:minHeight="25dp"
+                android:background="@drawable/radiobtnbackground"
+                android:button="@android:color/transparent"
+                android:layout_marginRight="20dp"/>
 
-                <RadioButton
-                    android:id="@+id/radbusiness"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="business"
-                    android:textAlignment="center"
-                    android:textColor="@color/white"
-                    android:paddingTop="5dp"
-                    android:paddingBottom="5dp"
-                    android:paddingLeft="5dp"
-                    android:paddingRight="5dp"
-                    android:minWidth="75dp"
-                    android:minHeight="25dp"
-                    android:background="@drawable/radiobtnbackground"
-                    android:button="@android:color/transparent"
-                    android:layout_marginRight="20dp"/>
+            <RadioButton
+                android:id="@+id/radbusiness"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="business"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:minWidth="75dp"
+                android:minHeight="25dp"
+                android:background="@drawable/radiobtnbackground"
+                android:button="@android:color/transparent"
+                android:layout_marginRight="20dp"/>
 
 
         </RadioGroup>
@@ -192,13 +192,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="240dp"
                 android:scaleType="centerCrop" />
-            <ImageButton
+           <!-- <ImageButton
                 android:id="@+id/selectimage"
                 android:layout_gravity="center"
                 android:layout_width="86dp"
                 android:layout_height="70dp"
 
-                android:background="@drawable/ic_camera" />
+                android:background="@drawable/ic_camera"/> -->
         </FrameLayout>
 
         <TextView
@@ -353,7 +353,7 @@
             android:layout_marginRight="30dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-          />
+            />
 
 
         <TextView
@@ -375,7 +375,7 @@
             android:backgroundTint="@color/colorPrimary"
             android:layout_marginRight="30dp"
             android:layout_marginLeft="30dp"
-          />
+            />
 
 
         <Button
@@ -389,10 +389,8 @@
             android:minHeight="30dp"
             android:layout_gravity="center"
             android:textColor="@color/white"
-            android:text="@string/Create_event"
-            android:textAllCaps="false"/>
-
+            android:text="@string/Create_event" />
 
     </LinearLayout>
-</ScrollView>
+    </ScrollView>
 </LinearLayout>

@@ -111,6 +111,14 @@ public class MypageFragment extends android.support.v4.app.Fragment implements N
     Uri selectedAvatar = null;
     private Activity activity;
 
+    private int[] listrank =  new int[]{
+        R.drawable.ic_rank1,
+            R.drawable.ic_rank2,
+            R.drawable.ic_rank3,
+            R.drawable.ic_rank4,
+            R.drawable.ic_rank5
+    };
+
 
     @Override
     public void onResume() {
@@ -240,6 +248,8 @@ public class MypageFragment extends android.support.v4.app.Fragment implements N
                                 AccountController.getInstance().getAccount().setCover(user.getCover());
                             }
                         }
+
+                        rankImage.setImageResource(listrank[user.getRank()]);
 
                         followed.setText(getString(R.string.Following) + user.getFollowed());
                         follower.setText(getString(R.string.Followers) + user.getFollower());

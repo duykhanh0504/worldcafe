@@ -38,6 +38,7 @@ import com.aseanfan.worldcafe.UI.Adapter.RequestMemberAdapter;
 import com.aseanfan.worldcafe.UI.CommentEventActivity;
 import com.aseanfan.worldcafe.UI.Component.ViewDialog;
 import com.aseanfan.worldcafe.UI.CreateEventActivity;
+import com.aseanfan.worldcafe.UI.EditEventActivity;
 import com.aseanfan.worldcafe.UI.MainActivity;
 import com.aseanfan.worldcafe.UI.MemberRequestActivity;
 import com.aseanfan.worldcafe.Utils.Constants;
@@ -83,6 +84,7 @@ public class DetailCommunityFragment extends android.support.v4.app.Fragment imp
     private ImageView imagelike;
     private ImageView imagecomment;
     private LinearLayout content_info;
+    private TextView txtprivate;
 
     String[] listreport ;
 
@@ -115,8 +117,39 @@ public class DetailCommunityFragment extends android.support.v4.app.Fragment imp
             }
         });
     }
-
     public void dialogReport(final List<String> list)
+    {
+        listreport = new String[list.size()];
+        listreport = list.toArray(listreport);
+        final int[] mpos = {-1};
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setTitle("Choose some areas");
+
+        builder.setCancelable(true);
+        builder.setSingleChoiceItems(listreport, 0, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                mpos[0] = i;
+            }
+        });
+
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // LoadListEvent(typegenre);
+                dialog.dismiss();
+                if(mpos[0]!=-1) {
+                    Report(listreport[mpos[0]]);
+                }
+            }
+        });
+        builder.setNegativeButton("Cancel", null);
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+  /*  public void dialogReport(final List<String> list)
     {
         final String[] spinner_item = new String[1];
 
@@ -160,7 +193,7 @@ public class DetailCommunityFragment extends android.support.v4.app.Fragment imp
             }
         });
         dialog.show();
-    }
+    }*/
 
 
     public void Report(String reporttext)
@@ -232,17 +265,19 @@ public class DetailCommunityFragment extends android.support.v4.app.Fragment imp
         });
     }
 
-    public void JoinEvent(Long eventid)
+    public void JoinEvent(Long eventid,String comment)
     {
         JsonObject dataJson = new JsonObject();
         dataJson.addProperty("account_id", AccountController.getInstance().getAccount().getId());
         dataJson.addProperty("event_id",eventid);
+        dataJson.addProperty("comment", comment);
 
         RestAPI.PostDataMasterWithToken(getActivity().getApplicationContext(),dataJson,RestAPI.POST_JOINEVENT, new RestAPI.RestAPIListenner() {
             @Override
             public void OnComplete(int httpCode, String error, String s) {
                 try {
                     if (!RestAPI.checkHttpCode(httpCode)) {
+                        //AppFuncs.alert(getApplicationContext(),s,true);
                         //AppFuncs.alert(getApplicationContext(),s,true);
 
                         return;
@@ -340,6 +375,7 @@ public class DetailCommunityFragment extends android.support.v4.app.Fragment imp
         imagelike = (ImageView) view.findViewById(R.id.imageLike);
         imagecomment = (ImageView) view.findViewById(R.id.imageComment);
         content_info = (LinearLayout)  view.findViewById(R.id.content_info);
+        txtprivate = (TextView)  view.findViewById(R.id.txtprivate);
 
         btnJoin.setOnClickListener(this);
         containList.setOnClickListener(this);
@@ -372,6 +408,8 @@ public class DetailCommunityFragment extends android.support.v4.app.Fragment imp
             event.setNote(getArguments().getString("note"));
             event.setIslike(getArguments().getInt("islike"));
             event.setSchedule_type(getArguments().getInt("schedule_type"));
+            event.setPrivate(getArguments().getInt("is_private"));
+
 
             if(event.getIslike()==0)
             {
@@ -380,6 +418,14 @@ public class DetailCommunityFragment extends android.support.v4.app.Fragment imp
             else
             {
                 imagelike.setBackgroundResource(R.drawable.like);
+            }
+            if(event.getPrivate() ==0)
+            {
+                txtprivate.setText("Public");
+            }
+            else
+            {
+                txtprivate.setText("Private");
             }
 
 
@@ -518,17 +564,29 @@ public class DetailCommunityFragment extends android.support.v4.app.Fragment imp
                         ((MainActivity)getActivity()).callMemberRequest(event);
                         break;
                     case R.id.item_edit:
-                        Intent intent = new Intent(getContext(), CreateEventActivity.class);
+                        Intent intent = new Intent(getContext(), EditEventActivity.class);
 
-                        intent.putExtra("isedit",1);
-                        intent.putExtra("type",event.getType());
-                        intent.putExtra("place",event.getCityid());
-                        intent.putExtra("price",event.getPrice());
-                        intent.putExtra("limitperson",event.getLimitpersons());
+                        Bundle bundle = new Bundle();
+                        intent.putExtra("eventid",event.getEventid());
                         intent.putExtra("title",event.getTitle());
-                        intent.putExtra("detail",event.getContent());
+                        intent.putExtra("content",event.getContent());
+                        intent.putExtra("isJoin",event.getIsjoin());
+                        intent.putExtra("type",event.getType());
+                        intent.putExtra("startime",event.getStarttime());
+                        intent.putExtra("updatetime", event.getUpdatetime());
+                        intent.putExtra("place",event.getCityname());
+                        intent.putExtra("numberlike",event.getNumberLike());
+                        intent.putExtra("numbercomment",event.getNumberComment());
+                        intent.putExtra("avatar",event.getUrlAvatar());
+                        intent.putExtra("username",event.getUsername());
+                        intent.putExtra("accountid",event.getAccountid());
+                        intent.putExtra("number",event.getNumber());
+                        intent.putExtra("pertime",event.getPertime());
+                        intent.putExtra("limitperson",event.getLimitpersons());
                         intent.putExtra("note",event.getNote());
-
+                        intent.putExtra("islike",event.getIslike());
+                        intent.putExtra("schedule_type",event.getSchedule_type());
+                        intent.putExtra("is_private",event.getPrivate());
 
                         startActivity(intent);
                         break;
@@ -572,7 +630,20 @@ public class DetailCommunityFragment extends android.support.v4.app.Fragment imp
                 }
                 break;
             case R.id.btnJoin:
-                JoinEvent(event.getEventid());
+                ViewDialog dialog = new ViewDialog();
+                if(event.getPrivate() ==0) {
+                    dialog.showDialogJoinEvent(getActivity(), AccountController.getInstance().getAccount().getAvarta(), AccountController.getInstance().getAccount().getUsername()
+                            , new ViewDialog.DialogListennerJoinEvent() {
+                                @Override
+                                public void OnClickConfirm(String text) {
+                                    JoinEvent(event.getEventid(), text);
+                                }
+                            });
+                }
+                else
+                {
+                    dialog.showDialogCancel(getActivity(),"Event is private");
+                }
                 break;
             case  R.id.list_account:
             {

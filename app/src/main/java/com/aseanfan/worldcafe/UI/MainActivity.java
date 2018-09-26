@@ -437,7 +437,7 @@ public class MainActivity extends BaseActivity implements NotificationCenter.Not
         bundle.putLong("eventid",eventid.getEventid());
         requestMemberFragment.setArguments(bundle);
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.replace(R.id.content, requestMemberFragment,TAG_REQUEST_MEMBER).commit();
+        ft.add(R.id.content, requestMemberFragment,TAG_REQUEST_MEMBER).commit();
 
     }
 
@@ -447,7 +447,7 @@ public class MainActivity extends BaseActivity implements NotificationCenter.Not
         bundle.putLong("eventid",eventid.getEventid());
         memberEventFragment.setArguments(bundle);
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.replace(R.id.content, memberEventFragment,TAG_MEMBEREVENT).commit();
+        ft.add(R.id.content, memberEventFragment,TAG_MEMBEREVENT).commit();
 
     }
 
@@ -495,6 +495,7 @@ public class MainActivity extends BaseActivity implements NotificationCenter.Not
           bundle.putString("note",eventid.getNote());
           bundle.putInt("islike",eventid.getIslike());
           bundle.putInt("schedule_type",eventid.getSchedule_type());
+          bundle.putInt("is_private",eventid.getPrivate());
 
 
           if(eventid.getUrlImage() !=null && eventid.getUrlImage().size() >0) {

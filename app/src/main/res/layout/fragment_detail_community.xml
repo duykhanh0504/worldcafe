@@ -100,6 +100,7 @@
                         android:layout_marginLeft="5dp"
                         android:textSize="20dp"
                         android:text="test "
+                        android:singleLine="true"
                         android:gravity="right"
                         android:textStyle="bold" />
                 </LinearLayout>
@@ -174,17 +175,34 @@
                         android:text="comment" />
                 </LinearLayout>
 
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="35dp">
+                    <TextView
+                        android:id="@+id/txtprivate"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="left"
+                        android:layout_marginRight="35dp"
+                        android:layout_marginLeft="30dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="10dp"
+                        android:gravity="center|left"
+                        android:drawablePadding="5dp"
+                        android:text="Public"
+                        android:textSize="20dp" />
                 <Button
                     android:id="@+id/btnJoin"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:layout_marginTop="35dp"
                     android:background="@drawable/background_button"
                     android:minHeight="35dp"
                     android:text="Join"
                     android:textSize="18sp"
                     android:textColor="#fff" />
+                </FrameLayout>
 
                 <TextView
                     android:id="@+id/txtcreatetime"

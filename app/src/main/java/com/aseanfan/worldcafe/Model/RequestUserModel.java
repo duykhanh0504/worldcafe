@@ -7,6 +7,7 @@ public class RequestUserModel {
     private String avarta;
     private int id;
     private int status;
+    private String comment;
 
 
     public RequestUserModel()
@@ -35,6 +36,14 @@ public class RequestUserModel {
 
 
 
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
+    }
+
     public String getUsername() {
         return username;
     }
@@ -42,6 +51,7 @@ public class RequestUserModel {
     public void setUsername(String username) {
         this.username = username;
     }
+
 
 
     public String getAvarta() {

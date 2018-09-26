@@ -42,6 +42,7 @@ public class RequestMemberAdapter extends RecyclerView.Adapter<RecyclerView.View
         public TextView name;
         public Button reject;
         public TextView confirm;
+        public TextView comment;
 
 
         public MyViewHolder(View view) {
@@ -50,6 +51,7 @@ public class RequestMemberAdapter extends RecyclerView.Adapter<RecyclerView.View
             avatar = (ImageView) view.findViewById(R.id.imageAvatar);
             reject = (Button) view.findViewById(R.id.btnReject);
             confirm = (Button) view.findViewById(R.id.btnConfirm);
+            comment = (TextView) view.findViewById(R.id.txtcomment);
             view.setOnClickListener(this);
             reject.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -110,6 +112,14 @@ public class RequestMemberAdapter extends RecyclerView.Adapter<RecyclerView.View
             viewHolder.confirm.setEnabled(true);
         }
         viewHolder.name.setText(user.getUsername());
+        if(user.getComment()==null || user.getComment().isEmpty())
+        {
+            viewHolder.comment.setText("No comment");
+        }
+        else
+        {
+            viewHolder.comment.setText(user.getComment());
+        }
         Drawable mDefaultBackground = viewHolder.avatar.getContext().getResources().getDrawable(R.drawable.avata_defaul);
         Glide.with(viewHolder.avatar.getContext()).load(user.getAvarta()).apply(RequestOptions.circleCropTransform().diskCacheStrategy(DiskCacheStrategy.NONE).error(mDefaultBackground)).into(viewHolder.avatar);
     }

@@ -83,7 +83,7 @@ public class CreateEventActivity extends AppCompatActivity {
     private Spinner choosearea;
     private RecyclerView listarea;
     private List<String> l = new ArrayList<>();
-    private TextView scheduel;
+    private EditText scheduel;
     private int mYear, mMonth, mDay, mHour, mMinute;
     private RadioButton friend,language,local,buissines;
     private RadioGroup radgroup;
@@ -97,6 +97,8 @@ public class CreateEventActivity extends AppCompatActivity {
     private CheckBox checktype;
     private Spinner typetime;
     private EditText note;
+    private Button privatepost;
+    private ImageView cancel;
 
     private int isedit = 0;
 
@@ -138,7 +140,7 @@ public class CreateEventActivity extends AppCompatActivity {
         });
     }
 
-    public void CreateEvent(final EventModel event)
+    public void CreateEvent(final EventModel event, final int type)
     {
         JsonObject dataJson = new JsonObject();
         dataJson.addProperty("account_id", AccountController.getInstance().getAccount().getId());
@@ -159,6 +161,7 @@ public class CreateEventActivity extends AppCompatActivity {
         dataJson.addProperty("base64",listImageBase64);
         dataJson.addProperty("image","event" + System.currentTimeMillis());
         dataJson.addProperty("type","image/jpeg");
+        dataJson.addProperty("is_private",type);
 
         RestAPI.PostDataMasterWithToken(this,dataJson,RestAPI.POST_CREATEEVENT, new RestAPI.RestAPIListenner() {
             @Override
@@ -170,12 +173,21 @@ public class CreateEventActivity extends AppCompatActivity {
                         return;
                     }
                     ViewDialog dialog = new ViewDialog();
-                    dialog.showDialogOK(CreateEventActivity.this,"Create Event Successfully", new ViewDialog.DialogListenner() {
-                        @Override
-                        public void OnClickConfirm() {
-                            finish();
-                        }
-                    });
+                    String msg ="";
+                    if(type ==0) {
+                        msg = "Create Event Successfully";
+                    }
+                    else
+                    {
+                        msg = "Create Private Event Successfully";
+                    }
+                        dialog.showDialogOK(CreateEventActivity.this, msg, new ViewDialog.DialogListenner() {
+                            @Override
+                            public void OnClickConfirm() {
+                                finish();
+                            }
+                        });
+
 
 
                //     ListComment(timelineid);
@@ -238,6 +250,8 @@ public class CreateEventActivity extends AppCompatActivity {
         checktype  = findViewById(R.id.checktype);
         typetime = findViewById(R.id.spinner_typetimes);
         note = findViewById(R.id.input_note);
+        privatepost = findViewById(R.id.btnprivate);
+        cancel = findViewById(R.id.btncancel);
 
         listcity = Utils.initDefaultCity();
 
@@ -340,6 +354,46 @@ public class CreateEventActivity extends AppCompatActivity {
             }
         });
 
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+
+        privatepost.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(validateInput()== true) {
+                    event.setTitle(title.getText().toString());
+                    try {
+                        event.setPrice(Utils.parse(price.getText().toString(), Locale.US).longValue());
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                    event.setContent(content.getText().toString());
+                    TimeZone tz = TimeZone.getTimeZone("UTC");
+                    DateFormat df = new SimpleDateFormat("yyy-MM-dd HH:mm:ss");
+                    df.setTimeZone(tz);
+                    Date convertedDate = new Date();
+                    try {
+                        convertedDate = df.parse(scheduel.getText().toString());
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                    String nowAsISO = df.format(convertedDate);
+
+                    event.setStarttime(nowAsISO);
+                    event.setLimit_personse(Integer.valueOf(numberofparticipal.getText().toString()));
+                    if(event.getSchedule_type() == 1) {
+                        event.setNumber(Integer.valueOf(times.getText().toString()));
+                    }
+                    event.setNote(note.getText().toString());
+                    CreateEvent(event,1);
+                }
+            }
+        });
+
         btncreate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -368,7 +422,7 @@ public class CreateEventActivity extends AppCompatActivity {
                         event.setNumber(Integer.valueOf(times.getText().toString()));
                     }
                     event.setNote(note.getText().toString());
-                    CreateEvent(event);
+                    CreateEvent(event,0);
                 }
             }
         });
