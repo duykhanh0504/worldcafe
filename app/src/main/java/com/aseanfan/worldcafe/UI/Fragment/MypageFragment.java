@@ -456,6 +456,20 @@ public class MypageFragment extends android.support.v4.app.Fragment implements N
         name = view.findViewById(R.id.Name);
         age = view.findViewById(R.id.Age);
 
+        followed.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ((MainActivity)activity).callFollowScreen();
+            }
+        });
+
+        follower.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ((MainActivity)activity).callFollowScreen();
+            }
+        });
+
         avatar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

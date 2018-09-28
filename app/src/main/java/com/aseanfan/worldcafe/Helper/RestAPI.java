@@ -80,6 +80,7 @@ public class RestAPI {
     public static String POST_CHECK_FOLLOW= root_url + "/api/follow/checkFollow";
     public static String GET_MESSAGECHAT= root_url + "/api/message/getmessagechat?account_id=%d&offset_id=%d";
     public static String GET_LISTFOLLOW= root_url + "/api/follow/getListFollowed?account_id=%d";
+    public static String GET_LISTFOLLOWER= root_url + "/api/follow/getListFollower?account_id=%d";
     public static String GET_CONTACT_CHAT= root_url + "/api/follow/getListChatbyid?account_id=%d";
     public static String GET_LISTTIMELINEFOLLOWED= root_url + "/api/newfeed/getfollowednewfeeds?account_id=%d&index=%d";
     public static String POST_JOINEVENT = root_url + "/api/event/joinevents";
@@ -93,6 +94,8 @@ public class RestAPI {
     public static String GET_EVENTCOMMENT = root_url + "/api/event/getcommentevent?event_id=%d&account_id=%d";
     public static String POST_REPORT = root_url + "/api/report/report";
     public static String GET_LIST_REPORT = root_url + "/api/report/list-report-reason?type=%d";
+    public static String POST_UPDATEEVENT = root_url + "/api/event/updateevent";
+    public static String POST_DELETEDEVENT = root_url + "/api/event/deleteevent";
 
     public final static int STATUS_SUCCESS = 200;
     public final static int STATUS_WRONGPASSWORD = 2;

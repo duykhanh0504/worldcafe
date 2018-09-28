@@ -148,7 +148,8 @@ public class SocketService extends Service {
                     datamessage.put("username" ,AccountController.getInstance().getAccount().getUsername());
                     if(message.getType() == 0)
                     {
-                        datamessage.put("message", Utils.decodeStringUrl(message.getMessageText()));
+                       // datamessage.put("message", Utils.decodeStringUrl(message.getMessageText()));
+                        datamessage.put("message",message.getMessageText());
                     }
                     else
                     {

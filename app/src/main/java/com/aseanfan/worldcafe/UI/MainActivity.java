@@ -44,6 +44,7 @@ import com.aseanfan.worldcafe.UI.Component.ViewDialog;
 import com.aseanfan.worldcafe.UI.Fragment.CommunityFragment;
 import com.aseanfan.worldcafe.UI.Fragment.DetailCommunityFragment;
 import com.aseanfan.worldcafe.UI.Fragment.DetailTimelineFragment;
+import com.aseanfan.worldcafe.UI.Fragment.FollowFrargment;
 import com.aseanfan.worldcafe.UI.Fragment.MemberEventFragment;
 import com.aseanfan.worldcafe.UI.Fragment.MyPageDetailFragment;
 import com.aseanfan.worldcafe.UI.Fragment.MypageFragment;
@@ -80,6 +81,8 @@ public class MainActivity extends BaseActivity implements NotificationCenter.Not
     private String TAG_REQUEST_MEMBER = "request_member";
     private String TAG_MEMBEREVENT = "member_of_event";
     private String TAG_TIMELINE_DETAIL = "timeline_detail";
+
+    private String TAG_FOLLOWER = "follow";
 
     private DetailCommunityFragment detailcomunityfragment;
     private RequestMemberFragment requestMemberFragment;
@@ -470,6 +473,16 @@ public class MainActivity extends BaseActivity implements NotificationCenter.Not
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.add(R.id.content, detailTimelineFragment,TAG_TIMELINE_DETAIL).commit();
 
+    }
+
+    public void callFollowScreen()
+    {
+        FollowFrargment followFrargment = new FollowFrargment();
+     //   Bundle bundle = new Bundle();
+      //  bundle.putLong("eventid",eventid.getEventid());
+       // memberEventFragment.setArguments(bundle);
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.add(R.id.content, followFrargment,TAG_MEMBEREVENT).commit();
     }
 
     public void callDetailEvent(EventModel eventid) {

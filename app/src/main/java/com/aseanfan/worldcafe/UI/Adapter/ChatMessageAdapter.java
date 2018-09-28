@@ -189,7 +189,8 @@ public class ChatMessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                 right.mAvatar.setVisibility(View.GONE);
                // Drawable mDefaultBackground = right.mAvatar.getContext().getResources().getDrawable(R.drawable.avata_defaul);
                // Glide.with(right.mAvatar.getContext()).load(AccountController.getInstance().getAccount().getAvarta()).apply(RequestOptions.circleCropTransform().diskCacheStrategy(DiskCacheStrategy.NONE).error(mDefaultBackground)).into(right.mAvatar);
-                right.mMessage.setText(Utils.decodeStringUrl(listmessagechat.get(i).getMessageText()));
+             //   right.mMessage.setText(Utils.decodeStringUrl(listmessagechat.get(i).getMessageText()));
+                right.mMessage.setText((listmessagechat.get(i).getMessageText()));
                 break;
 
             case 1:
@@ -204,7 +205,8 @@ public class ChatMessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                     Glide.with(left.mAvatar.getContext()).load(friendAvatar).apply(RequestOptions.circleCropTransform().diskCacheStrategy(DiskCacheStrategy.NONE).error(mDefaultBackground)).into(left.mAvatar);
 
                 }
-                left.mMessage.setText(Utils.decodeStringUrl(listmessagechat.get(i).getMessageText()));
+              //  left.mMessage.setText(Utils.decodeStringUrl(listmessagechat.get(i).getMessageText()));
+                left.mMessage.setText((listmessagechat.get(i).getMessageText()));
                 break;
             case 2:
                 ViewHolderRightImage rightimage = (ViewHolderRightImage)viewHolder;

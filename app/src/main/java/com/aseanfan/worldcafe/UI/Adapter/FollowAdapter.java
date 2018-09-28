@@ -73,7 +73,7 @@ public class FollowAdapter  extends RecyclerView.Adapter<FollowAdapter.MyViewHol
     @Override
     public FollowAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         View itemView = LayoutInflater.from(viewGroup.getContext())
-                .inflate(R.layout.comment_row, viewGroup, false);
+                .inflate(R.layout.followrow, viewGroup, false);
 
         return new FollowAdapter.MyViewHolder(itemView);
     }

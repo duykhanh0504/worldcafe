@@ -46,16 +46,18 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Your Comment"
+                android:layout_marginLeft="10dp"
                 android:layout_weight="1.9"
                 />
 
         <ImageButton
             android:id="@+id/btn_postcomment"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
             android:layout_gravity="right|top"
             android:paddingHorizontal="10dp"
-            android:background="@drawable/ic_chat_send_active"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/ic_send"
             />
     </LinearLayout>
 

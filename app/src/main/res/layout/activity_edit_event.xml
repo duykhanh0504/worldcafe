@@ -33,7 +33,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:minHeight="30dp"
-                    android:background="@drawable/ic_cancel"
+                    android:background="@drawable/ic_back"
                     android:foregroundGravity="left"
                     android:layout_gravity="center|left"/>
             </FrameLayout>
@@ -50,7 +50,7 @@
                 />
 
             <Button
-                android:id="@+id/btnprivate"
+                android:id="@+id/btndone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:minHeight="30dp"
@@ -195,13 +195,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="240dp"
                 android:scaleType="centerCrop" />
-           <!-- <ImageButton
+           <ImageButton
                 android:id="@+id/selectimage"
                 android:layout_gravity="center"
                 android:layout_width="86dp"
                 android:layout_height="70dp"
 
-                android:background="@drawable/ic_camera"/> -->
+                android:background="@drawable/ic_camera"/>
         </FrameLayout>
 
         <TextView
@@ -380,19 +380,42 @@
             android:layout_marginLeft="30dp"
             />
 
-
-        <Button
-            android:id="@+id/btn_create"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/background_button"
+            android:orientation="horizontal"
             android:layout_marginRight="30dp"
             android:layout_marginLeft="30dp"
             android:layout_marginBottom="20dp"
+            android:weightSum="2"
+            >
+            <Button
+                android:id="@+id/btnprivate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/background_button"
+                android:layout_marginRight="30dp"
+                android:layout_marginLeft="30dp"
+                android:minHeight="30dp"
+                android:layout_gravity="center"
+                android:textColor="@color/white"
+                android:text="Private"
+                android:layout_weight="1"/>
+
+        <Button
+            android:id="@+id/btndeleted"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/background_button"
             android:minHeight="30dp"
+            android:layout_marginRight="30dp"
+            android:layout_marginLeft="30dp"
             android:layout_gravity="center"
             android:textColor="@color/white"
-            android:text="@string/Create_event" />
+            android:text="@string/Create_event"
+            android:layout_weight="1"/>
+
+        </LinearLayout>
 
     </LinearLayout>
     </ScrollView>

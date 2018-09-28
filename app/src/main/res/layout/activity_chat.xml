@@ -50,20 +50,22 @@
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_marginRight="5dp"
-                android:src="@drawable/photo" />
+                android:src="@drawable/photo"
+                android:visibility="gone"/>
 
             <ImageView
                 android:id="@+id/image_btn"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
 
-                android:src="@drawable/photo" />
+                android:src="@drawable/ic_image" />
 
             <hani.momanii.supernova_emoji_library.Helper.EmojiconEditText
                 android:privateImeOptions="nm"
                 android:id="@+id/input_message"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
                 android:layout_weight="2.3"
                 />
 
@@ -71,7 +73,8 @@
                 android:id="@+id/btn_send"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:background="@drawable/ic_chat_send_active"
+                android:layout_marginRight="10dp"
+                android:background="@drawable/ic_send"
                 android:layout_gravity="right|top"
                 />
         </LinearLayout>

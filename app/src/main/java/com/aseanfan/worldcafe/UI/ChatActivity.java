@@ -199,7 +199,8 @@ public class ChatActivity extends AppCompatActivity {
                 if (!edtChat.getText().toString().trim().isEmpty())
                 {
 
-                    String messageText = Utils.encodeStringUrl(edtChat.getText().toString());
+                    //String messageText = Utils.encodeStringUrl(edtChat.getText().toString());
+                    String messageText = edtChat.getText().toString();
                     sendMessage(0, messageText);
                 }
             }
