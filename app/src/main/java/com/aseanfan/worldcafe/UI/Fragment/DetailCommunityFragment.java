@@ -65,7 +65,7 @@ public class DetailCommunityFragment extends android.support.v4.app.Fragment imp
     private FrameLayout imageEvent;
     private EventModel event;
     private Button btnJoin;
-    private FrameLayout containList;
+    private LinearLayout containList;
     private List<AccountModel> listaccount = new ArrayList<>();
     private TextView updatetime;
     private TextView title;
@@ -122,19 +122,24 @@ public class DetailCommunityFragment extends android.support.v4.app.Fragment imp
     {
         listreport = new String[list.size()];
         listreport = list.toArray(listreport);
-        final int[] mpos = {-1};
+        final int[] mpos = {0};
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        builder.setTitle("Choose some areas");
+        LayoutInflater inflater = this.getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.choice_dialog, null);
+        builder.setView(dialogView);
+        builder.setCancelable(true);
+        ArrayAdapter<CharSequence> adapter = new ArrayAdapter<CharSequence>(
+                getActivity(), R.layout.choice_item, listreport);
 
         builder.setCancelable(true);
-        builder.setSingleChoiceItems(listreport, 0, new DialogInterface.OnClickListener() {
+        builder.setSingleChoiceItems(adapter, 0, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 mpos[0] = i;
             }
         });
 
-        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+        /*builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 // LoadListEvent(typegenre);
@@ -144,9 +149,30 @@ public class DetailCommunityFragment extends android.support.v4.app.Fragment imp
                 }
             }
         });
-        builder.setNegativeButton("Cancel", null);
+        builder.setNegativeButton("Cancel", null);*/
 
-        AlertDialog dialog = builder.create();
+        Button cancel = dialogView.findViewById(R.id.btn_cancel);
+        Button report = dialogView.findViewById(R.id.btn_report);
+
+        final AlertDialog dialog = builder.create();
+
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+
+            }
+        });
+
+        report.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+                if(mpos[0]!=-1) {
+                    Report(listreport[mpos[0]]);
+                }
+            }
+        });
         dialog.show();
     }
 
@@ -202,7 +228,7 @@ public class DetailCommunityFragment extends android.support.v4.app.Fragment imp
         JsonObject dataJson = new JsonObject();
         dataJson.addProperty("type", 1);
         dataJson.addProperty("account_id", AccountController.getInstance().getAccount().getId());
-        dataJson.addProperty("object_id", event.getAccountid());
+        dataJson.addProperty("object_id", event.getEventid());
         dataJson.addProperty("content", reporttext);
 
         RestAPI.PostDataMasterWithToken(getActivity().getApplicationContext(),dataJson,RestAPI.POST_REPORT, new RestAPI.RestAPIListenner() {
@@ -299,6 +325,13 @@ public class DetailCommunityFragment extends android.support.v4.app.Fragment imp
         });
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+
+    }
+
+
     public void getListAccount(Long eventid)
     {
         String url =  String.format(RestAPI.GET_LISTEVENTACCOUNT,AccountController.getInstance().getAccount().getId(),eventid);
@@ -319,16 +352,17 @@ public class DetailCommunityFragment extends android.support.v4.app.Fragment imp
                     listaccount = gson.fromJson(jsonArray, type);
                     if(listaccount!=null && listaccount.size()>0)
                     {
-                        int number = listaccount.size()>1?2:listaccount.size();
+                        containList.setOrientation(LinearLayout.HORIZONTAL);
+                        int number = listaccount.size()>6?6:listaccount.size();
                         for( int i = 0 ; i < number ; i++) {
                             ImageView avatarImage = new ImageView(getContext());
                             LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(Utils.convertDpToPixel(40, getContext()), Utils.convertDpToPixel(40, getContext()));
                             layoutParams.height = Utils.convertDpToPixel(40, getContext());
                             layoutParams.width = Utils.convertDpToPixel(40, getContext());
-                            layoutParams.setMargins(i * Utils.convertDpToPixel(30, getContext()), 0, 0, 0);
+                            layoutParams.setMargins(i * Utils.convertDpToPixel(2, getContext()), 0, 0, 0);
                             avatarImage.setLayoutParams(layoutParams);
                             avatarImage.setScaleType(ImageView.ScaleType.FIT_XY);
-                            if(i==1)
+                            if(i==5)
                             {
                                 Bitmap image = Utils.createImage(Utils.convertDpToPixel(40, getContext()),
                                         Utils.convertDpToPixel(40, getContext()),getResources().getColor(R.color.colorPrimary),
@@ -343,8 +377,8 @@ public class DetailCommunityFragment extends android.support.v4.app.Fragment imp
                             containList.addView(avatarImage);
                         }
 
-                    }
 
+                    }
                 }
                 catch (Exception ex) {
 
@@ -358,7 +392,7 @@ public class DetailCommunityFragment extends android.support.v4.app.Fragment imp
     {
         imageEvent = (FrameLayout)view.findViewById(R.id.imageEvent);
         btnJoin = (Button) view.findViewById(R.id.btnJoin);
-        containList = (FrameLayout) view.findViewById(R.id.list_account);
+        containList = (LinearLayout) view.findViewById(R.id.list_account);
         title = (TextView) view.findViewById(R.id.txttitle);
         content = (TextView) view.findViewById(R.id.txtcontent);
         type = (TextView) view.findViewById(R.id.txttype);

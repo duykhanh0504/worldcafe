@@ -13,6 +13,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -47,6 +49,7 @@ import com.aseanfan.worldcafe.Helper.cropper.CropImage;
 import com.aseanfan.worldcafe.Helper.cropper.CropImageView;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class EditProfileActivity extends AppCompatActivity {
@@ -57,11 +60,16 @@ public class EditProfileActivity extends AppCompatActivity {
     private EditText introduce;
     private EditText school;
     private EditText company;
-    private RadioGroup radgroup;
+  //  private RadioGroup radgroup;
     private Spinner country;
     private Spinner city;
     private UserModel user;
     private Button Button;
+    private CheckBox radfriend;
+    private CheckBox radlanguage;
+    private CheckBox radlocal;
+    private CheckBox radbusiness;
+    List<Integer> interest = new ArrayList<>();
 
     private static List<AreaModel> listarea = new ArrayList<>();
 
@@ -255,7 +263,25 @@ public class EditProfileActivity extends AppCompatActivity {
 
         user = AccountController.getInstance().getAccount();
 
-
+        if(user.getInterest()!=null && !user.getInterest().isEmpty()) {
+            String[] separated = user.getInterest().split(",");
+            interest.clear();
+            for (int i = 0; i < separated.length; i++) {
+                interest.add(Integer.valueOf(separated[i]));
+                if (Integer.valueOf(separated[i]) == Constants.EVENT_FRIEND + 1) {
+                    radfriend.setChecked(true);
+                }
+                if (Integer.valueOf(separated[i]) == Constants.EVENT_BUSSINESS + 1) {
+                    radbusiness.setChecked(true);
+                }
+                if (Integer.valueOf(separated[i]) == Constants.EVENT_LANGUAGE + 1) {
+                    radlanguage.setChecked(true);
+                }
+                if (Integer.valueOf(separated[i]) == Constants.EVENT_LOCAL + 1) {
+                    radlocal.setChecked(true);
+                }
+            }
+        }
         if(user.getCover()==null)
         {
          /*   Glide.with(this).load( "https://png.pngtree.com/thumb_back/fh260/back_pic/00/15/30/4656e81f6dc57c5.jpg").into(new SimpleTarget<Drawable>() {
@@ -293,12 +319,12 @@ public class EditProfileActivity extends AppCompatActivity {
         }
 
 
-        radgroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+/*        radgroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 changeSex(group, checkedId);
             }
-        });
+        });*/
 
         adaptercountry = new SpinnerAreaAdapter(this,
                 android.R.layout.simple_spinner_item,listarea);
@@ -341,11 +367,60 @@ public class EditProfileActivity extends AppCompatActivity {
         country.setSelection(countrypos);
         city.setSelection(getIndexCity(user.getCity(),listarea.get(countrypos)));
 
-        if(user.getSex() == Constants.MALE)
+      /*  if(user.getSex() == Constants.MALE)
           radgroup.check(R.id.rad_male);
         else
-          radgroup.check(R.id.rad_female);
+          radgroup.check(R.id.rad_female);*/
 
+        radfriend.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if (b) {
+                    interest.add(Constants.EVENT_FRIEND+1);
+                } else {
+                    if (interest.contains(Constants.EVENT_FRIEND + 1)) {
+                        interest.remove(interest.indexOf(Constants.EVENT_FRIEND + 1));
+                    }
+                }
+            }
+        });
+        radlocal.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if (b) {
+                    interest.add(Constants.EVENT_LOCAL+1);
+                } else {
+                    if (interest.contains(Constants.EVENT_LOCAL + 1)) {
+                        interest.remove(interest.indexOf(Constants.EVENT_LOCAL + 1));
+                    }
+                }
+
+            }
+        });
+        radlanguage.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if (b) {
+                    interest.add(Constants.EVENT_LANGUAGE+1);
+                } else {
+                    if (interest.contains(Constants.EVENT_LANGUAGE + 1)) {
+                        interest.remove(interest.indexOf(Constants.EVENT_LANGUAGE + 1));
+                    }
+                }
+            }
+        });
+        radbusiness.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if (b) {
+                    interest.add(Constants.EVENT_BUSSINESS+1);
+                } else {
+                    if (interest.contains(Constants.EVENT_BUSSINESS + 1)) {
+                        interest.remove(interest.indexOf(Constants.EVENT_BUSSINESS + 1));
+                    }
+                }
+            }
+        });
         Button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -354,6 +429,21 @@ public class EditProfileActivity extends AppCompatActivity {
                 user.setIntroduction(introduce.getText().toString());
                 user.setSchool(school.getText().toString());
                 user.setCompany(company.getText().toString());
+                if(interest.size() > 0)
+                {
+                    String s = "";
+                    for(int i = 0;i<interest.size() ;i++)
+                    {
+                        if(i== interest.size()-1) {
+                            s =s+ interest.get(i).toString();
+                        }
+                        else
+                        {
+                            s =s+ interest.get(i) + ",";
+                        }
+                    }
+                    user.setInterest(s);
+                }
                 update(user);
             }
         });
@@ -403,10 +493,14 @@ public class EditProfileActivity extends AppCompatActivity {
         introduce = (EditText) this.findViewById(R.id.edtintroduce);
         school = (EditText) this.findViewById(R.id.edtschool);
         company = (EditText) this.findViewById(R.id.edtcompany);
-        radgroup = (RadioGroup) this.findViewById(R.id.rad_sex);
+       // radgroup = (RadioGroup) this.findViewById(R.id.rad_sex);
         country = (Spinner) this.findViewById(R.id.spinner_country);
         city = (Spinner) this.findViewById(R.id.spinner_city);
         Button = (Button) this.findViewById(R.id.btn_update);
+        radfriend  = (CheckBox) this.findViewById(R.id.radfriend);
+        radlanguage = (CheckBox) this.findViewById(R.id.radlanguage);
+        radlocal = (CheckBox) this.findViewById(R.id.radlocal);
+        radbusiness = (CheckBox) this.findViewById(R.id.radbusiness);
 
     }
 
@@ -416,11 +510,16 @@ public class EditProfileActivity extends AppCompatActivity {
 
         JsonObject dataJson = new JsonObject();
         dataJson.addProperty("account_id",u.getId());
-        dataJson.addProperty("sex",u.getSex());
-        dataJson.addProperty("birthday",u.getBirthday());
+        //dataJson.addProperty("sex",u.getSex());
+      //  dataJson.addProperty("birthday",u.getBirthday());
         dataJson.addProperty("username",u.getUsername());
         dataJson.addProperty("city",u.getCity());
         dataJson.addProperty("country",u.getCountry());
+        if(u.getIntroduction()!=null) {
+            dataJson.addProperty("interest", u.getInterest());
+        }
+
+
 
         if(u.getIntroduction()!=null) {
             dataJson.addProperty("introduction",u.getIntroduction());

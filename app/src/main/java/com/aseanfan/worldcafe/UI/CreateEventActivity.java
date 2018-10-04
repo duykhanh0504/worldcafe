@@ -160,7 +160,7 @@ public class CreateEventActivity extends AppCompatActivity {
         dataJson.addProperty("pertime",event.getPertime());
         dataJson.addProperty("base64",listImageBase64);
         dataJson.addProperty("image","event" + System.currentTimeMillis());
-        dataJson.addProperty("type","image/jpeg");
+      //  dataJson.addProperty("type","image/jpeg");
         dataJson.addProperty("is_private",type);
 
         RestAPI.PostDataMasterWithToken(this,dataJson,RestAPI.POST_CREATEEVENT, new RestAPI.RestAPIListenner() {
@@ -542,12 +542,13 @@ public class CreateEventActivity extends AppCompatActivity {
                     public void onAction(@NonNull ArrayList<AlbumFile> result) {
                         mAlbumFiles = result;
                         mAdapter.notifyDataSetChanged(mAlbumFiles);
-
-                        for (int i = 0; i < mAlbumFiles.size(); i++) {
+                        String[] bb  =Utils.compressFormat(mAlbumFiles.get(0).getPath(), CreateEventActivity.this);
+                        listImageBase64 = bb[0];
+                       /* for (int i = 0; i < mAlbumFiles.size(); i++) {
                             String[] bb = Utils.compressFormat(mAlbumFiles.get(i).getPath(), CreateEventActivity.this);
                             String ba1 = bb[0];
                             listImageBase64 += ba1 + ",";
-                        }
+                        }*/
                         //  mTvMessage.setVisibility(result.size() > 0 ? View.VISIBLE : View.GONE);
                     }
                 })
@@ -570,7 +571,7 @@ public class CreateEventActivity extends AppCompatActivity {
                     CropImage.ActivityResult result = CropImage.getActivityResult(data);
                     Uri selectedAvatar  = result.getUri();
                     String[] bb = Utils.compressFormat(selectedAvatar.getPath(), this);
-                    listImageBase64 = bb[0] + ",";
+                    listImageBase64 = bb[0] ;
                    // String imagename = System.currentTimeMillis() + "." + bb[1];
                  //   listImageBase64
                     listimage.setVisibility(View.VISIBLE);

@@ -990,9 +990,43 @@ public class LoginActivity extends BaseActivity {
                     progressDialog.dismiss();
                     if (statuscode == RestAPI.STATUS_SUCCESS) {
 
+                        if( jsons.get("type").getAsInt() == 1)
+                        {
+                            DBHelper.getInstance(getApplicationContext()).CreateMessageTable();
+                            DBHelper.getInstance(getApplicationContext()).CreateNotifyTable();
+                            // DBHelper.getInstance(getApplicationContext()).CreateMessageTable();
+
+                            Gson gson = new Gson();
+                            final UserModel u = gson.fromJson(jsons.getAsJsonObject("result"), UserModel.class);
+                            Store.putStringData(LoginActivity.this, Store.ACCESSTOKEN, jsons.get("access_token").getAsString());
+                            AccountController.getInstance().SetAccount(u);
+
+                            if(u.getUsername() == null ||u.getUsername().isEmpty() )
+                            {
+                                showPage(Constants.PAGE_UPDATE);
+                                return;
+                            }
+
+
+                            DBHelper.getInstance(getApplicationContext()).insertPerson(u);
+                            startService(new Intent(getApplicationContext(), SocketService.class));
+                            startService(new Intent(getApplicationContext(), MyFirebaseInstanceIDService.class));
+
+                            Store.putBooleanData(LoginActivity.this, Store.LOGGED, true);
+
+                            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                            intent.putExtra("fromlogin", 1);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            startActivity(intent);
+                            finish();
+
+
+                        }
+                        else {
                             AccountController.getInstance().getAccount().setId(jsons.get("result").getAsJsonObject().get("account_id").getAsLong());
                             AccountController.getInstance().getAccount().setEmail(jsons.get("result").getAsJsonObject().get("email").getAsString());
                             showActive();
+                        }
 
                     } else if (statuscode == RestAPI.STATUS_ACCOUNTESIXT) {
                            {
@@ -1206,10 +1240,15 @@ public class LoginActivity extends BaseActivity {
              startActivity(intent);
              finish();
         }
-        if(_viewfliper.getDisplayedChild () == Constants.PAGE_FORGETPASS)
+        else if(_viewfliper.getDisplayedChild () == Constants.PAGE_FORGETPASS)
         {
             showPage(Constants.PAGE_LOGIN);
         }
+        else if(_viewfliper.getDisplayedChild () == Constants.PAGE_ACTIVE)
+        {
+            showPage(Constants.PAGE_REGISTER);
+        }
+
 
 
     }

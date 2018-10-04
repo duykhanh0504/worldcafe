@@ -6,12 +6,14 @@ import android.content.Context;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.media.Image;
+import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.aseanfan.worldcafe.App.AccountController;
@@ -39,6 +41,12 @@ public class ViewDialog {
         dialog.setCancelable(true);
         dialog.setContentView(R.layout.custom_dialog);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+        lp.copyFrom(dialog.getWindow().getAttributes());
+        lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+        lp.height = WindowManager.LayoutParams.MATCH_PARENT;
+        lp.gravity = Gravity.CENTER;
+        dialog.getWindow().setAttributes(lp);
 
         TextView text = (TextView) dialog.findViewById(R.id.txt_file_path);
         text.setText(msg);
@@ -68,6 +76,7 @@ public class ViewDialog {
         lp.copyFrom(dialog.getWindow().getAttributes());
         lp.width = WindowManager.LayoutParams.MATCH_PARENT;
         lp.height = WindowManager.LayoutParams.MATCH_PARENT;
+        lp.gravity = Gravity.CENTER;
         dialog.getWindow().setAttributes(lp);
 
         TextView text = (TextView) dialog.findViewById(R.id.txt_file_path);
@@ -96,6 +105,7 @@ public class ViewDialog {
         lp.copyFrom(dialog.getWindow().getAttributes());
         lp.width = WindowManager.LayoutParams.MATCH_PARENT;
         lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
+        lp.gravity = Gravity.CENTER;
         dialog.getWindow().setAttributes(lp);
 
         TextView text = (TextView) dialog.findViewById(R.id.txt_file_path);

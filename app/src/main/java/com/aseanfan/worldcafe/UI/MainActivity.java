@@ -454,6 +454,17 @@ public class MainActivity extends BaseActivity implements NotificationCenter.Not
 
     }
 
+    public void callDetailTimelineID(int pos) {
+        detailTimelineFragment = new DetailTimelineFragment();
+        Bundle bundle = new Bundle();
+        bundle.putLong("timelineid",pos);
+        bundle.putInt("id",0);
+        detailTimelineFragment.setArguments(bundle);
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.add(R.id.content, detailTimelineFragment,TAG_TIMELINE_DETAIL).commit();
+
+    }
+
     public void callDetailTimeline(PostTimelineModel timeline) {
         detailTimelineFragment = new DetailTimelineFragment();
         Bundle bundle = new Bundle();
@@ -463,6 +474,7 @@ public class MainActivity extends BaseActivity implements NotificationCenter.Not
 
         bundle.putLong("timelineid",timeline.getTimelineid());
         bundle.putString("username",timeline.getUsername());
+        bundle.putString("avatar",timeline.getUrlAvatar());
         bundle.putString("detail",timeline.getDetail());
         bundle.putInt("numberlike",timeline.getNumberLike());
         bundle.putInt("numbercomment",timeline.getNumberComment());
@@ -533,6 +545,10 @@ public class MainActivity extends BaseActivity implements NotificationCenter.Not
         {
             int i=0;
         }
+        else  if (f instanceof DetailCommunityFragment)
+        {
+            f.onResume();
+        }
     }
 
     public void BackKey()
@@ -573,7 +589,8 @@ public class MainActivity extends BaseActivity implements NotificationCenter.Not
                 getSupportFragmentManager().getFragments().get(getSupportFragmentManager().getFragments().size()-2).onResume();
             }
         }
-        else if(f instanceof DetailTimelineFragment ||f instanceof DetailCommunityFragment  ){
+        else if(f instanceof DetailTimelineFragment ||f instanceof DetailCommunityFragment
+                ||f instanceof MemberEventFragment){
 
             getSupportFragmentManager().beginTransaction().remove(f).commit();
 

@@ -31,11 +31,11 @@ public class NotifyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
 
     public void setOnItemClickListener(NotifyAdapter.ClickListener clickListener) {
-      //  NotifyAdapter.clickListener = clickListener;
+        NotifyAdapter.clickListener = clickListener;
     }
 
     public interface ClickListener {
-        void onItemClick(int position, View v, int Type);
+        void onItemClick(int position, View v);
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -63,7 +63,7 @@ public class NotifyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
         @Override
         public void onClick(View view) {
-            //  clickListener.onItemClick(getAdapterPosition(), view , Constants.CLICK_EVENT);
+              clickListener.onItemClick(getAdapterPosition(), view );
         }
     }
 

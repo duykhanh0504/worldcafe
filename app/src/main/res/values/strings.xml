@@ -51,7 +51,7 @@
     <string name="titlenumberthanks">Number of times you gave "thanks"</string>
     <string name="givethanks">Give: %d times</string>
     <string name="receivethanks">Receive: %d times</string>
-    <string name="Direct_mesage">Direct message</string>
+    <string name="Direct_mesage">Chat</string>
     <string name="Event_exhibition">Event Exhibition</string>
     <string name="School">School</string>
     <string name="Company">Company</string>

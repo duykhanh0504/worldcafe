@@ -36,6 +36,7 @@ public class DBHelper extends SQLiteOpenHelper {
     public static final String PERSON_INTRODUCTION = "introduction";
     public static final String PERSON_STATUS = "status";
     public static final String PERSON_FACEBOOKID = "facebookid";
+    public static final String PERSON_INTEREST = "interest";
     public static final String OWNER = "owner";
 
 
@@ -118,6 +119,7 @@ public class DBHelper extends SQLiteOpenHelper {
         contentValues.put(PERSON_INTRODUCTION, user.getIntroduction());
         contentValues.put(PERSON_STATUS, user.getStatus());
         contentValues.put(PERSON_FACEBOOKID, user.getFacebookid());
+        contentValues.put(PERSON_INTEREST, user.getFacebookid());
         db.update(PERSON_TABLE_USER, contentValues, PERSON_COLUMN_ID + " = ? ", new String[] { Long.toString(user.getId()) } );
         db.close();
         return true;
@@ -364,6 +366,7 @@ public class DBHelper extends SQLiteOpenHelper {
                         PERSON_STATUS + " INTEGER, " +
                         OWNER + " INTEGER DEFAULT '0', " +
                         PERSON_FACEBOOKID + " TEXT , " +
+                        PERSON_INTEREST + " TEXT , " +
                         PERSON_INTRODUCTION + " TEXT)"
         );
 

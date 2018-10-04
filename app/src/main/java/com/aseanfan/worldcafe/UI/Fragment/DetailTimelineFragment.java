@@ -107,6 +107,36 @@ public class DetailTimelineFragment  extends android.support.v4.app.Fragment imp
         });
     }
 
+    public void getTimeline(Long timelineid)
+    {
+        String url;
+        url = String.format(RestAPI.GET_COMMENT, timelineid);
+
+        RestAPI.GetDataMasterWithToken(getActivity(),url, new RestAPI.RestAPIListenner() {
+            @Override
+            public void OnComplete(int httpCode, String error, String s) {
+                try {
+                    if (!RestAPI.checkHttpCode(httpCode)) {
+                        //AppFuncs.alert(getApplicationContext(),s,true);
+
+                        return;
+                    }
+
+                    JsonArray jsonArray = (new JsonParser()).parse(s).getAsJsonObject().getAsJsonArray("result");
+                    Gson gson = new Gson();
+                    java.lang.reflect.Type type = new TypeToken<List<CommentModel>>(){}.getType();
+                    listcomment = gson.fromJson(jsonArray, type);
+                    commentAdapter.setCommentList(listcomment);
+                    rcycoment.smoothScrollToPosition(listcomment.size());
+
+                }
+                catch (Exception ex) {
+
+                    ex.printStackTrace();
+                }
+            }
+        });
+    }
 
     public void ListComment(Long timelineid)
     {
@@ -180,6 +210,7 @@ public class DetailTimelineFragment  extends android.support.v4.app.Fragment imp
             timeline.setDetail(getArguments().getString("detail"));
             timeline.setIslike(getArguments().getInt("islike"));
             timeline.setAccount_id(getArguments().getLong("accountid"));
+            timeline.setUrlAvatar(getArguments().getString("avatar"));
 
             Drawable mDefaultBackground = getContext().getResources().getDrawable(R.drawable.avata_defaul);
             Glide.with(getContext()).load(timeline.getUrlAvatar()).apply(RequestOptions.circleCropTransform().diskCacheStrategy(DiskCacheStrategy.NONE).error(mDefaultBackground)).into(avatar);
@@ -451,7 +482,7 @@ public class DetailTimelineFragment  extends android.support.v4.app.Fragment imp
         JsonObject dataJson = new JsonObject();
         dataJson.addProperty("type", 2);
         dataJson.addProperty("account_id", AccountController.getInstance().getAccount().getId());
-        dataJson.addProperty("object_id", timeline.getAccountid());
+        dataJson.addProperty("object_id", timeline.getTimelineid());
         dataJson.addProperty("content", reporttext);
 
         RestAPI.PostDataMasterWithToken(getActivity().getApplicationContext(),dataJson,RestAPI.POST_REPORT, new RestAPI.RestAPIListenner() {
@@ -540,19 +571,45 @@ public class DetailTimelineFragment  extends android.support.v4.app.Fragment imp
     {
         listreport = new String[list.size()];
         listreport = list.toArray(listreport);
-        final int[] mpos = {-1};
+        final int[] mpos = {0};
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        builder.setTitle("Choose some areas");
-
+        LayoutInflater inflater = this.getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.choice_dialog, null);
+        builder.setView(dialogView);
         builder.setCancelable(true);
-        builder.setSingleChoiceItems(listreport, 0, new DialogInterface.OnClickListener() {
+        ArrayAdapter<CharSequence> adapter = new ArrayAdapter<CharSequence>(
+                getActivity(), R.layout.choice_item, listreport);
+        builder.setSingleChoiceItems(adapter, 0, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 mpos[0] = i;
             }
         });
 
-        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+        Button cancel = dialogView.findViewById(R.id.btn_cancel);
+        Button report = dialogView.findViewById(R.id.btn_report);
+
+        final AlertDialog dialog = builder.create();
+
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+
+            }
+        });
+
+        report.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+                if(mpos[0]!=-1) {
+                    Report(listreport[mpos[0]]);
+                }
+            }
+        });
+
+     /*   builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 // LoadListEvent(typegenre);
@@ -562,9 +619,11 @@ public class DetailTimelineFragment  extends android.support.v4.app.Fragment imp
                 }
             }
         });
-        builder.setNegativeButton("Cancel", null);
+        builder.setNegativeButton("Cancel", null);*/
 
-        AlertDialog dialog = builder.create();
+        dialog.getWindow().setBackgroundDrawable(getResources().getDrawable(R.drawable.background_dialog));
+
+
         dialog.show();
     }
 

@@ -9,6 +9,8 @@ public class NotificationModel {
     private int _status;
     private Long _fromid;
     private int _type;
+    private Long objectId;
+
 
 
     public NotificationModel() {
@@ -80,5 +82,13 @@ public class NotificationModel {
 
     public void setType(int _type) {
         this._type = _type;
+    }
+
+    public Long getObjectId() {
+        return objectId;
+    }
+
+    public void setObjectId(Long objectId) {
+        this.objectId = objectId;
     }
 }

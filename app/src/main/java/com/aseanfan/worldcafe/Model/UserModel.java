@@ -18,6 +18,7 @@ public class UserModel {
     private String company;
     private String school;
     private String introduction;
+    private String interest;
     private int status;
     private String facebook_id;
     private int v_followed;
@@ -32,6 +33,14 @@ public class UserModel {
     }
 
     public UserModel() {
+    }
+
+    public String getInterest() {
+        return interest;
+    }
+
+    public void setInterest(String interest) {
+        this.interest = interest;
     }
 
     public String getFacebookid() {

@@ -94,9 +94,6 @@
              Set color used with incoming notification messages. This is used when no color is set for the incoming
              notification message. See README(https://goo.gl/6BKBk7) for more.
         -->
-        <meta-data
-            android:name="com.google.firebase.messaging.default_notification_color"
-            android:resource="@color/colorAccent" />
 
         <service
             android:name="com.aseanfan.worldcafe.Service.SocketService"
@@ -142,7 +139,7 @@
         <activity
             android:name="com.aseanfan.worldcafe.UI.EditProfileActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/ThemeWithTabBar" />
+            android:windowSoftInputMode="stateHidden"/>
         <activity
             android:name="com.aseanfan.worldcafe.UI.MemberRequestActivity"
             android:screenOrientation="portrait"

@@ -21,8 +21,8 @@
             android:gravity="center|left"
             android:drawableLeft="@drawable/ic_profile_introduce"
             android:layout_marginTop="@dimen/margin_line_mypage"
-            android:layout_marginRight="@dimen/margin_left_right"
-            android:layout_marginLeft="@dimen/margin_left_right"/>
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"/>
 
         <TextView
             android:id="@+id/txtintroduce"
@@ -30,15 +30,15 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="TextView"
-            android:layout_marginTop="@dimen/margin_line_mypage"
-            android:layout_marginRight="@dimen/margin_left_right"
-            android:layout_marginLeft="@dimen/margin_left_right"/>
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"/>
 
         <FrameLayout
             android:layout_marginTop="@dimen/margin_line_mypage"
             android:layout_width="match_parent"
             android:layout_height="1px"
-            android:background="@color/aqua">
+            android:background="@color/gray">
         </FrameLayout>
 
         <TextView
@@ -51,8 +51,8 @@
             android:gravity="center|left"
             android:drawableLeft="@drawable/ic_place_blue"
             android:layout_marginTop="@dimen/margin_line_mypage"
-            android:layout_marginRight="@dimen/margin_left_right"
-            android:layout_marginLeft="@dimen/margin_left_right"/>
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"/>
 
 
 
@@ -62,20 +62,20 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="TextView"
-            android:layout_marginTop="@dimen/margin_line_mypage"
-            android:layout_marginRight="@dimen/margin_left_right"
-            android:layout_marginLeft="@dimen/margin_left_right"/>
+            android:layout_marginBottom="@dimen/margin_line_mypage"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"/>
 
         <FrameLayout
             android:layout_marginTop="@dimen/margin_line_mypage"
             android:layout_width="match_parent"
             android:layout_height="1px"
-            android:background="@color/aqua">
+            android:background="@color/gray">
         </FrameLayout>
         <TextView
             android:layout_marginTop="@dimen/margin_line_mypage"
-            android:layout_marginRight="@dimen/margin_left_right"
-            android:layout_marginLeft="@dimen/margin_left_right"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
             android:id="@+id/titleInterested"
             android:drawableLeft="@drawable/ic_profile_interested"
             android:gravity="center|left"
@@ -86,13 +86,89 @@
             android:textStyle="bold"
             android:text="@string/Interested" />
         <LinearLayout
-            android:layout_marginTop="@dimen/margin_line_mypage"
-            android:layout_marginRight="@dimen/margin_left_right"
-            android:layout_marginLeft="@dimen/margin_left_right"
-            android:id="@+id/detailInterested"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"/>
+            android:layout_marginBottom="10dp"
+            android:layout_gravity="center"
+            android:gravity="center_horizontal"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/radfriend"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="friend"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:minWidth="75dp"
+                android:minHeight="25dp"
+                android:background="@drawable/background_button"
+                android:visibility="gone"
+                android:button="@android:color/transparent"
+                android:layout_marginRight="20dp"/>
+
+            <TextView
+                android:id="@+id/radlanguage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:text="language"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:minWidth="75dp"
+                android:minHeight="25dp"
+                android:background="@drawable/background_button"
+                android:visibility="gone"
+                android:button="@android:color/transparent"
+                android:layout_marginRight="20dp"/>
+
+
+
+            <TextView
+                android:id="@+id/radlocal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="local"
+                android:textAlignment="center"
+
+                android:textColor="@color/white"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:minWidth="75dp"
+                android:minHeight="25dp"
+                android:background="@drawable/background_button"
+                android:visibility="gone"
+                android:button="@android:color/transparent"
+                android:layout_marginRight="20dp"/>
+
+            <TextView
+                android:id="@+id/radbusiness"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="business"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:minWidth="75dp"
+                android:minHeight="25dp"
+                android:background="@drawable/background_button"
+                android:visibility="gone"
+                android:button="@android:color/transparent"
+                android:layout_marginRight="20dp"/>
+
+        </LinearLayout>
 
      <!--   <TextView
             android:layout_marginTop="@dimen/margin_line_mypage"
@@ -147,16 +223,15 @@
         -->
 
         <FrameLayout
-            android:layout_marginTop="@dimen/margin_line_mypage"
             android:layout_width="match_parent"
             android:layout_height="1px"
-            android:background="@color/aqua">
+            android:background="@color/gray">
         </FrameLayout>
 
         <TextView
             android:layout_marginTop="@dimen/margin_line_mypage"
-            android:layout_marginRight="@dimen/margin_left_right"
-            android:layout_marginLeft="@dimen/margin_left_right"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
             android:id="@+id/titlenumberthanks"
             android:layout_gravity="left|center"
             android:drawableLeft="@drawable/ic_profile_numberthanks"
@@ -170,8 +245,8 @@
             <TextView
                 android:id="@+id/txtgive"
                 android:layout_marginTop="@dimen/margin_line_mypage"
-                android:layout_marginRight="@dimen/margin_left_right"
-                android:layout_marginLeft="@dimen/margin_left_right"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp"
                 android:layout_gravity="left|center"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -180,8 +255,8 @@
 
         <LinearLayout
             android:layout_marginTop="@dimen/margin_line_mypage"
-            android:layout_marginRight="@dimen/margin_left_right"
-            android:layout_marginLeft="@dimen/margin_left_right"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
@@ -190,33 +265,39 @@
             android:id="@+id/btn_directmessage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="12dp"
+
             android:layout_gravity="center"
             android:text="@string/Direct_mesage"
             android:layout_marginRight="@dimen/margin_left_right"
+            android:textColor="@color/white"
             android:layout_marginLeft="@dimen/margin_left_right"
+            android:minHeight="30dp"
+            android:background="@drawable/background_button"
             />
             <android.support.v7.widget.AppCompatButton
                 android:layout_gravity="center"
                 android:id="@+id/btn_createevent"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:padding="12dp"
-                android:text="@string/Event_exhibition"
+
+                android:text="Edit"
+                android:minHeight="30dp"
                 android:layout_marginRight="@dimen/margin_left_right"
-                android:layout_marginLeft="@dimen/margin_left_right"/>
+                android:layout_marginLeft="@dimen/margin_left_right"
+                android:textColor="@color/white"
+                android:background="@drawable/background_button"/>
         </LinearLayout>
         <FrameLayout
             android:layout_marginTop="@dimen/margin_line_mypage"
             android:layout_width="match_parent"
             android:layout_height="1px"
-            android:background="@color/aqua">
+            android:background="@color/gray">
         </FrameLayout>
         <TextView
             android:id="@+id/titleschool"
             android:layout_marginTop="@dimen/margin_line_mypage"
-            android:layout_marginRight="@dimen/margin_left_right"
-            android:layout_marginLeft="@dimen/margin_left_right"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
             android:layout_gravity="left|center"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -226,9 +307,9 @@
             android:textStyle="bold"
             android:text="@string/School" />
         <TextView
-            android:layout_marginTop="@dimen/margin_line_mypage"
-            android:layout_marginRight="@dimen/margin_left_right"
-            android:layout_marginLeft="@dimen/margin_left_right"
+
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
             android:id="@+id/txtschool"
             android:layout_gravity="left|center"
             android:layout_width="match_parent"
@@ -239,13 +320,13 @@
             android:layout_marginTop="@dimen/margin_line_mypage"
             android:layout_width="match_parent"
             android:layout_height="1px"
-            android:background="@color/aqua">
+            android:background="@color/gray">
         </FrameLayout>
         <TextView
             android:id="@+id/titlecompany"
             android:layout_marginTop="@dimen/margin_line_mypage"
-            android:layout_marginRight="@dimen/margin_left_right"
-            android:layout_marginLeft="@dimen/margin_left_right"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
             android:layout_gravity="left|center"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -255,9 +336,9 @@
             android:textStyle="bold"
             android:text="@string/Company" />
         <TextView
-            android:layout_marginTop="@dimen/margin_line_mypage"
-            android:layout_marginRight="@dimen/margin_left_right"
-            android:layout_marginLeft="@dimen/margin_left_right"
+
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
             android:id="@+id/txtcompany"
             android:layout_gravity="left|center"
             android:layout_width="match_parent"

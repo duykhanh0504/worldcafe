@@ -129,6 +129,12 @@ public class NotifyFragment extends android.support.v4.app.Fragment {
                         JsonObject json = (new JsonParser()).parse(jsonArray.get(i).getAsJsonObject().get("data").getAsString()).getAsJsonObject();
                      //   notify.setAvarta(json.get("data").getAsJsonObject().get("avarta").getAsString());
                         notify.setMessage(json.get("data").getAsJsonObject().get("message").getAsString());
+                        if(notify.getType() == 1|| notify.getType() == 2||
+                                notify.getType() == 3|| notify.getType() == 4||notify.getType() == 5||
+                                notify.getType() == 6||notify.getType() == 7||notify.getType() == 9)
+                        {
+                            notify.setObjectId(json.get("data").getAsJsonObject().get("objectId").getAsLong());
+                        }
                         listnotify.add(notify);
                     }
 
@@ -167,6 +173,18 @@ public class NotifyFragment extends android.support.v4.app.Fragment {
        LoadListHistoryNotify();
 
         ((MainActivity) getActivity()).checkbadge();
+
+        mAdapter.setOnItemClickListener(new NotifyAdapter.ClickListener() {
+            @Override
+            public void onItemClick(int position, View v) {
+                if(listnotify.get(position).getType() ==1
+                        ||listnotify.get(position).getType() ==2 ||
+                listnotify.get(position).getType() ==3)
+                {
+                  //  ((MainActivity) getActivity()).callDetailTimeline(listnotify.get(position).getObjectId());
+                }
+            }
+        });
 
         return view;
     }

@@ -21,7 +21,9 @@ import com.aseanfan.worldcafe.UI.ChatActivity;
 import com.aseanfan.worldcafe.UI.ContactChatActivity;
 import com.aseanfan.worldcafe.UI.CreateEventActivity;
 import com.aseanfan.worldcafe.UI.DirectMessageActivity;
+import com.aseanfan.worldcafe.UI.EditProfileActivity;
 import com.aseanfan.worldcafe.UI.ListFollowActivity;
+import com.aseanfan.worldcafe.Utils.Constants;
 import com.aseanfan.worldcafe.Utils.Utils;
 import com.aseanfan.worldcafe.worldcafe.R;
 import com.koushikdutta.async.Util;
@@ -51,6 +53,10 @@ public class MyPageDetailFragment extends android.support.v4.app.Fragment implem
     private String school;
     private String company;
 
+    private TextView radfriend;
+    private TextView radlanguage;
+    private TextView radlocal;
+    private TextView radbusiness;
 
 
 
@@ -68,6 +74,7 @@ public class MyPageDetailFragment extends android.support.v4.app.Fragment implem
             school = bundle.getString("school");
             company = bundle.getString("company");
             givethanks = bundle.getInt("numberthanks");
+            interested = bundle.getString("interested");
 
         }
         else {
@@ -99,40 +106,54 @@ public class MyPageDetailFragment extends android.support.v4.app.Fragment implem
         }
 
          txtgive.setText("give: " + givethanks);
+        radbusiness.setVisibility(View.GONE);
+        radfriend.setVisibility(View.GONE);
+        radlanguage.setVisibility(View.GONE);
+        radlocal.setVisibility(View.GONE);
+
+        if(interested!=null && !interested.isEmpty()) {
+            String[] separated = interested.split(",");
+
+            for (int i = 0; i < separated.length; i++) {
+                if(Integer.valueOf(separated[i]) == Constants.EVENT_LOCAL +1)
+                {
+                    radlocal.setVisibility(View.VISIBLE);
+                }
+                else if(Integer.valueOf(separated[i]) == Constants.EVENT_LANGUAGE +1)
+                {
+                    radlanguage.setVisibility(View.VISIBLE);
+                }
+                else if(Integer.valueOf(separated[i]) == Constants.EVENT_BUSSINESS +1)
+                {
+                    radbusiness.setVisibility(View.VISIBLE);
+                }
+                else if(Integer.valueOf(separated[i]) == Constants.EVENT_FRIEND +1)
+                {
+                    radfriend.setVisibility(View.VISIBLE);
+                }
+            }
+        }
+
+
 
     }
 
     void initView(View view)
     {
         titleintroduce =(TextView) view.findViewById(R.id.titleIntroduce);
-       // Drawable iconProfile = getResources().getDrawable( R.drawable.icon_profile );
-     //   iconProfile.setBounds(0,0, Utils.convertDpToPixel(20,getContext()),Utils.convertDpToPixel(20,getContext()));
-     //   titleintroduce.setCompoundDrawables(iconProfile, null, null, null);
+
 
         titleinterested =(TextView) view.findViewById(R.id.titleInterested);
-       // Drawable iconInterested = getResources().getDrawable( R.drawable.icon_profile_intered );
-       // iconInterested.setBounds(0,0, Utils.convertDpToPixel(20,getContext()),Utils.convertDpToPixel(20,getContext()));
-       // titleinterested.setCompoundDrawables(iconInterested, null, null, null);
 
-        //titlerating =(TextView) view.findViewById(R.id.titleRating);
-       // Drawable iconRating = getResources().getDrawable( R.drawable.icon_profile_rating );
-       // iconRating.setBounds(0,0, Utils.convertDpToPixel(20,getContext()),Utils.convertDpToPixel(20,getContext()));
-        //titlerating.setCompoundDrawables(iconRating, null, null, null);
 
         titlenumberthanks =(TextView) view.findViewById(R.id.titlenumberthanks);
-       // Drawable iconNumber = getResources().getDrawable( R.drawable.icon_profile_like );
-       // iconNumber.setBounds(0,0, Utils.convertDpToPixel(20,getContext()),Utils.convertDpToPixel(20,getContext()));
-       // titlenumberthanks.setCompoundDrawables(iconNumber, null, null, null);
+
+
 
         titleschool =(TextView) view.findViewById(R.id.titleschool);
-       // Drawable iconSchool = getResources().getDrawable( R.drawable.icon_profile_school );
-       // iconSchool.setBounds(0,0, Utils.convertDpToPixel(20,getContext()),Utils.convertDpToPixel(20,getContext()));
-        //titleschool.setCompoundDrawables(iconSchool, null, null, null);
+
 
         titlecompany =(TextView) view.findViewById(R.id.titlecompany);
-      //  Drawable iconCompany = getResources().getDrawable( R.drawable.icon_profile_company );
-       // iconCompany.setBounds(0,0, Utils.convertDpToPixel(20,getContext()),Utils.convertDpToPixel(20,getContext()));
-       // titlecompany.setCompoundDrawables(iconCompany, null, null, null);
 
         directMessage =(Button) view.findViewById(R.id.btn_directmessage);
         createEvent =(Button) view.findViewById(R.id.btn_createevent);
@@ -145,6 +166,10 @@ public class MyPageDetailFragment extends android.support.v4.app.Fragment implem
         txtschool =(TextView) view.findViewById(R.id.txtschool);
         txtintroduction =(TextView) view.findViewById(R.id.txtintroduce);
 
+        radfriend =(TextView) view.findViewById(R.id.radfriend);
+        radlanguage =(TextView) view.findViewById(R.id.radlanguage);
+        radlocal =(TextView) view.findViewById(R.id.radlocal);
+        radbusiness =(TextView) view.findViewById(R.id.radbusiness);
 
         if(!friendid.equals(AccountController.getInstance().getAccount().getId()))
         {
@@ -183,8 +208,7 @@ public class MyPageDetailFragment extends android.support.v4.app.Fragment implem
                 break;
             }
             case R.id.btn_createevent: {
-                Intent intent = new Intent(getContext(), CreateEventActivity.class);
-                intent.putExtra("isedit",0);
+                Intent intent = new Intent(getActivity(), EditProfileActivity.class);
                 startActivity(intent);
                 break;
             }

@@ -65,6 +65,7 @@ public class FragmentMyPagerAdapter  extends FragmentPagerAdapter {
             bundle.putString("introduce",user.getIntroduction());
            // bundle.putString("interested",user.get);
             bundle.putInt("numberthanks",user.getTotalLike());
+            bundle.putString("interested",user.getInterest());
             bundle.putString("school",user.getSchool());
             bundle.putString("company",user.getCompany());
 

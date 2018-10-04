@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.DialogFragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -25,6 +26,7 @@ import com.aseanfan.worldcafe.UI.Adapter.CommunityAdapter;
 import com.aseanfan.worldcafe.UI.Adapter.PostTimelineAdapter;
 import com.aseanfan.worldcafe.UI.CommentActivity;
 import com.aseanfan.worldcafe.UI.CommentEventActivity;
+import com.aseanfan.worldcafe.UI.Component.DIalogImagePreview;
 import com.aseanfan.worldcafe.UI.EditPostTimeline;
 import com.aseanfan.worldcafe.UI.MainActivity;
 import com.aseanfan.worldcafe.Utils.Constants;
@@ -326,6 +328,11 @@ public class MyPostFragment  extends android.support.v4.app.Fragment implements 
             intent.putExtra("Timeline_id",posttimeline.get(position).getTimelineid());
             intent.putExtra("Account_id", posttimeline.get(position).getAccountid());
             startActivity(intent);
+        }
+        if(type == Constants.CLICK_IMAGE_PREVIEW) {
+            DialogFragment fragment =  DIalogImagePreview.newInstance(posttimeline.get(position).getUrlImage());
+            fragment.show(getFragmentManager(), "image preciew");
+            // fragment.setData
         }
 
     }

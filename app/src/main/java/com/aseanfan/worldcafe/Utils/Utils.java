@@ -74,8 +74,7 @@ public class Utils {
        // canvas.drawRect(0F, 0F, (float) width, (float) height, paint2);
         Paint paint = new Paint();
         paint.setColor(Color.WHITE);
-        paint.setTextSize(50);
-        paint.setTextScaleX(1);
+        paint.setTextSize(60);
         canvas.drawText("+"+name, width - convertDpToPixel(30,context), height - convertDpToPixel(15,context), paint);
         return bitmap;
     }
@@ -140,6 +139,10 @@ public class Utils {
             age--;
         }
 
+        if(age <0)
+        {
+            return 0;
+        }
         return age;
     }
 

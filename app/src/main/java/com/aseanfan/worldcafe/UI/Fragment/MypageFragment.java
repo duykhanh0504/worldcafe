@@ -2,6 +2,7 @@ package com.aseanfan.worldcafe.UI.Fragment;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
@@ -15,6 +16,7 @@ import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
@@ -31,6 +33,8 @@ import com.aseanfan.worldcafe.Model.UserModel;
 import com.aseanfan.worldcafe.Provider.Store;
 import com.aseanfan.worldcafe.UI.Adapter.FragmentMyPagerAdapter;
 import com.aseanfan.worldcafe.UI.Component.DIalogImagePreview;
+import com.aseanfan.worldcafe.UI.Component.ViewDialog;
+import com.aseanfan.worldcafe.UI.CreateEventActivity;
 import com.aseanfan.worldcafe.UI.EditProfileActivity;
 import com.aseanfan.worldcafe.UI.MainActivity;
 import com.aseanfan.worldcafe.Utils.Constants;
@@ -45,8 +49,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -85,11 +91,12 @@ public class MypageFragment extends android.support.v4.app.Fragment implements N
     private ProgressBar loading;
     private List<PostTimelineModel> posttimeline;
     private ImageView rankImage;
-    private ImageView editImage;
+   // private ImageView editImage;
     private Long accountid;
     private FragmentMyPagerAdapter adapter;
     private  UserModel user = new UserModel();
     private Button btn_follow;
+    private ImageView imagereport;
     private int isfollow;
 
     private LinearLayout content_info;
@@ -101,6 +108,7 @@ public class MypageFragment extends android.support.v4.app.Fragment implements N
 
     private ImageView avatartoolbar;
     private TextView nametoolbar;
+    private String[] listreport;
 
 
     private static final float PERCENTAGE_TO_SHOW  = 0.9f;
@@ -422,6 +430,123 @@ public class MypageFragment extends android.support.v4.app.Fragment implements N
         });
     }
 
+    public void Report(String reporttext)
+    {
+        JsonObject dataJson = new JsonObject();
+        dataJson.addProperty("type", 0);
+        dataJson.addProperty("account_id", AccountController.getInstance().getAccount().getId());
+        dataJson.addProperty("object_id", accountid);
+        dataJson.addProperty("content", reporttext);
+
+        RestAPI.PostDataMasterWithToken(getActivity().getApplicationContext(),dataJson,RestAPI.POST_REPORT, new RestAPI.RestAPIListenner() {
+            @Override
+            public void OnComplete(int httpCode, String error, String s) {
+                try {
+                    if (!RestAPI.checkHttpCode(httpCode)) {
+                        //AppFuncs.alert(getApplicationContext(),s,true);
+
+                        return;
+                    }
+                    ViewDialog dialog = new ViewDialog();
+                    dialog.showDialogCancel(getActivity(),"Report Successful");
+                    //   posttimeline.remove(pos);
+                    //  Adapter.setPostList(posttimeline);
+
+                }
+                catch (Exception ex) {
+                }
+            }
+        });
+    }
+
+    public void LoadReport()
+    {
+        String url;
+        url = String.format(RestAPI.GET_LIST_REPORT, 0);
+
+        RestAPI.GetDataMaster(getActivity().getApplicationContext(),url, new RestAPI.RestAPIListenner() {
+            @Override
+            public void OnComplete(int httpCode, String error, String s) {
+                try {
+                    if (!RestAPI.checkHttpCode(httpCode)) {
+                        //AppFuncs.alert(getApplicationContext(),s,true);
+
+                        return;
+                    }
+
+                    JsonArray jsonArray = (new JsonParser()).parse(s).getAsJsonObject().getAsJsonArray("result");
+                    Gson gson = new Gson();
+                    java.lang.reflect.Type type = new TypeToken<List<String>>(){}.getType();
+                    List<String> listEvent = gson.fromJson(jsonArray, type);
+                    dialogReport(listEvent);
+
+
+                }
+                catch (Exception ex) {
+                }
+            }
+        });
+    }
+
+    public void dialogReport(final List<String> list)
+    {
+        listreport = new String[list.size()];
+        listreport = list.toArray(listreport);
+        final int[] mpos = {0};
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        LayoutInflater inflater = this.getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.choice_dialog, null);
+        builder.setView(dialogView);
+        builder.setCancelable(true);
+        ArrayAdapter<CharSequence> adapter = new ArrayAdapter<CharSequence>(
+                getActivity(), R.layout.choice_item, listreport);
+        builder.setSingleChoiceItems(adapter, 0, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                mpos[0] = i;
+            }
+        });
+
+        Button cancel = dialogView.findViewById(R.id.btn_cancel);
+        Button report = dialogView.findViewById(R.id.btn_report);
+
+        final AlertDialog dialog = builder.create();
+
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+
+            }
+        });
+
+        report.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+                if(mpos[0]!=-1) {
+                    Report(listreport[mpos[0]]);
+                }
+            }
+        });
+
+     /*   builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // LoadListEvent(typegenre);
+                dialog.dismiss();
+                if(mpos[0]!=-1) {
+                    Report(listreport[mpos[0]]);
+                }
+            }
+        });
+        builder.setNegativeButton("Cancel", null);*/
+
+        dialog.getWindow().setBackgroundDrawable(getResources().getDrawable(R.drawable.background_dialog));
+
+
+        dialog.show();
+    }
 
     @Nullable
     @Override
@@ -429,10 +554,11 @@ public class MypageFragment extends android.support.v4.app.Fragment implements N
         View view = inflater.inflate(R.layout.fragment_mypage, container, false);
 
         btn_follow =(Button)view.findViewById(R.id.btn_follow);
+        imagereport = (ImageView) view.findViewById(R.id.btn_report);
         avatar = view.findViewById(R.id.avatar);
         followed = (TextView) view.findViewById(R.id.txt_followed);
         follower =(TextView)view.findViewById(R.id.txt_follower);
-        editImage= (ImageView) view.findViewById(R.id.image_edit);
+      //  editImage= (ImageView) view.findViewById(R.id.image_edit);
 
         content_info = (LinearLayout) view.findViewById(R.id.content_info);
         content_toolbar = (LinearLayout) view.findViewById(R.id.content_toolbar);
@@ -447,9 +573,9 @@ public class MypageFragment extends android.support.v4.app.Fragment implements N
         nametoolbar = view.findViewById(R.id.txtusername);
 
 
-        toolbar = (Toolbar) view.findViewById(R.id.toolbar);
+      //  toolbar = (Toolbar) view.findViewById(R.id.toolbar);
      //   ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
-      //  ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle(null);
+       ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle(null);
       //  ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 
@@ -511,25 +637,40 @@ public class MypageFragment extends android.support.v4.app.Fragment implements N
         {
 
             btn_follow.setVisibility(View.VISIBLE);
-            editImage.setVisibility(View.GONE);
+          //  editImage.setVisibility(View.GONE);
             CheckFollow(accountid);
+            imagereport.setVisibility(View.VISIBLE);
         }
         else
         {
-            btn_follow.setVisibility(View.GONE);
-            editImage.setVisibility(View.VISIBLE);
+          //  btn_follow.setVisibility(View.GONE);
+           // editImage.setVisibility(View.VISIBLE);
+            btn_follow.setText("Create Event");
+            imagereport.setVisibility(View.GONE);
         }
 
+
+        imagereport.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                LoadReport();
+            }
+        });
         btn_follow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(isfollow == Constants.FOLLOW)
-                {
-                    Follow(accountid);
+                if(!accountid.equals(AccountController.getInstance().getAccount().getId())) {
+                    if (isfollow == Constants.FOLLOW) {
+                        Follow(accountid);
+                    } else {
+                        UnFollow(accountid);
+                    }
                 }
                 else
                 {
-                    UnFollow(accountid);
+                    Intent intent = new Intent(getContext(), CreateEventActivity.class);
+                    intent.putExtra("isedit",0);
+                    startActivity(intent);
                 }
             }
         });
@@ -539,7 +680,7 @@ public class MypageFragment extends android.support.v4.app.Fragment implements N
         avatar.setScaleType(ImageView.ScaleType.FIT_XY);
         rankImage= (ImageView) view.findViewById(R.id.image_rank);
 
-        editImage.setOnClickListener(new View.OnClickListener() {
+       /* editImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if(accountid.equals(AccountController.getInstance().getAccount().getId())) {
@@ -547,7 +688,7 @@ public class MypageFragment extends android.support.v4.app.Fragment implements N
                     startActivity(intent);
                 }
             }
-        });
+        });*/
 
 
         background = view.findViewById(R.id.background);

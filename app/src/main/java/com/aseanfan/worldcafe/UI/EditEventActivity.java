@@ -112,6 +112,14 @@ public class EditEventActivity extends AppCompatActivity {
         if(typeupdate ==UPDATE_PRIVATE||typeupdate ==UPDATE_PUBLIC )
         {
             dataJson.addProperty("is_private",typeupdate);
+            if(event.getPrivate() ==0)
+            {
+                privatepost.setText("Public");
+            }
+            else
+            {
+                privatepost.setText("Private");
+            }
         }
         else if(typeupdate == UPDATE_EVENT)
         {
@@ -147,10 +155,12 @@ public class EditEventActivity extends AppCompatActivity {
                     String str = "";
                     if(typeupdate==UPDATE_PRIVATE)
                     {
+                        event.setPrivate(0);
                         str = "Event updated to private";
                     }
                     else if (typeupdate ==UPDATE_PUBLIC)
                     {
+                        event.setPrivate(1);
                         str = "Event updated to public";
                     }
                     else if(typeupdate == UPDATE_EVENT)
@@ -341,7 +351,7 @@ public class EditEventActivity extends AppCompatActivity {
        privatepost.setOnClickListener(new View.OnClickListener() {
            @Override
            public void onClick(View view) {
-               if(event.getPrivate() ==0)
+               if(event.getPrivate() ==1)
                {
                    update(event,UPDATE_PRIVATE);
                }
