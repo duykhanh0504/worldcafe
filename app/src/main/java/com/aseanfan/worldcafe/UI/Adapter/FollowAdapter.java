@@ -31,7 +31,7 @@ public class FollowAdapter  extends RecyclerView.Adapter<FollowAdapter.MyViewHol
     }
 
     public interface ClickListener {
-        void onItemClick(int position, View v);
+        void onItemClick(Long position, View v);
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -54,7 +54,7 @@ public class FollowAdapter  extends RecyclerView.Adapter<FollowAdapter.MyViewHol
 
         @Override
         public void onClick(View view) {
-              clickListener.onItemClick(getAdapterPosition(), view );
+              clickListener.onItemClick(followlist.get(getAdapterPosition()).getAccount_id(), view );
         }
     }
 

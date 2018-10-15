@@ -96,6 +96,8 @@ public class RestAPI {
     public static String GET_LIST_REPORT = root_url + "/api/report/list-report-reason?type=%d";
     public static String POST_UPDATEEVENT = root_url + "/api/event/updateevent";
     public static String POST_DELETEDEVENT = root_url + "/api/event/deleteevent";
+    public static String GET_TIMELINEDETAIL = root_url + "/api/newfeed/getnewfeeddetail?newfeed_id=%d&account_id=%d";
+    public static String POST_CONTACTUS = root_url + "/api/user/contact";
 
     public final static int STATUS_SUCCESS = 200;
     public final static int STATUS_WRONGPASSWORD = 2;

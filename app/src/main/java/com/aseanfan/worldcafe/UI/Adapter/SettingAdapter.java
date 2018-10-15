@@ -15,6 +15,8 @@ import com.aseanfan.worldcafe.worldcafe.R;
 
 import java.util.List;
 
+import static com.aseanfan.worldcafe.Utils.Constants.SETTING_EMPTY_ROW;
+
 public class SettingAdapter  extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
 
@@ -53,6 +55,10 @@ public class SettingAdapter  extends RecyclerView.Adapter<RecyclerView.ViewHolde
         {
             return 2;
         }
+        else if(position == Constants.SETTING_EMPTY_ROW)
+        {
+            return 3;
+        }
         return -1;
     }
 
@@ -89,6 +95,15 @@ public class SettingAdapter  extends RecyclerView.Adapter<RecyclerView.ViewHolde
         }
     }
 
+    static class ViewHolderEmpty extends RecyclerView.ViewHolder {
+
+        TextView title;
+
+        public ViewHolderEmpty(View view) {
+            super(view);
+        }
+
+    }
 
     static class ViewHolderTitle extends RecyclerView.ViewHolder implements View.OnClickListener {
 
@@ -142,9 +157,14 @@ public class SettingAdapter  extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 itemView = LayoutInflater.from(viewGroup.getContext())
                         .inflate(R.layout.setting_row, viewGroup, false);
                 return new SettingAdapter.ViewHolderRowSetting(itemView);
+
             case 2:
                 itemView = LayoutInflater.from(viewGroup.getContext())
                         .inflate(R.layout.version_row, viewGroup, false);
+                return new SettingAdapter.ViewHolderVersion(itemView);
+            case 3:
+                itemView = LayoutInflater.from(viewGroup.getContext())
+                        .inflate(R.layout.empty_row, viewGroup, false);
                 return new SettingAdapter.ViewHolderVersion(itemView);
 
         }

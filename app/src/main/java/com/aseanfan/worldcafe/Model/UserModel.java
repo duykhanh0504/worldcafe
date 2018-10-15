@@ -17,6 +17,7 @@ public class UserModel {
     private int country;
     private String company;
     private String school;
+    private String job;
     private String introduction;
     private String interest;
     private int status;
@@ -34,6 +35,15 @@ public class UserModel {
 
     public UserModel() {
     }
+
+    public String getJob() {
+        return job;
+    }
+
+    public void setJob(String job) {
+        this.job = job;
+    }
+
 
     public String getInterest() {
         return interest;

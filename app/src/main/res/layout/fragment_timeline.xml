@@ -68,7 +68,7 @@
                 android:id="@+id/txtpost"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="What on your mind?"
+                android:text="@string/timeline"
                 android:layout_gravity="center|left"
                 android:layout_margin="@dimen/margin_left_right"/>
         </LinearLayout>

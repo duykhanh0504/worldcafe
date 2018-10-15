@@ -9,88 +9,161 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
-    <string name="title_community">Community</string>
+
+    <string name="title_community">Classifieds</string>
     <string name="title_timeline">Timeline</string>
-    <string name="title_mypage">My page</string>
+    <string name="title_mypage">My Page</string>
     <string name="title_setting">Setting</string>
     <string name="title_notifications">Notify</string>
+
 
     <string name="facebook_app_id">512038499006720</string>
     <string name="fb_login_protocol_scheme">fb512038499006720</string>
 
-    <string name="Friend">Friend</string>
-    <string name="Business">Business</string>
-    <string name="Local">Local</string>
-    <string name="Language">Language</string>
 
-    <string name="Login">Login</string>
-    <string name="Signup">Sign up with Email</string>
-    <string name="Signupfb">Sign up with Facebook</string>
+    <string name="intro1">Connect with people crossing the sea \n \n ·When you want to exchange with… \n “people from various countries” \n　“normally you can’t meet people” \n \n You can connect with people beyond the walls of the　country by Classifieds.</string>
+    <string name="intro2">Timeline \n \n You can by Timeline… \n “Share experiences and impressions at travel　destinations / destinations” \n　“Feel free to exchange information with local people” \n \n Travelers and expatriates can connect with local people.</string>
+    <string name="intro3">Let"'"s start Crosea \n \n You can get by crosea... \n "Connection beyond your community!" \n \n "Connection with valuable people for you!“ </string>
+
+
+    <string name="Username">Fullname</string>
+    <string name="Birthday">Birthday</string>
+    <string name="Sex">Gender</string>
+    <string name="Country">Country</string>
+    <string name="city">Location</string>
+    <string name="signup1">After completion of registration, we can"'"t accept any changes / corrections of age and gender, so please be careful when entering.	</string>
+    <string name="Register_button">Next</string>
+
+
+    <string name="activation_text">We have sent you a code via Email. \n Please enter it below.</string>
+    <string name="male">male</string>
+    <string name="female">female</string>
+    <string name="title_activity_list_follow">ListFollowActivity</string>
+    <string name="Activation_button">Done</string>
+
+
+    <string name="password_empty">Password empty</string>
+    <string name="Username_empty">Fullname empty</string>
+
+
+    <string name="Login">Log in</string>
+    <string name="Signup">Sign up</string>
+    <string name="Facebook_Signup">Sign up with Facebook</string>
     <string name="Email">Email</string>
     <string name="Password">Password</string>
-    <string name="Facebook_Login">Facebook Login</string>
-    <string name="Forget_Password">Forgot password</string>
+    <string name="Facebook_Login">Login with Facebook</string>
+    <string name="Forget_Password">Forgot password?</string>
+
+
+    <string name="facebookAvatarUrl">https://graph.facebook.com/%s/picture?type=square</string>
+
 
     <string name="Wrong_passowrd">Wrong Password</string>
     <string name="Account_exist">Account exist</string>
 
-    <string name="My_Post">My post</string>
+
+    <string name="forgetpassword_text">Enter your email address, we will send you \n an email with password reset instructions.</string>
+    <string name="ResetPassword">Send</string>
+    <string name="Passcode">Passcode</string>
+
+
+    <string name="Local">Local</string>
+    <string name="Business">Business</string>
+    <string name="Language">Language</string>
+    <string name="Friend">Friend</string>
+
+
+    <string name="Order_by_latest">Recent</string>
+    <string name="Order_by_thanks">Popularity</string>
+    <string name="Order_by_date">Date</string>
+    <string name="Order_by_price">Price</string>
+
+
+    <string name="timeline">Let"'"s share precious experiences and impressions</string>
+    <string name="question">Let"'"s feel free to exchange information with local people</string>
+    <string name="timeline_popup1">Ho Chi Minh</string>
+    <string name="timeline_popup2">Ha Noi</string>
+    <string name="timeline_popup3">Da nang</string>
+    <string name="timeline_popup4">Okinawa</string>
+    <string name="timeline_popup5">Osaka</string>
+
+    <string name="post_detail">Comment and question s answer on here</string>
+    <string name="Post">Post</string>
+
+
+    <string name="My_Event">Classifieds</string>
+    <string name="My_Post">Activity</string>
+    <string name="Album_page">Photo</string>
     <string name="Detail_page">Detail</string>
-    <string name="Album_page">Album</string>
-    <string name="My_Event">My event</string>
 
     <string name="Following">Following: </string>
-    <string name="Followers">Followers: </string>
+    <string name="Followers">Follower: </string>
     <string name="Rank">Rank</string>
+    <string name="Profession">Profession</string>
+    <string name="Event_exhibition">Create event</string>
 
-    <string name="Introduce">Introduce</string>
+    <string name="Introduce">Profile</string>
     <string name="Location">Location</string>
-    <string name="Interested">Interested </string>
-
-    <string name="Rating">Rating</string>
-    <string name="titlenumberthanks">Number of times you gave "thanks"</string>
-    <string name="givethanks">Give: %d times</string>
+    <string name="Interested">Interest </string>
+    <string name="titlenumberthanks">How many "thanks"</string>
     <string name="receivethanks">Receive: %d times</string>
     <string name="Direct_mesage">Chat</string>
-    <string name="Event_exhibition">Event Exhibition</string>
-    <string name="School">School</string>
-    <string name="Company">Company</string>
+    <string name="Edit_profile">Edit</string>
+    <string name="School">Academic background</string>
+    <string name="Company">Work experience</string>
 
-    <string name="intro1">Crosea,\n"Connect with valuable people for yourself"\n"Connection beyond the breadth of its own community"\nIt is a service that can be realized with global people crossing the sea.</string>
-    <string name="intro2">Crosea\n· Community you want to join\n· Information and knowledge you want\nYou can find it under the conditions you desire.\nLet"'"s go beyond the framework of your </string>
-    <string name="intro3">At Crosea.\n· Community you want to plan\n· Your information · knowledge\nYou can sell it under the conditions you desire.\nLet"'"s connect with people around the world </string>
+    <string name="banner_ad_unit_id">ca-app-pub-8507216984714483/7653944847</string>
 
-    <string name="facebookAvatarUrl">https://graph.facebook.com/%s/picture?type=square</string>
 
     <string name="genre">Genre</string>
-    <string name="photo">Photos/Images</string>
-    <string name="area">Area</string>
-    <string name="schedule">Schedule</string>
-    <string name="numberofparticipants">Number of participants</string>
-    <string name="price">Price</string>
+    <string name="photo">Image</string>
+    <string name="area">Location</string>
+    <string name="area_select">Tap to select</string>
+    <string name="schedule">Date</string>
+    <string name="schedule_select">Tap to select</string>
+    <string name="repeat_times">Enter repeat interval</string>
+    <string name="price">Fee</string>
+    <string name="price_select">Into 0 to 2,000K VND here</string>
+    <string name="numberofparticipants">How many attendees</string>
+    <string name="numberofparticipants_select">How many attendees will join?</string>
     <string name="title">Title</string>
-    <string name="detail">Details</string>
-    <string name="note">Note</string>
-    <string name="Post">Post</string>
+    <string name="title_select">Tap to enter</string>
+    <string name="detail">Description</string>
+    <string name="detail_select">Who can connect with? Show your awesome community.</string>
+    <string name="note">Attention</string>
+    <string name="note_select">Show anything attention on the day.</string>
+
+    <string name="Private">Private</string>
     <string name="Create_event">Create</string>
     <string name="notification_channel_id">default</string>
 
-    <string name="activation_text">We have sent you a code via Email. \nPlease enter it below </string>
-    <string name="male">male</string>
-    <string name="female">female</string>
-    <string name="title_activity_list_follow">ListFollowActivity</string>
 
-    <string name="forgetpassword_text">We just need your registered Email to send \n you password reset instructions </string>
-    <string name="ResetPassword">Reset Password</string>
-    <string name="Passcode">Passcode</string>
-    <string name="Old_pass">Old Password</string>
+    <string name="done">Done</string>
+    <string name="delete">Delete</string>
+
+
+    <string name="posted_timeline">Posted "TimelineContentLink".</string>
+    <string name="posted_event">Posted "EventTitleLink"!</string>
+    <string name="Joined_event">Joined "EventTitleLink"!</string>
+    <string name="Followed">Your account was followed!</string>
+    <string name="comment_timeline">"TimelineContentLink" was commented.</string>
+    <string name="comment_event">"EventTitleLink" was commented.</string>
+    <string name="received_thanks">"TimelineContentLink" was received Thanks!</string>
+
+
+    <string name="Old_pass">Current Password</string>
     <string name="New_pass">New Password</string>
-    <string name="Re_pass">Reenter Password</string>
-
-    <string name="can_not_connect_server">Failed to connect to server, please try again</string>
-    <string name="banner_ad_unit_id">ca-app-pub-8507216984714483/7653944847</string>
-    <string name="edit_time_line">Edit successfully</string>
-    <string name="Signupnote">After completion of registration, we can not accept any changes / corrections of participants age and sex, so please be careful when entering.</string>
+    <string name="Re_pass">Confirm Password</string>
 
 
+    <string name="can_not_connect_server">Failed to connect to server, please try again.</string>
+    <string name="edit_time_line">Edit done</string>
+    <string name="Event_create_done">Community created! \n Please wait for approval.</string>
+
+    <string name="Signupnote">After completion of registration, we can not accept any changes / corrections of age and gender, so please be careful when entering.
+    </string>
+    <string name="InfoRank">TL rank will grade up by… \n・Post Timeline / Question\n・Receive ｢Thanks｣\n\n
+    As rank goes up, you will find easier for others to see in Crosea\n\n
+    Let s receive “Thanks” from people in your area by posting / commenting
+    </string>
 </resources>

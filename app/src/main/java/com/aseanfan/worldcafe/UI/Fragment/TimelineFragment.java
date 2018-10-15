@@ -128,7 +128,7 @@ public class TimelineFragment extends android.support.v4.app.Fragment implements
 
         if (id == R.id.buttonarea) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                builder.setTitle("Choose some areas");
+           //     builder.setTitle("Choose some areas");
 
             builder.setCancelable(true);
             builder.setMultiChoiceItems(listcity, checkedItems, new DialogInterface.OnMultiChoiceClickListener() {
@@ -149,7 +149,7 @@ public class TimelineFragment extends android.support.v4.app.Fragment implements
                     LoadListTimeLinePost();
                 }
             });
-            builder.setNegativeButton("Cancel", null);
+            builder.setNegativeButton(getResources().getString(R.string.album_cancel), null);
 
             AlertDialog dialog = builder.create();
             dialog.show();

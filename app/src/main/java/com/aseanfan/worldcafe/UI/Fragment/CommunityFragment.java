@@ -91,7 +91,7 @@ public class CommunityFragment extends Fragment implements NotificationCenter.No
     private ViewPager viewPager;
     private FragmentEventPageAdapter adapter;
 
-    private static final String[]paths = {"Order by latest", "Order by thanks" ,"Order by date","Order by price"};
+    private static String[]paths;
 
     private List<Integer> area = new ArrayList<>();
     String[] listcity = {"HCM", "Ha Noi", "Da Nang", "Tokyo", "Osaka"};
@@ -154,7 +154,7 @@ public class CommunityFragment extends Fragment implements NotificationCenter.No
 
         if (id == R.id.buttonarea) {
             AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-            builder.setTitle("Choose some areas");
+          //  builder.setTitle("Choose some areas");
 
             builder.setCancelable(true);
             builder.setMultiChoiceItems(listcity, checkedItems, new DialogInterface.OnMultiChoiceClickListener() {
@@ -188,7 +188,7 @@ public class CommunityFragment extends Fragment implements NotificationCenter.No
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable final ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_community, container, false);
-
+        paths = new String[]{getResources().getString(R.string.Order_by_latest), getResources().getString(R.string.Order_by_thanks), getResources().getString(R.string.Order_by_date), getResources().getString(R.string.Order_by_price)};
         Toolbar toolbar = (Toolbar) view.findViewById(R.id.app_toolbar);
         ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
         ((AppCompatActivity)getActivity()).setTitle(null);

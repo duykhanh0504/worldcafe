@@ -62,6 +62,7 @@ public class FollowFrargment  extends Fragment {
         viewPager.setAdapter(adapter);
 
 
+
         tabfollow = (TabLayout)view.findViewById(R.id.tab_follow);
 
         tabfollow.setupWithViewPager(viewPager);

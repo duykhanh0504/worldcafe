@@ -40,7 +40,7 @@
                         android:layout_height="25dp"
                         android:background="@drawable/friendchatbackground"
                         android:gravity="center"
-                        android:text="Cancel"
+                        android:text="@string/album_cancel"
                         android:textSize="13dp"
                         android:textStyle="bold"
                         android:textColor="#ffffffff" />

@@ -135,19 +135,16 @@
     </RadioGroup>
 
 
-    <android.support.design.widget.TextInputLayout
-        android:layout_marginRight="@dimen/margin_left_right"
-        android:layout_marginLeft="@dimen/margin_left_right"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:maxHeight="300dp">
+
         <EditText android:id="@+id/input_detail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="what do you think?"
-            android:maxHeight="300dp"/>
-    </android.support.design.widget.TextInputLayout>
+            android:hint="@string/timeline"
+            android:maxHeight="300dp"
+            android:backgroundTint="@color/colorPrimary"
+            android:layout_marginRight="@dimen/margin_left_right"
+            android:layout_marginLeft="@dimen/margin_left_right"/>
+
 
     <android.support.v7.widget.RecyclerView
         android:layout_marginRight="@dimen/margin_left_right"

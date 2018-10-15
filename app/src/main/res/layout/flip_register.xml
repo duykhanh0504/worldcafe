@@ -55,7 +55,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:textSize="16sp"
-            android:text="Username" />
+            android:text="@string/Username" />
         <EditText android:id="@+id/input_username_update"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -65,7 +65,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="16sp"
-            android:text="Birthday" />
+            android:text="@string/Birthday" />
 
             <EditText android:id="@+id/input_birthday"
                 android:layout_width="match_parent"
@@ -81,7 +81,7 @@
             android:layout_marginTop="15dp"
             android:layout_marginBottom="15dp"
             android:textSize="16sp"
-            android:text="Sex" />
+            android:text="@string/Sex" />
         <RadioGroup
             android:id="@+id/rad_sex"
             android:layout_width="wrap_content"
@@ -109,7 +109,7 @@
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
             android:textSize="16sp"
-            android:text="Country" />
+            android:text="@string/Country" />
         <Spinner
             android:id="@+id/spinner_country"
             android:layout_width="match_parent"
@@ -122,7 +122,7 @@
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
             android:textSize="16sp"
-            android:text="city" />
+            android:text="@string/city" />
         <Spinner
             android:id="@+id/spinner_city"
             android:layout_width="match_parent"

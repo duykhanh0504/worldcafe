@@ -2,18 +2,24 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal"
+    android:orientation="vertical"
     android:background="@color/white"
-    android:layout_marginTop="5dp"
-    android:layout_marginBottom="5dp">
 
+>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+        >
     <TextView
         android:layout_gravity="left|center"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="0.8"
-        android:textSize="20sp"
-        android:layout_marginLeft="@dimen/margin_left_right"
+        android:textSize="16sp"
+        android:layout_marginLeft="24dp"
         android:text="Version" />
 
     <ImageView
@@ -21,13 +27,23 @@
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:layout_gravity="center"
-        android:background="@drawable/ic_launcher"/>
+        android:background="@drawable/ic_crosea_setting"/>
     <TextView
         android:id="@+id/textversion"
         android:layout_width="45dp"
-        android:layout_height="45dp"
-        android:textSize="20sp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:textSize="16sp"
         android:textAlignment="center"
         android:gravity="center"
-        android:text="1.0.0"/>
+        android:text="1.0.0"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="24dp"/>
+</LinearLayout>
+
+
+<FrameLayout
+android:layout_width="match_parent"
+android:layout_height="1dp"
+android:background="@color/silver"></FrameLayout>
 </LinearLayout>

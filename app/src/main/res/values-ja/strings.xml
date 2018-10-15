@@ -1,115 +1,162 @@
-
-
-    <resources>
-
+<resources>
     <string name="app_name">Crosea</string>
+    <string name="button">Button</string>
+    <string name="todo">TODO</string>
 
-    <string name="title_community">イベント</string>
 
+    <string name="google_maps_api_key">AIzaSyD5WulihCHENmeaCamHEPajTEUzBroqrEo</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+
+    <string name="title_community">コミュニティ</string>
     <string name="title_timeline">タイムライン</string>
-
     <string name="title_mypage">マイページ</string>
-
     <string name="title_setting">設定</string>
-
     <string name="title_notifications">通知</string>
 
-    <string name="facebook_app_id">216205465084648</string>
 
-    <string name="fb_login_protocol_scheme">fb216205465084648</string>
+    <string name="facebook_app_id">512038499006720</string>
+    <string name="fb_login_protocol_scheme">fb512038499006720</string>
 
-    <string name="Friend">フレンド</string>
 
-    <string name="Business">ビジネス</string>
+    <string name="intro1">海を越えた人々とつながる\n　\n ”様々な国の人々”や”普段出会えない人”\n と交流したいとき…\n \n　国の壁を超えた人とつながることができるサービスです。</string>
+    <string name="intro2">タイムライン\n　\n ”旅行先・滞在先での体験、感動をシェア”\n ”現地の人々と気軽に情報交換”\n　をタイムラインで行い…\n 旅行者と駐在人は、現地の人々とつながることができます。</string>
+    <string name="intro3">Croseaを始めましょう\n　\n　Croseaでは…\n　コミュニティの幅を超えたつながりを創ることができます！\n そして、あなたにとって価値のある人とつながってみましょう！</string>
 
-    <string name="Local">ローカル</string>
 
-    <string name="Language">ランゲージ</string>
+    <string name="Username">名前</string>
+    <string name="Birthday">生年月日</string>
+    <string name="Sex">性別</string>
+    <string name="Country">滞在国</string>
+    <string name="city">地域</string>
+    <string name="signup1">登録完了後は参加者の年齢や性別の変更・訂正は一切お受けできませんので、入力の際は十分ご注意ください。</string>
+    <string name="Register_button">次へ</string>
+
+
+    <string name="activation_text">メールアドレスへアクティベーションコードを送付いたしました。\n 下部に入力してください。</string>
+    <string name="male">男性</string>
+    <string name="female">女性</string>
+    <string name="title_activity_list_follow">ListFollowActivity</string>
+    <string name="Activation_button">登録完了</string>
+
+
+    <string name="password_empty">パスワードが入力されていません</string>
+    <string name="Username_empty">名前が入力されていません</string>
+
 
     <string name="Login">ログイン</string>
-
     <string name="Signup">新規登録</string>
-
+    <string name="Facebook_Signup">Facebookで新規登録</string>
     <string name="Email">メールアドレス</string>
-
     <string name="Password">パスワード</string>
-
     <string name="Facebook_Login">Facebookでログイン</string>
-
     <string name="Forget_Password">パスワードをお忘れの場合</string>
 
+    //facebook avatar
+    <string name="facebookAvatarUrl">https://graph.facebook.com/%s/picture?type=square</string>
+
+    //signup / login error
     <string name="Wrong_passowrd">パスワードが違います</string>
+    <string name="Account_exist">既に存在しているアカウントです</string>
 
-    <string name="Account_exist">すでにアカウントが存在しています</string>
+    //password reset
+    <string name="forgetpassword_text">メールアドレスを入力すると、パスワードリセットの案内を送付します。</string>
+    <string name="ResetPassword">リセットメールを送信</string>
+    <string name="Passcode">コードを数字で入力</string>
 
-    <string name="My_Post">アクティビティ</string>
+    //event
+    <string name="Local">ローカル</string>
+    <string name="Business">ビジネス</string>
+    <string name="Language">ランゲージ</string>
+    <string name="Friend">フレンド</string>
 
-    <string name="Detail_page">基本情報</string>
+    //event sort
+    <string name="Order_by_latest">新着順</string>
+    <string name="Order_by_thanks">人気順</string>
+    <string name="Order_by_date">日程近い順</string>
+    <string name="Order_by_price">金額低い順</string>
 
-    <string name="Album_page">フォト</string>
+    //timeline
+    <string name="timeline">現地での貴重な体験・感動を共有してみましょう</string>
+    <string name="question">現地の人々と気軽に情報交換してみましょう</string>
+    <string name="timeline_popup1">ホーチミン</string>
+    <string name="timeline_popup2">ハノイ</string>
+    <string name="timeline_popup3">ダナン</string>
+    <string name="timeline_popup4">沖縄</string>
+    <string name="timeline_popup5">大阪</string>
 
-    <string name="Following">フォロー: %d</string>
-
-    <string name="Followers">フォロワー: %d</string>
-
-    <string name="Rank">ランク</string>
-
-    <string name="Introduce">プロフィール</string>
-
-    <string name="Interested">関心ジャンル</string>
-
-    <string name="Rating">ユーザー評価</string>
-
-    <string name="titlenumberthanks">「ありがとう」を贈った・もらった回数</string>
-
-    <string name="givethanks">贈る: %d times</string>
-
-    <string name="receivethanks">もらう: %d times</string>
-
-    <string name="Direct_mesage">メッセージ履歴</string>
-
-    <string name="Event_exhibition">イベント作成</string>
-
-    <string name="School">学歴</string>
-
-    <string name="Company">職歴</string>
-
-    <string name="intro1">Croseaは、\n”自分にとって価値のある人とつながる"\n"自身のコミュニティの幅を超えたつながり”を、 \n海を越えたグローバルな人々と叶えるサービスです。</string>
-
-    <string name="intro2">・あなたの参加したいイベント\n・あなたの欲しい情報・知識 を、\nあなたの望む条件で発見できます。\n\nあなたの今あるコミュニティの枠を超えましょう。</string>
-
-    <string name="intro3">·あなたが企画したいイベント\n・あなたの情報・知識 を、\nあなたの望む条件で販売できます。\n\nあなたがコミュニティのインフルエンサーになり 世界中の人々とつながりましょう。</string>
-
-
-    <string name="genre">ジャンル</string>
-
-    <string name="photo">写真を追加</string>
-
-    <string name="area">地域</string>
-
-    <string name="schedule">毎週/月/年　繰り返し</string>
-
-    <string name="numberofparticipants">実施人数</string>
-
-    <string name="price">参加費</string>
-
-    <string name="title">タイトル</string>
-
-    <string name="detail">イベント内容</string>
-
-    <string name="note">参加にあたってのお願い</string>
-
+    <string name="post_detail">ここにコメント・質問への回答を入力</string>
     <string name="Post">投稿</string>
 
-    <string name="Create_event">イベントを作成</string>
+    //user profile / my page / event edit
+    <string name="My_Event">コミュニティ</string>
+    <string name="My_Post">アクティビティ</string>
+    <string name="Album_page">フォト</string>
+    <string name="Detail_page">基本情報</string>
 
+    <string name="Following">フォロー: </string>
+    <string name="Followers">フォロワー: </string>
+    <string name="Rank">ランク</string>
+    <string name="Profession">職業</string>
+    <string name="Event_exhibition">コミュニティ企画</string>
+
+    <string name="Introduce">プロフィール</string>
+    <string name="Location">地域</string>
+    <string name="Interested">関心ジャンル</string>
+    <string name="titlenumberthanks">「ありがとう」数</string>
+    <string name="receivethanks">もらう: %d 回</string>
+    <string name="Direct_mesage">メッセージ</string>
+    <string name="Edit_profile">編集</string>
+    <string name="School">学歴</string>
+    <string name="Company">職歴</string>
+
+    <string name="banner_ad_unit_id">ca-app-pub-8507216984714483/7653944847</string>
+
+    //create event
+    <string name="genre">ジャンル</string>
+    <string name="photo">写真を追加</string>
+    <string name="area">地域</string>
+    <string name="area_select">タップで選択</string>
+    <string name="schedule">日程</string>
+    <string name="schedule_select">タップで選択</string>
+    <string name="repeat_times">実施頻度を入力</string>
+    <string name="price">価格</string>
+    <string name="price_select">0から2,000KVNDまで入力</string>
+    <string name="numberofparticipants">実施予定人数</string>
+    <string name="numberofparticipants_select">人数規模を入力</string>
+    <string name="title">タイトル</string>
+    <string name="title_select">タップで入力</string>
+    <string name="detail">内容</string>
+    <string name="detail_select">あなたの素晴らしいコミュニティを紹介しましょう</string>
+    <string name="note">参加へのお願い</string>
+    <string name="note_select">当日に関する詳細を入力</string>
+
+    <string name="Private">非公開</string>
+    <string name="Create_event">企画を公開</string>
     <string name="notification_channel_id">default</string>
 
-    <string name="activation_text">メールアドレスにアクティブコードを送信しました。\n以下に入力してください。</string>
 
-    <string name="male">男性</string>
+    <string name="done">更新</string>
+    <string name="delete">削除</string>
 
-    <string name="female">女性</string>
+    <string name="posted_timeline">"TimelineContentLink"を投稿しました</string>
+    <string name="posted_event">"EventTitleLink"を企画しました！</string>
+    <string name="Joined_event">"EventTitleLink"に参加しました！</string>
+    <string name="Followed">さんにフォローされました！</string>
+    <string name="comment_timeline">"TimelineContentLink"にコメントされました</string>
+    <string name="comment_event">"EventTitleLink"にコメントされました</string>
+    <string name="received_thanks">"TimelineContentLink"に「ありがとう」が贈られました！</string>
 
+
+    <string name="Old_pass">現在のパスワードを入力</string>
+    <string name="New_pass">新しいパスワードを入力</string>
+    <string name="Re_pass">確認のためもう一度入力</string>
+
+
+    <string name="can_not_connect_server">サーバに接続できませんでした。もう一度お試しください。</string>
+    <string name="edit_time_line">編集完了しました。</string>
+    <string name="Event_create_done">コミュニティ企画が完了しました！ \n 運営からの承認をお待ちください。</string>
 
 </resources>

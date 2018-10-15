@@ -599,13 +599,13 @@ public class LoginActivity extends BaseActivity {
             public void onClick(View view) {
                 if(_passcode.getText().toString().isEmpty())
                 {
-                    dialog.showDialogCancel( LoginActivity.this,"Passcode can not empty" );
+                    dialog.showDialogCancel( LoginActivity.this,getResources().getString(R.string.password_empty) );
                 //    Toast.makeText(LoginActivity.this, "Passcode can not empty", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 if(_newpass.getText().toString().isEmpty())
                 {
-                    dialog.showDialogCancel( LoginActivity.this,"Password can not empty" );
+                    dialog.showDialogCancel( LoginActivity.this,getResources().getString(R.string.password_empty));
                     //    Toast.makeText(LoginActivity.this, "Passcode can not empty", Toast.LENGTH_SHORT).show();
                     return;
                 }
@@ -930,7 +930,7 @@ public class LoginActivity extends BaseActivity {
 
         if(validatePassword(password)==false)
         {
-            dialog.showDialogCancel( LoginActivity.this,"password can not empty" );
+            dialog.showDialogCancel( LoginActivity.this,getResources().getString(R.string.password_empty) );
             progressDialog.dismiss();
             return;
         }
@@ -1264,7 +1264,7 @@ public class LoginActivity extends BaseActivity {
           if (password==null || password.isEmpty())
           {
              // Toast.makeText(LoginActivity.this, "Password can not empty", Toast.LENGTH_SHORT).show();
-              dialog.showDialogCancel( LoginActivity.this,"Password can not empty" );
+              dialog.showDialogCancel( LoginActivity.this,getResources().getString(R.string.password_empty) );
               return;
           }
       }

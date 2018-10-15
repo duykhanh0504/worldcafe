@@ -60,11 +60,13 @@ public class EditProfileActivity extends AppCompatActivity {
     private EditText introduce;
     private EditText school;
     private EditText company;
+    private EditText profession;
   //  private RadioGroup radgroup;
     private Spinner country;
     private Spinner city;
     private UserModel user;
     private Button Button;
+    private ImageView btnCancel;
     private CheckBox radfriend;
     private CheckBox radlanguage;
     private CheckBox radlocal;
@@ -317,7 +319,9 @@ public class EditProfileActivity extends AppCompatActivity {
         if(user.getCompany()!=null) {
             company.setText(user.getCompany());
         }
-
+        if(user.getJob()!=null) {
+            profession.setText(user.getJob());
+        }
 
 /*        radgroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
@@ -421,6 +425,13 @@ public class EditProfileActivity extends AppCompatActivity {
                 }
             }
         });
+        btnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+
         Button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -429,6 +440,7 @@ public class EditProfileActivity extends AppCompatActivity {
                 user.setIntroduction(introduce.getText().toString());
                 user.setSchool(school.getText().toString());
                 user.setCompany(company.getText().toString());
+                user.setJob(profession.getText().toString());
                 if(interest.size() > 0)
                 {
                     String s = "";
@@ -496,11 +508,13 @@ public class EditProfileActivity extends AppCompatActivity {
        // radgroup = (RadioGroup) this.findViewById(R.id.rad_sex);
         country = (Spinner) this.findViewById(R.id.spinner_country);
         city = (Spinner) this.findViewById(R.id.spinner_city);
-        Button = (Button) this.findViewById(R.id.btn_update);
+        Button = (Button) this.findViewById(R.id.btndone);
+        btnCancel = (ImageView) this.findViewById(R.id.btncancel);
         radfriend  = (CheckBox) this.findViewById(R.id.radfriend);
         radlanguage = (CheckBox) this.findViewById(R.id.radlanguage);
         radlocal = (CheckBox) this.findViewById(R.id.radlocal);
         radbusiness = (CheckBox) this.findViewById(R.id.radbusiness);
+        profession = (EditText) this.findViewById(R.id.edtProfession);
 
     }
 
@@ -519,6 +533,9 @@ public class EditProfileActivity extends AppCompatActivity {
             dataJson.addProperty("interest", u.getInterest());
         }
 
+        if(u.getJob()!=null) {
+            dataJson.addProperty("job", u.getJob());
+        }
 
 
         if(u.getIntroduction()!=null) {
@@ -559,7 +576,6 @@ public class EditProfileActivity extends AppCompatActivity {
 
             }
         });
-        // TODO: Implement your own authentication logic here.
 
     }
 }

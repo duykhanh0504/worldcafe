@@ -65,41 +65,74 @@
                 android:layout_margin="20dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center">
+                android:layout_gravity="center"
+                android:orientation="vertical">
 
                 <TextView
                     android:id="@+id/txt_file_path"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:gravity="center"
-                    android:text=""
-                    android:textColor="#ff000000"
-                    android:textSize="15dp"
-                    android:textStyle="bold" />
+                    android:gravity="center|top"
+                    android:text="About TL rank"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="10dp"/>
+
+                <TextView
+                    android:id="@+id/txtcontent"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="left"
+                    android:text="@string/InfoRank"
+                    />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="10dp"
+                android:layout_gravity="center"
+                android:gravity="center">
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/ic_rank1"/>
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/ic_rank2"
+                    android:layout_marginLeft="10dp"/>
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/ic_rank3"
+                    android:layout_marginLeft="10dp"/>
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/ic_rank4"
+                    android:layout_marginLeft="10dp"/>
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/ic_rank5"
+                    android:layout_marginLeft="10dp"/>
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginBottom="20dp"
-                android:orientation="horizontal"
-                android:gravity="center">
-
-
-                    <Button
-                        android:id="@+id/btn_cancel"
-                        android:layout_width="80dp"
-                        android:layout_height="25dp"
-                        android:background="@drawable/friendchatbackground"
-                        android:gravity="center"
-                        android:text="@string/album_cancel"
-                        android:layout_marginRight="30dp"
-                        android:textSize="13dp"
-                        android:textStyle="bold"
-                        android:textColor="#ffffffff" />
+                android:orientation="horizontal">
 
 
 
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="50"
+                    android:gravity="center">
 
 
                     <Button
@@ -107,12 +140,13 @@
                         android:layout_width="80dp"
                         android:layout_height="25dp"
                         android:background="@drawable/round_button"
-                        android:text="Ok"
+                        android:textAllCaps="false"
+                        android:text="Close"
                         android:textSize="13dp"
                         android:textStyle="bold"
                         android:textColor="#ffffffff" />
 
-
+                </LinearLayout>
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>

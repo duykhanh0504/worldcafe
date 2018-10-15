@@ -45,6 +45,7 @@ import com.aseanfan.worldcafe.UI.Fragment.CommunityFragment;
 import com.aseanfan.worldcafe.UI.Fragment.DetailCommunityFragment;
 import com.aseanfan.worldcafe.UI.Fragment.DetailTimelineFragment;
 import com.aseanfan.worldcafe.UI.Fragment.FollowFrargment;
+import com.aseanfan.worldcafe.UI.Fragment.Follow_Page;
 import com.aseanfan.worldcafe.UI.Fragment.MemberEventFragment;
 import com.aseanfan.worldcafe.UI.Fragment.MyPageDetailFragment;
 import com.aseanfan.worldcafe.UI.Fragment.MypageFragment;
@@ -185,6 +186,11 @@ public class MainActivity extends BaseActivity implements NotificationCenter.Not
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        if(java.lang.Integer.toHexString(getIntent().getFlags()).equals("14000000"))
+        {
+            int i=0;
+        }
       //  NotificationCenter.getInstance().addObserver(this, NotificationCenter.callbackEventDetail);
 
       /*  mToolbar = (Toolbar) findViewById(R.id.app_toolbar);
@@ -454,14 +460,25 @@ public class MainActivity extends BaseActivity implements NotificationCenter.Not
 
     }
 
-    public void callDetailTimelineID(int pos) {
+    public void callDetailTimelineID(Long pos) {
         detailTimelineFragment = new DetailTimelineFragment();
         Bundle bundle = new Bundle();
         bundle.putLong("timelineid",pos);
-        bundle.putInt("id",0);
+        bundle.putBoolean("frompush",true);
         detailTimelineFragment.setArguments(bundle);
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.add(R.id.content, detailTimelineFragment,TAG_TIMELINE_DETAIL).commit();
+
+    }
+
+    public void callDetailEventID(Long pos) {
+        detailcomunityfragment = new DetailCommunityFragment();
+        Bundle bundle = new Bundle();
+        bundle.putLong("eventid",pos);
+        bundle.putBoolean("frompush",true);
+        detailcomunityfragment.setArguments(bundle);
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.add(R.id.content, detailcomunityfragment,TAG_COMMUNITY_DETAIL).commit();
 
     }
 
@@ -541,6 +558,10 @@ public class MainActivity extends BaseActivity implements NotificationCenter.Not
         super.onResume();
 
         Fragment f = getSupportFragmentManager().findFragmentById(R.id.content);
+        if(java.lang.Integer.toHexString(getIntent().getFlags()).equals("14000000"))
+        {
+            int i=0;
+        }
         if (f instanceof MypageFragment)
         {
             int i=0;
@@ -590,7 +611,7 @@ public class MainActivity extends BaseActivity implements NotificationCenter.Not
             }
         }
         else if(f instanceof DetailTimelineFragment ||f instanceof DetailCommunityFragment
-                ||f instanceof MemberEventFragment){
+                ||f instanceof MemberEventFragment||f instanceof FollowFrargment){
 
             getSupportFragmentManager().beginTransaction().remove(f).commit();
 

@@ -28,7 +28,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginBottom="15dp"
-            android:text="@string/Signupfb"
+            android:text="@string/Facebook_Signup"
             android:textColor="@color/white"
             android:drawableLeft= "@drawable/ic_fb"
             android:paddingLeft="20dp"

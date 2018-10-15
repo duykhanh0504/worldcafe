@@ -92,10 +92,10 @@ public class ListFollowActivity extends Activity implements FollowAdapter.ClickL
 
 
     @Override
-    public void onItemClick(int position, View v) {
+    public void onItemClick(Long position, View v) {
         Intent intent = new Intent(this, ChatActivity.class);
-        intent.putExtra("chat_id",listFollow.get(position).getAccount_id());
-        intent.putExtra("avatarurl",listFollow.get(position).getAvarta());
+        intent.putExtra("chat_id",listFollow.get( position.intValue()).getAccount_id());
+        intent.putExtra("avatarurl",listFollow.get(position.intValue()).getAvarta());
         startActivity(intent);
         finish();
     }

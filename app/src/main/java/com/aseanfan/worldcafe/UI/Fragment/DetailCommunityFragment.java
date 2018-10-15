@@ -331,6 +331,33 @@ public class DetailCommunityFragment extends android.support.v4.app.Fragment imp
 
     }
 
+    public void getDetailEvent(Long eventid)
+    {
+        String url =  String.format(RestAPI.GET_EVENTDETAIL,AccountController.getInstance().getAccount().getId(),eventid);
+
+        RestAPI.GetDataMasterWithToken(getActivity().getApplicationContext(),url, new RestAPI.RestAPIListenner() {
+            @Override
+            public void OnComplete(int httpCode, String error, String s) {
+                try {
+                    if (!RestAPI.checkHttpCode(httpCode)) {
+                        //AppFuncs.alert(getApplicationContext(),s,true);
+
+                        return;
+                    }
+                    JsonObject json = (new JsonParser()).parse(s).getAsJsonObject();
+                    Gson gson = new Gson();
+                    event = gson.fromJson(json.getAsJsonObject("result"), EventModel.class);
+                    loaddata();
+                    getListAccount(event.getEventid());
+                }
+                catch (Exception ex) {
+
+                    ex.printStackTrace();
+                }
+            }
+        });
+    }
+
 
     public void getListAccount(Long eventid)
     {
@@ -422,10 +449,126 @@ public class DetailCommunityFragment extends android.support.v4.app.Fragment imp
         content_info.setOnClickListener(this);
 
     }
+    public void loaddata()
+    {
+        txtprice.setText(event.getPrice().toString() + " VND");
+
+        if(event.getIslike()==0)
+        {
+            imagelike.setBackgroundResource(R.drawable.unlike);
+        }
+        else
+        {
+            imagelike.setBackgroundResource(R.drawable.like);
+        }
+        if(event.getPrivate() ==0)
+        {
+            txtprivate.setText("Public");
+        }
+        else
+        {
+            txtprivate.setText(getResources().getString(R.string.Private));
+        }
+
+
+
+        if(event.getAccountid().equals(AccountController.getInstance().getAccount().getId())) {
+            setHasOptionsMenu(true);
+            // imagemenu.setVisibility(View.VISIBLE);
+            imagemenu.setImageResource(R.drawable.event_header_right);
+        }
+        else
+        {
+            setHasOptionsMenu(false);
+            imagemenu.setImageResource(R.drawable.ic_report_header);
+            // imagemenu.setVisibility(View.GONE);
+        }
+        if(!event.getAccountid().equals(AccountController.getInstance().getAccount().getId())) {
+            if (event.getIsjoin() == 1) {
+                btnJoin.setText("Request");
+                btnJoin.setEnabled(false);
+            } else if (event.getIsjoin() == 2) {
+                btnJoin.setText("Joined");
+                btnJoin.setEnabled(false);
+            } else {
+                btnJoin.setText("Join");
+                btnJoin.setEnabled(true);
+            }
+        }
+        else
+        {
+            btnJoin.setText("Owner");
+            btnJoin.setEnabled(false);
+        }
+        Glide.with(getContext()).load( getArguments().getString("image")).into(new SimpleTarget<Drawable>() {
+            @Override
+            public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
+                imageEvent.setBackgroundDrawable(resource);
+            }
+        });
+
+        title.setText(event.getTitle());
+        content.setText(event.getContent());
+
+        if(event.getType() == Constants.EVENT_FRIEND)
+        {
+            type.setText(getContext().getText(R.string.Friend));
+        }
+        else if (event.getType() == Constants.EVENT_BUSSINESS)
+        {
+            type.setText(getContext().getText(R.string.Business));
+        }
+        else if (event.getType() == Constants.EVENT_LOCAL)
+        {
+            type.setText(getContext().getText(R.string.Local));
+        }
+        else
+        {
+            type.setText(getContext().getText(R.string.Language));
+        }
+
+        starttime.setText(Utils.ConvertDateEvent(event.getStarttime()));
+        updatetime.setText(Utils.ConvertDateEventNonDetail(event.getUpdatetime()));
+        place.setText(event.getCityname());
+        String timetype= "";
+        if(event.getPertime() ==0)
+        {
+            timetype = "Week";
+        }
+        else if(event.getPertime() ==1)
+        {
+            timetype = "Month";
+        }
+        else if(event.getPertime() ==2)
+        {
+            timetype = "Year";
+        }
+        if( event.getNumber()==0 ) {
+            //scheduel.setText(event.getNumber() + " / " + timetype);
+            scheduel.setText("No repeat");
+        }
+        else
+        {
+            scheduel.setText(event.getNumber() + " / " + timetype);
+        }
+        number_attendess.setText(event.getLimitpersons()+"");
+        if(event.getNote() != null && !event.getNote().isEmpty())
+        {
+            note.setText(event.getNote());
+        }
+        else
+        {
+            note.setText("Nothing to show");
+        }
+        numberlike.setText(String.valueOf(event.getNumberLike()));
+        numbercomment.setText(String.valueOf(event.getNumberComment()));
+        Drawable mDefaultBackground = getContext().getResources().getDrawable(R.drawable.avata_defaul);
+        Glide.with(getContext()).load(event.getUrlAvatar()).apply(RequestOptions.circleCropTransform().diskCacheStrategy(DiskCacheStrategy.NONE).error(mDefaultBackground)).into(avatar);
+        username.setText(event.getUsername());
+    }
 
     public void initdata()
     {
-        if (getArguments() != null) {
             event.setIsJoin(getArguments().getInt("isJoin"));
             event.setEventid(getArguments().getLong("eventid"));
             event.setTitle(getArguments().getString("title"));
@@ -448,123 +591,7 @@ public class DetailCommunityFragment extends android.support.v4.app.Fragment imp
             event.setPrivate(getArguments().getInt("is_private"));
             event.setPrice(getArguments().getLong("price"));
 
-
-            txtprice.setText(event.getPrice().toString() + " VND");
-
-            if(event.getIslike()==0)
-            {
-                imagelike.setBackgroundResource(R.drawable.unlike);
-            }
-            else
-            {
-                imagelike.setBackgroundResource(R.drawable.like);
-            }
-            if(event.getPrivate() ==0)
-            {
-                txtprivate.setText("Public");
-            }
-            else
-            {
-                txtprivate.setText("Private");
-            }
-
-
-
-            if(event.getAccountid().equals(AccountController.getInstance().getAccount().getId())) {
-                setHasOptionsMenu(true);
-               // imagemenu.setVisibility(View.VISIBLE);
-                imagemenu.setImageResource(R.drawable.event_header_right);
-            }
-            else
-            {
-                setHasOptionsMenu(false);
-                imagemenu.setImageResource(R.drawable.ic_report_header);
-               // imagemenu.setVisibility(View.GONE);
-            }
-            if(!event.getAccountid().equals(AccountController.getInstance().getAccount().getId())) {
-                if (event.getIsjoin() == 1) {
-                    btnJoin.setText("Request");
-                    btnJoin.setEnabled(false);
-                } else if (event.getIsjoin() == 2) {
-                    btnJoin.setText("Joined");
-                    btnJoin.setEnabled(false);
-                } else {
-                    btnJoin.setText("Join");
-                    btnJoin.setEnabled(true);
-                }
-            }
-            else
-            {
-                btnJoin.setText("Owner");
-                btnJoin.setEnabled(false);
-            }
-            Glide.with(getContext()).load( getArguments().getString("image")).into(new SimpleTarget<Drawable>() {
-                @Override
-                public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
-                    imageEvent.setBackgroundDrawable(resource);
-                }
-            });
-
-            title.setText(event.getTitle());
-            content.setText(event.getContent());
-
-            if(event.getType() == Constants.EVENT_FRIEND)
-            {
-                type.setText(getContext().getText(R.string.Friend));
-            }
-            else if (event.getType() == Constants.EVENT_BUSSINESS)
-            {
-                type.setText(getContext().getText(R.string.Business));
-            }
-            else if (event.getType() == Constants.EVENT_LOCAL)
-            {
-                type.setText(getContext().getText(R.string.Local));
-            }
-            else
-            {
-               type.setText(getContext().getText(R.string.Language));
-            }
-
-            starttime.setText(Utils.ConvertDateEvent(event.getStarttime()));
-            updatetime.setText(Utils.ConvertDateEventNonDetail(event.getUpdatetime()));
-            place.setText(event.getCityname());
-            String timetype= "";
-            if(event.getPertime() ==0)
-            {
-                timetype = "Week";
-            }
-            else if(event.getPertime() ==1)
-            {
-                timetype = "Month";
-            }
-            else if(event.getPertime() ==2)
-            {
-                timetype = "Year";
-            }
-            if( event.getNumber()==0 ) {
-                //scheduel.setText(event.getNumber() + " / " + timetype);
-                scheduel.setText("No repeat");
-            }
-            else
-            {
-                scheduel.setText(event.getNumber() + " / " + timetype);
-            }
-            number_attendess.setText(event.getLimitpersons()+"");
-            if(event.getNote() != null && !event.getNote().isEmpty())
-            {
-                note.setText(event.getNote());
-            }
-            else
-            {
-                note.setText("Nothing to show");
-            }
-            numberlike.setText(String.valueOf(event.getNumberLike()));
-            numbercomment.setText(String.valueOf(event.getNumberComment()));
-            Drawable mDefaultBackground = getContext().getResources().getDrawable(R.drawable.avata_defaul);
-            Glide.with(getContext()).load(event.getUrlAvatar()).apply(RequestOptions.circleCropTransform().diskCacheStrategy(DiskCacheStrategy.NONE).error(mDefaultBackground)).into(avatar);
-            username.setText(event.getUsername());
-
-        }
+            loaddata();
     }
 
     @Override
@@ -651,7 +678,14 @@ public class DetailCommunityFragment extends android.support.v4.app.Fragment imp
 
         event = new EventModel();
 
-        initdata();
+        if (getArguments() != null) {
+            if (getArguments().getBoolean("frompush", false) == false) {
+                initdata();
+            } else {
+                getDetailEvent(getArguments().getLong("eventid"));
+            }
+        }
+
 
         getListAccount(event.getEventid());
 

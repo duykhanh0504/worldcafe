@@ -8,6 +8,7 @@ import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.opengl.Visibility;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.constraint.solver.widgets.Rectangle;
@@ -33,6 +34,7 @@ import com.aseanfan.worldcafe.Model.UserModel;
 import com.aseanfan.worldcafe.Provider.Store;
 import com.aseanfan.worldcafe.UI.Adapter.FragmentMyPagerAdapter;
 import com.aseanfan.worldcafe.UI.Component.DIalogImagePreview;
+import com.aseanfan.worldcafe.UI.Component.DialogRankInfo;
 import com.aseanfan.worldcafe.UI.Component.ViewDialog;
 import com.aseanfan.worldcafe.UI.CreateEventActivity;
 import com.aseanfan.worldcafe.UI.EditProfileActivity;
@@ -88,6 +90,7 @@ public class MypageFragment extends android.support.v4.app.Fragment implements N
     private CardView background;
     private TextView name;
     private TextView age;
+    private TextView job;
     private ProgressBar loading;
     private List<PostTimelineModel> posttimeline;
     private ImageView rankImage;
@@ -224,6 +227,9 @@ public class MypageFragment extends android.support.v4.app.Fragment implements N
                         user = gson.fromJson(jsonObject, UserModel.class);
                         name.setText(user.getUsername());
                         age.setText( String.valueOf(Utils.getAge(user.getBirthday())));
+                        if(user.getJob()!=null && !user.getJob().isEmpty()) {
+                            job.setText(user.getJob());
+                        }
                         if(user.getSex() == 1)
                         {
                              age.setTextColor(getResources().getColor(R.color.colorPrimary));
@@ -256,8 +262,14 @@ public class MypageFragment extends android.support.v4.app.Fragment implements N
                                 AccountController.getInstance().getAccount().setCover(user.getCover());
                             }
                         }
-
-                        rankImage.setImageResource(listrank[user.getRank()]);
+                        if(user.getRank()>0) {
+                            rankImage.setVisibility(View.VISIBLE);
+                            rankImage.setImageResource(listrank[user.getRank() - 1]);
+                        }
+                        else
+                        {
+                            rankImage.setVisibility(View.GONE);
+                        }
 
                         followed.setText(getString(R.string.Following) + user.getFollowed());
                         follower.setText(getString(R.string.Followers) + user.getFollower());
@@ -462,7 +474,7 @@ public class MypageFragment extends android.support.v4.app.Fragment implements N
     public void LoadReport()
     {
         String url;
-        url = String.format(RestAPI.GET_LIST_REPORT, 0);
+        url = String.format(RestAPI.GET_LIST_REPORT, 1);
 
         RestAPI.GetDataMaster(getActivity().getApplicationContext(),url, new RestAPI.RestAPIListenner() {
             @Override
@@ -530,6 +542,7 @@ public class MypageFragment extends android.support.v4.app.Fragment implements N
             }
         });
 
+
      /*   builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -581,6 +594,7 @@ public class MypageFragment extends android.support.v4.app.Fragment implements N
 
         name = view.findViewById(R.id.Name);
         age = view.findViewById(R.id.Age);
+        job = view.findViewById(R.id.job);
 
         followed.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -645,7 +659,7 @@ public class MypageFragment extends android.support.v4.app.Fragment implements N
         {
           //  btn_follow.setVisibility(View.GONE);
            // editImage.setVisibility(View.VISIBLE);
-            btn_follow.setText("Create Event");
+            btn_follow.setText(getResources().getString(R.string.Create_event));
             imagereport.setVisibility(View.GONE);
         }
 
@@ -743,7 +757,8 @@ public class MypageFragment extends android.support.v4.app.Fragment implements N
         rankImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                DialogRankInfo dialog = new DialogRankInfo();
+                dialog.showDialog(getActivity());
             }
         });
       //  ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);

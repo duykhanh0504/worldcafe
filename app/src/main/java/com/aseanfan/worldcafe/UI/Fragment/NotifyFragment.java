@@ -131,7 +131,7 @@ public class NotifyFragment extends android.support.v4.app.Fragment {
                         notify.setMessage(json.get("data").getAsJsonObject().get("message").getAsString());
                         if(notify.getType() == 1|| notify.getType() == 2||
                                 notify.getType() == 3|| notify.getType() == 4||notify.getType() == 5||
-                                notify.getType() == 6||notify.getType() == 7||notify.getType() == 9)
+                                notify.getType() == 6||notify.getType() == 7||notify.getType() == 9||notify.getType() == 10)
                         {
                             notify.setObjectId(json.get("data").getAsJsonObject().get("objectId").getAsLong());
                         }
@@ -181,8 +181,25 @@ public class NotifyFragment extends android.support.v4.app.Fragment {
                         ||listnotify.get(position).getType() ==2 ||
                 listnotify.get(position).getType() ==3)
                 {
-                  //  ((MainActivity) getActivity()).callDetailTimeline(listnotify.get(position).getObjectId());
+                    ((MainActivity) getActivity()).callDetailTimelineID(listnotify.get(position).getObjectId());
                 }
+                else if (listnotify.get(position).getType() ==4
+                        ||listnotify.get(position).getType() ==5 ||
+                        listnotify.get(position).getType() ==6
+                        ||listnotify.get(position).getType() ==7
+                        ||listnotify.get(position).getType() ==9)
+                {
+                    ((MainActivity) getActivity()).callDetailEventID(listnotify.get(position).getObjectId());
+                }
+                else if( listnotify.get(position).getType() ==10)
+                {
+                    ((MainActivity) getActivity()).callFriendPage(listnotify.get(position).getObjectId());
+                }
+                else if ( listnotify.get(position).getType() ==8 )
+                {
+
+                }
+
             }
         });
 

@@ -15,6 +15,7 @@ import com.aseanfan.worldcafe.Helper.RestAPI;
 import com.aseanfan.worldcafe.Model.FollowModel;
 import com.aseanfan.worldcafe.Provider.Store;
 import com.aseanfan.worldcafe.UI.Adapter.FollowAdapter;
+import com.aseanfan.worldcafe.UI.MainActivity;
 import com.aseanfan.worldcafe.worldcafe.R;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
@@ -123,7 +124,6 @@ public class Follow_Page extends android.support.v4.app.Fragment  {
         rcyfollow.setItemAnimator(new DefaultItemAnimator());
         rcyfollow.setAdapter(mAdapter);
 
-      //  mAdapter.setOnItemClickListener(this);
         if(type ==0) {
             Listfollow(AccountController.getInstance().getAccount().getId());
         }
@@ -131,6 +131,14 @@ public class Follow_Page extends android.support.v4.app.Fragment  {
         {
             Listfollower(AccountController.getInstance().getAccount().getId());
         }
+
+        mAdapter.setOnItemClickListener(new FollowAdapter.ClickListener() {
+            @Override
+            public void onItemClick(Long position, View v) {
+                ((MainActivity)getActivity()).callFriendPage(position);
+            }
+        });
+
 
         return view;
     }

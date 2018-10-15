@@ -250,7 +250,7 @@
                 android:layout_gravity="left|center"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/givethanks" />
+                android:text="@string/receivethanks" />
 
 
         <LinearLayout
@@ -280,7 +280,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
 
-                android:text="Edit"
+                android:text="@string/Edit_profile"
                 android:minHeight="30dp"
                 android:layout_marginRight="@dimen/margin_left_right"
                 android:layout_marginLeft="@dimen/margin_left_right"

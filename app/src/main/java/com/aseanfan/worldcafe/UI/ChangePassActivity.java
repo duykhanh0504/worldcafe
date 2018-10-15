@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.aseanfan.worldcafe.App.AccountController;
@@ -23,6 +24,7 @@ public class ChangePassActivity extends AppCompatActivity {
     private EditText repass;
     private Button btn_change;
     private ViewDialog dialog;
+    private ImageView btn_back;
 
     void changePass( String oldpass , String newpass)
     {
@@ -86,21 +88,29 @@ public class ChangePassActivity extends AppCompatActivity {
         newpass = this.findViewById(R.id.input_newpass);
         repass = this.findViewById(R.id.input_repass);
         btn_change = this.findViewById(R.id.btn_changepass);
+        btn_back = this.findViewById(R.id.btncancel);
         dialog = new ViewDialog();
 
+
+        btn_back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
 
         btn_change.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if(oldpass.getText().toString().isEmpty())
                 {
-                    dialog.showDialogCancel( ChangePassActivity.this,"Old password can not empty" );
+                    dialog.showDialogCancel( ChangePassActivity.this,getResources().getString(R.string.password_empty));
                     //    Toast.makeText(LoginActivity.this, "Passcode can not empty", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 if(newpass.getText().toString().isEmpty())
                 {
-                    dialog.showDialogCancel( ChangePassActivity.this,"Password can not empty" );
+                    dialog.showDialogCancel( ChangePassActivity.this,getResources().getString(R.string.password_empty) );
                     //    Toast.makeText(LoginActivity.this, "Passcode can not empty", Toast.LENGTH_SHORT).show();
                     return;
                 }

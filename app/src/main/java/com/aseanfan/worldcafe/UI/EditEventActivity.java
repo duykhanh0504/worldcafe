@@ -118,7 +118,7 @@ public class EditEventActivity extends AppCompatActivity {
             }
             else
             {
-                privatepost.setText("Private");
+                privatepost.setText(getResources().getString(R.string.Private));
             }
         }
         else if(typeupdate == UPDATE_EVENT)
@@ -496,7 +496,7 @@ public class EditEventActivity extends AppCompatActivity {
 
         if(event.getPrivate() ==0)
         {
-            privatepost.setText("Private");
+            privatepost.setText(getResources().getString(R.string.Private));
         }
         else
         {

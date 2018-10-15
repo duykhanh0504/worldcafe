@@ -56,7 +56,8 @@ public class Constants {
     public static  int SETTING_CHANGEPASS_ROW = 2;
     public static  int SETTING_CONTRACT_ROW = 3;
     public static  int SETTING_VERSION_ROW = 4;
-    public static  int SETTING_LOGOUT_ROW = 5;
+    public static  int SETTING_EMPTY_ROW = 5;
+    public static  int SETTING_LOGOUT_ROW = 6;
 
 
 }
