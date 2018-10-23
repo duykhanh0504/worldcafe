@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.aseanfan.worldcafe.Helper.NotificationCenter;
 import com.aseanfan.worldcafe.Model.CommentModel;
 import com.aseanfan.worldcafe.Model.NotificationModel;
+import com.aseanfan.worldcafe.Utils.Utils;
 import com.aseanfan.worldcafe.worldcafe.R;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -49,7 +50,7 @@ public class NotifyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             super(view);
             detail = (TextView) view.findViewById(R.id.txtmessage);
             name = (TextView) view.findViewById(R.id.txttitle);
-            date = (TextView) view.findViewById(R.id.txtdate);
+            date = (TextView) view.findViewById(R.id.txttime);
             avatar = (ImageView) view.findViewById(R.id.imageAvatar);
             view.setOnClickListener(this);
             avatar.setOnClickListener(new View.OnClickListener() {
@@ -113,7 +114,7 @@ public class NotifyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             NotificationModel notify = notifylist.get(i);
             viewHolder.name.setText(notify.getTitle());
             viewHolder.detail.setText(notify.getMessage());
-            // myViewHolder.date.setText(commentModel.getCreatetime());
+            viewHolder.date.setText( Utils.ConvertDiffTime(notify.getCreatetime()));
             Drawable mDefaultBackground = viewHolder.avatar.getContext().getResources().getDrawable(R.drawable.avata_defaul);
             Glide.with(viewHolder.avatar.getContext()).load(notify.getAvarta()).apply(RequestOptions.circleCropTransform().error(mDefaultBackground)).into(viewHolder.avatar);
         }

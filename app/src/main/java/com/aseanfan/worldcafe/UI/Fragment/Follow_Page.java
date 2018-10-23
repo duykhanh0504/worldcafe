@@ -27,6 +27,8 @@ import java.util.List;
 
 public class Follow_Page extends android.support.v4.app.Fragment  {
 
+    Long accountID;
+
     private RecyclerView rcyfollow;
 
     private ProgressBar loading;
@@ -37,14 +39,19 @@ public class Follow_Page extends android.support.v4.app.Fragment  {
 
     private int type =0;
 
+    public void setid(Long id)
+    {
+        this.accountID =id;
+    }
+
     public void setFollowType(int type)
     {
         this.type =type;
     }
 
-    public void Listfollower(Long accountid)
+    public void Listfollower(Long accountid,Long id)
     {
-        String url =  String.format(RestAPI.GET_LISTFOLLOWER, accountid, Store.getStringData(getActivity(),Store.ACCESSTOKEN));
+        String url =  String.format(RestAPI.GET_LISTFOLLOWER, accountid, id);
         loading.setVisibility(View.VISIBLE);
 
         RestAPI.GetDataMasterWithToken(getActivity(),url, new RestAPI.RestAPIListenner() {
@@ -75,9 +82,9 @@ public class Follow_Page extends android.support.v4.app.Fragment  {
         });
     }
 
-    public void Listfollow(Long accountid)
+    public void Listfollow(Long accountid,Long id)
     {
-        String url =  String.format(RestAPI.GET_LISTFOLLOW, accountid, Store.getStringData(getActivity(),Store.ACCESSTOKEN));
+        String url =  String.format(RestAPI.GET_LISTFOLLOW, accountid, id);
         loading.setVisibility(View.VISIBLE);
 
         RestAPI.GetDataMasterWithToken(getActivity(),url, new RestAPI.RestAPIListenner() {
@@ -125,11 +132,11 @@ public class Follow_Page extends android.support.v4.app.Fragment  {
         rcyfollow.setAdapter(mAdapter);
 
         if(type ==0) {
-            Listfollow(AccountController.getInstance().getAccount().getId());
+            Listfollow(AccountController.getInstance().getAccount().getId(),accountID);
         }
         if(type == 1 )
         {
-            Listfollower(AccountController.getInstance().getAccount().getId());
+            Listfollower(AccountController.getInstance().getAccount().getId(),accountID);
         }
 
         mAdapter.setOnItemClickListener(new FollowAdapter.ClickListener() {

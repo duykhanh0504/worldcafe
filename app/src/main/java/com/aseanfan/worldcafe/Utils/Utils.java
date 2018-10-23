@@ -75,7 +75,7 @@ public class Utils {
         Paint paint = new Paint();
         paint.setColor(Color.WHITE);
         paint.setTextSize(60);
-        canvas.drawText("+"+name, width - convertDpToPixel(30,context), height - convertDpToPixel(15,context), paint);
+        canvas.drawText("+"+name, width - convertDpToPixel(10,context), height - convertDpToPixel(15,context), paint);
         return bitmap;
     }
 
@@ -97,6 +97,21 @@ public class Utils {
         listarea.add(new AreaModel(2,"Japan",listcity1));
         return listarea;
 
+    }
+
+    public static String getCitybyID(int id)
+    {
+        String result ="";
+        List<CityModel> list = initDefaultCity();
+        for (CityModel temp: list
+             ) {
+            if(temp.getid() == id)
+            {
+                return  temp.getname();
+            }
+
+        }
+        return  result;
     }
 
     public static List<CityModel> initDefaultCity()
@@ -272,12 +287,13 @@ public class Utils {
         try {
              date1 = simpleDateFormat.parse(diff);
              long difference = date1.getTime();
-             int days = (int) (difference / (1000*60*60*24));
-             int hours = (int) ((difference - (1000*60*60*24*days)) / (1000*60*60));
-             int mins = (int) (difference - (1000*60*60*24*days) - (1000*60*60*hours)) / (1000*60);
-             if(days > 0)
+             int days = (int)date1.getDate(); //(difference / (1000*60*60*24));
+             int hours = (int) date1.getHours();//((difference - (1000*60*60*24*days)) / (1000*60*60));
+             int mins = (int) date1.getMinutes();//(difference - (1000*60*60*24*days) - (1000*60*60*hours)) / (1000*60);
+             int second = (int) date1.getSeconds();
+             if(days-1 > 0)
              {
-                 return days + " days ago";
+                 return (days-1) + " days ago";
              }
             else if(hours > 0)
             {
@@ -287,6 +303,10 @@ public class Utils {
             {
                 return mins + " minutes ago";
             }
+             else if(second > 5)
+             {
+                 return second + " seconds ago";
+             }
 
 
         } catch (ParseException e) {

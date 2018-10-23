@@ -10,9 +10,12 @@ import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
+import com.aseanfan.worldcafe.App.AccountController;
 import com.aseanfan.worldcafe.UI.Adapter.FragmentEventPageAdapter;
 import com.aseanfan.worldcafe.UI.Adapter.FragmentFollowAdapter;
+import com.aseanfan.worldcafe.UI.MainActivity;
 import com.aseanfan.worldcafe.worldcafe.R;
 
 public class FollowFrargment  extends Fragment {
@@ -20,6 +23,7 @@ public class FollowFrargment  extends Fragment {
     private TabLayout tabfollow;
     private ViewPager viewPager;
     private FragmentFollowAdapter adapter;
+    private ImageView backbutton;
 
 
     public static FollowFrargment newInstance() {
@@ -51,13 +55,15 @@ public class FollowFrargment  extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable final ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_follow, container, false);
-
+        Long  accountid = getArguments().getLong("accountid", AccountController.getInstance().getAccount().getId());
         Toolbar toolbar = (Toolbar) view.findViewById(R.id.app_toolbar);
         ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
         ((AppCompatActivity) getActivity()).setTitle(null);
 
+        backbutton = (ImageView) view.findViewById(R.id.btncancel);
+
         viewPager = (ViewPager)view.findViewById(R.id.view_follow);
-        adapter = new FragmentFollowAdapter(getActivity(),getChildFragmentManager());
+        adapter = new FragmentFollowAdapter(getActivity(),getChildFragmentManager(),accountid);
 
         viewPager.setAdapter(adapter);
 
@@ -66,6 +72,13 @@ public class FollowFrargment  extends Fragment {
         tabfollow = (TabLayout)view.findViewById(R.id.tab_follow);
 
         tabfollow.setupWithViewPager(viewPager);
+
+        backbutton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ((MainActivity)getActivity()).GoToback();
+            }
+        });
 
 
         return view;

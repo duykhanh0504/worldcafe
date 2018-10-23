@@ -144,7 +144,7 @@ public class MyEventFragment  extends Fragment implements NotificationCenter.Not
         }
         else
         {
-            url= String.format(RestAPI.GET_LISTEVENTBYID,accountid, AccountController.getInstance().getAccount().getId(), 0);
+            url= String.format(RestAPI.GET_LISTEVENTBYID,accountid, AccountController.getInstance().getAccount().getId(), currentpos);
         }
 
         url = url + "&is_my_event=" + 1;

@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="240dp"
+    android:layout_height="200dp"
     android:clickable="true"
     android:focusable="true"
     android:background="@color/colorPrimary"
@@ -14,7 +15,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="240dp"
+        android:layout_height="200dp"
         android:id="@+id/background_event"
         android:background="@color/black"
         android:orientation="vertical"
@@ -31,9 +32,9 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:weightSum="2"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="23dp"
         android:gravity="center_vertical"
-        android:layout_marginLeft="35dp">
+        android:layout_marginLeft="23dp">
 
         <ImageView
             android:id="@+id/imageAvatar"
@@ -51,7 +52,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginLeft="5dp"
-            android:textSize="20dp"
+            android:textSize="16dp"
             android:singleLine="true"
             android:textStyle="bold"
             android:textColor="@color/white"/>
@@ -75,8 +76,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_marginTop="10dp"
-            android:layout_marginLeft="35dp">
+            android:layout_marginTop="0dp"
+            android:layout_marginLeft="23dp">
 
             <TextView
                 android:background="@drawable/genre_style"
@@ -91,7 +92,6 @@
                 android:layout_gravity="left|center"
                 android:textAlignment="center"
                 android:layout_marginLeft="5dp"
-                android:textSize="20dp"
                 android:text="test "
                 android:textColor="@color/white"
                 />
@@ -111,7 +111,6 @@
                 android:layout_marginLeft="5dp"
                 android:layout_marginBottom="5dp"
                 android:gravity="right"
-                android:textSize="20dp"
                 android:text="test "
                 android:textColor="@color/white"
                 />
@@ -123,7 +122,7 @@
                 android:layout_alignParentTop="true"
                 android:layout_weight="1"
                 android:layout_marginLeft="5dp"
-                android:textSize="20dp"
+                android:textSize="16dp"
                 android:text="test "
                 android:singleLine="true"
                 android:textColor="@color/white"
@@ -137,7 +136,7 @@
     android:layout_height="wrap_content"
     android:orientation="horizontal"
     android:layout_marginTop="10dp"
-    android:layout_marginLeft="35dp"
+    android:layout_marginLeft="23dp"
     android:weightSum="2">
 
     <TextView
@@ -150,17 +149,20 @@
         android:layout_weight="0.48"
         android:layout_marginLeft="5dp"
         android:layout_gravity="left"
-        android:textSize="20dp"
+        android:textSize="16dp"
         android:text="test "
-        android:textColor="@color/white"/>
+        android:gravity="center"
+        android:textAlignment="textStart"
+        android:textColor="@color/white"
+        tools:ignore="RtlCompat" />
 
 
 </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="35dp"
-        android:layout_marginRight="35dp"
+        android:layout_marginLeft="23dp"
+        android:layout_marginRight="23dp"
         android:orientation="horizontal"
         android:weightSum="2">
 
@@ -171,7 +173,7 @@
             android:layout_alignParentTop="true"
             android:layout_marginLeft="10dp"
             android:layout_gravity="left"
-            android:textSize="20dp"
+            android:textSize="16dp"
             android:text="test "
             android:textStyle="bold"
             android:layout_weight="2"

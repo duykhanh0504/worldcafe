@@ -15,15 +15,19 @@ public class FragmentFollowAdapter  extends FragmentPagerAdapter {
 
     Follow_Page follow_page ;
     Follow_Page folower_page ;
+  //  Long accountid;
 
-    public FragmentFollowAdapter(Context context, FragmentManager fm) {
+    public FragmentFollowAdapter(Context context, FragmentManager fm ,Long accountid) {
         super(fm);
 
         mContext = context;
         follow_page = new Follow_Page();
+        follow_page.setid(accountid);
         follow_page.setFollowType(0);
         folower_page = new Follow_Page();
+        folower_page.setid(accountid);
         folower_page.setFollowType(1);
+       // this.accountid =accountid;
 
     }
 
@@ -45,9 +49,9 @@ public class FragmentFollowAdapter  extends FragmentPagerAdapter {
         // Generate title based on item position
         switch (position) {
             case 0:
-                return "Follow";
+                return mContext.getResources().getString(R.string.Following);
             case 1:
-                return "Follower";
+                return mContext.getResources().getString(R.string.Followers);
             default:
                 return null;
         }

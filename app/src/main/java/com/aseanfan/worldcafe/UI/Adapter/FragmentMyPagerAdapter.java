@@ -47,9 +47,16 @@ public class FragmentMyPagerAdapter  extends FragmentPagerAdapter {
         this.user =user;
     }
 
+    public void detailpageupdate ()
+    {
+      //  myPageDetailFragment.update();
+      //  notifyDataSetChanged();
+    }
+
     public void setdata (UserModel user)
     {
         this.user = user;
+        myPageDetailFragment.update(user);
         notifyDataSetChanged();
     }
     @Override
@@ -63,6 +70,7 @@ public class FragmentMyPagerAdapter  extends FragmentPagerAdapter {
             return mypostFragment;
         } else if(position ==DETAIL_PAGE){
             bundle.putString("introduce",user.getIntroduction());
+            bundle.putString("name",user.getUsername());
            // bundle.putString("interested",user.get);
             bundle.putInt("numberthanks",user.getTotalLike());
             bundle.putString("interested",user.getInterest());

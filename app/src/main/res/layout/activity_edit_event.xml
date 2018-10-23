@@ -412,7 +412,7 @@
             android:layout_marginLeft="30dp"
             android:layout_gravity="center"
             android:textColor="@color/white"
-            android:text="@string/Create_event"
+            android:text="@string/delete"
             android:layout_weight="1"/>
 
         </LinearLayout>

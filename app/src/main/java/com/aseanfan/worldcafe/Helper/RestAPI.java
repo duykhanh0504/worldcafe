@@ -79,8 +79,8 @@ public class RestAPI {
     public static String POST_DELETE_TIMELINE= root_url + "/api/newfeed/deletenewfeed";
     public static String POST_CHECK_FOLLOW= root_url + "/api/follow/checkFollow";
     public static String GET_MESSAGECHAT= root_url + "/api/message/getmessagechat?account_id=%d&offset_id=%d";
-    public static String GET_LISTFOLLOW= root_url + "/api/follow/getListFollowed?account_id=%d";
-    public static String GET_LISTFOLLOWER= root_url + "/api/follow/getListFollower?account_id=%d";
+    public static String GET_LISTFOLLOW= root_url + "/api/follow/getListFollowed?account_id=%d&id=%d";
+    public static String GET_LISTFOLLOWER= root_url + "/api/follow/getListFollower?account_id=%d&id=%d";
     public static String GET_CONTACT_CHAT= root_url + "/api/follow/getListChatbyid?account_id=%d";
     public static String GET_LISTTIMELINEFOLLOWED= root_url + "/api/newfeed/getfollowednewfeeds?account_id=%d&index=%d";
     public static String POST_JOINEVENT = root_url + "/api/event/joinevents";

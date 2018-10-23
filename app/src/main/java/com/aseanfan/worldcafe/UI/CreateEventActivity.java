@@ -373,7 +373,8 @@ public class CreateEventActivity extends AppCompatActivity {
                     }
                     event.setContent(content.getText().toString());
                     TimeZone tz = TimeZone.getTimeZone("UTC");
-                    DateFormat df = new SimpleDateFormat("yyy-MM-dd HH:mm:ss");
+                    DateFormat df = new SimpleDateFormat("dd-MM-yyyy");
+                    DateFormat df1 = new SimpleDateFormat("yyyy-MM-dd");
                     df.setTimeZone(tz);
                     Date convertedDate = new Date();
                     try {
@@ -381,7 +382,7 @@ public class CreateEventActivity extends AppCompatActivity {
                     } catch (ParseException e) {
                         e.printStackTrace();
                     }
-                    String nowAsISO = df.format(convertedDate);
+                    String nowAsISO = df1.format(convertedDate);
 
                     event.setStarttime(nowAsISO);
                     event.setLimit_personse(Integer.valueOf(numberofparticipal.getText().toString()));
@@ -406,7 +407,8 @@ public class CreateEventActivity extends AppCompatActivity {
                     }
                     event.setContent(content.getText().toString());
                     TimeZone tz = TimeZone.getTimeZone("UTC");
-                    DateFormat df = new SimpleDateFormat("yyy-MM-dd HH:mm:ss");
+                    DateFormat df = new SimpleDateFormat("dd-MM-yyyy");
+                    DateFormat df1 = new SimpleDateFormat("yyyy-MM-dd");
                     df.setTimeZone(tz);
                     Date convertedDate = new Date();
                     try {
@@ -414,7 +416,7 @@ public class CreateEventActivity extends AppCompatActivity {
                     } catch (ParseException e) {
                         e.printStackTrace();
                     }
-                    String nowAsISO = df.format(convertedDate);
+                    String nowAsISO = df1.format(convertedDate);
 
                     event.setStarttime(nowAsISO);
                     event.setLimit_personse(Integer.valueOf(numberofparticipal.getText().toString()));

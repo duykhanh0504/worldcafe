@@ -456,6 +456,10 @@ public class EditProfileActivity extends AppCompatActivity {
                     }
                     user.setInterest(s);
                 }
+                else
+                {
+                    user.setInterest("");
+                }
                 update(user);
             }
         });

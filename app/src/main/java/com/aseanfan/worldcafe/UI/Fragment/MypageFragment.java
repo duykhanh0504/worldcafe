@@ -275,6 +275,7 @@ public class MypageFragment extends android.support.v4.app.Fragment implements N
                         follower.setText(getString(R.string.Followers) + user.getFollower());
                         adapter.setdata(user);
 
+
                     }
 
                 } catch (Exception ex) {
@@ -599,21 +600,21 @@ public class MypageFragment extends android.support.v4.app.Fragment implements N
         followed.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ((MainActivity)activity).callFollowScreen();
+                ((MainActivity)activity).callFollowScreen(accountid);
             }
         });
 
         follower.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ((MainActivity)activity).callFollowScreen();
+                ((MainActivity)activity).callFollowScreen(accountid);
             }
         });
 
         avatar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                DialogFragment fragment =  DIalogImagePreview.newInstancestring(user.getAvarta());
+                DialogFragment fragment =  DIalogImagePreview.newInstancestring(user.getAvarta()+ "&redirect=true&width=400&height=400");
                 fragment.show(getFragmentManager(), "image preview");
 
               /*  if(accountid.equals(AccountController.getInstance().getAccount().getId())) {

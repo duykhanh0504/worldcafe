@@ -2,6 +2,7 @@ package com.aseanfan.worldcafe.UI;
 
 import android.app.DatePickerDialog;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
@@ -39,6 +40,7 @@ import com.aseanfan.worldcafe.UI.Component.ViewDialog;
 import com.aseanfan.worldcafe.Utils.Constants;
 import com.aseanfan.worldcafe.Utils.Utils;
 import com.aseanfan.worldcafe.worldcafe.R;
+import com.bumptech.glide.Glide;
 import com.google.gson.JsonObject;
 import com.yanzhenjie.album.AlbumFile;
 
@@ -134,6 +136,10 @@ public class EditEventActivity extends AppCompatActivity {
             dataJson.addProperty("note",e.getNote());
             dataJson.addProperty("genre",e.getType());
             dataJson.addProperty("start_time",e.getStarttime());
+            if(!listImageBase64.isEmpty()) {
+                dataJson.addProperty("base64", listImageBase64);
+                dataJson.addProperty("image", "event" + System.currentTimeMillis());
+            }
         }
         else if(typeupdate == DELETE_EVENT)
         {
@@ -185,6 +191,26 @@ public class EditEventActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch(requestCode) {
+
+            case CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE:
+                if(resultCode == RESULT_OK){
+                    CropImage.ActivityResult result = CropImage.getActivityResult(data);
+                    Uri selectedAvatar  = result.getUri();
+                    String[] bb = Utils.compressFormat(selectedAvatar.getPath(), this);
+                    listImageBase64 = bb[0] ;
+                    // String imagename = System.currentTimeMillis() + "." + bb[1];
+                    //   listImageBase64
+                    listimage.setVisibility(View.VISIBLE);
+                    Glide.with(this).load( selectedAvatar).into(listimage);
+                }
+                break;
+        }
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_event);
@@ -233,6 +259,21 @@ public class EditEventActivity extends AppCompatActivity {
                     event.setSchedule_type(1);
                     event.setPertime(0);
                 }
+            }
+        });
+
+        imgbutton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // selectImage();
+                Intent intent = CropImage.activity(null)
+                        .setGuidelines(CropImageView.Guidelines.ON)
+                        .setAutoZoomEnabled(false)
+                        .setMultiTouchEnabled(true)
+                        .setFixAspectRatio(true)
+                        // .setInitialCropWindowRectangle(new Rect(0,0,Utils.getwidthScreen(CreateEventActivity.this),Utils.convertDpToPixel(240,CreateEventActivity.this)))
+                        .getIntent(EditEventActivity.this);
+                startActivityForResult(intent, CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE);
             }
         });
 
@@ -381,7 +422,8 @@ public class EditEventActivity extends AppCompatActivity {
                     }
                     event.setContent(content.getText().toString());
                     TimeZone tz = TimeZone.getTimeZone("UTC");
-                    DateFormat df = new SimpleDateFormat("yyy-MM-dd HH:mm:ss");
+                    DateFormat df = new SimpleDateFormat("dd-MM-yyyy");
+                    DateFormat df1 = new SimpleDateFormat("yyyy-MM-dd");
                     df.setTimeZone(tz);
                     Date convertedDate = new Date();
                     try {
@@ -389,7 +431,7 @@ public class EditEventActivity extends AppCompatActivity {
                     } catch (ParseException e) {
                         e.printStackTrace();
                     }
-                    String nowAsISO = df.format(convertedDate);
+                    String nowAsISO = df1.format(convertedDate);
 
                     event.setStarttime(nowAsISO);
                     event.setLimit_personse(Integer.valueOf(numberofparticipal.getText().toString()));
@@ -531,7 +573,7 @@ public class EditEventActivity extends AppCompatActivity {
         event = new EventModel();
 
         listimage= findViewById(R.id.list_image);
-        listimage.setVisibility(View.GONE);
+     //   listimage.setVisibility(View.GONE);
         imgbutton= findViewById(R.id.selectimage);
         choosearea= findViewById(R.id.choosearea);
         scheduel =  findViewById(R.id.timepicker);
@@ -587,6 +629,10 @@ public class EditEventActivity extends AppCompatActivity {
             event.setSchedule_type(bundle.getInt("schedule_type"));
             event.setPrivate(bundle.getInt("is_private"));
             event.setPrice(bundle.getLong("price"));
+            if(bundle.getString("urlimage")!=null && !bundle.getString("urlimage").isEmpty())
+            {
+                Glide.with(EditEventActivity.this).load( bundle.getString("urlimage")).into(listimage);
+            }
         }
     }
 }

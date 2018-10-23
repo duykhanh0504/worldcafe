@@ -94,6 +94,7 @@ public class ContactChatActivity extends AppCompatActivity implements ConctactCh
         Intent intent = new Intent(this, ChatActivity.class);
         intent.putExtra("chat_id",listcontactchat.get(position).getAccount_id());
         intent.putExtra("avatarurl",listcontactchat.get(position).getAvarta());
+        intent.putExtra("name",listcontactchat.get(position).getUsername());
         startActivity(intent);
         finish();
     }

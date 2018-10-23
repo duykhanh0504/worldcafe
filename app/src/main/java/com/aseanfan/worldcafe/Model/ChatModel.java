@@ -4,6 +4,8 @@ public class ChatModel {
     private Long account_id;
     private String username;
     private String avarta;
+    private String time_diff;
+
 
     public Long getAccount_id() {
         return account_id;
@@ -13,6 +15,13 @@ public class ChatModel {
         this.account_id = _account_id;
     }
 
+    public String getTimediff() {
+        return time_diff;
+    }
+
+    public void setTime_diff(String time_diff) {
+        this.time_diff = time_diff;
+    }
 
     public String getAvarta() {
         return avarta;

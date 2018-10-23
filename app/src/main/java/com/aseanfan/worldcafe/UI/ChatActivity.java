@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.SystemClock;
 import android.support.v4.app.ActivityCompat;
@@ -24,6 +25,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.aseanfan.worldcafe.App.AccountController;
@@ -43,6 +45,7 @@ import com.aseanfan.worldcafe.Utils.Constants;
 import com.aseanfan.worldcafe.Utils.Utils;
 import com.aseanfan.worldcafe.worldcafe.R;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
@@ -70,9 +73,13 @@ public class ChatActivity extends AppCompatActivity {
     private ImageButton btnSend;
     private Long chatid;
     private String chatavatar;
+    private String username;
     private EmojiconEditText edtChat;
     ImageView emojiImageView;
     ImageView imagechat;
+    ImageView back;
+    ImageView avatar;
+    TextView name;
     View rootView;
     private ProgressBar loading;
 
@@ -139,6 +146,7 @@ public class ChatActivity extends AppCompatActivity {
         if(extras != null){
             chatid= extras.getLong("chat_id");
             chatavatar = extras.getString("avatarurl");
+            username = extras.getString("name");
             new ListHistoryChatAsync().execute(chatid);
         }
 
@@ -156,7 +164,24 @@ public class ChatActivity extends AppCompatActivity {
         edtChat = (EmojiconEditText)this.findViewById(R.id.input_message);
         rcychat = (RecyclerView)this.findViewById(R.id.listChat);
 
+        back =  (ImageView) findViewById(R.id.btncancel);
+        avatar =  (ImageView) findViewById(R.id.imageAvatar);
+        name =  (TextView) findViewById(R.id.txtname);
+        name.setText(username);
+        Drawable mDefaultBackground = this.getResources().getDrawable(R.drawable.avata_defaul);
+        Glide.with(this).load(chatavatar).apply(RequestOptions.circleCropTransform().diskCacheStrategy(DiskCacheStrategy.NONE).error(mDefaultBackground)).into(avatar);
+        name =  (TextView) findViewById(R.id.txtname);
+
         mAdapter = new ChatMessageAdapter(null,chatavatar);
+
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+
+
         mAdapter.setOnItemClickListener(new ChatMessageAdapter.ClickListener() {
             @Override
             public void onItemClick(int position, View v) {

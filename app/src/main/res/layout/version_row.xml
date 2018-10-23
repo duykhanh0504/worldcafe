@@ -20,7 +20,7 @@
         android:layout_weight="0.8"
         android:textSize="16sp"
         android:layout_marginLeft="24dp"
-        android:text="Version" />
+        android:text="@string/Version" />
 
     <ImageView
         android:id="@+id/image"

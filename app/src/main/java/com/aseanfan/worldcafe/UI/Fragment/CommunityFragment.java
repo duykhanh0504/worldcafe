@@ -203,7 +203,7 @@ public class CommunityFragment extends Fragment implements NotificationCenter.No
                 } else {
                     keyword = "";
                    // LoadListEvent(typegenre);
-                    adapter.loadfragmentevent(typegenre-1,area,keyword,typeSort);
+                    adapter.loadfragmentevent(typegenre,area,keyword,typeSort);
                     // searchView not expanded
                 }
             }
@@ -214,7 +214,7 @@ public class CommunityFragment extends Fragment implements NotificationCenter.No
             public boolean onQueryTextSubmit(String s) {
                 keyword = s;
              //   LoadListEvent(typegenre);
-                adapter.loadfragmentevent(typegenre-1,area,keyword,typeSort);
+                adapter.loadfragmentevent(typegenre,area,keyword,typeSort);
                 return false;
             }
 

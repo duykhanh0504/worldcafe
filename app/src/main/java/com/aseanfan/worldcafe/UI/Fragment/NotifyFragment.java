@@ -124,6 +124,9 @@ public class NotifyFragment extends android.support.v4.app.Fragment {
                         if(!jsonArray.get(i).getAsJsonObject().get("username").isJsonNull()) {
                             notify.setTitle(jsonArray.get(i).getAsJsonObject().get("username").getAsString());
                         }
+                        if(!jsonArray.get(i).getAsJsonObject().get("time_diff").isJsonNull()) {
+                            notify.setCreatetime(jsonArray.get(i).getAsJsonObject().get("time_diff").getAsString());
+                        }
 
                         notify.setNotifyid(jsonArray.get(i).getAsJsonObject().get("id").getAsInt());
                         JsonObject json = (new JsonParser()).parse(jsonArray.get(i).getAsJsonObject().get("data").getAsString()).getAsJsonObject();

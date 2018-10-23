@@ -9,8 +9,8 @@
     android:gravity="center_vertical"
     android:checkMark="?android:attr/listChoiceIndicatorSingle"
     android:checkMarkTint="@color/colorPrimary"
-    android:layout_marginRight="35dp"
-    android:layout_marginLeft="35dp"
+    android:layout_marginRight="23dp"
+    android:layout_marginLeft="23dp"
     android:ellipsize="marquee"
-    android:paddingRight="35dp"
-    android:paddingLeft="35dp"/>
+    android:paddingRight="23dp"
+    android:paddingLeft="23dp"/>

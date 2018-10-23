@@ -380,7 +380,7 @@ public class DetailCommunityFragment extends android.support.v4.app.Fragment imp
                     if(listaccount!=null && listaccount.size()>0)
                     {
                         containList.setOrientation(LinearLayout.HORIZONTAL);
-                        int number = listaccount.size()>6?6:listaccount.size();
+                        int number = listaccount.size()>5?5:listaccount.size();
                         for( int i = 0 ; i < number ; i++) {
                             ImageView avatarImage = new ImageView(getContext());
                             LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(Utils.convertDpToPixel(40, getContext()), Utils.convertDpToPixel(40, getContext()));
@@ -389,11 +389,11 @@ public class DetailCommunityFragment extends android.support.v4.app.Fragment imp
                             layoutParams.setMargins(i * Utils.convertDpToPixel(2, getContext()), 0, 0, 0);
                             avatarImage.setLayoutParams(layoutParams);
                             avatarImage.setScaleType(ImageView.ScaleType.FIT_XY);
-                            if(i==5)
+                            if(i==4)
                             {
                                 Bitmap image = Utils.createImage(Utils.convertDpToPixel(40, getContext()),
                                         Utils.convertDpToPixel(40, getContext()),getResources().getColor(R.color.colorPrimary),
-                                        String.valueOf(listaccount.size()),getContext());
+                                        String.valueOf(listaccount.size() - 4),getContext());
                                 Glide.with(getContext()).load(image).apply(RequestOptions.circleCropTransform()).into(avatarImage);
                             }
                             else {
@@ -497,6 +497,7 @@ public class DetailCommunityFragment extends android.support.v4.app.Fragment imp
         }
         else
         {
+            btnJoin.setBackgroundResource(R.drawable.button_gray);
             btnJoin.setText("Owner");
             btnJoin.setEnabled(false);
         }
@@ -655,6 +656,7 @@ public class DetailCommunityFragment extends android.support.v4.app.Fragment imp
                         intent.putExtra("schedule_type",event.getSchedule_type());
                         intent.putExtra("is_private",event.getPrivate());
                         intent.putExtra("price",event.getPrice());
+                        intent.putExtra("urlimage",getArguments().getString("image"));
 
                         startActivity(intent);
                         break;

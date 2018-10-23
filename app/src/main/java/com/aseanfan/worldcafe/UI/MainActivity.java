@@ -504,12 +504,12 @@ public class MainActivity extends BaseActivity implements NotificationCenter.Not
 
     }
 
-    public void callFollowScreen()
+    public void callFollowScreen(Long id)
     {
         FollowFrargment followFrargment = new FollowFrargment();
-     //   Bundle bundle = new Bundle();
-      //  bundle.putLong("eventid",eventid.getEventid());
-       // memberEventFragment.setArguments(bundle);
+        Bundle bundle = new Bundle();
+        bundle.putLong("accountid",id);
+        followFrargment.setArguments(bundle);
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.add(R.id.content, followFrargment,TAG_MEMBEREVENT).commit();
     }
@@ -564,6 +564,7 @@ public class MainActivity extends BaseActivity implements NotificationCenter.Not
         }
         if (f instanceof MypageFragment)
         {
+            f.onResume();
             int i=0;
         }
         else  if (f instanceof DetailCommunityFragment)
@@ -611,7 +612,7 @@ public class MainActivity extends BaseActivity implements NotificationCenter.Not
             }
         }
         else if(f instanceof DetailTimelineFragment ||f instanceof DetailCommunityFragment
-                ||f instanceof MemberEventFragment||f instanceof FollowFrargment){
+                ||f instanceof MemberEventFragment||f instanceof FollowFrargment || f instanceof RequestMemberFragment){
 
             getSupportFragmentManager().beginTransaction().remove(f).commit();
 

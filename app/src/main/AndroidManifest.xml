@@ -101,8 +101,7 @@
 
         <activity
             android:name="com.aseanfan.worldcafe.UI.ChatActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/ThemeWithTabBar" />
+            android:screenOrientation="portrait" />
         <activity
             android:name="com.aseanfan.worldcafe.UI.RegisterActivity"
             android:screenOrientation="portrait" />
@@ -134,8 +133,7 @@
             android:theme="@style/ThemeWithTabBar" />
         <activity
             android:name="com.aseanfan.worldcafe.UI.ContactChatActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/ThemeWithTabBar" />
+            android:screenOrientation="portrait" />
         <activity
             android:name="com.aseanfan.worldcafe.UI.EditProfileActivity"
             android:screenOrientation="portrait"

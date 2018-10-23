@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.aseanfan.worldcafe.Model.ChatModel;
 import com.aseanfan.worldcafe.Model.FollowModel;
+import com.aseanfan.worldcafe.Utils.Utils;
 import com.aseanfan.worldcafe.worldcafe.R;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -81,6 +82,7 @@ public class ConctactChatAdapter  extends RecyclerView.Adapter<ConctactChatAdapt
     public void onBindViewHolder(@NonNull ConctactChatAdapter.MyViewHolder myViewHolder, int i) {
         ChatModel contact = contactlist.get(i);
         myViewHolder.name.setText(contact.getUsername());
+        myViewHolder.date.setText(Utils.ConvertDiffTime(contact.getTimediff()));
          Drawable mDefaultBackground = myViewHolder.avatar.getContext().getResources().getDrawable(R.drawable.avata_defaul);
         Glide.with(myViewHolder.avatar.getContext()).load(contact.getAvarta()).apply(RequestOptions.circleCropTransform().diskCacheStrategy(DiskCacheStrategy.NONE).error(mDefaultBackground)).into(myViewHolder.avatar);
     }

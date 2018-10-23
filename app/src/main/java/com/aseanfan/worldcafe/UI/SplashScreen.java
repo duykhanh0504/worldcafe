@@ -53,6 +53,7 @@ public class SplashScreen extends AppCompatActivity {
                             user.setCompany(cursor.getString(cursor.getColumnIndex(DBHelper.PERSON_COMPANY)));
                             user.setSchool(cursor.getString(cursor.getColumnIndex(DBHelper.PERSON_SCHOOL)));
                             user.setIntroduction(cursor.getString(cursor.getColumnIndex(DBHelper.PERSON_INTRODUCTION)));
+                            user.setInterest(cursor.getString(cursor.getColumnIndex(DBHelper.PERSON_INTEREST)));
                             AccountController.getInstance().SetAccount(user);
                             cursor.moveToFirst();
                             while (cursor.isAfterLast() == false) {

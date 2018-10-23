@@ -16,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.aseanfan.worldcafe.App.AccountController;
+import com.aseanfan.worldcafe.Model.UserModel;
 import com.aseanfan.worldcafe.UI.Adapter.ConctactChatAdapter;
 import com.aseanfan.worldcafe.UI.ChatActivity;
 import com.aseanfan.worldcafe.UI.ContactChatActivity;
@@ -48,6 +49,7 @@ public class MyPageDetailFragment extends android.support.v4.app.Fragment implem
     private Long friendid;
     private String friendavatar;
     private String introduce;
+    private String name;
     private String interested;
     private int givethanks =0;
     private String school;
@@ -71,6 +73,7 @@ public class MyPageDetailFragment extends android.support.v4.app.Fragment implem
             friendid = bundle.getLong("chat_id");
             friendavatar = bundle.getString("chat_avarta");
             introduce = bundle.getString("introduce");
+            name = bundle.getString("name");
             school = bundle.getString("school");
             company = bundle.getString("company");
             givethanks = bundle.getInt("numberthanks");
@@ -89,6 +92,19 @@ public class MyPageDetailFragment extends android.support.v4.app.Fragment implem
         initView(view);
         setdata();
         return view;
+    }
+
+    public  void  update(UserModel userModel)
+    {
+
+            friendid = Long.valueOf(-1);
+            introduce = userModel.getIntroduction();
+            interested =userModel.getInterest();;
+            givethanks = userModel.getTotalLike();
+            school = userModel.getSchool();
+            company = userModel.getCompany();
+            setdata();
+
     }
 
     void  setdata()
@@ -190,11 +206,12 @@ public class MyPageDetailFragment extends android.support.v4.app.Fragment implem
             case R.id.btn_directmessage: {
               //  Intent intent = new Intent(getContext(), DirectMessageActivity.class);
                // startActivity(intent);
-                if(!friendid.equals(AccountController.getInstance().getAccount().getId()))
+                if(friendid!=-1&&!friendid.equals(AccountController.getInstance().getAccount().getId()))
                 {
                     Intent intent = new Intent(getContext(), ChatActivity.class);
                     intent.putExtra("chat_id",friendid);
                     intent.putExtra("avatarurl",friendavatar);
+                    intent.putExtra("name",name);
                     startActivity(intent);
 
                 }

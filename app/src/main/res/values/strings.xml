@@ -9,9 +9,7 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
-
-    <string name="title_community">Classifieds</string>
-    <string name="title_timeline">Timeline</string>
+    <string name="title_community">Event</string>
     <string name="title_mypage">My Page</string>
     <string name="title_setting">Setting</string>
     <string name="title_notifications">Notify</string>
@@ -22,7 +20,7 @@
 
 
     <string name="intro1">Connect with people crossing the sea \n \n ·When you want to exchange with… \n “people from various countries” \n　“normally you can’t meet people” \n \n You can connect with people beyond the walls of the　country by Classifieds.</string>
-    <string name="intro2">Timeline \n \n You can by Timeline… \n “Share experiences and impressions at travel　destinations / destinations” \n　“Feel free to exchange information with local people” \n \n Travelers and expatriates can connect with local people.</string>
+    <string name="intro2">Timeline \n \n You can by Timeline… \n “Share precious experiences and impressions at travel　destinations / destinations” \n　“Feel free to exchange information with local people” \n \n Travelers and expatriates can connect with local people.</string>
     <string name="intro3">Let"'"s start Crosea \n \n You can get by crosea... \n "Connection beyond your community!" \n \n "Connection with valuable people for you!“ </string>
 
 
@@ -31,24 +29,26 @@
     <string name="Sex">Gender</string>
     <string name="Country">Country</string>
     <string name="city">Location</string>
-    <string name="signup1">After completion of registration, we can"'"t accept any changes / corrections of age and gender, so please be careful when entering.	</string>
+    <string name="signup1">After completion of registration, we can &apos;t accept any changes / corrections of age and gender, so please be careful when entering.	</string>
     <string name="Register_button">Next</string>
 
 
     <string name="activation_text">We have sent you a code via Email. \n Please enter it below.</string>
+    <string name="activation_enter">Enter activation numbers</string>
     <string name="male">male</string>
     <string name="female">female</string>
     <string name="title_activity_list_follow">ListFollowActivity</string>
     <string name="Activation_button">Done</string>
 
 
-    <string name="password_empty">Password empty</string>
-    <string name="Username_empty">Fullname empty</string>
+    <string name="password_empty">Please enter password 6 or more characters</string>
+	<string name="Username_empty">Fullname empty</string>
+
 
 
     <string name="Login">Log in</string>
-    <string name="Signup">Sign up</string>
-    <string name="Facebook_Signup">Sign up with Facebook</string>
+    <string name="Signup">Sign up with Email</string>
+    <string name="Facebook_Signup">Sign up with Facebook</string>	
     <string name="Email">Email</string>
     <string name="Password">Password</string>
     <string name="Facebook_Login">Login with Facebook</string>
@@ -64,11 +64,12 @@
 
     <string name="forgetpassword_text">Enter your email address, we will send you \n an email with password reset instructions.</string>
     <string name="ResetPassword">Send</string>
+   <string name="ResetPassword_enter">Email@sample.com</string>
     <string name="Passcode">Passcode</string>
+	<string name="password_reset_done">Password just changed.</string>
 
-
-    <string name="Local">Local</string>
     <string name="Business">Business</string>
+    <string name="Local">Local</string>
     <string name="Language">Language</string>
     <string name="Friend">Friend</string>
 
@@ -79,6 +80,28 @@
     <string name="Order_by_price">Price</string>
 
 
+	<string name="location_hcm">Ho Chi Minh</string>
+	<string name="location_hni">Ha noi</string>
+	<string name="location_dnn">Da nang</string>
+	<string name="location_okn">Okinawa</string>
+	<string name="location_osk">Osaka</string>
+	<string name="ShowListMember">Event requests</string>
+	<string name="Accept">Accept</string>
+	<string name="Reject">Reject</string>
+	<string name="My_Event_button">Host</string>
+	<string name="Event_button">Join</string>
+	<string name="Event_apply">Requested</string>
+	<string name="Event_accepted">Joined</string>
+	<string name="Event_finished">Finished</string>
+    <string name="Week_Month_Year">Repeat</string>
+    <string name="No_repeat">No</string>
+    <string name="Week_once">Week/once</string>
+    <string name="Month_once">Month/once</string>
+    <string name="Year_once">Year/once</string>
+    <string name="Attendees">Attendees</string>
+	<string name="title_timeline">Timeline</string>
+	<string name="title_question">Question</string>
+	<string name="title_follow">Follow</string>
     <string name="timeline">Let"'"s share precious experiences and impressions</string>
     <string name="question">Let"'"s feel free to exchange information with local people</string>
     <string name="timeline_popup1">Ho Chi Minh</string>
@@ -89,19 +112,21 @@
 
     <string name="post_detail">Comment and question s answer on here</string>
     <string name="Post">Post</string>
+	<string name="incorrect_postcontents">Please share your information, experience and impressions.</string>
 
-
+    <string name="Share">Share</string>
     <string name="My_Event">Classifieds</string>
     <string name="My_Post">Activity</string>
     <string name="Album_page">Photo</string>
     <string name="Detail_page">Detail</string>
 
-    <string name="Following">Following: </string>
-    <string name="Followers">Follower: </string>
+    <string name="Following">Following </string>
+    <string name="Followers">Follower </string>
     <string name="Rank">Rank</string>
     <string name="Profession">Profession</string>
     <string name="Event_exhibition">Create event</string>
 
+    <string name="profile_edit">Edit Profile</string>
     <string name="Introduce">Profile</string>
     <string name="Location">Location</string>
     <string name="Interested">Interest </string>
@@ -111,17 +136,22 @@
     <string name="Edit_profile">Edit</string>
     <string name="School">Academic background</string>
     <string name="Company">Work experience</string>
+	<string name="edit_profile">Edit done</string>
 
     <string name="banner_ad_unit_id">ca-app-pub-8507216984714483/7653944847</string>
 
 
+    <string name="Following_followers">Following/follower</string>
+    <string name="Follow">Following</string>
+    <string name="Follower">Follower</string>
     <string name="genre">Genre</string>
     <string name="photo">Image</string>
     <string name="area">Location</string>
     <string name="area_select">Tap to select</string>
     <string name="schedule">Date</string>
     <string name="schedule_select">Tap to select</string>
-    <string name="repeat_times">Enter repeat interval</string>
+  <string name="repeat">Repeat</string>
+    <string name="repeat_times">Times here</string>
     <string name="price">Fee</string>
     <string name="price_select">Into 0 to 2,000K VND here</string>
     <string name="numberofparticipants">How many attendees</string>
@@ -132,9 +162,17 @@
     <string name="detail_select">Who can connect with? Show your awesome community.</string>
     <string name="note">Attention</string>
     <string name="note_select">Show anything attention on the day.</string>
-
+    <string name="edit_event">Edit event</string>
+	
+    <string name="edit">Edit</string>
+    <string name="Public">Public</string>
     <string name="Private">Private</string>
-    <string name="Create_event">Create</string>
+     <string name="Create_event">Create event</string>
+    <string name="Create_done">Create</string>
+   	<string name="incorrect_title">Please imput title</string>
+    <string name="incorrect_price">Please imput participate fee</string>
+    <string name="incorrect_attendees">Please imput number of attendees </string>
+    <string name="incorrect_date">Please imput meetup date</string>
     <string name="notification_channel_id">default</string>
 
 
@@ -149,12 +187,39 @@
     <string name="comment_timeline">"TimelineContentLink" was commented.</string>
     <string name="comment_event">"EventTitleLink" was commented.</string>
     <string name="received_thanks">"TimelineContentLink" was received Thanks!</string>
+	<string name="years_ago">years ago</string>
+	<string name="months_ago">months ago</string>
+	<string name="days_ago">days ago</string>
+	<string name="hours_ago">hours ago</string>
+	<string name="minutes_ago">minutes ago</string>
+	<string name="seconds_ago">seconds ago</string>
+	<string name="a_moment_ago">a moment ago</string>
+    <string name="incorrect_contents">incorrect contents</string>
+    <string name="Sensitive_Images">Sensitive Images</string>
+    <string name="Abusive_or_Harmful">Abusive or Harmful</string>
+	<string name="Others">Others</string>
+    <string name="Hacked">Hacked</string>
+    <string name="Spam">Spam</string>
+    <string name="Impersonation">Impersonation</string>
+    <string name="Report">Report</string>
+    <string name="Cancel">Cancel</string>
 
+	<string name="Application">Application</string>
+	<string name="Contact_us">Contact us</string>
+	<string name="Change_password">Change password</string>
+	<string name="Contract">Contract</string>
+	<string name="Version">Version</string>
+	<string name="Logout">Log out</string>
 
+	<string name="Contact_us_feedback">Contact Us･Feedback</string>
+	<string name="Contact_form">Contact form</string>
+	<string name="Contact_content">Let us know your any question for feedback</string>
     <string name="Old_pass">Current Password</string>
     <string name="New_pass">New Password</string>
     <string name="Re_pass">Confirm Password</string>
 
+    <string name="Terms_of_service">Terms of service</string>
+    <string name="Privacy_policy">Privacy policy</string>
 
     <string name="can_not_connect_server">Failed to connect to server, please try again.</string>
     <string name="edit_time_line">Edit done</string>

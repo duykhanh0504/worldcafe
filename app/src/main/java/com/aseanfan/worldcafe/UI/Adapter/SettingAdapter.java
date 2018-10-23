@@ -178,26 +178,26 @@ public class SettingAdapter  extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
             case 0:
                 ViewHolderTitle title = (ViewHolderTitle)myViewHolder;
-                title.title.setText("Application");
+                title.title.setText(title.title.getContext().getResources().getString(R.string.Application));
                 break;
 
             case 1:
                 ViewHolderRowSetting setting = (ViewHolderRowSetting)myViewHolder;
                 if(i == Constants.SETTING_CONTACT_ROW)
                 {
-                    setting.title.setText("Contact us");
+                    setting.title.setText(setting.title.getContext().getResources().getString(R.string.Contact_us));
                 }
                 if(i == Constants.SETTING_CHANGEPASS_ROW)
                 {
-                    setting.title.setText("Change password");
+                    setting.title.setText(setting.title.getContext().getResources().getString(R.string.Change_password));
                 }
                 if(i == Constants.SETTING_CONTRACT_ROW)
                 {
-                    setting.title.setText("Contract");
+                    setting.title.setText(setting.title.getContext().getResources().getString(R.string.Contract));
                 }
                 if(i == Constants.SETTING_LOGOUT_ROW)
                 {
-                    setting.title.setText("logout");
+                    setting.title.setText(setting.title.getContext().getResources().getString(R.string.Logout));
                     setting.image.setVisibility(View.GONE);
                 }
                 break;

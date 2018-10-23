@@ -234,7 +234,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="30dp"
-            android:inputType="date"
             android:textSize="16sp"
             android:focusableInTouchMode="false"
             android:hint="Tap to select"

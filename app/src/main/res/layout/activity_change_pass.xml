@@ -30,7 +30,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_gravity="center"
-                    android:text="Change Password"
+                    android:text="@string/Change_password"
                     android:gravity="center"
                     android:textColor="@color/white"
                     android:layout_weight="1"
