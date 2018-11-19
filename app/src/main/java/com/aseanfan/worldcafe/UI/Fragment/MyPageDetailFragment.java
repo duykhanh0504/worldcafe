@@ -42,6 +42,7 @@ public class MyPageDetailFragment extends android.support.v4.app.Fragment implem
     private TextView txtgive;
     private TextView txtschool;
     private TextView txtcompany;
+    private TextView txtplace;
 
     private Button directMessage;
     private Button createEvent;
@@ -54,6 +55,7 @@ public class MyPageDetailFragment extends android.support.v4.app.Fragment implem
     private int givethanks =0;
     private String school;
     private String company;
+    private int place;
 
     private TextView radfriend;
     private TextView radlanguage;
@@ -78,6 +80,7 @@ public class MyPageDetailFragment extends android.support.v4.app.Fragment implem
             company = bundle.getString("company");
             givethanks = bundle.getInt("numberthanks");
             interested = bundle.getString("interested");
+            place = bundle.getInt("place");
 
         }
         else {
@@ -103,6 +106,7 @@ public class MyPageDetailFragment extends android.support.v4.app.Fragment implem
             givethanks = userModel.getTotalLike();
             school = userModel.getSchool();
             company = userModel.getCompany();
+            place = userModel.getCity();
             setdata();
 
     }
@@ -121,7 +125,9 @@ public class MyPageDetailFragment extends android.support.v4.app.Fragment implem
             txtintroduction.setText(introduce);
         }
 
-         txtgive.setText("give: " + givethanks);
+        txtplace.setText(Utils.getCitybyID(place));
+String give  = String.format(getString(R.string.receivethanks),givethanks);
+         txtgive.setText(give);
         radbusiness.setVisibility(View.GONE);
         radfriend.setVisibility(View.GONE);
         radlanguage.setVisibility(View.GONE);
@@ -167,6 +173,8 @@ public class MyPageDetailFragment extends android.support.v4.app.Fragment implem
 
 
         titleschool =(TextView) view.findViewById(R.id.titleschool);
+
+        txtplace =(TextView) view.findViewById(R.id.txtlocation);
 
 
         titlecompany =(TextView) view.findViewById(R.id.titlecompany);

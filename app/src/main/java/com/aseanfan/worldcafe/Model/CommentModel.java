@@ -1,5 +1,7 @@
 package com.aseanfan.worldcafe.Model;
 
+import java.util.List;
+
 public class CommentModel {
 
     private Long _account_id;
@@ -8,10 +10,58 @@ public class CommentModel {
     private String _content;
     private String _createtime;
     private String time_diff;
-
+    private int _comment_id;
+    private int _subcomments;
+    private int _islike;
+    private int _like;
+    private List<SubCommentModel> _data_subcomments;
 
     public CommentModel() {
     }
+
+    public int getCommentId() {
+        return _comment_id;
+    }
+
+    public void setCommentId(int _comment_id) {
+        this._comment_id = _comment_id;
+    }
+
+    public int getNumberSubComment() {
+        return _subcomments;
+    }
+
+    public void setNumberSubComment(int _subcomments) {
+        this._subcomments = _subcomments;
+    }
+
+
+    public int getNumberLike() {
+        return _like;
+    }
+
+    public void setCNumberLike(int _like) {
+        this._like = _like;
+    }
+
+    public int getIslike() {
+        return _islike;
+    }
+
+    public void setIslike(int _islike) {
+        this._islike = _islike;
+    }
+
+
+
+    public List<SubCommentModel> getSubcomment() {
+        return _data_subcomments;
+    }
+
+    public void setSubcomment(List<SubCommentModel>  subcomment) {
+        this._data_subcomments = subcomment;
+    }
+
 
     public String getTimeDiff() {
         return time_diff;

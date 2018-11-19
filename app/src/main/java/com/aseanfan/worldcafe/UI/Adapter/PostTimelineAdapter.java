@@ -13,6 +13,7 @@ import android.text.Spanned;
 import android.text.method.LinkMovementMethod;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
@@ -52,6 +53,7 @@ public class PostTimelineAdapter extends RecyclerView.Adapter<PostTimelineAdapte
 
     public interface ClickListener {
         void onItemClick(int position, View v ,int type);
+        void onItemPreviewImage(int position, int posImage, View v ,int type);
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener,PostImageAdapter.ClickListener {
@@ -130,7 +132,64 @@ public class PostTimelineAdapter extends RecyclerView.Adapter<PostTimelineAdapte
             imagePost.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    clickListener.onItemClick(getAdapterPosition(), view , Constants.CLICK_IMAGE_PREVIEW);
+                   // clickListener.onItemClick(getAdapterPosition(), view , Constants.CLICK_IMAGE_PREVIEW);
+                }
+            });
+            imagePost.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View view, MotionEvent motionEvent) {
+                   int [] location = new int[2];
+                    view.getLocationOnScreen(location);
+                    int wide = view.getWidth();
+                    int heigh = view.getHeight();
+                    int ximage = location[0];
+                    int yimage = location[1];
+                    int touchx = (int)motionEvent.getX();
+                    int touchy = (int)motionEvent.getY();
+                    if (motionEvent.getAction() == android.view.MotionEvent.ACTION_UP) {
+                        if (postList.get(getAdapterPosition()).getUrlImage().size() == 1) {
+
+                            clickListener.onItemPreviewImage(getAdapterPosition(), 0, view, Constants.CLICK_IMAGE_PREVIEW);
+                        }
+                        if (postList.get(getAdapterPosition()).getUrlImage().size() == 2) {
+                            if (touchx < wide / 2) {
+                                clickListener.onItemPreviewImage(getAdapterPosition(), 0, view, Constants.CLICK_IMAGE_PREVIEW);
+                            } else {
+                                clickListener.onItemPreviewImage(getAdapterPosition(), 1, view, Constants.CLICK_IMAGE_PREVIEW);
+                            }
+
+                        }
+                        if (postList.get(getAdapterPosition()).getUrlImage().size() == 3) {
+                            if (touchx < wide / 2) {
+                                clickListener.onItemPreviewImage(getAdapterPosition(), 0, view, Constants.CLICK_IMAGE_PREVIEW);
+                            } else {
+                                if (touchy < heigh /2) {
+                                    clickListener.onItemPreviewImage(getAdapterPosition(), 1, view, Constants.CLICK_IMAGE_PREVIEW);
+                                } else {
+                                    clickListener.onItemPreviewImage(getAdapterPosition(), 2, view, Constants.CLICK_IMAGE_PREVIEW);
+                                }
+                            }
+                        }
+                        if (postList.get(getAdapterPosition()).getUrlImage().size() >= 4) {
+                            if (touchx < wide / 2) {
+                                if (touchy <  heigh /2) {
+                                    clickListener.onItemPreviewImage(getAdapterPosition(), 0, view, Constants.CLICK_IMAGE_PREVIEW);
+                                }
+                                else
+                                {
+                                    clickListener.onItemPreviewImage(getAdapterPosition(), 1, view, Constants.CLICK_IMAGE_PREVIEW);
+                                }
+                            } else {
+                                if (touchy < heigh /2) {
+                                    clickListener.onItemPreviewImage(getAdapterPosition(), 2, view, Constants.CLICK_IMAGE_PREVIEW);
+                                } else {
+                                    clickListener.onItemPreviewImage(getAdapterPosition(), 3, view, Constants.CLICK_IMAGE_PREVIEW);
+                                }
+                            }
+                            //  clickListener.onItemPreviewImage(getAdapterPosition(),3, view ,Constants.CLICK_IMAGE_PREVIEW);
+                        }
+                    }
+                    return false;
                 }
             });
 
@@ -227,7 +286,7 @@ public class PostTimelineAdapter extends RecyclerView.Adapter<PostTimelineAdapte
             myViewHolder.imagelike.setBackgroundResource(R.drawable.like);
         }
 
-        myViewHolder.create_time.setText(Utils.ConvertDiffTime(post.getTimeDiff()));
+        myViewHolder.create_time.setText(Utils.ConvertDiffTime(post.getTimeDiff(),myViewHolder.create_time.getContext()));
         Drawable mDefaultBackground = myViewHolder.avatar.getContext().getResources().getDrawable(R.drawable.avata_defaul);
         Glide.with(myViewHolder.avatar.getContext()).load(post.getUrlAvatar()).apply(RequestOptions.circleCropTransform().diskCacheStrategy(DiskCacheStrategy.NONE).error(mDefaultBackground)).into(myViewHolder.avatar);
 

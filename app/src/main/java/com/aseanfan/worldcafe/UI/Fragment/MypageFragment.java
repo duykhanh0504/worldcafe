@@ -250,7 +250,7 @@ public class MypageFragment extends android.support.v4.app.Fragment implements N
                         nametoolbar.setText(user.getUsername());
                         Glide.with(getContext()).load( user.getAvarta()).apply(RequestOptions.circleCropTransform().diskCacheStrategy(DiskCacheStrategy.NONE).error(mDefaultBackground1)).into(avatartoolbar);
 
-                        if(user.getCover()!=null)
+                        if(user.getCover()!=null && !user.getCover().isEmpty())
                         {
                             Glide.with(getContext()).load( user.getCover()).into(new SimpleTarget<Drawable>() {
                                 @Override
@@ -262,6 +262,10 @@ public class MypageFragment extends android.support.v4.app.Fragment implements N
                                 AccountController.getInstance().getAccount().setCover(user.getCover());
                             }
                         }
+                        else
+                        {
+                            background.setBackgroundDrawable(getResources().getDrawable(R.drawable.background_event));
+                        }
                         if(user.getRank()>0) {
                             rankImage.setVisibility(View.VISIBLE);
                             rankImage.setImageResource(listrank[user.getRank() - 1]);
@@ -271,8 +275,8 @@ public class MypageFragment extends android.support.v4.app.Fragment implements N
                             rankImage.setVisibility(View.GONE);
                         }
 
-                        followed.setText(getString(R.string.Following) + user.getFollowed());
-                        follower.setText(getString(R.string.Followers) + user.getFollower());
+                        followed.setText(getString(R.string.Following) + " " + user.getFollowed());
+                        follower.setText(getString(R.string.Followers) + " " + user.getFollower());
                         adapter.setdata(user);
 
 
@@ -306,7 +310,7 @@ public class MypageFragment extends android.support.v4.app.Fragment implements N
                     int statuscode = jsons.get("status").getAsInt();
                     if (statuscode == RestAPI.STATUS_SUCCESS) {
                         isfollow = Constants.FOLLOW;
-                        btn_follow.setText("Follow");
+                        btn_follow.setText(getResources().getString(R.string.title_follow));
                         user.setFollower(user.getFollower() -1);
                         follower.setText(getString(R.string.Followers) + user.getFollower());
 
@@ -427,7 +431,7 @@ public class MypageFragment extends android.support.v4.app.Fragment implements N
                     }
                     if(isfollow == Constants.FOLLOW)
                     {
-                        btn_follow.setText("Follow");
+                        btn_follow.setText(getResources().getString(R.string.title_follow));
                     }
                     else
                     {
@@ -589,7 +593,7 @@ public class MypageFragment extends android.support.v4.app.Fragment implements N
 
       //  toolbar = (Toolbar) view.findViewById(R.id.toolbar);
      //   ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
-       ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle(null);
+    //   ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle(null);
       //  ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 
@@ -614,7 +618,7 @@ public class MypageFragment extends android.support.v4.app.Fragment implements N
         avatar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                DialogFragment fragment =  DIalogImagePreview.newInstancestring(user.getAvarta()+ "&redirect=true&width=400&height=400");
+                DialogFragment fragment =  DIalogImagePreview.newInstancestring(user.getAvarta());
                 fragment.show(getFragmentManager(), "image preview");
 
               /*  if(accountid.equals(AccountController.getInstance().getAccount().getId())) {

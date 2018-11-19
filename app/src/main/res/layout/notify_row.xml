@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-android:layout_width="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
 android:layout_height="wrap_content"
 android:orientation="horizontal"
 android:layout_marginLeft="@dimen/margin_left_right"
@@ -22,28 +23,32 @@ android:weightSum="3">
     android:layout_gravity="center"
     >
 
-    <LinearLayout
+    <RelativeLayout
+        android:id="@+id/contain"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:weightSum="2"
         >
         <TextView
             android:id="@+id/txttitle"
             android:layout_gravity="left|center"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="0.5"
-            android:text="TextView" />
+            android:text="TextView"
+            android:singleLine="true" />
 
         <TextView
             android:id="@+id/txttime"
+            android:layout_toRightOf="@+id/txttitle"
             android:layout_gravity="left|center"
-            android:layout_width="match_parent"
+            android:layout_alignParentRight="true"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="TextView" />
-    </LinearLayout>
+            android:textAlignment="textEnd"
+            android:text=""
+            android:singleLine="true"
+            tools:ignore="RtlCompat" />
+    </RelativeLayout>
     <TextView
         android:id="@+id/txtmessage"
         android:layout_gravity="left|center"

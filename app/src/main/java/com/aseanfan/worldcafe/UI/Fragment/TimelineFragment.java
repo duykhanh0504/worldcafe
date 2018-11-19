@@ -66,7 +66,7 @@ import java.util.TimerTask;
 
 public class TimelineFragment extends android.support.v4.app.Fragment implements PostTimelineAdapter.ClickListener{
 
-    private static final String[]paths = {"Timeline","Question", "Follow"};
+    private static String[]paths ;
 
     private RecyclerView list_post;
 
@@ -128,6 +128,11 @@ public class TimelineFragment extends android.support.v4.app.Fragment implements
 
         if (id == R.id.buttonarea) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+
+            for(int i : area)
+            {
+                checkedItems[i-1] = true;
+            }
            //     builder.setTitle("Choose some areas");
 
             builder.setCancelable(true);
@@ -315,6 +320,9 @@ public class TimelineFragment extends android.support.v4.app.Fragment implements
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_timeline, container, false);
 
+        paths = new String[]{getResources().getString(R.string.title_timeline), getResources().getString(R.string.title_question), getResources().getString(R.string.title_follow)};
+
+
         Toolbar toolbar = (Toolbar) view.findViewById(R.id.app_toolbar);
         ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
 
@@ -363,6 +371,9 @@ public class TimelineFragment extends android.support.v4.app.Fragment implements
         list_post.setAdapter(mAdapter);
         loading = (ProgressBar)view.findViewById(R.id.loading_spinner);
         imageAvatar = (ImageView)view.findViewById(R.id.imageAvatar);
+
+        area.clear();
+        area.add(AccountController.getInstance().getAccount().getCity());
 
         // Start loading the ad in the background.
 
@@ -427,6 +438,7 @@ public class TimelineFragment extends android.support.v4.app.Fragment implements
             }
         });
 
+
         return view;
     }
 
@@ -464,10 +476,13 @@ public class TimelineFragment extends android.support.v4.app.Fragment implements
 
         }
         if(type == Constants.CLICK_IMAGE_COMMENT) {
-            Intent intent = new Intent(getContext(), CommentActivity.class);
+          /*  Intent intent = new Intent(getContext(), CommentActivity.class);
             intent.putExtra("Timeline_id", timeline.get(position).getTimelineid());
             intent.putExtra("Account_id", timeline.get(position).getAccountid());
-            startActivity(intent);
+            startActivity(intent);*/
+            if(timeline.get(position)!=null) {
+                ((MainActivity) getActivity()).callDetailTimeline(timeline.get(position));
+            }
 
         }
         if(type == Constants.CLICK_TIMELINE)
@@ -481,5 +496,11 @@ public class TimelineFragment extends android.support.v4.app.Fragment implements
             fragment.show(getFragmentManager(), "image preciew");
            // fragment.setData
         }
+    }
+
+    @Override
+    public void onItemPreviewImage(int position, int posImage, View v, int type) {
+        DialogFragment fragment =  DIalogImagePreview.newInstance(timeline.get(position).getUrlImage(),posImage);
+        fragment.show(getFragmentManager(), "image preciew");
     }
 }

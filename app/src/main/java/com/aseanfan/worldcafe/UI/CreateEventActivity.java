@@ -106,7 +106,7 @@ public class CreateEventActivity extends AppCompatActivity {
 
     private SpinnerCityAdapter  adaptercity;
 
-    String[] arraytypetime={"week","month","year"};
+    String[] arraytypetime;
 
     private int typeCreate = Constants.EVENT_CREATE;
 
@@ -181,12 +181,13 @@ public class CreateEventActivity extends AppCompatActivity {
                     {
                         msg = "Create Private Event Successfully";
                     }
-                        dialog.showDialogOK(CreateEventActivity.this, msg, new ViewDialog.DialogListenner() {
+                    Toast.makeText(getBaseContext(),msg, Toast.LENGTH_LONG).show();
+                      /*  dialog.showDialogOK(CreateEventActivity.this, msg, new ViewDialog.DialogListenner() {
                             @Override
                             public void OnClickConfirm() {
                                 finish();
                             }
-                        });
+                        });*/
 
 
 
@@ -274,6 +275,8 @@ public class CreateEventActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_event);
+
+        arraytypetime= new String[]{getResources().getString(R.string.Week_once), getResources().getString(R.string.Month_once), getResources().getString(R.string.Year_once)};
 
         initView();
 
@@ -492,7 +495,16 @@ public class CreateEventActivity extends AppCompatActivity {
                             public void onDateSet(DatePicker view, int year,
                                                   int monthOfYear, int dayOfMonth) {
 
-                                scheduel.setText(dayOfMonth + "-" + (monthOfYear + 1) + "-" + year);
+                                String date = dayOfMonth + "-" + (monthOfYear + 1) + "-" + year;
+                                if(Utils.Comparedate(date) == true)
+                                {
+                                    scheduel.setText(date);
+                                }
+                                else
+                                {
+                                    scheduel.setText("");
+                                    scheduel.setHint("The Start date must be greater than the current date");
+                                }
                             }
                         }, mYear, mMonth, mDay);
                 datePickerDialog.show();

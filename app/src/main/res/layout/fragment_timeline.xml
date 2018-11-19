@@ -58,8 +58,8 @@
             android:layout_marginLeft="45dp">
             <ImageView
                 android:id="@+id/imageAvatar"
-                android:layout_width="23dp"
-                android:layout_height="23dp"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
                 android:layout_gravity="left|center"
 
                 android:contentDescription="TODO" />
@@ -71,11 +71,19 @@
                 android:text="@string/timeline"
                 android:layout_gravity="center|left"
                 android:layout_margin="@dimen/margin_left_right"/>
+
+
         </LinearLayout>
 
 
     </FrameLayout>
 
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/gray_app"
+        android:layout_gravity="bottom"
+        ></FrameLayout>
 
 <FrameLayout
     android:layout_width="match_parent"

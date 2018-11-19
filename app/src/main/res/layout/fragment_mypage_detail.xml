@@ -38,7 +38,7 @@
             android:layout_marginTop="@dimen/margin_line_mypage"
             android:layout_width="match_parent"
             android:layout_height="1px"
-            android:background="@color/gray">
+            android:background="@color/gray_app">
         </FrameLayout>
 
         <TextView
@@ -70,7 +70,7 @@
             android:layout_marginTop="@dimen/margin_line_mypage"
             android:layout_width="match_parent"
             android:layout_height="1px"
-            android:background="@color/gray">
+            android:background="@color/gray_app">
         </FrameLayout>
         <TextView
             android:layout_marginTop="@dimen/margin_line_mypage"
@@ -97,7 +97,7 @@
                 android:id="@+id/radfriend"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="friend"
+                android:text="@string/Friend"
                 android:textAlignment="center"
                 android:textColor="@color/white"
                 android:paddingTop="5dp"
@@ -117,7 +117,7 @@
                 android:layout_height="wrap_content"
                 android:textAlignment="center"
                 android:textColor="@color/white"
-                android:text="language"
+                android:text="@string/Language"
                 android:paddingTop="5dp"
                 android:paddingBottom="5dp"
                 android:paddingLeft="5dp"
@@ -135,7 +135,7 @@
                 android:id="@+id/radlocal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="local"
+                android:text="@string/Local"
                 android:textAlignment="center"
 
                 android:textColor="@color/white"
@@ -154,7 +154,7 @@
                 android:id="@+id/radbusiness"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="business"
+                android:text="@string/Business"
                 android:textAlignment="center"
                 android:textColor="@color/white"
                 android:paddingTop="5dp"
@@ -225,7 +225,7 @@
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="1px"
-            android:background="@color/gray">
+            android:background="@color/gray_app">
         </FrameLayout>
 
         <TextView
@@ -291,7 +291,7 @@
             android:layout_marginTop="@dimen/margin_line_mypage"
             android:layout_width="match_parent"
             android:layout_height="1px"
-            android:background="@color/gray">
+            android:background="@color/gray_app">
         </FrameLayout>
         <TextView
             android:id="@+id/titleschool"
@@ -320,7 +320,7 @@
             android:layout_marginTop="@dimen/margin_line_mypage"
             android:layout_width="match_parent"
             android:layout_height="1px"
-            android:background="@color/gray">
+            android:background="@color/gray_app">
         </FrameLayout>
         <TextView
             android:id="@+id/titlecompany"

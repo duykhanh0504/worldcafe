@@ -11,12 +11,49 @@
     tools:context="com.aseanfan.worldcafe.UI.CommentActivity"
     android:weightSum="2">
 
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/app_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        app:layout_scrollFlags="scroll|enterAlways|snap"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginRight="20dp"
+            android:gravity="center|left">
+
+            <ImageView
+                android:id="@+id/btncancel"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:minHeight="30dp"
+                android:src="@drawable/ic_back"
+                android:foregroundGravity="left|center" />
+
+
+            <TextView
+                android:id="@+id/txtname"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:text="@string/Comments"
+                android:gravity="center"
+                android:textColor="@color/white"
+                android:layout_weight="1"
+                />
+        </RelativeLayout>
+
+    </android.support.v7.widget.Toolbar>
 
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="2.2"
-        android:layout_margin="@dimen/margin_left_right">
+        android:layout_marginTop="@dimen/margin_left_right">
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/listComment"
@@ -34,25 +71,63 @@
     </FrameLayout>
 
     <LinearLayout
+        android:id="@+id/reply"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/background_line_top"
+        android:layout_gravity="bottom"
+        android:visibility="gone">
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:background="@drawable/ic_cancel"/>
+        <TextView
+            android:id="@+id/txtreply"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Reply to"/>
+    </LinearLayout>
 
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="10dp"
+        android:background="@color/silver">
+    </FrameLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp">
+
+        <ImageView
+            android:id="@+id/imageAvatar"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_gravity="center"
+            android:contentDescription="TODO"
+            android:layout_marginLeft="23dp"/>
 
         <EditText
             android:privateImeOptions="nm"
             android:id="@+id/input_comment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Your Comment"
+            android:hint="@string/comment_cursor"
             android:layout_weight="1.9"
+            android:background="@color/white"
+            android:layout_gravity="center"
             android:layout_marginLeft="10dp"
             />
 
         <ImageButton
             android:id="@+id/btn_postcomment"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:layout_gravity="right|top"
             android:layout_marginRight="10dp"
             android:background="@drawable/ic_send"

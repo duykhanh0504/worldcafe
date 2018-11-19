@@ -114,9 +114,15 @@ public class NotifyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             NotificationModel notify = notifylist.get(i);
             viewHolder.name.setText(notify.getTitle());
             viewHolder.detail.setText(notify.getMessage());
-            viewHolder.date.setText( Utils.ConvertDiffTime(notify.getCreatetime()));
+            viewHolder.date.setText( Utils.ConvertDiffTime(notify.getCreatetime(),viewHolder.date.getContext()));
             Drawable mDefaultBackground = viewHolder.avatar.getContext().getResources().getDrawable(R.drawable.avata_defaul);
             Glide.with(viewHolder.avatar.getContext()).load(notify.getAvarta()).apply(RequestOptions.circleCropTransform().error(mDefaultBackground)).into(viewHolder.avatar);
+            if(notify.getType() == 8)
+            {
+                viewHolder.name.setText("Crosea");
+                Drawable mDefaultBackgroundserver = viewHolder.avatar.getContext().getResources().getDrawable(R.drawable.ic_launcher);
+                Glide.with(viewHolder.avatar.getContext()).load(mDefaultBackgroundserver).apply(RequestOptions.circleCropTransform().error(mDefaultBackground)).into(viewHolder.avatar);
+            }
         }
     }
 

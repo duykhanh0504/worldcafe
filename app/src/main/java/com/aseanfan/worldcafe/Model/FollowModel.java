@@ -4,6 +4,15 @@ public class FollowModel {
     private Long account_id;
     private String username;
     private String avarta;
+    private String job;
+
+    public String getJob() {
+        return job;
+    }
+
+    public void setJob(String job) {
+        this.job = job;
+    }
 
     public Long getAccount_id() {
         return account_id;

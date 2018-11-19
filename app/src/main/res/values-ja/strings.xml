@@ -20,9 +20,9 @@
     <string name="fb_login_protocol_scheme">fb512038499006720</string>
 
 
-    <string name="intro1">海を越えた人々とつながる\n　\n ”様々な国の人々”や”普段出会えない人”\n と交流したいとき…\n \n　国の壁を超えた人とつながることができるサービスです。</string>
-  <string name="intro2">タイムライン\n　\n ”旅行先・滞在先での貴重な体験、感動をシェア”\n ”現地の人々と気軽に情報交換”\n　を行い…\n \n 旅行者と駐在員は、現地の人々とつながることができます。</string>
-    <string name="intro3">Croseaを始めましょう\n　\n　Croseaでは…\n　コミュニティの幅を超えたつながりを創ることができます！\n そして、あなたにとって価値のある人とつながってみましょう！</string>
+    <string name="intro1">イベント\n\n「語学交流」「趣味交流」\n「ローカルツアー」「ビジネス交流」によって…\n国の壁を超えた人たちとつながることができます。</string>
+    <string name="intro2">タイムライン\n\n”旅行先・滞在先での貴重な体験、感動をシェア”\n”現地の人々と気軽に情報交換”によって…\n\n旅行者と駐在員は、現地の人々とつながることができます。</string>
+    <string name="intro3">海を越えた人々とつながる\n\nCroseaでは…\nコミュニティの幅を超えたつながりを創ることができます。\n\nそして、あなたにとって価値のある人とつながってみましょう！</string>	
 
 
     <string name="Username">名前</string>
@@ -66,7 +66,7 @@
     <string name="Passcode">コードを数字で入力</string>
 	<string name="password_reset_done">パスワード変更に成功しました。</string>
 
-    <string name="Local">ローカル</string>
+     <string name="Local">トラベル</string>
     <string name="Business">ビジネス</string>
     <string name="Language">ランゲージ</string>
     <string name="Friend">フレンド</string>
@@ -82,6 +82,7 @@
 	<string name="location_dnn">ダナン</string>
 	<string name="location_okn">沖縄</string>
 	<string name="location_osk">大阪</string>
+	<string name="ShowListMember">参加申込一覧</string>
 	<string name="Accept">承認</string>
 	<string name="Reject">拒否</string>
 	<string name="My_Event_button">ホスト</string>
@@ -101,6 +102,8 @@
     <string name="timeline_popup1">ホーチミン</string>
     <string name="timeline_popup2">ハノイ</string>
     <string name="timeline_popup3">ダナン</string>
+   <string name="Public">公開中</string>	
+    <string name="Private">非公開</string>
 	<string name="title_timeline">タイムライン</string>
 	<string name="title_question">質問</string>
 	<string name="title_follow">フォロー</string>
@@ -111,7 +114,7 @@
     <string name="post_detail">ここにコメント・質問への回答を入力</string>
     <string name="Post">投稿</string>
   <string name="incorrect_postcontents">あなたの情報・体験・感動をシェアしてください</string>
-    //user profile / my page / event edit
+
      <string name="My_Event">イベント</string>
     <string name="My_Post">アクティビティ</string>
     <string name="Album_page">フォト</string>
@@ -134,13 +137,14 @@
     <string name="School">学歴</string>
     <string name="Company">職歴</string>
 
+  <string name="done">完了</string>
 	<string name="edit_profile">編集完了しました。</string>
     <string name="banner_ad_unit_id">ca-app-pub-8507216984714483/7653944847</string>
 
    <string name="Following_followers">フォロー・フォロワー一覧</string>
     <string name="Follow">フォロー中</string>
     <string name="Follower">フォロワー</string>
-    //create event
+    
     <string name="genre">ジャンル</string>
     <string name="photo">写真を追加</string>
     <string name="area">地域</string>
@@ -148,7 +152,7 @@
     <string name="schedule">日程</string>
     <string name="schedule_select">タップで選択</string>
     <string name="repeat">繰り返し</string>
- <string name="repeat_times">頻度を入力</string>
+    <string name="repeat_times">頻度を入力</string>
     <string name="price">参加費</string>
     <string name="price_select">0から2,000KVNDまで入力</string>
     <string name="numberofparticipants">実施予定人数</string>
@@ -161,10 +165,7 @@
     <string name="note_select">当日に関する詳細を入力</string>
     <string name="edit_event">イベント編集</string>
 	
-    <string name="edit">編集</string>	
-    <string name="ShowListMember">リクエスト一覧</string>
-    <string name="Public">公開中</string>
-    <string name="Private">非公開</string>
+    <string name="edit">編集</string>
     <string name="Create_event">イベント作成</string>
     <string name="Create_done">企画を公開</string>
 
@@ -174,8 +175,6 @@
     <string name="incorrect_date">日程を入力してください</string>
     <string name="notification_channel_id">default</string>
 
-
-    <string name="done">更新</string>
     <string name="delete">削除</string>
 
     <string name="posted_timeline">"TimelineContentLink"を投稿しました</string>
@@ -219,7 +218,13 @@
     <string name="New_pass">新しいパスワードを入力</string>
     <string name="Re_pass">確認のためもう一度入力</string>
 
+    <string name="Logout_popup">本当にログアウトしますか？</string>
+    <string name="Exit">もう一度タップすると終了します。</string>
 
     <string name="Terms_of_service">利用規約</string>
     <string name="Privacy_policy">プライバシーポリシー</string>
+
+    <string name="Comments">コメント一覧</string>
+    <string name="comment_cursor">コメントしてみましょう</string>
+
 </resources>

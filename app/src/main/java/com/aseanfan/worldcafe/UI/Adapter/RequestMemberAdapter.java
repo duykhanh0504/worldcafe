@@ -102,13 +102,13 @@ public class RequestMemberAdapter extends RecyclerView.Adapter<RecyclerView.View
         if(user.getStatus()== Constants.MEMBER_ACCEPT)
         {
             viewHolder.reject.setVisibility(View.GONE);
-            viewHolder.confirm.setText("Accepted");
+            viewHolder.confirm.setText(viewHolder.confirm.getContext().getResources().getString(R.string.Event_accepted));
             viewHolder.confirm.setEnabled(false);
         }
         else
         {
             viewHolder.reject.setVisibility(View.VISIBLE);
-            viewHolder.confirm.setText("Accept");
+            viewHolder.confirm.setText(viewHolder.confirm.getContext().getResources().getString(R.string.Accept));
             viewHolder.confirm.setEnabled(true);
         }
         viewHolder.name.setText(user.getUsername());

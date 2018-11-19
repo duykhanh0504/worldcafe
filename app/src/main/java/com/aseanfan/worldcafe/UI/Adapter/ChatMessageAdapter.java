@@ -186,7 +186,17 @@ public class ChatMessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
             case 0:
                 ViewHolderRightCHat right = (ViewHolderRightCHat)viewHolder;
-                right.mAvatar.setVisibility(View.GONE);
+                if(i < listmessagechat.size()-1 && (listmessagechat.get(i).getSend_account() == listmessagechat.get(i+1).getSend_account())) {
+                    right.mAvatar.setVisibility(View.INVISIBLE);
+                }
+                else
+                {
+                    right.mAvatar.setVisibility(View.VISIBLE);
+                    Drawable mDefaultBackground = right.mAvatar.getContext().getResources().getDrawable(R.drawable.avata_defaul);
+                    Glide.with(right.mAvatar.getContext()).load(AccountController.getInstance().getAccount().getAvarta()).apply(RequestOptions.circleCropTransform().diskCacheStrategy(DiskCacheStrategy.NONE).error(mDefaultBackground)).into(right.mAvatar);
+
+                }
+             //   right.mAvatar.setVisibility(View.GONE);
                // Drawable mDefaultBackground = right.mAvatar.getContext().getResources().getDrawable(R.drawable.avata_defaul);
                // Glide.with(right.mAvatar.getContext()).load(AccountController.getInstance().getAccount().getAvarta()).apply(RequestOptions.circleCropTransform().diskCacheStrategy(DiskCacheStrategy.NONE).error(mDefaultBackground)).into(right.mAvatar);
              //   right.mMessage.setText(Utils.decodeStringUrl(listmessagechat.get(i).getMessageText()));

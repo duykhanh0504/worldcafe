@@ -5,7 +5,7 @@
     android:orientation="vertical"
     android:layout_marginTop="10dp">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="23dp"
@@ -19,14 +19,27 @@
             android:contentDescription="TODO" />
 
         <TextView
+            android:layout_toRightOf="@+id/imageAvatar"
             android:id="@+id/txtname"
             android:layout_gravity="left|center"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:textStyle="bold"
             android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
             android:text="TextView" />
-    </LinearLayout>
+        <TextView
+            android:layout_toRightOf="@+id/imageAvatar"
+            android:layout_below="@+id/txtname"
+            android:id="@+id/txtJob"
+            android:layout_gravity="left|center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginLeft="10dp"
+            android:text="" />
+    </RelativeLayout>
 
     <FrameLayout
         android:layout_width="match_parent"

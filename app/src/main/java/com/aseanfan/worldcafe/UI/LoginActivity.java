@@ -123,6 +123,7 @@ public class LoginActivity extends BaseActivity {
 
     private EditText _emailForgetPass;
     private Button _resetpassButton;
+    private ImageView _backButton;
 
     private EditText _passcode;
     private EditText _newpass;
@@ -594,6 +595,13 @@ public class LoginActivity extends BaseActivity {
             }
         });
 
+        _backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showPage(Constants.PAGE_LOGIN);
+            }
+        });
+
         _changepassButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -707,7 +715,7 @@ public class LoginActivity extends BaseActivity {
                                                 u.setSex(Constants.FEMALE);
                                             }
                                           //  u.setAvarta( object.getJSONObject("picture").getJSONObject("data").getString("url"));
-                                            u.setAvarta(String.format(getString(R.string.facebookAvatarUrl),object.getString("id")));
+                                            u.setAvarta(String.format(getString(R.string.facebookAvatarUrl),object.getString("id")) + "&redirect=true&width=400&height=400");
                                             AccountController.getInstance().SetAccount(u);
                                             register(u.getEmail(),null);
 
@@ -778,6 +786,7 @@ public class LoginActivity extends BaseActivity {
 
         _emailForgetPass = (EditText)viewForgetPass.findViewById(R.id.input_ForgetEmail);
         _resetpassButton = (Button) viewForgetPass.findViewById(R.id.btn_resetpassword);
+        _backButton = (ImageView) viewForgetPass.findViewById(R.id.btncancel);
 
         _passcode = (EditText)viewChangePass.findViewById(R.id.input_passcode);
         _newpass = (EditText)viewChangePass.findViewById(R.id.input_newpass);;
@@ -942,7 +951,7 @@ public class LoginActivity extends BaseActivity {
         }
         if(_usernameSignup.getText().toString().isEmpty())
         {
-            dialog.showDialogCancel( LoginActivity.this,"User name can not empty " );
+            dialog.showDialogCancel( LoginActivity.this,getResources().getString(R.string.Username_empty) );
             progressDialog.dismiss();
             //   Toast.makeText(LoginActivity.this, "User name can not empty ", Toast.LENGTH_SHORT).show();
             return;
@@ -1030,7 +1039,7 @@ public class LoginActivity extends BaseActivity {
 
                     } else if (statuscode == RestAPI.STATUS_ACCOUNTESIXT) {
                            {
-                            dialog.showDialogCancel( LoginActivity.this,"Account exist!!!" );
+                            dialog.showDialogCancel( LoginActivity.this,getResources().getString(R.string.Account_exist)  );
                             //Toast.makeText(LoginActivity.this, "Account exist!!!", Toast.LENGTH_SHORT).show();
                         }
                     }
@@ -1123,7 +1132,7 @@ public class LoginActivity extends BaseActivity {
                            /* if (USING_FACEBOOK == true) {
                                 login(email, password, LOGIN_FACEBOOK);
                             } else*/ {
-                                dialog.showDialogCancel( LoginActivity.this,"Account exist!!!" );
+                                dialog.showDialogCancel( LoginActivity.this,getResources().getString(R.string.Account_exist) );
                                 //Toast.makeText(LoginActivity.this, "Account exist!!!", Toast.LENGTH_SHORT).show();
                             }
                         }
@@ -1160,7 +1169,7 @@ public class LoginActivity extends BaseActivity {
         }
         if(_usernameupdate.getText().toString().isEmpty())
         {
-            dialog.showDialogCancel( LoginActivity.this,"User name can not empty " );
+            dialog.showDialogCancel( LoginActivity.this,getResources().getString(R.string.Username_empty) );
             progressDialog.dismiss();
          //   Toast.makeText(LoginActivity.this, "User name can not empty ", Toast.LENGTH_SHORT).show();
             return;

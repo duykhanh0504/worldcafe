@@ -45,7 +45,7 @@
                 android:id="@+id/input_comment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Your Comment"
+                android:hint="@string/comment_cursor"
                 android:layout_marginLeft="10dp"
                 android:layout_weight="1.9"
                 />

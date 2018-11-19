@@ -49,7 +49,7 @@ public class FragmentFollowAdapter  extends FragmentPagerAdapter {
         // Generate title based on item position
         switch (position) {
             case 0:
-                return mContext.getResources().getString(R.string.Following);
+                return mContext.getResources().getString(R.string.Follow);
             case 1:
                 return mContext.getResources().getString(R.string.Followers);
             default:

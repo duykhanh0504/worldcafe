@@ -324,10 +324,13 @@ public class MyPostFragment  extends android.support.v4.app.Fragment implements 
         }
         else if(type == Constants.CLICK_IMAGE_COMMENT)
         {
-            Intent intent = new Intent(getActivity(), CommentActivity.class);
+            if(posttimeline.get(position)!=null) {
+                ((MainActivity) getActivity()).callDetailTimeline(posttimeline.get(position));
+            }
+           /* Intent intent = new Intent(getActivity(), CommentActivity.class);
             intent.putExtra("Timeline_id",posttimeline.get(position).getTimelineid());
             intent.putExtra("Account_id", posttimeline.get(position).getAccountid());
-            startActivity(intent);
+            startActivity(intent);*/
         }
         if(type == Constants.CLICK_IMAGE_PREVIEW) {
             DialogFragment fragment =  DIalogImagePreview.newInstance(posttimeline.get(position).getUrlImage());
@@ -335,6 +338,12 @@ public class MyPostFragment  extends android.support.v4.app.Fragment implements 
             // fragment.setData
         }
 
+    }
+
+    @Override
+    public void onItemPreviewImage(int position, int posImage, View v, int type) {
+        DialogFragment fragment =  DIalogImagePreview.newInstance(posttimeline.get(position).getUrlImage(),posImage);
+        fragment.show(getFragmentManager(), "image preciew");
     }
 
 }

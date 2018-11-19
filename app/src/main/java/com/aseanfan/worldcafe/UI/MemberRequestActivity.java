@@ -68,11 +68,11 @@ public class MemberRequestActivity extends AppCompatActivity {
         });
     }
 
-    public void AcceptRejectMember(final RequestUserModel user , final int status)
+    public void AcceptRejectMember(final int pos , final int status)
     {
         JsonObject dataJson = new JsonObject();
         dataJson.addProperty("account_id", AccountController.getInstance().getAccount().getId());
-        dataJson.addProperty("id", user.getRequestId());
+        dataJson.addProperty("id", listuser.get(pos).getRequestId());
         dataJson.addProperty("status",status);
 
         RestAPI.PostDataMasterWithToken(this,dataJson,RestAPI.POST_ACCEPTREJECTMEMBER, new RestAPI.RestAPIListenner() {
@@ -84,7 +84,8 @@ public class MemberRequestActivity extends AppCompatActivity {
 
                         return;
                     }
-                    user.setStatus(status);
+                    listuser.get(pos).setStatus(status);
+                    mAdapter.setData(listuser);
                     mAdapter.notifyDataSetChanged();
                    /* JsonArray jsonArray = (new JsonParser()).parse(s).getAsJsonObject().getAsJsonArray("result");
                     Gson gson = new Gson();
@@ -141,12 +142,12 @@ public class MemberRequestActivity extends AppCompatActivity {
             public void onItemClick(int position, View v, int type) {
                 if(type == Constants.MEMBER_ACCEPT)
                 {
-                    AcceptRejectMember(listuser.get(position),Constants.MEMBER_ACCEPT);
+                    AcceptRejectMember(position,Constants.MEMBER_ACCEPT);
 
                 }
                 if(type == Constants.MEMBER_REJECT)
                 {
-                    AcceptRejectMember(listuser.get(position),Constants.MEMBER_REJECT);
+                    AcceptRejectMember(position,Constants.MEMBER_REJECT);
                 }
             }
         });

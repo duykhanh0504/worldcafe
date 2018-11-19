@@ -77,6 +77,7 @@ public class DetailCommunityFragment extends android.support.v4.app.Fragment imp
     private TextView numbercomment;
     private ImageView avatar;
     private TextView username;
+    private TextView job;
     private TextView scheduel;
     private TextView number_attendess;
     private TextView note;
@@ -139,17 +140,6 @@ public class DetailCommunityFragment extends android.support.v4.app.Fragment imp
             }
         });
 
-        /*builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                // LoadListEvent(typegenre);
-                dialog.dismiss();
-                if(mpos[0]!=-1) {
-                    Report(listreport[mpos[0]]);
-                }
-            }
-        });
-        builder.setNegativeButton("Cancel", null);*/
 
         Button cancel = dialogView.findViewById(R.id.btn_cancel);
         Button report = dialogView.findViewById(R.id.btn_report);
@@ -173,6 +163,9 @@ public class DetailCommunityFragment extends android.support.v4.app.Fragment imp
                 }
             }
         });
+
+        dialog.getWindow().setBackgroundDrawable(getResources().getDrawable(R.drawable.background_dialog));
+
         dialog.show();
     }
 
@@ -312,7 +305,7 @@ public class DetailCommunityFragment extends android.support.v4.app.Fragment imp
                     JsonObject jsons = (new JsonParser()).parse(s).getAsJsonObject();
                     int statuscode = jsons.get("status").getAsInt();
                     if (statuscode == RestAPI.STATUS_SUCCESS) {
-                        btnJoin.setText("Request");
+                        btnJoin.setText(getResources().getString(R.string.Event_apply));
                         btnJoin.setEnabled(false);
                     }
 
@@ -328,7 +321,7 @@ public class DetailCommunityFragment extends android.support.v4.app.Fragment imp
     @Override
     public void onResume() {
         super.onResume();
-
+        getDetailEvent(getArguments().getLong("eventid"));
     }
 
     public void getDetailEvent(Long eventid)
@@ -377,10 +370,11 @@ public class DetailCommunityFragment extends android.support.v4.app.Fragment imp
                     Gson gson = new Gson();
                     java.lang.reflect.Type type = new TypeToken<List<AccountModel>>(){}.getType();
                     listaccount = gson.fromJson(jsonArray, type);
+                    containList.removeAllViews();
                     if(listaccount!=null && listaccount.size()>0)
                     {
                         containList.setOrientation(LinearLayout.HORIZONTAL);
-                        int number = listaccount.size()>5?5:listaccount.size();
+                        int number = listaccount.size()>6?6:listaccount.size();
                         for( int i = 0 ; i < number ; i++) {
                             ImageView avatarImage = new ImageView(getContext());
                             LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(Utils.convertDpToPixel(40, getContext()), Utils.convertDpToPixel(40, getContext()));
@@ -389,11 +383,11 @@ public class DetailCommunityFragment extends android.support.v4.app.Fragment imp
                             layoutParams.setMargins(i * Utils.convertDpToPixel(2, getContext()), 0, 0, 0);
                             avatarImage.setLayoutParams(layoutParams);
                             avatarImage.setScaleType(ImageView.ScaleType.FIT_XY);
-                            if(i==4)
+                            if(i==5)
                             {
                                 Bitmap image = Utils.createImage(Utils.convertDpToPixel(40, getContext()),
                                         Utils.convertDpToPixel(40, getContext()),getResources().getColor(R.color.colorPrimary),
-                                        String.valueOf(listaccount.size() - 4),getContext());
+                                        String.valueOf(listaccount.size() - 5),getContext());
                                 Glide.with(getContext()).load(image).apply(RequestOptions.circleCropTransform()).into(avatarImage);
                             }
                             else {
@@ -429,6 +423,7 @@ public class DetailCommunityFragment extends android.support.v4.app.Fragment imp
         numbercomment = (TextView) view.findViewById(R.id.textComment);
         avatar = (ImageView)view.findViewById(R.id.imageAvatar);
         username = (TextView)view.findViewById(R.id.username);
+        job = (TextView)view.findViewById(R.id.job);
         updatetime = (TextView) view.findViewById(R.id.txtcreatetime);
         scheduel = (TextView) view.findViewById(R.id.txtscheduel);
         number_attendess = (TextView) view.findViewById(R.id.txtquatity);
@@ -451,7 +446,8 @@ public class DetailCommunityFragment extends android.support.v4.app.Fragment imp
     }
     public void loaddata()
     {
-        txtprice.setText(event.getPrice().toString() + " VND");
+
+        txtprice.setText(  Utils.currencyFormat(event.getPrice()) + " VND");
 
         if(event.getIslike()==0)
         {
@@ -463,7 +459,7 @@ public class DetailCommunityFragment extends android.support.v4.app.Fragment imp
         }
         if(event.getPrivate() ==0)
         {
-            txtprivate.setText("Public");
+            txtprivate.setText(getResources().getString(R.string.Public));
         }
         else
         {
@@ -485,13 +481,13 @@ public class DetailCommunityFragment extends android.support.v4.app.Fragment imp
         }
         if(!event.getAccountid().equals(AccountController.getInstance().getAccount().getId())) {
             if (event.getIsjoin() == 1) {
-                btnJoin.setText("Request");
+                btnJoin.setText(getResources().getString(R.string.Event_apply));
                 btnJoin.setEnabled(false);
             } else if (event.getIsjoin() == 2) {
-                btnJoin.setText("Joined");
+                btnJoin.setText(getResources().getString(R.string.Event_accepted));
                 btnJoin.setEnabled(false);
             } else {
-                btnJoin.setText("Join");
+                btnJoin.setText(getResources().getString(R.string.Event_button));
                 btnJoin.setEnabled(true);
             }
         }
@@ -501,12 +497,14 @@ public class DetailCommunityFragment extends android.support.v4.app.Fragment imp
             btnJoin.setText("Owner");
             btnJoin.setEnabled(false);
         }
-        Glide.with(getContext()).load( getArguments().getString("image")).into(new SimpleTarget<Drawable>() {
-            @Override
-            public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
-                imageEvent.setBackgroundDrawable(resource);
-            }
-        });
+        if(event.getUrlImage()!=null && event.getUrlImage().size() >0 ) {
+            Glide.with(getContext()).load(event.getUrlImage().get(0)).into(new SimpleTarget<Drawable>() {
+                @Override
+                public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
+                    imageEvent.setBackgroundDrawable(resource);
+                }
+            });
+        }
 
         title.setText(event.getTitle());
         content.setText(event.getContent());
@@ -529,24 +527,24 @@ public class DetailCommunityFragment extends android.support.v4.app.Fragment imp
         }
 
         starttime.setText(Utils.ConvertDateEvent(event.getStarttime()));
-        updatetime.setText(Utils.ConvertDateEventNonDetail(event.getUpdatetime()));
-        place.setText(event.getCityname());
+        updatetime.setText(Utils.ConvertUpdateDateEvent(event.getUpdatetime()));
+        place.setText(Utils.getCitybyID(event.getCityid()));
         String timetype= "";
         if(event.getPertime() ==0)
         {
-            timetype = "Week";
+            timetype = getContext().getResources().getString(R.string.Week_once);
         }
         else if(event.getPertime() ==1)
         {
-            timetype = "Month";
+            timetype = getContext().getResources().getString(R.string.Month_once);
         }
         else if(event.getPertime() ==2)
         {
-            timetype = "Year";
+            timetype = getContext().getResources().getString(R.string.Year_once);
         }
         if( event.getNumber()==0 ) {
             //scheduel.setText(event.getNumber() + " / " + timetype);
-            scheduel.setText("No repeat");
+            scheduel.setText(getContext().getResources().getString(R.string.No_repeat));
         }
         else
         {
@@ -566,6 +564,7 @@ public class DetailCommunityFragment extends android.support.v4.app.Fragment imp
         Drawable mDefaultBackground = getContext().getResources().getDrawable(R.drawable.avata_defaul);
         Glide.with(getContext()).load(event.getUrlAvatar()).apply(RequestOptions.circleCropTransform().diskCacheStrategy(DiskCacheStrategy.NONE).error(mDefaultBackground)).into(avatar);
         username.setText(event.getUsername());
+        job.setText(event.getJob());
     }
 
     public void initdata()

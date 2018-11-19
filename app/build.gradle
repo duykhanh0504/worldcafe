@@ -6,7 +6,7 @@ android {
         applicationId "com.aseanfan.worldcafe.worldcafe"
         minSdkVersion 15
         targetSdkVersion 28
-        versionCode 2
+        versionCode 4
         versionName "1.1"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         multiDexEnabled true

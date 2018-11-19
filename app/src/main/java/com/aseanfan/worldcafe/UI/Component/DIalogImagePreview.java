@@ -32,6 +32,7 @@ public class DIalogImagePreview extends DialogFragment {
     }
 
 
+
     public static DIalogImagePreview newInstance(List<String> data, int Pos) {
         listimage = data;
         pos = Pos;

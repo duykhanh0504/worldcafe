@@ -3,6 +3,8 @@ package com.aseanfan.worldcafe.UI.Adapter;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,19 +29,34 @@ public class CommentAdapter  extends RecyclerView.Adapter<CommentAdapter.MyViewH
 
     private static CommentAdapter.ClickListener clickListener;
 
+    private static  int type = Constants.TIMELINE;
+
     public void setOnItemClickListener(CommentAdapter.ClickListener clickListener) {
         CommentAdapter.clickListener = clickListener;
     }
 
-    public interface ClickListener {
-        void onItemClick(int position, View v, int Type);
+    public void setdata(List<CommentModel> data)
+    {
+        commentlist = data;
+        notifyDataSetChanged();
     }
 
-    public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public interface ClickListener {
+        void onItemClick(int position, View v, int Type);
+        void onItemSubClick(int position, View v, int subpos);
+    }
+
+    public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener ,SubCommentAdapter.ClickListener {
         public TextView detail;
         public TextView name;
         public TextView date;
         public ImageView avatar;
+        public ImageView iconlike;
+        public ImageView iconcomment;
+        public TextView numberlike;
+        public TextView numbercomment;
+        public RecyclerView subcomment;
+        public SubCommentAdapter subcommentadapter;
 
 
         public MyViewHolder(View view) {
@@ -48,7 +65,21 @@ public class CommentAdapter  extends RecyclerView.Adapter<CommentAdapter.MyViewH
             name = (TextView) view.findViewById(R.id.txtname);
             date = (TextView) view.findViewById(R.id.txtdate);
             avatar = (ImageView) view.findViewById(R.id.imageAvatar);
+            iconlike  = (ImageView) view.findViewById(R.id.imageLike);
+            iconcomment = (ImageView) view.findViewById(R.id.imageComment);
+            numberlike  = (TextView) view.findViewById(R.id.textLike);
+            numbercomment = (TextView) view.findViewById(R.id.textComment);
+            subcomment = (RecyclerView) view.findViewById(R.id.subcomment);
+
             view.setOnClickListener(this);
+            subcommentadapter  = new SubCommentAdapter(null,type);
+            subcommentadapter.setOnItemClickListener(this);
+
+            RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(view.getContext());
+            subcomment.setLayoutManager(mLayoutManager);
+            subcomment.setItemAnimator(new DefaultItemAnimator());
+            subcomment.setAdapter(subcommentadapter);
+
             avatar.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -56,17 +87,43 @@ public class CommentAdapter  extends RecyclerView.Adapter<CommentAdapter.MyViewH
                 }
             });
 
+            iconlike.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    clickListener.onItemClick(getAdapterPosition(), view , Constants.CLICK_IMAGE_LIKE);
+                }
+            });
+
+            iconcomment.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    clickListener.onItemClick(getAdapterPosition(), view , Constants.CLICK_IMAGE_COMMENT);
+                }
+            });
+
         }
 
         @Override
         public void onClick(View view) {
-          //  clickListener.onItemClick(getAdapterPosition(), view , Constants.CLICK_EVENT);
+            clickListener.onItemClick(getAdapterPosition(), view , Constants.CLICK_EVENT);
+        }
+
+        @Override
+        public void onItemClick(int position, View v ,int commentid) {
+                clickListener.onItemSubClick(commentid, v , position);
+
         }
     }
 
 
     public CommentAdapter(List<CommentModel> commentList) {
         this.commentlist = commentList;
+        type = Constants.TIMELINE;
+    }
+
+    public CommentAdapter(List<CommentModel> commentList, int type) {
+        this.commentlist = commentList;
+        this.type = type;
     }
 
 
@@ -89,8 +146,29 @@ public class CommentAdapter  extends RecyclerView.Adapter<CommentAdapter.MyViewH
         CommentModel commentModel = commentlist.get(i);
         myViewHolder.name.setText(commentModel.getUsername());
         myViewHolder.detail.setText(commentModel.getContent());
-        myViewHolder.date.setText(   Utils.ConvertDiffTime(commentModel.getTimeDiff()));
+        myViewHolder.date.setText(   Utils.ConvertDiffTime(commentModel.getTimeDiff(),myViewHolder.date.getContext()));
+        myViewHolder.numberlike.setText(String.valueOf(commentModel.getNumberLike()));
+        myViewHolder.numbercomment.setText(String.valueOf(commentModel.getNumberSubComment()));
         Drawable mDefaultBackground = myViewHolder.avatar.getContext().getResources().getDrawable(R.drawable.avata_defaul);
+        myViewHolder.subcommentadapter.setdata(commentModel.getSubcomment(),i);
+        if(commentModel.getIslike() ==0)
+        {
+            myViewHolder.iconlike.setBackgroundResource(R.drawable.unlike);
+        }
+        else
+        {
+            myViewHolder.iconlike.setBackgroundResource(R.drawable.like);
+        }
+        if(type == Constants.TIMELINE)
+        {
+            myViewHolder.iconlike.setVisibility(View.VISIBLE);
+            myViewHolder.numberlike.setVisibility(View.VISIBLE);
+        }
+        else
+        {
+            myViewHolder.iconlike.setVisibility(View.GONE);
+            myViewHolder.numberlike.setVisibility(View.GONE);
+        }
         Glide.with(myViewHolder.avatar.getContext()).load(commentModel.getAvarta()).apply(RequestOptions.circleCropTransform().diskCacheStrategy(DiskCacheStrategy.NONE).error(mDefaultBackground)).into(myViewHolder.avatar);
     }
 

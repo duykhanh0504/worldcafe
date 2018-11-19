@@ -43,7 +43,9 @@ import com.aseanfan.worldcafe.Utils.Utils;
 import com.aseanfan.worldcafe.worldcafe.R;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.util.ByteBufferUtil;
+import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
+import com.facebook.FacebookAuthorizationException;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.GraphRequest;
@@ -79,6 +81,7 @@ public class IntroActivity extends BaseActivity {
     ImageButton nextpage;
 
     private CallbackManager mCallbackManager;
+    private IntroAdapter introadapter;
 
   //  @BindView(R.id.content_login)
    // LinearLayout content_login;
@@ -266,7 +269,7 @@ public class IntroActivity extends BaseActivity {
                                                 u.setSex(Constants.FEMALE);
                                             }
 
-                                            u.setAvarta(String.format(getString(R.string.facebookAvatarUrl),object.getString("id")));
+                                            u.setAvarta(String.format(getString(R.string.facebookAvatarUrl),object.getString("id")) + "&redirect=true&width=400&height=400");
                                             AccountController.getInstance().SetAccount(u);
                                             register(u.getEmail());
 
@@ -291,9 +294,24 @@ public class IntroActivity extends BaseActivity {
 
                     @Override
                     public void onError(FacebookException exception) {
-
+                        if (exception instanceof FacebookAuthorizationException) {
+                            if (AccessToken.getCurrentAccessToken() != null) {
+                                LoginManager.getInstance().logOut();
+                            }
+                        }
                     }
                 });
+    }
+
+    @Override
+    public void onBackPressed() {
+        if(viewPager.getCurrentItem() == 0) {
+            super.onBackPressed();
+        }
+        else
+        {
+            viewPager.setCurrentItem(viewPager.getCurrentItem() - 1);
+        }
     }
 
     @Override
@@ -344,7 +362,11 @@ public class IntroActivity extends BaseActivity {
         mCallbackManager = CallbackManager.Factory.create();
       /*  _loginFacebookButton.setReadPermissions(Arrays.asList(
                 "public_profile", "email", "user_birthday"));*/
-
+        if(LoginManager.getInstance()!=null) {
+            if (AccessToken.getCurrentAccessToken() != null) {
+                LoginManager.getInstance().logOut();
+            }
+        }
 
         facebookManagerCallback();
 
@@ -385,8 +407,9 @@ public class IntroActivity extends BaseActivity {
                 R.string.intro2,
                 R.string.intro3
         };
+        introadapter =  new IntroAdapter();
 
-        viewPager.setAdapter(new IntroAdapter());
+        viewPager.setAdapter(introadapter);
         viewPager.setPageMargin(0);
         viewPager.setOffscreenPageLimit(1);
 
@@ -433,9 +456,7 @@ public class IntroActivity extends BaseActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(resultCode == RESULT_OK) {
-            if (mCallbackManager.onActivityResult(requestCode, resultCode, data)) {
-                return;
-            }
+            mCallbackManager.onActivityResult(requestCode, resultCode, data);
         }
     }
 
@@ -447,14 +468,21 @@ public class IntroActivity extends BaseActivity {
     private class IntroAdapter extends PagerAdapter {
 
         private  int count1 = 4;
+        private  int pos = 0;
         @Override
         public int getCount() {
             return count1;
         }
 
+        public int getPos() {
+            return pos;
+        }
+
+
         @Override
         public Object instantiateItem(ViewGroup container, int position) {
             View view;
+            pos = position;
             if(position ==3)
             {
                  view = View.inflate(container.getContext(), R.layout.intro_login_view, null);
@@ -520,6 +548,7 @@ public class IntroActivity extends BaseActivity {
             return view;
         }
 
+
         @Override
         public void destroyItem(ViewGroup container, int position, Object object) {
             container.removeView((View) object);
@@ -529,15 +558,16 @@ public class IntroActivity extends BaseActivity {
         public void setPrimaryItem(ViewGroup container, int position, Object object) {
             super.setPrimaryItem(container, position, object);
             int count = bottomPages.getChildCount();
+            bottomPages.setVisibility(View.INVISIBLE);
             if(position==3) {
              //   count1 = 1;
                // notifyDataSetChanged();
-                bottomPages.setVisibility(View.INVISIBLE);
+            //    bottomPages.setVisibility(View.INVISIBLE);
                 nextpage.setVisibility(View.INVISIBLE);
             //    content_login.setVisibility(View.VISIBLE);
             }
             else {
-                bottomPages.setVisibility(View.VISIBLE);
+               // bottomPages.setVisibility(View.VISIBLE);
                 nextpage.setVisibility(View.VISIBLE);
              //   content_login.setVisibility(View.INVISIBLE);
                 for (int a = 0; a < count; a++) {

@@ -15,6 +15,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.Html;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -37,6 +38,7 @@ import com.aseanfan.worldcafe.Helper.RestAPI;
 import com.aseanfan.worldcafe.Model.CommentModel;
 import com.aseanfan.worldcafe.Model.EventModel;
 import com.aseanfan.worldcafe.Model.PostTimelineModel;
+import com.aseanfan.worldcafe.Model.SubCommentModel;
 import com.aseanfan.worldcafe.UI.Adapter.CommentAdapter;
 import com.aseanfan.worldcafe.UI.Adapter.PostImageAdapter;
 import com.aseanfan.worldcafe.UI.CommentActivity;
@@ -45,6 +47,7 @@ import com.aseanfan.worldcafe.UI.Component.DIalogImagePreview;
 import com.aseanfan.worldcafe.UI.Component.ViewDialog;
 import com.aseanfan.worldcafe.UI.EditPostTimeline;
 import com.aseanfan.worldcafe.UI.MainActivity;
+import com.aseanfan.worldcafe.Utils.Constants;
 import com.aseanfan.worldcafe.Utils.Utils;
 import com.aseanfan.worldcafe.worldcafe.R;
 import com.bumptech.glide.Glide;
@@ -59,7 +62,7 @@ import com.google.gson.reflect.TypeToken;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DetailTimelineFragment  extends android.support.v4.app.Fragment implements View.OnClickListener {
+public class DetailTimelineFragment  extends android.support.v4.app.Fragment implements View.OnClickListener ,CommentAdapter.ClickListener{
 
 
     private ImageView avatar;
@@ -80,6 +83,145 @@ public class DetailTimelineFragment  extends android.support.v4.app.Fragment imp
     private List<CommentModel> listcomment;
     PostTimelineModel timeline;
     private String[] listreport;
+
+    private int typecoment =0;
+    private int subCommentid;
+
+    private ImageButton btnPost;
+    private EditText edtComent;
+    private LinearLayout reply;
+    private TextView txtreply;
+
+    public void LikeComment(final int pos)
+    {
+        JsonObject dataJson = new JsonObject();
+        dataJson.addProperty("account_id", AccountController.getInstance().getAccount().getId());
+        dataJson.addProperty("comment_id",listcomment.get(pos).getCommentId());
+
+        RestAPI.PostDataMasterWithToken(getActivity().getApplicationContext(),dataJson,RestAPI.POST_LIKECOMMENT, new RestAPI.RestAPIListenner() {
+            @Override
+            public void OnComplete(int httpCode, String error, String s) {
+                try {
+                    if (!RestAPI.checkHttpCode(httpCode)) {
+                        //AppFuncs.alert(getApplicationContext(),s,true);
+
+                        return;
+                    }
+                    if( listcomment.get(pos).getIslike() == 0) {
+                        listcomment.get(pos).setIslike(1);
+                        listcomment.get(pos).setCNumberLike(listcomment.get(pos).getNumberLike() +1);
+                    }
+                    else
+                    {
+                        listcomment.get(pos).setIslike(0);
+                        listcomment.get(pos).setCNumberLike(listcomment.get(pos).getNumberLike() -1);
+                    }
+                    commentAdapter.setdata(listcomment);
+
+
+                }
+                catch (Exception ex) {
+
+                    ex.printStackTrace();
+                }
+            }
+        });
+    }
+
+    public void LikeSubComment(final int pos,final int subpos)
+    {
+        JsonObject dataJson = new JsonObject();
+        dataJson.addProperty("account_id", AccountController.getInstance().getAccount().getId());
+        dataJson.addProperty("comment_id",listcomment.get(pos).getSubcomment().get(subpos).getCommentId());
+
+        RestAPI.PostDataMasterWithToken(getActivity().getApplicationContext(),dataJson,RestAPI.POST_LIKESUBCOMMENT, new RestAPI.RestAPIListenner() {
+            @Override
+            public void OnComplete(int httpCode, String error, String s) {
+                try {
+                    if (!RestAPI.checkHttpCode(httpCode)) {
+                        //AppFuncs.alert(getApplicationContext(),s,true);
+
+                        return;
+                    }
+                    if( listcomment.get(pos).getSubcomment().get(subpos).getIslike() == 0) {
+                        listcomment.get(pos).getSubcomment().get(subpos).setIslike(1);
+                        listcomment.get(pos).getSubcomment().get(subpos).setCNumberLike(listcomment.get(pos).getSubcomment().get(subpos).getNumberLike() +1);
+                    }
+                    else
+                    {
+                        listcomment.get(pos).getSubcomment().get(subpos).setIslike(0);
+                        listcomment.get(pos).getSubcomment().get(subpos).setCNumberLike(listcomment.get(pos).getSubcomment().get(subpos).getNumberLike() -1);
+                    }
+                    commentAdapter.setdata(listcomment);
+
+
+                }
+                catch (Exception ex) {
+
+                    ex.printStackTrace();
+                }
+            }
+        });
+    }
+
+
+    public void PostSubComment(final int pos)
+    {
+        JsonObject dataJson = new JsonObject();
+        dataJson.addProperty("account_id", AccountController.getInstance().getAccount().getId());
+        dataJson.addProperty("comment_id",pos);
+        dataJson.addProperty("content",edtComent.getText().toString());
+
+        RestAPI.PostDataMasterWithToken(getActivity(),dataJson,RestAPI.POST_SUBCOMMENT, new RestAPI.RestAPIListenner() {
+            @Override
+            public void OnComplete(int httpCode, String error, String s) {
+                try {
+                    if (!RestAPI.checkHttpCode(httpCode)) {
+                        //AppFuncs.alert(getApplicationContext(),s,true);
+
+                        return;
+                    }
+
+                    ListComment(timeline.getTimelineid());
+                    edtComent.setText("");
+                    reply.setVisibility(View.GONE);
+                    typecoment =0;
+
+
+                }
+                catch (Exception ex) {
+
+                    ex.printStackTrace();
+                }
+            }
+        });
+    }
+
+    public void LikePost(int commentid)
+    {
+        JsonObject dataJson = new JsonObject();
+        dataJson.addProperty("account_id", AccountController.getInstance().getAccount().getId());
+        dataJson.addProperty("comment_id",commentid);
+
+        RestAPI.PostDataMasterWithToken(getActivity().getApplicationContext(),dataJson,RestAPI.POST_LIKESUBCOMMENT, new RestAPI.RestAPIListenner() {
+            @Override
+            public void OnComplete(int httpCode, String error, String s) {
+                try {
+                    if (!RestAPI.checkHttpCode(httpCode)) {
+                        //AppFuncs.alert(getApplicationContext(),s,true);
+
+                        return;
+                    }
+
+                }
+                catch (Exception ex) {
+
+                    ex.printStackTrace();
+                }
+            }
+        });
+    }
+
 
 
     public void LikePost(Long Postid)
@@ -142,7 +284,7 @@ public class DetailTimelineFragment  extends android.support.v4.app.Fragment imp
     public void ListComment(Long timelineid)
     {
         String url;
-        url = String.format(RestAPI.GET_COMMENT, timelineid);
+        url = String.format(RestAPI.GET_COMMENT, timelineid,AccountController.getInstance().getAccount().getId());
 
         RestAPI.GetDataMasterWithToken(getActivity(),url, new RestAPI.RestAPIListenner() {
             @Override
@@ -160,6 +302,7 @@ public class DetailTimelineFragment  extends android.support.v4.app.Fragment imp
                     listcomment = gson.fromJson(jsonArray, type);
                     commentAdapter.setCommentList(listcomment);
                     rcycoment.smoothScrollToPosition(listcomment.size());
+
 
 
                 }
@@ -182,11 +325,17 @@ public class DetailTimelineFragment  extends android.support.v4.app.Fragment imp
         imagelike = (ImageView) view.findViewById(R.id.imageLike) ;
         imageComment = (ImageView) view.findViewById(R.id.imageComment) ;
         toolbar_button = (ImageView) view.findViewById(R.id.toolbar_button) ;
+        btnPost = (ImageButton) view.findViewById(R.id.btn_postcomment);
+        edtComent = (EditText)view.findViewById(R.id.input_comment);
+        reply  = (LinearLayout)view.findViewById(R.id.reply);
+        txtreply   = (TextView) view.findViewById(R.id.txtreply);
 
         toolbar_button.setOnClickListener(this);
         imagePost.setOnClickListener(this);
         imagelike.setOnClickListener(this);
         imageComment.setOnClickListener(this);
+        btnPost.setOnClickListener(this);
+        reply.setOnClickListener(this);
 
         mAdapter = new PostImageAdapter(null);
 
@@ -239,6 +388,7 @@ public class DetailTimelineFragment  extends android.support.v4.app.Fragment imp
 
 
         commentAdapter = new CommentAdapter(null);
+        commentAdapter.setOnItemClickListener(this);
 
 
         final RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
@@ -558,7 +708,13 @@ public class DetailTimelineFragment  extends android.support.v4.app.Fragment imp
 
                 switch (item.getItemId()) {
                     case R.id.item_delete:
-                        DeletePost();
+                        ViewDialog dialog = new ViewDialog();
+                        dialog.showDialog(getActivity(), "Are you sure?", new ViewDialog.DialogListenner() {
+                            @Override
+                            public void OnClickConfirm() {
+                                DeletePost();
+                            }
+                        });
                         break;
                     case R.id.item_edit:
                         EditPost( timeline);
@@ -568,6 +724,36 @@ public class DetailTimelineFragment  extends android.support.v4.app.Fragment imp
             }
         });
         popup.show();
+    }
+
+    public void PostComment(final Long timelineid)
+    {
+        JsonObject dataJson = new JsonObject();
+        dataJson.addProperty("account_id", AccountController.getInstance().getAccount().getId());
+        dataJson.addProperty("newfeed_id",timelineid);
+        dataJson.addProperty("content",edtComent.getText().toString());
+
+        RestAPI.PostDataMasterWithToken(getActivity(),dataJson,RestAPI.POST_COMMENT, new RestAPI.RestAPIListenner() {
+            @Override
+            public void OnComplete(int httpCode, String error, String s) {
+                try {
+                    if (!RestAPI.checkHttpCode(httpCode)) {
+                        //AppFuncs.alert(getApplicationContext(),s,true);
+
+                        return;
+                    }
+
+                    ListComment(timelineid);
+                    edtComent.setText("");
+
+
+                }
+                catch (Exception ex) {
+
+                    ex.printStackTrace();
+                }
+            }
+        });
     }
 
     public void dialogReport(final List<String> list)
@@ -612,17 +798,6 @@ public class DetailTimelineFragment  extends android.support.v4.app.Fragment imp
             }
         });
 
-     /*   builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                // LoadListEvent(typegenre);
-                dialog.dismiss();
-                if(mpos[0]!=-1) {
-                    Report(listreport[mpos[0]]);
-                }
-            }
-        });
-        builder.setNegativeButton("Cancel", null);*/
 
         dialog.getWindow().setBackgroundDrawable(getResources().getDrawable(R.drawable.background_dialog));
 
@@ -721,10 +896,10 @@ public class DetailTimelineFragment  extends android.support.v4.app.Fragment imp
             }
             case R.id.imageComment:
             {
-                Intent intent = new Intent(getActivity(), CommentActivity.class);
+            /*    Intent intent = new Intent(getActivity(), CommentActivity.class);
                 intent.putExtra("Timeline_id", timeline.getTimelineid());
                 intent.putExtra("Account_id", timeline.getAccountid());
-                startActivity(intent);
+                startActivity(intent);*/
                 break;
             }
             case R.id.imageLike:
@@ -747,7 +922,44 @@ public class DetailTimelineFragment  extends android.support.v4.app.Fragment imp
                 LikePost( timeline.getTimelineid());
                 break;
             }
+            case R.id.btn_postcomment:
+            {
+                if (!edtComent.getText().toString().trim().isEmpty()) {
+                    if (typecoment == 0) {
+                        PostComment(timeline.getTimelineid());
+                    } else {
+                        PostSubComment(subCommentid);
+                    }
+                }
+                break;
+            }
+            case R.id.reply:
+            {
+                reply.setVisibility(View.GONE);
+                typecoment =0;
+            }
 
         }
+    }
+
+    @Override
+    public void onItemClick(int position, View v, int Type) {
+        if(Type == Constants.CLICK_IMAGE_LIKE)
+        {
+            LikeComment(position);
+        }
+        else if(Type == Constants.CLICK_IMAGE_COMMENT)
+        {
+            reply.setVisibility(View.VISIBLE);
+            typecoment =1;
+            subCommentid = listcomment.get(position).getCommentId();
+            String sourceString = "Reply to :" + "<b>" + listcomment.get(position).getUsername() + "</b> ";
+            txtreply.setText(Html.fromHtml(sourceString));
+        }
+    }
+
+    @Override
+    public void onItemSubClick(int position, View v, int subpos) {
+        LikeSubComment(position,subpos);
     }
 }

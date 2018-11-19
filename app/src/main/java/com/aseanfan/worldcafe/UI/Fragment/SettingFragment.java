@@ -28,6 +28,7 @@ import com.aseanfan.worldcafe.UI.Adapter.SettingAdapter;
 import com.aseanfan.worldcafe.UI.ChangePassActivity;
 import com.aseanfan.worldcafe.UI.Component.ViewDialog;
 import com.aseanfan.worldcafe.UI.ContactUsActivity;
+import com.aseanfan.worldcafe.UI.ContractActivity;
 import com.aseanfan.worldcafe.UI.EditProfileActivity;
 import com.aseanfan.worldcafe.UI.IntroActivity;
 import com.aseanfan.worldcafe.UI.LoginActivity;
@@ -110,7 +111,7 @@ public class SettingFragment extends android.support.v4.app.Fragment implements 
         if(position == Constants.SETTING_LOGOUT_ROW)
         {
             ViewDialog dialog = new ViewDialog();
-            dialog.showDialog(getActivity(), "Are you sure?", new ViewDialog.DialogListenner() {
+            dialog.showDialogcustom(getActivity(), getResources().getString(R.string.Logout_popup),getResources().getString(R.string.Cancel),getResources().getString(R.string.Logout), new ViewDialog.DialogListenner() {
                 @Override
                 public void OnClickConfirm() {
                     app.Logout();
@@ -122,6 +123,11 @@ public class SettingFragment extends android.support.v4.app.Fragment implements 
         {
            Intent intent = new Intent(getActivity() , ChangePassActivity.class);
            startActivity(intent);
+        }
+        else if(position == Constants.SETTING_CONTRACT_ROW)
+        {
+            Intent intent = new Intent(getActivity() , ContractActivity.class);
+            startActivity(intent);
         }
         else if (position == Constants.SETTING_CONTACT_ROW)
         {

@@ -5,6 +5,8 @@ import android.database.Cursor;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Window;
+import android.view.WindowManager;
 
 import com.aseanfan.worldcafe.App.AccountController;
 import com.aseanfan.worldcafe.Helper.DBHelper;
@@ -24,9 +26,15 @@ public class SplashScreen extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        //Full screen is set for the Window
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        // MobileAds.initialize(this, this.getString(R.string.banner_ad_unit_id));
+
         setContentView(R.layout.activity_splash_screen);
 
-       // MobileAds.initialize(this, this.getString(R.string.banner_ad_unit_id));
 
         int secondsDelayed = 1;
         new Handler().postDelayed(new Runnable() {
@@ -54,6 +62,7 @@ public class SplashScreen extends AppCompatActivity {
                             user.setSchool(cursor.getString(cursor.getColumnIndex(DBHelper.PERSON_SCHOOL)));
                             user.setIntroduction(cursor.getString(cursor.getColumnIndex(DBHelper.PERSON_INTRODUCTION)));
                             user.setInterest(cursor.getString(cursor.getColumnIndex(DBHelper.PERSON_INTEREST)));
+                            user.setJob(cursor.getString(cursor.getColumnIndex(DBHelper.PERSON_JOB)));
                             AccountController.getInstance().SetAccount(user);
                             cursor.moveToFirst();
                             while (cursor.isAfterLast() == false) {

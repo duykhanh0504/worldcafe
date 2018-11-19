@@ -1,5 +1,6 @@
 package com.aseanfan.worldcafe.UI;
 
+import android.annotation.SuppressLint;
 import android.app.SearchManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -24,12 +25,14 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.aseanfan.worldcafe.App.AccountController;
 import com.aseanfan.worldcafe.App.App;
 import com.aseanfan.worldcafe.Helper.DBHelper;
 import com.aseanfan.worldcafe.Helper.NotificationCenter;
+import com.aseanfan.worldcafe.Helper.RestAPI;
 import com.aseanfan.worldcafe.Model.ChatMessageModel;
 import com.aseanfan.worldcafe.Model.EventModel;
 import com.aseanfan.worldcafe.Model.NotificationModel;
@@ -40,6 +43,7 @@ import com.aseanfan.worldcafe.Service.MyFirebaseInstanceIDService;
 import com.aseanfan.worldcafe.Service.SocketService;
 import com.aseanfan.worldcafe.Service.SyncDataService;
 import com.aseanfan.worldcafe.UI.Adapter.CommunityAdapter;
+import com.aseanfan.worldcafe.UI.Component.DialogReview;
 import com.aseanfan.worldcafe.UI.Component.ViewDialog;
 import com.aseanfan.worldcafe.UI.Fragment.CommunityFragment;
 import com.aseanfan.worldcafe.UI.Fragment.DetailCommunityFragment;
@@ -54,11 +58,19 @@ import com.aseanfan.worldcafe.UI.Fragment.RequestMemberFragment;
 import com.aseanfan.worldcafe.UI.Fragment.SettingFragment;
 import com.aseanfan.worldcafe.UI.Fragment.TimelineFragment;
 import com.aseanfan.worldcafe.Utils.Constants;
+import com.aseanfan.worldcafe.Utils.Utils;
 import com.aseanfan.worldcafe.worldcafe.R;
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import com.google.gson.reflect.TypeToken;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import io.socket.client.IO;
 import io.socket.client.Socket;
@@ -101,6 +113,94 @@ public class MainActivity extends BaseActivity implements NotificationCenter.Not
     private  BottomNavigationView navigation;
     private View badge ;
     private LocalBroadcastManager mLocalBroadcastManager;
+    private DialogReview dialog;
+
+    public void PostReview(Long event_id ,int starvote , String comment)
+    {
+        JsonObject dataJson = new JsonObject();
+        dataJson.addProperty("account_id", AccountController.getInstance().getAccount().getId());
+        dataJson.addProperty("value",starvote);
+        dataJson.addProperty("event_id",event_id);
+        dataJson.addProperty("content",comment);
+
+        RestAPI.PostDataMasterWithToken(this,dataJson,RestAPI.POST_VOTEEVENT, new RestAPI.RestAPIListenner() {
+            @Override
+            public void OnComplete(int httpCode, String error, String s) {
+                try {
+                    if (!RestAPI.checkHttpCode(httpCode)) {
+                        //AppFuncs.alert(getApplicationContext(),s,true);
+
+                        return;
+                    }
+                    dialog.cancel();
+                }
+                catch (Exception ex) {
+
+                    ex.printStackTrace();
+                }
+            }
+        });
+    }
+
+    public void CheckVoteEvent()
+    {
+
+        String url =  String.format(RestAPI.GET_CHECKVOTEEVENT,AccountController.getInstance().getAccount().getId(),AccountController.getInstance().getAccount().getId());
+
+        RestAPI.GetDataMasterWithToken(this,url, new RestAPI.RestAPIListenner() {
+            @Override
+            public void OnComplete(int httpCode, String error, String s) {
+                try {
+                    if (!RestAPI.checkHttpCode(httpCode)) {
+                        //AppFuncs.alert(getApplicationContext(),s,true);
+                        return;
+                    }
+                    if(RestAPI.checkExpiredtoken(s))
+                    {
+                        ViewDialog dialog = new ViewDialog();
+                        dialog.showDialogOK(MainActivity.this, "invalid token", new ViewDialog.DialogListenner() {
+                            @Override
+                            public void OnClickConfirm() {
+                                App.mApp.Logout();
+                            }
+                        });
+
+                        return;
+                    }
+                    JsonObject jsons = (new JsonParser()).parse(s).getAsJsonObject();
+                    if(jsons.getAsJsonArray("result")!=null && jsons.getAsJsonArray("result").size() > 0 ) {
+                        JsonObject jsonObject = jsons.getAsJsonArray("result").get(0).getAsJsonObject();
+                        Gson gson = new Gson();
+                        final EventModel u = gson.fromJson(jsonObject, EventModel.class);
+
+                        if (u != null) {
+                            dialog = new DialogReview();
+                            dialog.showDialog(MainActivity.this, u.getEventid(), new DialogReview.DialogListenner() {
+                                @Override
+                                public void OnClickSend(int starvote, Long eventid, String comment) {
+                                    PostReview(eventid, starvote, comment);
+                                }
+                            });
+                        }
+                    }
+
+                //    JsonArray jsonArray = (new JsonParser()).parse(s).getAsJsonObject().getAsJsonArray("result");
+                //    Gson gson = new Gson();
+                   // java.lang.reflect.Type type = new TypeToken<List<EventModel>>(){}.getType();
+
+
+                    // java.lang.reflect.Type type = new TypeToken<List<EventModel>>(){}.getType();
+                    // mlistevent = gson.fromJson(jsonArray, type);
+
+
+                }
+                catch (Exception ex) {
+
+                    ex.printStackTrace();
+                }
+            }
+        });
+    }
 
    /* private Emitter.Listener onConnectError = new Emitter.Listener() {
         @Override
@@ -182,6 +282,7 @@ public class MainActivity extends BaseActivity implements NotificationCenter.Not
         return super.onCreateOptionsMenu(menu);
     }
 */
+    @SuppressLint("RestrictedApi")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -237,6 +338,7 @@ public class MainActivity extends BaseActivity implements NotificationCenter.Not
 
         BottomNavigationMenuView bottomNavigationMenuView =
                 (BottomNavigationMenuView) navigation.getChildAt(0);
+        bottomNavigationMenuView.setItemIconSize(Utils.convertDpToPixel(20,this));
         View v = bottomNavigationMenuView.getChildAt(3);
         BottomNavigationItemView itemView = (BottomNavigationItemView) v;
 
@@ -260,6 +362,17 @@ public class MainActivity extends BaseActivity implements NotificationCenter.Not
 
         SyncDataService.listmessage(AccountController.getInstance().getAccount().getId(),getApplicationContext());
         SyncDataService.syncPush(AccountController.getInstance().getAccount().getId(),getApplicationContext(), fromlogin);
+
+        new Timer().schedule(
+                new TimerTask(){
+
+                    @Override
+                    public void run(){
+
+                        CheckVoteEvent();
+                    }
+
+                }, 3000);
 
        // new SyncDataService(getApplicationContext()).execute(AccountController.getInstance().getAccount().getId());
 
@@ -576,7 +689,7 @@ public class MainActivity extends BaseActivity implements NotificationCenter.Not
     public void BackKey()
     {
         ViewDialog dialog = new ViewDialog();
-        dialog.showDialog(MainActivity.this, "Are you sure exit", new ViewDialog.DialogListenner() {
+        dialog.showDialogcustom(MainActivity.this, getResources().getString(R.string.Logout_popup),getResources().getString(R.string.Cancel),getResources().getString(R.string.Logout), new ViewDialog.DialogListenner() {
             @Override
             public void OnClickConfirm() {
                 finish();

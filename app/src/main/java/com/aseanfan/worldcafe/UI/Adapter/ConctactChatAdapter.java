@@ -40,6 +40,7 @@ public class ConctactChatAdapter  extends RecyclerView.Adapter<ConctactChatAdapt
         public TextView name;
         public TextView date;
         public ImageView avatar;
+        public TextView message;
 
         public MyViewHolder(View view) {
             super(view);
@@ -47,6 +48,7 @@ public class ConctactChatAdapter  extends RecyclerView.Adapter<ConctactChatAdapt
             name = (TextView) view.findViewById(R.id.txtname);
             date = (TextView) view.findViewById(R.id.txtdate);
             avatar = (ImageView) view.findViewById(R.id.imageAvatar);
+            message = (TextView) view.findViewById(R.id.txtmessage);
             view.setOnClickListener(this);
 
 
@@ -82,8 +84,9 @@ public class ConctactChatAdapter  extends RecyclerView.Adapter<ConctactChatAdapt
     public void onBindViewHolder(@NonNull ConctactChatAdapter.MyViewHolder myViewHolder, int i) {
         ChatModel contact = contactlist.get(i);
         myViewHolder.name.setText(contact.getUsername());
-        myViewHolder.date.setText(Utils.ConvertDiffTime(contact.getTimediff()));
+        myViewHolder.date.setText(Utils.ConvertDiffTime(contact.getTimediff(),myViewHolder.date.getContext()));
          Drawable mDefaultBackground = myViewHolder.avatar.getContext().getResources().getDrawable(R.drawable.avata_defaul);
+        myViewHolder.message.setText(contact.getLastMessage());
         Glide.with(myViewHolder.avatar.getContext()).load(contact.getAvarta()).apply(RequestOptions.circleCropTransform().diskCacheStrategy(DiskCacheStrategy.NONE).error(mDefaultBackground)).into(myViewHolder.avatar);
     }
 

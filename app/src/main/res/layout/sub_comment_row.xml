@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:layout_marginTop="10dp">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/gray_app"></FrameLayout>
+
+
+    <RelativeLayout
+        android:id="@+id/container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="73dp"
+        android:layout_marginRight="23dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        >
+        <ImageView
+            android:id="@+id/imageAvatar"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginTop="5dp"
+            android:layout_alignParentLeft="true"
+            android:contentDescription="TODO"
+            android:layout_marginRight="5dp"/>
+
+        <TextView
+            android:id="@+id/txtname"
+            android:layout_gravity="left|center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="TextView"
+            android:layout_marginTop="2dp"
+            android:layout_toRightOf="@+id/imageAvatar"/>
+        <TextView
+            android:id="@+id/txtcontent"
+            android:layout_gravity="left|center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_toRightOf="@+id/imageAvatar"
+            android:layout_below="@+id/txtname"
+            android:text="TextView" />
+
+        <TextView
+            android:id="@+id/txtdate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_alignParentEnd="true"
+            android:text="TextView"
+            android:layout_marginTop="2dp"
+            android:textAlignment="textEnd"
+            android:layout_gravity="left|center"
+            tools:ignore="RtlCompat" />
+
+        <LinearLayout
+            android:layout_below="@+id/txtcontent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp"
+            android:gravity="right">
+
+
+
+            <ImageView
+                android:id="@+id/imageLike"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_gravity="center|right"
+                android:background="@drawable/unlike"
+                android:contentDescription="TODO"
+                android:layout_marginRight="@dimen/space_icon_text"/>
+            <TextView
+                android:id="@+id/textLike"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginRight="@dimen/margin_left_right"
+                android:layout_marginLeft="5dp" />
+
+
+            <ImageView
+                android:id="@+id/imageComment"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_gravity="center"
+                android:background="@drawable/comment"
+                android:layout_marginRight="@dimen/space_icon_text"
+                android:contentDescription="TODO" />
+            <TextView
+                android:id="@+id/textComment"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text=""
+                android:layout_marginLeft="5dp" />
+
+        </LinearLayout>
+    </RelativeLayout>
+
+
+
+</LinearLayout>

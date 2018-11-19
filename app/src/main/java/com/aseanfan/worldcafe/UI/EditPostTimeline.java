@@ -116,9 +116,9 @@ public class EditPostTimeline extends AppCompatActivity {
             radgroupquestion.setVisibility(View.GONE);
             post.setGenre(-1);
         } else if(checkedRadioId== R.id.radquestion ) {
-            post.setGenre(1);
-            radgroupquestion.setVisibility(View.VISIBLE);
-            radgroupquestion.check(R.id.radfriend);
+            post.setType(1);
+         //   radgroupquestion.setVisibility(View.VISIBLE);
+          //  radgroupquestion.check(R.id.radfriend);
         }
     }
 

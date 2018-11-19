@@ -32,7 +32,7 @@
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
                 android:textColor="#FFF"
-                android:text="Edit"/>
+                android:text="@string/edit"/>
         </android.support.v7.widget.Toolbar>
 
 
@@ -75,14 +75,14 @@
             android:id="@+id/radtimeline"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Timeline"
+            android:text="@string/title_timeline"
             android:layout_marginRight="100dp"/>
 
         <RadioButton
             android:id="@+id/radquestion"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="question" />
+            android:text="@string/title_question" />
 
 
     </RadioGroup>

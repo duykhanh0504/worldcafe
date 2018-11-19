@@ -10,19 +10,24 @@
         android:id="@+id/background_image"
         android:scaleType="centerCrop"/>
 
-    <ScrollView
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent">
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:weightSum="2">
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1.35"></FrameLayout>
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingTop="56dp"
         android:paddingLeft="24dp"
         android:paddingRight="24dp"
-        android:layout_marginTop="210dp"
+        android:gravity="bottom"
+        android:layout_weight="0.65"
        >
-
         <Button
             android:id="@+id/btn_facebook_login"
             android:layout_width="fill_parent"
@@ -99,5 +104,5 @@
             android:textSize="16dip"/>
 
     </LinearLayout>
-    </ScrollView>
+        </LinearLayout>
 </FrameLayout>

@@ -149,7 +149,7 @@
         <activity
             android:name="com.aseanfan.worldcafe.UI.EditPostTimeline"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden" />
+            android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
             android:name="com.aseanfan.worldcafe.UI.CommentEventActivity"
             android:screenOrientation="portrait"
@@ -163,9 +163,11 @@
             android:name="com.aseanfan.worldcafe.UI.EditEventActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
-        <activity android:name="com.aseanfan.worldcafe.UI.ContactUsActivity"
+        <activity
+            android:name="com.aseanfan.worldcafe.UI.ContactUsActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden" ></activity>
+            android:windowSoftInputMode="stateHidden" />
+        <activity android:name="com.aseanfan.worldcafe.UI.ContractActivity"></activity>
     </application>
 
 </manifest>

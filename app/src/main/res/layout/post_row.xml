@@ -8,10 +8,7 @@
     android:background="@drawable/timelinebackground"
 
    >
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/silver"></FrameLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -125,6 +122,10 @@
                 android:contentDescription="TODO" />
 
         </LinearLayout>
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/gray_app"></FrameLayout>
     </LinearLayout>
 
 </FrameLayout>

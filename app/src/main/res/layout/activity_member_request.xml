@@ -8,20 +8,40 @@
     tools:context="com.aseanfan.worldcafe.UI.ListFollowActivity"
     android:background="@color/white">
 
-    <android.support.design.widget.AppBarLayout
-        android:id="@+id/appbar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
-
     <android.support.v7.widget.Toolbar
         android:id="@+id/app_toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="?attr/colorPrimary"
         app:layout_scrollFlags="scroll|enterAlways|snap"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
-    </android.support.design.widget.AppBarLayout>
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        android:elevation="0dp">
+
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginRight="20dp">
+            <ImageView
+                android:id="@+id/btncancel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:minHeight="30dp"
+                android:background="@drawable/ic_back"
+                android:foregroundGravity="left"
+                android:layout_gravity="center|left"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:text="@string/ShowListMember"
+                android:gravity="center"
+                android:textColor="@color/white"
+                android:layout_weight="1"
+                />
+        </FrameLayout>
+
+    </android.support.v7.widget.Toolbar>
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">

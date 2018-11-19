@@ -24,6 +24,7 @@ import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.aseanfan.worldcafe.App.AccountController;
 import com.aseanfan.worldcafe.Helper.DBHelper;
@@ -100,7 +101,7 @@ public class EditEventActivity extends AppCompatActivity {
 
     private SpinnerCityAdapter adaptercity;
 
-    String[] arraytypetime={"week","month","year"};
+    String[] arraytypetime;
 
     private int typeCreate = Constants.EVENT_CREATE;
 
@@ -116,7 +117,7 @@ public class EditEventActivity extends AppCompatActivity {
             dataJson.addProperty("is_private",typeupdate);
             if(event.getPrivate() ==0)
             {
-                privatepost.setText("Public");
+                privatepost.setText(getResources().getString(R.string.Public));
             }
             else
             {
@@ -177,7 +178,8 @@ public class EditEventActivity extends AppCompatActivity {
                     {
                         str = "Delete Successful";
                     }
-                    dialog.showDialogCancel(EditEventActivity.this, str);
+                 //   dialog.showDialogCancel(EditEventActivity.this, str);
+                    Toast.makeText(getBaseContext(),str, Toast.LENGTH_LONG).show();
 
                 } catch (Exception ex) {
 
@@ -214,6 +216,8 @@ public class EditEventActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_event);
+
+        arraytypetime= new String[]{this.getResources().getString(R.string.Week_once), this.getResources().getString(R.string.Month_once), this.getResources().getString(R.string.Year_once)};
 
         initView();
 
@@ -394,11 +398,11 @@ public class EditEventActivity extends AppCompatActivity {
            public void onClick(View view) {
                if(event.getPrivate() ==1)
                {
-                   update(event,UPDATE_PRIVATE);
+                   update(event, UPDATE_PUBLIC);
                }
                else
                {
-                   update(event,UPDATE_PUBLIC);
+                   update(event,UPDATE_PRIVATE);
                }
            }
        });
@@ -458,8 +462,16 @@ public class EditEventActivity extends AppCompatActivity {
                             @Override
                             public void onDateSet(DatePicker view, int year,
                                                   int monthOfYear, int dayOfMonth) {
-
-                                scheduel.setText(dayOfMonth + "-" + (monthOfYear + 1) + "-" + year);
+                                String date = dayOfMonth + "-" + (monthOfYear + 1) + "-" + year;
+                                if(Utils.Comparedate(date) == true)
+                                {
+                                    scheduel.setText(date);
+                                }
+                                else
+                                {
+                                    scheduel.setText("");
+                                    scheduel.setHint("The Start date must be greater than the current date");
+                                }
                             }
                         }, mYear, mMonth, mDay);
                 datePickerDialog.show();
@@ -542,7 +554,7 @@ public class EditEventActivity extends AppCompatActivity {
         }
         else
         {
-            privatepost.setText("Public");
+            privatepost.setText(getResources().getString(R.string.Public));
         }
 
         String formattedString;

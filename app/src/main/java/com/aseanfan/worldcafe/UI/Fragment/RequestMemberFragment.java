@@ -10,6 +10,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.aseanfan.worldcafe.App.AccountController;
@@ -36,6 +37,8 @@ public class RequestMemberFragment extends android.support.v4.app.Fragment  {
     private RecyclerView rcyview;
 
     private RequestMemberAdapter mAdapter;
+
+    private ImageView btncancel;
 
     public void Listuser(Long accountid , Long eventid)
     {
@@ -71,11 +74,11 @@ public class RequestMemberFragment extends android.support.v4.app.Fragment  {
         });
     }
 
-    public void AcceptRejectMember(final RequestUserModel user , final int status)
+    public void AcceptRejectMember(final int pos , final int status)
     {
         JsonObject dataJson = new JsonObject();
         dataJson.addProperty("account_id", AccountController.getInstance().getAccount().getId());
-        dataJson.addProperty("id", user.getRequestId());
+        dataJson.addProperty("id", listuser.get(pos).getRequestId());
         dataJson.addProperty("status",status);
 
         RestAPI.PostDataMasterWithToken(getActivity(),dataJson,RestAPI.POST_ACCEPTREJECTMEMBER, new RestAPI.RestAPIListenner() {
@@ -87,7 +90,9 @@ public class RequestMemberFragment extends android.support.v4.app.Fragment  {
 
                         return;
                     }
-                    user.setStatus(status);
+                    //listuser.get(pos).setStatus(status);
+                    listuser.remove(listuser.get(pos));
+                    mAdapter.setData(listuser);
                     mAdapter.notifyDataSetChanged();
                    /* JsonArray jsonArray = (new JsonParser()).parse(s).getAsJsonObject().getAsJsonArray("result");
                     Gson gson = new Gson();
@@ -112,6 +117,8 @@ public class RequestMemberFragment extends android.support.v4.app.Fragment  {
     {
         listuser= new ArrayList<>();
         rcyview = (RecyclerView)view.findViewById(R.id.listRequsetmember);
+
+        btncancel = (ImageView)view.findViewById(R.id.btncancel);
 
         mAdapter = new RequestMemberAdapter(null);
 
@@ -146,12 +153,12 @@ public class RequestMemberFragment extends android.support.v4.app.Fragment  {
                 public void onItemClick(int position, View v, int type) {
                     if(type == Constants.MEMBER_ACCEPT)
                     {
-                        AcceptRejectMember(listuser.get(position),Constants.MEMBER_ACCEPT);
+                        AcceptRejectMember(position,Constants.MEMBER_ACCEPT);
 
                     }
                     else if(type == Constants.MEMBER_REJECT)
                     {
-                        AcceptRejectMember(listuser.get(position),Constants.MEMBER_REJECT);
+                        AcceptRejectMember(position,Constants.MEMBER_REJECT);
                     }
                     else if(type == -1)
                     {
@@ -159,6 +166,13 @@ public class RequestMemberFragment extends android.support.v4.app.Fragment  {
                     }
                 }
             });
+
+        btncancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ((MainActivity) getActivity()).GoToback();
+            }
+        });
 
 
         return view;

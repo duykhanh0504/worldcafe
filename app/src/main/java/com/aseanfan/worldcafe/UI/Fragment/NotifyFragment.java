@@ -136,7 +136,9 @@ public class NotifyFragment extends android.support.v4.app.Fragment {
                                 notify.getType() == 3|| notify.getType() == 4||notify.getType() == 5||
                                 notify.getType() == 6||notify.getType() == 7||notify.getType() == 9||notify.getType() == 10)
                         {
-                            notify.setObjectId(json.get("data").getAsJsonObject().get("objectId").getAsLong());
+                            if(json.get("data").getAsJsonObject().get("objectId") !=null) {
+                                notify.setObjectId(json.get("data").getAsJsonObject().get("objectId").getAsLong());
+                            }
                         }
                         listnotify.add(notify);
                     }

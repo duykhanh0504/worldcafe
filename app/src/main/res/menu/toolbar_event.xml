@@ -4,9 +4,9 @@
     >
     <item
         android:id="@+id/item_edit"
-        android:title="Edit" />
+        android:title="@string/edit" />
     <item
         android:id="@+id/item_listmember"
-        android:title="ShowListMember" />
+        android:title="@string/ShowListMember" />
 
 </menu>

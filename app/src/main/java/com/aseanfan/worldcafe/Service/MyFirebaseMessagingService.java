@@ -80,7 +80,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         intent.putExtras(bundle);
 
         JsonObject jsons = (new JsonParser()).parse(data.get("key")).getAsJsonObject();
-        int push_id = Integer.parseInt(data.get("push_id"));
+        //implement later
+        int push_id = -1;//Integer.parseInt(data.get("push_id"));
 
         Drawable mDefaultBackground = MyFirebaseMessagingService.this.getResources().getDrawable(R.drawable.avata_defaul);
 

@@ -30,6 +30,7 @@ import com.aseanfan.worldcafe.App.App;
 import com.aseanfan.worldcafe.Model.AreaModel;
 import com.aseanfan.worldcafe.Model.CityModel;
 import com.aseanfan.worldcafe.UI.Component.MySpannable;
+import com.aseanfan.worldcafe.worldcafe.R;
 
 import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
@@ -74,8 +75,15 @@ public class Utils {
        // canvas.drawRect(0F, 0F, (float) width, (float) height, paint2);
         Paint paint = new Paint();
         paint.setColor(Color.WHITE);
-        paint.setTextSize(60);
-        canvas.drawText("+"+name, width - convertDpToPixel(10,context), height - convertDpToPixel(15,context), paint);
+        if(Integer.valueOf(name)>9) {
+            paint.setTextSize(50);
+            canvas.drawText("+" + name, width - convertDpToPixel(40, context), height - convertDpToPixel(15, context), paint);
+        }
+        else
+        {
+            paint.setTextSize(60);
+            canvas.drawText("+" + name, width - convertDpToPixel(30, context), height - convertDpToPixel(15, context), paint);
+        }
         return bitmap;
     }
 
@@ -125,6 +133,25 @@ public class Utils {
         return listcity;
     }
 
+    public static boolean Comparedate( String date)
+    {
+        boolean result = false;
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+        Date strDate = null;
+        try {
+            strDate = sdf.parse(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        if (System.currentTimeMillis() > strDate.getTime()) {
+            result = false;
+        }
+        else{
+            result = true;
+        }
+        return  result;
+    }
+
     public static int getAge(String dobString){
 
         Date date = null;
@@ -160,6 +187,25 @@ public class Utils {
         }
         return age;
     }
+
+    public static String ConvertUpdateDateEvent(String s)
+    {
+        if(s==null)
+            return "";
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss",Locale.US);
+        DateFormat targetFormat = new SimpleDateFormat("yyyy/MM/dd", Locale.getDefault());
+        String formattedDate = null;
+        Date convertedDate = new Date();
+        try {
+            convertedDate = dateFormat.parse(s);
+            formattedDate = targetFormat.format(convertedDate);
+        } catch (ParseException e) {
+// TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return formattedDate;
+    }
+
 
     public static String ConvertDateEventNonDetail(String s)
     {
@@ -280,7 +326,7 @@ public class Utils {
         return false;
     }
 
-    public static String ConvertDiffTime(String diff)
+    public static String ConvertDiffTime(String diff,Context context)
     {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm:ss");
         Date date1;
@@ -293,19 +339,19 @@ public class Utils {
              int second = (int) date1.getSeconds();
              if(days-1 > 0)
              {
-                 return (days-1) + " days ago";
+                 return (days-1) + " " + context.getResources().getString(R.string.days_ago);
              }
             else if(hours > 0)
             {
-                return hours + " hours ago";
+                return hours + " " + context.getResources().getString(R.string.hours_ago);
             }
             else if(mins > 0)
             {
-                return mins + " minutes ago";
+                return mins + " " + context.getResources().getString(R.string.minutes_ago);
             }
              else if(second > 5)
              {
-                 return second + " seconds ago";
+                 return second + " " + context.getResources().getString(R.string.seconds_ago);
              }
 
 
@@ -313,7 +359,7 @@ public class Utils {
             e.printStackTrace();
         }
 
-        return "a moment ago";
+        return context.getResources().getString(R.string.a_moment_ago);
 
     }
 /*

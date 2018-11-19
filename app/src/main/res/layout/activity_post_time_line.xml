@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context="com.aseanfan.worldcafe.UI.PostTimeLineActivity"
+    android:weightSum="2"
 >
 
 
@@ -32,11 +33,17 @@
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
                 android:textColor="#FFF"
-                android:text="Share"/>
+                android:text="@string/Share"/>
         </android.support.v7.widget.Toolbar>
 
 
     </android.support.design.widget.AppBarLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_weight="2.0">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -75,14 +82,14 @@
             android:id="@+id/radtimeline"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Timeline"
+            android:text="@string/title_timeline"
             android:layout_marginRight="100dp"/>
 
         <RadioButton
             android:id="@+id/radquestion"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="question" />
+            android:text="@string/title_question" />
 
 
     </RadioGroup>
@@ -153,27 +160,26 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/margin_left_right"/>
-
+    </LinearLayout>
     <LinearLayout
-        android:layout_marginRight="@dimen/margin_left_right"
-        android:layout_marginLeft="@dimen/margin_left_right"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="vertical"
+        android:gravity="center|left">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/gray_app"></FrameLayout>
         <ImageButton
+            android:layout_marginLeft="23dp"
             android:id="@+id/btn_select"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:background="@drawable/ic_image"
             android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
             android:layout_marginRight="@dimen/margin_left_right"/>
-        <ImageButton
-            android:id="@+id/btn_attach"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:background="@drawable/attach"
-            android:layout_marginTop="5dp"
-            android:visibility="gone"/>
     </LinearLayout>
 
 

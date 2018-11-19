@@ -78,7 +78,7 @@
         android:minHeight="30dp"
         android:textColor="@color/white"
         android:background="@drawable/round_button"
-        android:text="Done" />
+        android:text="@string/done" />
 </RelativeLayout>
 
 </RelativeLayout>

@@ -6,6 +6,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
+import com.aseanfan.worldcafe.App.AccountController;
 import com.aseanfan.worldcafe.Model.PostTimelineModel;
 import com.aseanfan.worldcafe.Model.UserModel;
 import com.aseanfan.worldcafe.UI.Fragment.AlbumFragment;
@@ -56,7 +57,9 @@ public class FragmentMyPagerAdapter  extends FragmentPagerAdapter {
     public void setdata (UserModel user)
     {
         this.user = user;
-        myPageDetailFragment.update(user);
+        if(user.getId().equals(AccountController.getInstance().getAccount().getId())) {
+            myPageDetailFragment.update(user);
+        }
         notifyDataSetChanged();
     }
     @Override
@@ -76,6 +79,7 @@ public class FragmentMyPagerAdapter  extends FragmentPagerAdapter {
             bundle.putString("interested",user.getInterest());
             bundle.putString("school",user.getSchool());
             bundle.putString("company",user.getCompany());
+            bundle.putInt("place",user.getCity());
 
             myPageDetailFragment = new MyPageDetailFragment();
             myPageDetailFragment.setArguments(bundle);

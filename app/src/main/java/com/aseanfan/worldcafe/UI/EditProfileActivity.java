@@ -55,6 +55,7 @@ import java.util.List;
 public class EditProfileActivity extends AppCompatActivity {
 
     private FrameLayout cover;
+    private FrameLayout header;
     private ImageView avatar;
     private EditText username;
     private EditText introduce;
@@ -74,6 +75,7 @@ public class EditProfileActivity extends AppCompatActivity {
     List<Integer> interest = new ArrayList<>();
 
     private static List<AreaModel> listarea = new ArrayList<>();
+    private static List<CityModel> listcity = new ArrayList<>();
 
     private static  int countryid = 1;
     private SpinnerCityAdapter adaptercity;
@@ -339,9 +341,12 @@ public class EditProfileActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 countryid = listarea.get(i).getid();
-                getlistcity(countryid);
-                adaptercity.setdata( getlistcity(countryid));
-                user.setCountry(countryid);
+               // getlistcity(countryid);
+                if(countryid != user.getCountry()) {
+                    listcity = getlistcity(countryid);
+                    adaptercity.setdata( listcity);
+                    user.setCountry(countryid);
+                }
             }
 
             @Override
@@ -350,15 +355,19 @@ public class EditProfileActivity extends AppCompatActivity {
             }
         });
 
+        listcity = getlistcity(user.getCountry());
+
         adaptercity = new SpinnerCityAdapter(this,
-                android.R.layout.simple_spinner_item,getlistcity(countryid));
+                android.R.layout.simple_spinner_item,listcity);
 
         adaptercity.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         city.setAdapter(adaptercity);
         city.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                user.setCity(getlistcity(countryid).get(i).getid());
+                if(listcity.get(i).getid() != user.getCity()) {
+                    user.setCity(listcity.get(i).getid());
+                }
             }
 
             @Override
@@ -477,6 +486,12 @@ public class EditProfileActivity extends AppCompatActivity {
             }
         });
 
+        header.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+               // int i =0;
+            }
+        });
         cover.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -519,6 +534,7 @@ public class EditProfileActivity extends AppCompatActivity {
         radlocal = (CheckBox) this.findViewById(R.id.radlocal);
         radbusiness = (CheckBox) this.findViewById(R.id.radbusiness);
         profession = (EditText) this.findViewById(R.id.edtProfession);
+        header = (FrameLayout)this.findViewById(R.id.app_toolbar);
 
     }
 

@@ -220,7 +220,7 @@ public class CommunityAdapter extends RecyclerView.Adapter<CommunityAdapter.MyVi
         }
         else
         {
-            holder.background.setBackgroundColor(holder.background.getContext().getResources().getColor(R.color.colorPrimary));
+            holder.background.setBackgroundDrawable(holder.background.getContext().getResources().getDrawable(R.drawable.background_event));
         }
 
     }

@@ -155,6 +155,10 @@ public class CommunityFragment extends Fragment implements NotificationCenter.No
         if (id == R.id.buttonarea) {
             AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
           //  builder.setTitle("Choose some areas");
+            for(int i : area)
+            {
+                checkedItems[i-1] = true;
+            }
 
             builder.setCancelable(true);
             builder.setMultiChoiceItems(listcity, checkedItems, new DialogInterface.OnMultiChoiceClickListener() {
@@ -173,7 +177,7 @@ public class CommunityFragment extends Fragment implements NotificationCenter.No
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                    // LoadListEvent(typegenre);
-                    adapter.loadfragmentevent(typegenre-1,area,keyword,typeSort);
+                    adapter.loadfragmentevent(typegenre,area,keyword,typeSort);
                 }
             });
             builder.setNegativeButton("Cancel", null);
@@ -330,6 +334,8 @@ public class CommunityFragment extends Fragment implements NotificationCenter.No
 
             }
         });
+        area.clear();
+        area.add(AccountController.getInstance().getAccount().getCity());
 
         return view;
     }

@@ -39,6 +39,7 @@ public class FollowAdapter  extends RecyclerView.Adapter<FollowAdapter.MyViewHol
         public TextView name;
         public TextView date;
         public ImageView avatar;
+        public TextView job;
 
 
         public MyViewHolder(View view) {
@@ -47,6 +48,7 @@ public class FollowAdapter  extends RecyclerView.Adapter<FollowAdapter.MyViewHol
             name = (TextView) view.findViewById(R.id.txtname);
             date = (TextView) view.findViewById(R.id.txtdate);
             avatar = (ImageView) view.findViewById(R.id.imageAvatar);
+            job = (TextView) view.findViewById(R.id.txtJob);
             view.setOnClickListener(this);
 
 
@@ -82,6 +84,9 @@ public class FollowAdapter  extends RecyclerView.Adapter<FollowAdapter.MyViewHol
     public void onBindViewHolder(@NonNull FollowAdapter.MyViewHolder myViewHolder, int i) {
         FollowModel follow = followlist.get(i);
         myViewHolder.name.setText(follow.getUsername());
+        if(follow.getJob()!=null && !follow.getJob().isEmpty()) {
+            myViewHolder.job.setText(follow.getJob());
+        }
         Drawable mDefaultBackground = myViewHolder.avatar.getContext().getResources().getDrawable(R.drawable.avata_defaul);
         Glide.with(myViewHolder.avatar.getContext()).load(follow.getAvarta()).apply(RequestOptions.circleCropTransform().diskCacheStrategy(DiskCacheStrategy.NONE).error(mDefaultBackground)).into(myViewHolder.avatar);
     }

@@ -1,5 +1,6 @@
 package com.aseanfan.worldcafe.UI.Fragment;
 
+import android.media.Image;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -8,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.aseanfan.worldcafe.App.AccountController;
@@ -31,6 +33,8 @@ public class MemberEventFragment extends android.support.v4.app.Fragment  {
     private RecyclerView rcyview;
 
     private MemberEventAdapter mAdapter;
+
+    private ImageView btncancel;
 
     public void Listuser(Long accountid , Long eventid)
     {
@@ -72,6 +76,7 @@ public class MemberEventFragment extends android.support.v4.app.Fragment  {
     {
         listuser= new ArrayList<>();
         rcyview = (RecyclerView)view.findViewById(R.id.listRequsetmember);
+        btncancel = (ImageView)view.findViewById(R.id.btncancel);
 
         mAdapter = new MemberEventAdapter(null);
 
@@ -105,6 +110,13 @@ public class MemberEventFragment extends android.support.v4.app.Fragment  {
             @Override
             public void onItemClick(int position, View v) {
                 ((MainActivity) getActivity()).callFriendPage(listuser.get(position).getId());
+            }
+        });
+
+        btncancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ((MainActivity) getActivity()).GoToback();
             }
         });
 

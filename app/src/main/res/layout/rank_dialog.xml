@@ -95,29 +95,29 @@
                 android:layout_gravity="center"
                 android:gravity="center">
                 <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="45.5dp"
+                    android:layout_height="38dp"
                     android:background="@drawable/ic_rank1"/>
                 <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="45.5dp"
+                    android:layout_height="38dp"
                     android:background="@drawable/ic_rank2"
-                    android:layout_marginLeft="10dp"/>
+                    android:layout_marginLeft="15dp"/>
                 <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="45.5dp"
+                    android:layout_height="38dp"
                     android:background="@drawable/ic_rank3"
-                    android:layout_marginLeft="10dp"/>
+                    android:layout_marginLeft="15dp"/>
                 <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="45.5dp"
+                    android:layout_height="38dp"
                     android:background="@drawable/ic_rank4"
-                    android:layout_marginLeft="10dp"/>
+                    android:layout_marginLeft="15dp"/>
                 <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="45.5dp"
+                    android:layout_height="38dp"
                     android:background="@drawable/ic_rank5"
-                    android:layout_marginLeft="10dp"/>
+                    android:layout_marginLeft="15dp"/>
             </LinearLayout>
 
             <LinearLayout

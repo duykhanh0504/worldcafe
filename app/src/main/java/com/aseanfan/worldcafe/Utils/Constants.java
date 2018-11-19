@@ -15,7 +15,7 @@ public class Constants {
     public static int PAGE_CHANGEPASS = 5;
 
 
- public static int MALE = 1;
+    public static int MALE = 1;
     public static int FEMALE = 2;
 
     public static int CLICK_TIMELINE= 0;
@@ -24,6 +24,7 @@ public class Constants {
     public static int CLICK_AVATAR = 3;
     public static int CLICK_IMAGE_MENU = 4;
     public static int CLICK_IMAGE_PREVIEW = 5;
+    public static int CLICK_IMAGE_LIKE_SUB = 6;
 
     public static  String SEND_ACTION = "SEND_ACTION";
     public static  String REICEVE_ACTION = "REICEVE_ACTION";
@@ -58,6 +59,9 @@ public class Constants {
     public static  int SETTING_VERSION_ROW = 4;
     public static  int SETTING_EMPTY_ROW = 5;
     public static  int SETTING_LOGOUT_ROW = 6;
+
+    public static int EVENT = 0;
+    public static int TIMELINE = 1;
 
 
 }

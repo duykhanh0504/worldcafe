@@ -9,7 +9,7 @@
     android:background="@color/white"
     app:layout_scrollFlags="scroll|enterAlways"
     android:orientation="vertical"
-
+    android:weightSum="2"
     tools:context="com.aseanfan.worldcafe.UI.CommentActivity">
 
 
@@ -39,11 +39,14 @@
 
     <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:layout_weight="2"
+       >
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
+        android:weightSum="2"
         >
 
     <FrameLayout
@@ -130,6 +133,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_marginRight="@dimen/margin_left_right"
+                    android:layout_marginLeft="5dp"
                     android:text="like" />
 
 
@@ -147,6 +151,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_marginRight="@dimen/space_icon_text"
+                    android:layout_marginLeft="5dp"
                     android:text="comment" />
 
             </LinearLayout>
@@ -154,10 +159,12 @@
 
 
     </FrameLayout>
+
+
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="0.5">
+        android:layout_height="match_parent"
+        android:layout_weight="0.6">
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/listComment"
@@ -175,5 +182,65 @@
     </FrameLayout>
     </LinearLayout>
     </android.support.v4.widget.NestedScrollView>
+
+    <LinearLayout
+        android:id="@+id/reply"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/background_line_top"
+        android:layout_gravity="bottom"
+        android:visibility="gone">
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:background="@drawable/ic_cancel"/>
+        <TextView
+            android:id="@+id/txtreply"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Reply to"/>
+    </LinearLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="10dp"
+        android:background="@color/gray_app">
+    </FrameLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_alignParentBottom="true"
+        android:background="@color/white"
+        android:layout_gravity="bottom">
+
+
+        <EditText
+            android:privateImeOptions="nm"
+            android:id="@+id/input_comment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/comment_cursor"
+            android:background="@color/white"
+            android:layout_marginLeft="10dp"
+            android:layout_gravity="center"
+            android:layout_weight="1.9"
+            />
+
+        <ImageButton
+            android:id="@+id/btn_postcomment"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_gravity="right|top"
+            android:paddingHorizontal="10dp"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/ic_send"
+            />
+    </LinearLayout>
 
 </LinearLayout>

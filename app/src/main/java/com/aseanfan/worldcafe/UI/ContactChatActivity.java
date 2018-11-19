@@ -7,6 +7,9 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 
 import com.aseanfan.worldcafe.App.AccountController;
@@ -35,6 +38,8 @@ public class ContactChatActivity extends AppCompatActivity implements ConctactCh
     private List<ChatModel> listcontactchat = new ArrayList<>();
 
     private ConctactChatAdapter mAdapter;
+
+    private ImageView btncancel;
 
 
     public void Listfollow(Long accountid)
@@ -76,6 +81,7 @@ public class ContactChatActivity extends AppCompatActivity implements ConctactCh
         setContentView(R.layout.activity_contact_chat);
         rcycontactchat = (RecyclerView)this.findViewById(R.id.listFollow);
         loading = (ProgressBar) this.findViewById(R.id.loading);
+        btncancel = (ImageView) this.findViewById(R.id.btncancel);
 
         mAdapter = new ConctactChatAdapter(null);
 
@@ -87,6 +93,13 @@ public class ContactChatActivity extends AppCompatActivity implements ConctactCh
         mAdapter.setOnItemClickListener(this);
 
         Listfollow(AccountController.getInstance().getAccount().getId());
+
+        btncancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
     }
 
     @Override

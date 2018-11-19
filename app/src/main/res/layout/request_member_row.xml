@@ -61,7 +61,7 @@
         android:minHeight="30dp"
         android:background="@drawable/friendchatbackground"
         android:textColor="@color/white"
-        android:text="Reject" />
+        android:text="@string/Reject" />
 
     <Button
         android:id="@+id/btnConfirm"
@@ -72,7 +72,7 @@
         android:minHeight="30dp"
         android:background="@drawable/round_button"
         android:textColor="@color/white"
-        android:text="Accept" />
+        android:text="@string/Accept" />
     </LinearLayout>
 
     <FrameLayout

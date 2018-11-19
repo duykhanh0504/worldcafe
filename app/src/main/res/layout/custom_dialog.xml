@@ -96,6 +96,7 @@
                         android:layout_marginRight="30dp"
                         android:textSize="13dp"
                         android:textStyle="bold"
+                        style="?android:attr/borderlessButtonStyle"
                         android:textColor="#ffffffff" />
 
 
@@ -109,6 +110,7 @@
                         android:background="@drawable/round_button"
                         android:text="Ok"
                         android:textSize="13dp"
+                        style="?android:attr/borderlessButtonStyle"
                         android:textStyle="bold"
                         android:textColor="#ffffffff" />
 

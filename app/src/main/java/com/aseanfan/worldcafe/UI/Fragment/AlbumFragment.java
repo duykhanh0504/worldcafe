@@ -1,5 +1,6 @@
 package com.aseanfan.worldcafe.UI.Fragment;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
@@ -8,6 +9,7 @@ import android.support.v4.app.DialogFragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -21,8 +23,10 @@ import com.aseanfan.worldcafe.UI.Adapter.AlbumAdapter;
 import com.aseanfan.worldcafe.UI.Adapter.CommunityAdapter;
 import com.aseanfan.worldcafe.UI.Adapter.FragmentMyPagerAdapter;
 import com.aseanfan.worldcafe.UI.Component.DIalogImagePreview;
+import com.aseanfan.worldcafe.UI.Component.ItemDecorationAlbumColumns;
 import com.aseanfan.worldcafe.UI.MainActivity;
 import com.aseanfan.worldcafe.Utils.Constants;
+import com.aseanfan.worldcafe.Utils.Utils;
 import com.aseanfan.worldcafe.worldcafe.R;
 
 import java.util.List;
@@ -45,6 +49,7 @@ public class AlbumFragment  extends android.support.v4.app.Fragment {
         imagelist = data;
     }
 
+    @SuppressLint("ResourceType")
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -59,7 +64,8 @@ public class AlbumFragment  extends android.support.v4.app.Fragment {
         listalbum.setLayoutManager(mLayoutManager);
         listalbum.setItemAnimator(new DefaultItemAnimator());
         listalbum.setAdapter(mAdapter);
-
+        listalbum.addItemDecoration(new ItemDecorationAlbumColumns(
+                Utils.convertDpToPixel(5,container.getContext()), 2));
         mAdapter.setOnItemClickListener(new AlbumAdapter.ClickListener() {
             @Override
             public void onItemClick(int position, View v) {

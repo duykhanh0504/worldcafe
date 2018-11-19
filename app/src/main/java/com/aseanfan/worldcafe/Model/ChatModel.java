@@ -5,6 +5,7 @@ public class ChatModel {
     private String username;
     private String avarta;
     private String time_diff;
+    private String last_message;
 
 
     public Long getAccount_id() {
@@ -38,5 +39,13 @@ public class ChatModel {
 
     public void setUsername(String _username) {
         this.username = _username;
+    }
+
+    public String getLastMessage() {
+        return last_message;
+    }
+
+    public void setLastMessage(String last_message) {
+        this.last_message = last_message;
     }
 }

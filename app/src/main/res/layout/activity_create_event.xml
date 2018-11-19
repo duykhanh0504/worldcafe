@@ -97,10 +97,11 @@
 
 
                 <RadioButton
+                    android:singleLine="true"
                     android:id="@+id/radfriend"
-                    android:layout_width="wrap_content"
+                    android:layout_width="80dp"
                     android:layout_height="wrap_content"
-                    android:text="friend"
+                    android:text="@string/Friend"
                     android:textAlignment="center"
                     android:textColor="@color/white"
                     android:paddingTop="5dp"
@@ -111,15 +112,16 @@
                     android:minHeight="25dp"
                     android:background="@drawable/radiobtnbackground"
                     android:button="@android:color/transparent"
-                    android:layout_marginRight="20dp"/>
+                    android:layout_marginRight="10dp"/>
 
                 <RadioButton
+                    android:singleLine="true"
                     android:id="@+id/radlanguage"
-                    android:layout_width="wrap_content"
+                    android:layout_width="85dp"
                     android:layout_height="wrap_content"
                     android:textAlignment="center"
                     android:textColor="@color/white"
-                    android:text="language"
+                    android:text="@string/Language"
                     android:paddingTop="5dp"
                     android:paddingBottom="5dp"
                     android:paddingLeft="5dp"
@@ -128,17 +130,17 @@
                     android:minHeight="25dp"
                     android:background="@drawable/radiobtnbackground"
                     android:button="@android:color/transparent"
-                    android:layout_marginRight="20dp"/>
+                    android:layout_marginRight="10dp"/>
 
 
 
                 <RadioButton
                     android:id="@+id/radlocal"
-                    android:layout_width="wrap_content"
+                    android:layout_width="60dp"
                     android:layout_height="wrap_content"
-                    android:text="local"
+                    android:text="@string/Local"
                     android:textAlignment="center"
-
+                    android:singleLine="true"
                     android:textColor="@color/white"
                     android:paddingTop="5dp"
                     android:paddingBottom="5dp"
@@ -148,13 +150,14 @@
                     android:minHeight="25dp"
                     android:background="@drawable/radiobtnbackground"
                     android:button="@android:color/transparent"
-                    android:layout_marginRight="20dp"/>
+                    android:layout_marginRight="10dp"/>
 
                 <RadioButton
+                    android:singleLine="true"
                     android:id="@+id/radbusiness"
-                    android:layout_width="wrap_content"
+                    android:layout_width="85dp"
                     android:layout_height="wrap_content"
-                    android:text="business"
+                    android:text="@string/Business"
                     android:textAlignment="center"
                     android:textColor="@color/white"
                     android:paddingTop="5dp"
@@ -165,7 +168,7 @@
                     android:minHeight="25dp"
                     android:background="@drawable/radiobtnbackground"
                     android:button="@android:color/transparent"
-                    android:layout_marginRight="20dp"/>
+                    android:layout_marginRight="10dp"/>
 
 
         </RadioGroup>
@@ -185,7 +188,7 @@
             android:layout_height="240dp"
             android:orientation="horizontal"
             android:layout_marginBottom="15dp"
-            android:background="@color/colorPrimary">
+            android:background="@drawable/background_event">
 
             <ImageView
                 android:id="@+id/list_image"
@@ -209,7 +212,7 @@
             android:textSize="16sp"
             android:layout_marginLeft="30dp"
             android:layout_marginRight="30dp"
-            android:text="Location"  />
+            android:text="@string/Location"  />
 
         <Spinner
             android:id="@+id/choosearea"
@@ -225,7 +228,7 @@
             android:layout_marginBottom="10dp"
             android:textStyle="bold"
             android:layout_marginLeft="30dp"
-            android:text="Date"
+            android:text="@string/schedule"
             android:textSize="16sp"/>
 
 
@@ -247,7 +250,7 @@
             android:layout_height="wrap_content"
             android:layoutDirection="rtl"
             android:layout_marginLeft="30dp"
-            android:text="repeat"
+            android:text="@string/repeat"
             android:textSize="16sp"
             android:layout_marginBottom="10dp"/>
         <LinearLayout

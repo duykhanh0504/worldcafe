@@ -19,8 +19,8 @@ public class EventModel {
     private Long account_id;
     private String start_time;
     private String city_name;
-    private int cityid;
-    private int isJoin;
+    private int city;
+    private int isjoin;
     private int isOwner;
     private int limit_persons;
     private int number;
@@ -29,6 +29,15 @@ public class EventModel {
     private String note;
     private String create_time;
     private int is_private;
+    private String job;
+
+    public String getJob() {
+        return job;
+    }
+
+    public void setJob(String job) {
+        this.job = job;
+    }
 
 
     public EventModel() {
@@ -60,11 +69,11 @@ public class EventModel {
     }
 
     public int getCityid() {
-        return cityid;
+        return city;
     }
 
     public void setCityid(int cityid) {
-        this.cityid = cityid;
+        this.city= cityid;
     }
 
     public Long getEventid() {
@@ -170,11 +179,11 @@ public class EventModel {
     }
 
     public int getIsjoin() {
-        return isJoin;
+        return isjoin;
     }
 
     public void setIsJoin(int isJoin) {
-        this.isJoin = isJoin;
+        this.isjoin = isJoin;
     }
 
     public int getIsOwner() {

@@ -88,8 +88,8 @@ public class PostTimeLineActivity extends AppCompatActivity {
             typegenre = -1;
         } else if(checkedRadioId== R.id.radquestion ) {
             typetimeline = 1;
-            radgroupquestion.setVisibility(View.VISIBLE);
-            radgroupquestion.check(R.id.radfriend);
+         //   radgroupquestion.setVisibility(View.VISIBLE);
+           // radgroupquestion.check(R.id.radfriend);
         }
     }
 

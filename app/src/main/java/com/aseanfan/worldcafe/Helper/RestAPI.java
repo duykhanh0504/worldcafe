@@ -60,7 +60,7 @@ public class RestAPI {
     public static String POST_TIMELINEIMAGE = root_url + "/api/newfeed/postnewfeed_image";
     public static String POST_LIKEPOST = root_url + "/api/newfeed/clicklike";
     public static String POST_COMMENT = root_url + "/api/newfeed/postcomment";
-    public static String GET_COMMENT = root_url + "/api/newfeed/comments?newfeed_id=%d";
+    public static String GET_COMMENT = root_url + "/api/newfeed/comments?newfeed_id=%d&account_id=%d";
     public static String GET_ACCOUNT_INFO = root_url + "/api/user/accountbyid?account_id=%d&id=%d";
     public static String POST_CREATEEVENT= root_url + "/api/event/createevent";
     public static String GET_LISTEVENT= root_url + "/api/event/getallevents?account_id=%d&genre=%d&index=%d";
@@ -98,6 +98,12 @@ public class RestAPI {
     public static String POST_DELETEDEVENT = root_url + "/api/event/deleteevent";
     public static String GET_TIMELINEDETAIL = root_url + "/api/newfeed/getnewfeeddetail?newfeed_id=%d&account_id=%d";
     public static String POST_CONTACTUS = root_url + "/api/user/contact";
+    public static String POST_LIKECOMMENT = root_url + "/api/user/likeNewfeedComment";
+    public static String POST_LIKESUBCOMMENT = root_url + "/api/user/likeNewfeedSubComment";
+    public static String POST_SUBCOMMENT = root_url + "/api/newfeed/postsubcomment";
+    public static String POST_EVENTSUBCOMMENT = root_url + "/api/event/postsubcomment";
+    public static String GET_CHECKVOTEEVENT = root_url + "/api/event/checkvoteevent?account_id=%d";
+    public static String POST_VOTEEVENT = root_url + "/api/event/vote";
 
     public final static int STATUS_SUCCESS = 200;
     public final static int STATUS_WRONGPASSWORD = 2;

@@ -26,7 +26,7 @@
             <FrameLayout
                 android:id="@+id/imageEvent"
                 android:layout_width="match_parent"
-                android:background="@color/colorPrimary"
+                android:background="@drawable/background_event"
                 android:layout_height="240dp"></FrameLayout>
 
             <ImageView
@@ -115,6 +115,7 @@
                             android:layout_alignParentTop="true"
                             android:drawableLeft="@drawable/ic_place_blue"
                             android:layout_gravity="center"
+                            android:gravity="center|left"
                             android:layout_marginTop="10dp" />
 
                 <LinearLayout
@@ -187,7 +188,7 @@
                         android:layout_marginBottom="10dp"
                         android:gravity="center|left"
                         android:drawablePadding="5dp"
-                        android:text="Public" />
+                        android:text="@string/Public" />
                 <Button
                     android:id="@+id/btnJoin"
                     android:layout_width="wrap_content"
@@ -195,7 +196,7 @@
                     android:layout_gravity="center"
                     android:background="@drawable/background_button"
                     android:minHeight="35dp"
-                    android:text="Join"
+                    android:text="@string/Event_button"
                     android:textColor="#fff" />
                 </FrameLayout>
 
@@ -238,7 +239,7 @@
                     android:layout_gravity="left"
                     android:layout_marginRight="23dp"
                     android:layout_marginLeft="23dp"
-                    android:text="Week/Month/Year"
+                    android:text="@string/Week_Month_Year"
                     android:drawableLeft="@drawable/ic_event_time"
                     android:gravity="center|left" />
                 <TextView
@@ -292,7 +293,7 @@
                     android:layout_gravity="left"
                     android:layout_marginRight="23dp"
                     android:layout_marginLeft="23dp"
-                    android:text="Attendees"
+                    android:text="@string/Attendees"
                     android:gravity="center|left"
                     android:drawableLeft="@drawable/ic_event_attendees"
                     android:layout_marginBottom="10dp" />
@@ -338,6 +339,12 @@
                         android:layout_height="wrap_content"
                         android:text="@string/Username"
                         android:textAlignment="center"/>
+                        <TextView
+                            android:id="@+id/job"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="text"
+                            android:textAlignment="center"/>
                       <!--  <LinearLayout
                             android:layout_marginTop="@dimen/margin_line_mypage"
                             android:layout_marginRight="@dimen/margin_left_right"
